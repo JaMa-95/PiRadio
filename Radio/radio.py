@@ -170,7 +170,7 @@ class Radio:
             # global_.stop = True
             self.current_stream.radio_url = None
             if self.mqtt:
-                self.broker.publish(self.broker.topic_start, "0")
+                self.broker.publish_start_stop("0")
 
     def start_stream(self, stream: RadioFrequency):
         print(f"Playing stream: {stream}")
@@ -179,8 +179,8 @@ class Radio:
         self.current_stream = stream
         self.playing = True
         if self.mqtt:
-            self.broker.publish(self.broker.topic_start, "1")
-            self.broker.publish(self.broker.topic_stream, stream.radio_url)
+            self.broker.publish_start_stop("1")
+            self.broker.publish_stream(stream.radio_url)
 
     @staticmethod
     def get_frequency_stream(button_frequencies, encoder_value):
@@ -222,7 +222,7 @@ class Radio:
         self.add_content(volume)
         self.updateSubscribers()
         if self.mqtt:
-            self.broker.publish(self.broker.topic_volume, volume)
+            self.broker.publish_volume(volume)
 
     def extract_commands_from_string(self, command_: str):
         command_name = ""
@@ -298,8 +298,8 @@ class Radio:
                         # self.audio_player_thread.start()
                         self.current_stream = stream
                         if self.mqtt:
-                            self.broker.publish(self.broker.topic_start, "1")
-                            self.broker.publish(self.broker.topic_stream, stream.radio_url)
+                            self.broker.publish_start_stop("1")
+                            self.broker.publish_stream(stream.radio_url)
         #elif self.audio_player_thread and button:
         #    self.stop_player()
 
@@ -309,7 +309,7 @@ class Radio:
         # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
-            self.broker.publish(self.broker.topic_start, "0")
+            self.broker.publish_start_stop("0")
 
     def error(self):
         # save error cause
