@@ -38,7 +38,7 @@ class Radio:
                             "posUKW": None}
         self.currentCommandString = None
 
-        self.broker: MqttBroker = None
+        self.broker: MqttBroker = MqttBroker()
         self.mqtt = mqtt
 
     # PUB METHODS
