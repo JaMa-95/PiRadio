@@ -13,8 +13,8 @@ class MqttBroker:
         self.topic_volume = "piradio/volume"
         # generate client ID with pub prefix randomly
         self.client_id = f'python-mqtt-{random.randint(0, 1000)}'
-        self.username = 'emqx'
-        self.password = 'public'
+        self.username = 'piradio'
+        self.password = 'piradio'
         self.client = None
 
     def on_connect(self, client, userdata, flags, rc):

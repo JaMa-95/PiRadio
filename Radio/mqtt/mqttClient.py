@@ -10,8 +10,8 @@ class MqttClient:
         self.topic = "piradio/start"
         # generate client ID with pub prefix randomly
         self.client_id = f'python-mqtt-{random.randint(0, 100)}'
-        self.username = 'emqx'
-        self.password = 'public'
+        self.username = 'piradio'
+        self.password = 'piradio'
         self.client = None
 
         self.topic_start = "piradio/start"
