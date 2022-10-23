@@ -1,0 +1,19 @@
+from threading import Thread
+from radio import Radio, USBReader
+from audioPlayer import AudioPlayer
+#from web.dataWeb import DataGetter
+
+if __name__ == "__main__":
+
+    usb_reader = USBReader()
+    radio = Radio(True)
+    audioPlayer = AudioPlayer(radio)
+    #dataGetter = DataGetter(radio)
+    radio = Radio()
+    audioPlayer = AudioPlayer(radio)
+
+    radioThread = Thread(target=radio.check_commands)
+    readerThread = Thread(target=usb_reader.read_usb)
+
+    radioThread.start()
+    readerThread.start()
