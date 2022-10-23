@@ -9,7 +9,7 @@ if __name__ == "__main__":
     radio = Radio(True)
     audioPlayer = AudioPlayer(radio)
     #dataGetter = DataGetter(radio)
-    radio = Radio()
+    radio = Radio(True)
     audioPlayer = AudioPlayer(radio)
 
     radioThread = Thread(target=radio.check_commands)
