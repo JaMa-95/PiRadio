@@ -38,9 +38,10 @@ class Radio:
                             "posUKW": None}
         self.currentCommandString = None
 
-        self.broker: MqttBroker = MqttBroker()
+        self.broker: MqttBroker = None
         self.mqtt = mqtt
-
+        self.connect_mqtt()
+        
     # PUB METHODS
     def attach(self, subscriber):
         self.__subscribers.append(subscriber)
