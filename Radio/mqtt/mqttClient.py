@@ -84,6 +84,7 @@ class MqttClient:
         self.player.stop()
 
     def set_volume(self, volume):
+        volume += 10
         if self.player:
             self.player.audio_set_volume(volume)
         self.volume = volume
