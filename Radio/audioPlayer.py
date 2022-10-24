@@ -35,6 +35,7 @@ class AudioPlayer(Subscriber):
         self.player.play()
 
     def stop(self):
+        print("STOPPING")
         self.player.stop()
 
     def run(self):
