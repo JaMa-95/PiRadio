@@ -17,8 +17,6 @@ class AudioPlayer(Subscriber):
 
     def update(self):
         content = self.publisher.get_content()
-        print(f"CONTENT: {content}")
-        print(f"TYPE: {type(content)}")
         if type(content) == RadioFrequency:
             self.play(content)
         elif content == "stop":
@@ -37,7 +35,6 @@ class AudioPlayer(Subscriber):
         self.player.play()
 
     def stop(self):
-        print("STOPPING")
         self.player.stop()
 
     def run(self):
