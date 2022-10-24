@@ -167,13 +167,12 @@ class Radio:
 
     def turn_off_radio(self):
         print("Turning off radio")
-        if self.audio_player_thread:
-            self.add_content("stop")
-            self.updateSubscribers()
-            # global_.stop = True
-            self.current_stream.radio_url = None
-            if self.mqtt:
-                self.broker.publish_start_stop("0")
+        self.add_content("stop")
+        self.updateSubscribers()
+        # global_.stop = True
+        self.current_stream.radio_url = None
+        if self.mqtt:
+            self.broker.publish_start_stop("0")
 
     def start_stream(self, stream: RadioFrequency):
         print(f"Playing stream: {stream}")
