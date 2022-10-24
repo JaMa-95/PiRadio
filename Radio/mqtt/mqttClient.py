@@ -53,7 +53,7 @@ class MqttClient:
         elif topic == self.topic_volume:
             self.set_volume(volume=int(msg.payload.decode()))
         elif topic == self.topic_stream:
-            self.set_stream(stream=msg.payload.decode())
+            self.set_stream(url=msg.payload.decode())
 
     def set_start(self, start):
         self.start = start
