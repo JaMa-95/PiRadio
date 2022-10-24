@@ -38,6 +38,7 @@ class Radio:
                             "posUKW": None}
         self.currentCommandString = None
         self.volume_old = None
+        self.volume_sensitivity = 2
 
         self.broker: MqttBroker = None
         self.mqtt = mqtt
@@ -229,9 +230,9 @@ class Radio:
 
     def difference_volume_high(self, volume):
         if volume > self.volume_old:
-            if volume > (self.volume_old +3):
+            if volume > (self.volume_old + self.volume_sensitivity):
                 return True
-        elif volume < (self.volume_old - 3):
+        elif volume < (self.volume_old - self.volume_sensitivity):
             return True
         return False
 
