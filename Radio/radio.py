@@ -37,6 +37,7 @@ class Radio:
                             "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
                             "posUKW": None}
         self.currentCommandString = None
+        self.volume_old = None
 
         self.broker: MqttBroker = None
         self.mqtt = mqtt
@@ -220,10 +221,24 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
+        if self.volume_old:
+            if self.difference_volume_high(volume):
+                self.send_volume(volume)
+        else:
+            self.send_volume(volume)
+
+    def difference_volume_high(self, volume):
+        if volume > self.volume_old:
+            if volume > (self.volume_old +3):
+                return True
+        elif volume < (self.volume_old - 3):
+            return True
+        return False
+
+    def send_volume(self, volume):
         self.add_content(volume)
         self.updateSubscribers()
-        print(volume)
-        if self.mqtt and False:
+        if self.mqtt:
             self.broker.publish_volume(volume)
 
     def extract_commands_from_string(self, command_: str):
