@@ -5,13 +5,13 @@ from paho.mqtt import client as mqtt_client
 
 class MqttClient:
     def __init__(self):
-        self.broker = "localhost"
+        self.broker = "192.168.0.47"
         self.port = 1883
         self.topic = "piradio/start"
         # generate client ID with pub prefix randomly
         self.client_id = f'python-mqtt-{random.randint(0, 100)}'
-        self.username = 'piradio'
-        self.password = 'piradio'
+        self.username = 'picentral'
+        self.password = 'picentral'
         self.client = None
 
         self.topic_start = "piradio/start"
@@ -38,17 +38,20 @@ class MqttClient:
         self.client.connect(self.broker, self.port)
 
     def subscribe(self: mqtt_client):
-        self.client.subscribe(self.topic)
+        self.client.subscribe(self.topic_start)
+        self.client.subscribe(self.topic_volume)
+        self.client.subscribe(self.topic_stream)
         self.client.on_message = self.on_message
 
     def on_message(self, client, userdata, msg):
         payload = msg.payload.decode()
         print(f"Received `{payload}` from `{msg.topic}` topic")
         topic = msg.topic
+        a = msg.payload.decode()
         if topic == self.topic_start:
             self.set_start(start=msg.payload.decode())
         elif topic == self.topic_volume:
-            self.set_volume(volume=msg.payload.decode())
+            self.set_volume(volume=int(msg.payload.decode()))
         elif topic == self.topic_stream:
             self.set_stream(stream=msg.payload.decode())
 

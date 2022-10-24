@@ -6,7 +6,7 @@ from paho.mqtt import client as mqtt_client
 
 class MqttBroker:
     def __init__(self):
-        self.broker = "localhost"
+        self.broker = "192.168.0.47"
         self.port = 1883
         self.topic_start = "piradio/start"
         self.topic_stream = "piradio/stream"
@@ -51,7 +51,6 @@ class MqttBroker:
         if status != 0:
             print(f"Failed to send message to topic {self.topic_stream}")
 
-
     def publish(self):
         msg_count = 0
         while True:
@@ -76,6 +75,9 @@ if __name__ == '__main__':
     broker = MqttBroker()
     broker.connect_mqtt()
     broker.client.loop_start()
-    broker.publish_stream("123")
-    broker.publish_volume(12)
-    broker.publish_start_stop("0")
+    while True:
+        broker.publish_start_stop("0")
+        broker.publish_stream("123")
+        broker.publish_volume(12)
+        time.sleep(1)
+
