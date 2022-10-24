@@ -222,7 +222,8 @@ class Radio:
             volume = 100
         self.add_content(volume)
         self.updateSubscribers()
-        if self.mqtt:
+        print(volume)
+        if self.mqtt and False:
             self.broker.publish_volume(volume)
 
     def extract_commands_from_string(self, command_: str):
