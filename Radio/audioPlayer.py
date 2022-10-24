@@ -21,7 +21,7 @@ class AudioPlayer(Subscriber):
         print(f"TYPE: {type(content)}")
         if type(content) == RadioFrequency:
             self.play(content)
-        elif type(content) == str:
+        elif content == "stop":
             self.stop()
         elif type(content) == int:
             self.set_volume(content)
