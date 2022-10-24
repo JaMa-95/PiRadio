@@ -236,6 +236,7 @@ class Radio:
         return False
 
     def send_volume(self, volume):
+        self.volume_old = volume
         self.add_content(volume)
         self.updateSubscribers()
         if self.mqtt:
