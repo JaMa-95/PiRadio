@@ -17,6 +17,8 @@ class AudioPlayer(Subscriber):
 
     def update(self):
         content = self.publisher.get_content()
+        print("CONTENT: " + content)
+        print("TYPE: " + type(content))
         if type(content) == RadioFrequency:
             self.play(content)
         elif type(content) == str:
