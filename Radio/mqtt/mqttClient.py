@@ -68,7 +68,8 @@ class MqttClient:
         self.subscribe()
         self.client.loop_forever()
 
-    def set_stream(self):
+    def set_stream(self, url):
+        self.url = url
         self.stop()
         media = self.instance.media_new(self.url)
         media.get_mrl()
