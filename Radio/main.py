@@ -6,8 +6,6 @@ from audioPlayer import AudioPlayer
 if __name__ == "__main__":
 
     usb_reader = USBReader()
-    radio = Radio(True)
-    audioPlayer = AudioPlayer(radio)
     #dataGetter = DataGetter(radio)
     radio = Radio(mqtt=True, play_central=True, play_speaker=False)
     audioPlayer = AudioPlayer(radio)
