@@ -15,10 +15,13 @@ stop = False
 
 
 class Radio:
-    def __init__(self, mqtt: bool) -> None:
+    def __init__(self, mqtt: bool, play_central: bool, play_speaker: bool) -> None:
         # init pub
         self.__subscribers = []
         self.__content = None
+
+        self.play_central = play_central
+        self.play_speaker = play_speaker
 
         # init radio frequencies
         self.raspberry = Raspberry()
@@ -63,6 +66,10 @@ class Radio:
 
     def get_content(self):
         return self.__content
+
+    def publish(self, data):
+        self.add_content(data)
+        self.updateSubscribers()
 
     # END PUB METHODS
 
@@ -167,22 +174,24 @@ class Radio:
 
     def turn_off_radio(self):
         print("Turning off radio")
-        self.add_content("stop")
-        self.updateSubscribers()
+        if self.play_speaker:
+            self.publish("stop")
         # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
-            self.broker.publish_start_stop("0")
+            if self.play_central:
+                self.broker.publish_start_stop("0")
 
     def start_stream(self, stream: RadioFrequency):
         print(f"Playing stream: {stream}")
-        self.add_content(stream)
-        self.updateSubscribers()
+        if self.play_speaker:
+            self.publish(stream)
         self.current_stream = stream
         self.playing = True
         if self.mqtt:
-            self.broker.publish_start_stop("1")
-            self.broker.publish_stream(stream.radio_url)
+            if self.play_central:
+                self.broker.publish_start_stop("1")
+                self.broker.publish_stream(stream.radio_url)
 
     @staticmethod
     def get_frequency_stream(button_frequencies, encoder_value):
@@ -237,10 +246,11 @@ class Radio:
 
     def send_volume(self, volume):
         self.volume_old = volume
-        self.add_content(volume)
-        self.updateSubscribers()
+        if self.play_speaker:
+            self.publish(volume)
         if self.mqtt:
-            self.broker.publish_volume(volume)
+            if self.play_central:
+                self.broker.publish_volume(volume)
 
     def extract_commands_from_string(self, command_: str):
         command_name = ""
@@ -297,8 +307,8 @@ class Radio:
                 if self.current_stream.radio_url != stream.radio_url:
                     print("Changing stream")
                     if self.playing:
-                        self.add_content("stop")
-                        self.updateSubscribers()
+                        if self.play_speaker:
+                            self.publish("stop")
                         self.playing = False
                         # self.stop_player()
                         print("STOP")
@@ -307,8 +317,8 @@ class Radio:
                         # print(self.audio_player_thread)
                     if radio_frequency:
                         print(f"Playing playlist: {stream}")
-                        self.add_content(stream)
-                        self.updateSubscribers()
+                        if self.play_speaker:
+                            self.publish(stream)
 
                         self.playing = True
                         # self.audio_player_thread = AudioPlayer(stream, encoder_value)
@@ -316,18 +326,20 @@ class Radio:
                         # self.audio_player_thread.start()
                         self.current_stream = stream
                         if self.mqtt:
-                            self.broker.publish_start_stop("1")
-                            self.broker.publish_stream(stream.radio_url)
+                            if self.play_central:
+                                self.broker.publish_start_stop("1")
+                                self.broker.publish_stream(stream.radio_url)
         #elif self.audio_player_thread and button:
         #    self.stop_player()
 
     def stop_player(self):
-        self.add_content("stop")
-        self.updateSubscribers()
+        if self.play_speaker:
+            self.publish("stop")
         # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
-            self.broker.publish_start_stop("0")
+            if self.play_central:
+                self.broker.publish_start_stop("0")
 
     def error(self):
         # save error cause
