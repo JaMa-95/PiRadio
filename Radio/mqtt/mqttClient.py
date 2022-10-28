@@ -56,6 +56,7 @@ class MqttClient:
             self.set_stream(url=msg.payload.decode())
 
     def set_start(self, start):
+        print(f"Start/Stop: {start}")
         self.start = start
         if self.start == "0":
             self.stop()
@@ -69,6 +70,7 @@ class MqttClient:
         self.client.loop_forever()
 
     def set_stream(self, url):
+        print(f"Set stream: {url}")
         self.url = url
         self.stop()
         media = self.instance.media_new(self.url)
