@@ -1,6 +1,7 @@
 import random
 import vlc
 from paho.mqtt import client as mqtt_client
+from Radio.plug.tapo import TapoPlug
 
 
 class MqttClient:
@@ -23,6 +24,8 @@ class MqttClient:
         self.volume = 50
         self.url = None
         self.start = "0"
+
+        self.plug_speaker = TapoPlug()
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):
@@ -81,9 +84,11 @@ class MqttClient:
 
     def play(self):
         self.player.play()
+        self.plug_speaker.turn_on()
 
     def stop(self):
         self.player.stop()
+        self.plug_speaker.turn_off()
 
     def set_volume(self, volume):
         volume = int(volume * 3)
