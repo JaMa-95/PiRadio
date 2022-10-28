@@ -1,7 +1,7 @@
 import random
 import vlc
 from paho.mqtt import client as mqtt_client
-from Radio.plug.tapo import TapoPlug
+from tapo import TapoPlug
 
 
 class MqttClient:
