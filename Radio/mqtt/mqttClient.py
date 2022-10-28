@@ -75,7 +75,7 @@ class MqttClient:
     def set_stream(self, url):
         print(f"Set stream: {url}")
         self.url = url
-        self.stop()
+        self.player.stop()
         media = self.instance.media_new(self.url)
         media.get_mrl()
         self.player.set_media(media)
