@@ -80,7 +80,7 @@ class MqttClient:
         media.get_mrl()
         self.player.set_media(media)
         if self.start == "1":
-            self.player.play()
+            self.play()
 
     def play(self):
         self.player.play()
