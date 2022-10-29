@@ -3,7 +3,7 @@ from turbo_flask import Turbo
 import random
 import threading
 import time
-from Radio.db.db import Database
+from db.db import Database
 
 app = Flask(__name__)
 turbo = Turbo(app)
