@@ -1,5 +1,16 @@
 import sqlite3
-from Radio.util import Singleton
+
+
+class Singleton(object):
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            print('Creating the object')
+            cls._instance = super(Singleton, cls).__new__(cls)
+            # Put any initialization here.
+        return cls._instance
+
 
 class Database(Singleton):
     def __init__(self):
