@@ -26,6 +26,18 @@ class Database(Singleton):
             except sqlite3.OperationalError:
                 pass
 
+    def test_data(self):
+        self.insert_volume(10)
+        self.insert_stream("abc")
+        self.insert_pos_lang_mittel_kurz(21)
+        self.insert_pos_ukw(22)
+        self.insert_button_ukw(0)
+        self.insert_button_lang(1)
+        self.insert_butto_mittel(1)
+        self.insert_button_kurz(0)
+        self.insert_button_on_off(0)
+        self.insert_button_spr_mus(0)
+
     def table_exists(self, table_name: str):
         res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
         return res.fetchone() is not None
