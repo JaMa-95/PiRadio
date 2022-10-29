@@ -1,7 +1,7 @@
 import sqlite3
+from Radio.util import Singleton
 
-
-class Database:
+class Database(Singleton):
     def __init__(self):
         self.con = sqlite3.connect(r"C:\Users\Jakob\Documents\Python\PiRadio\Radio\db\radio.db")
         self.cur = self.con.cursor()

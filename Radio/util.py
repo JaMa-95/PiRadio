@@ -62,6 +62,7 @@ publisher.add_content('Updated content for remaining subscriber.')
 publisher.updateSubscribers()
 """
 
+
 class Singleton(object):
     _instance = None
 
