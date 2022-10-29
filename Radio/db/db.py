@@ -14,7 +14,8 @@ class Singleton(object):
 
 class Database(Singleton):
     def __init__(self):
-        self.con = sqlite3.connect(r"C:\Users\Jakob\Documents\Python\PiRadio\Radio\db\radio.db")
+        self.con = sqlite3.connect(r"C:\Users\Jakob\Documents\Python\PiRadio\Radio\db\radio.db",
+                                   check_same_thread=False)
         self.cur = self.con.cursor()
 
     def create(self):
