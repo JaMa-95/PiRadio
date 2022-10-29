@@ -10,8 +10,6 @@ if __name__ == "__main__":
     db.create()
     db.test_data()
 
-    app.run()
-
     usb_reader = USBReader()
     #dataGetter = DataGetter(radio)
     radio = Radio(mqtt=True, play_central=True, play_speaker=True)
@@ -22,3 +20,5 @@ if __name__ == "__main__":
 
     radioThread.start()
     readerThread.start()
+
+    app.run()
