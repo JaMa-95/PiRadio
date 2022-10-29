@@ -47,6 +47,7 @@ class Radio:
         self.mqtt = mqtt
         self.connect_mqtt()
 
+
     # PUB METHODS
     def attach(self, subscriber):
         self.__subscribers.append(subscriber)
