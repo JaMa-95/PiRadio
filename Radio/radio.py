@@ -5,7 +5,7 @@ import time
 import traceback
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
-import global_
+from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
 
@@ -46,6 +46,8 @@ class Radio:
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         self.connect_mqtt()
+
+        self.db = Database()
 
 
     # PUB METHODS
@@ -143,11 +145,11 @@ class Radio:
             elif changed_hardware in ["buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus"]:
                 print("button changed")
                 print("------------------------------------")
-                self.process_hardware_value_change(button=True)
+                self.process_hardware_value_change()
             elif changed_hardware in ["posLangKurzMittel", "posUKW"]:
                 print("------------------------------------")
                 print("encoder changed")
-                self.process_hardware_value_change(button=False)
+                self.process_hardware_value_change()
 
     def turn_on_off_radio(self, value):
         # TODO: turn on/off music
@@ -231,6 +233,8 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
+
+        self.db.insert_volume(volume)
         if self.volume_old:
             if self.difference_volume_high(volume):
                 self.send_volume(volume)
@@ -298,9 +302,28 @@ class Radio:
                     changed_hardware.append(command_)
                 elif value > 30 and self.old_command[command_] < 30:
                     changed_hardware.append(command_)
+        self.update_db(changed_hardware)
         return changed_hardware
 
-    def process_hardware_value_change(self, button):
+    def update_db(self, changed_hardware):
+        if "posLangKurzMittel" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["posLangKurzMittel"])
+        if "posUKW" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["posUKW"])
+        if "buttonOnOff" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+        if "buttonLang" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+        if "buttonMittel" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+        if "buttonKurz" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+        if "buttonUKW" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+        if "buttonSprMus" in changed_hardware:
+            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+
+    def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
         if radio_frequency and self.on:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
