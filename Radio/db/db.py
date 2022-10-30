@@ -102,11 +102,12 @@ class Database(Singleton):
 
     #######################################################################
 
-    def get_stream(self):
-        with self.lock:
-            res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
+    @classmethod
+    def get_stream(cls):
+        with cls.lock:
+            res = cls.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
+            cls.lock.release()
             return value[0][0]
 
     def get_button_on_off(self):
