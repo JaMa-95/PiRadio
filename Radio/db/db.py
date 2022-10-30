@@ -114,6 +114,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
+            print(f"Button On Off: {value[0][0]}")
             return value[0][0]
 
     def get_button_on_off_web(self):

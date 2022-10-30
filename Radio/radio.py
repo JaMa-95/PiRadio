@@ -309,19 +309,19 @@ class Radio:
         if "posLangKurzMittel" in changed_hardware:
             self.db.insert_pos_lang_mittel_kurz(self.current_command["posLangKurzMittel"])
         if "posUKW" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["posUKW"])
+            self.db.insert_pos_ukw(self.current_command["posUKW"])
         if "buttonOnOff" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_button_on_off(self.current_command["buttonOnOff"])
         if "buttonLang" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_button_lang(self.current_command["buttonOnOff"])
         if "buttonMittel" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_butto_mittel(self.current_command["buttonOnOff"])
         if "buttonKurz" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_button_kurz(self.current_command["buttonOnOff"])
         if "buttonUKW" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_button_ukw(self.current_command["buttonOnOff"])
         if "buttonSprMus" in changed_hardware:
-            self.db.insert_pos_lang_mittel_kurz(self.current_command["buttonOnOff"])
+            self.db.insert_button_spr_mus(self.current_command["buttonOnOff"])
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
