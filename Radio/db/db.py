@@ -2,14 +2,18 @@ import sqlite3
 import threading
 
 
-class Singleton(object):
+class Singleton:
     _instance = None
+    _lock = threading.Lock()
 
-    def __new__(cls):
-        if cls._instance is None:
-            print('Creating the object')
-            cls._instance = super(Singleton, cls).__new__(cls)
-            # Put any initialization here.
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            with cls._lock:
+                # another thread could have created the instance
+                # before we acquired the lock. So check that the
+                # instance is still nonexistent.
+                if not cls._instance:
+                    cls._instance = super(Singleton, cls).__new__(cls)
         return cls._instance
 
 
@@ -65,7 +69,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_button_lang(self, value: int):
         try:
             self.lock.acquire(True)
@@ -73,7 +77,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_butto_mittel(self, value: int):
         try:
             self.lock.acquire(True)
@@ -81,7 +85,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_button_kurz(self, value: int):
         try:
             self.lock.acquire(True)
@@ -89,7 +93,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_button_ukw(self, value: int):
         try:
             self.lock.acquire(True)
@@ -97,7 +101,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_button_spr_mus(self, value: int):
         try:
             self.lock.acquire(True)
@@ -105,7 +109,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_volume(self, value: int):
         try:
             self.lock.acquire(True)
@@ -113,7 +117,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_pos_lang_mittel_kurz(self, value: int):
         try:
             self.lock.acquire(True)
@@ -121,7 +125,7 @@ class Database(Singleton):
             self.con.commit()
         finally:
             self.lock.release()
-        
+
     def insert_pos_ukw(self, value: int):
         try:
             self.lock.acquire(True)
@@ -160,7 +164,6 @@ class Database(Singleton):
             return "On"
         finally:
             self.lock.release()
-
 
     def get_button_lang(self):
         try:
@@ -288,5 +291,3 @@ class Database(Singleton):
             return value[0][0]
         finally:
             self.lock.release()
-
-
