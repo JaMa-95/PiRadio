@@ -21,7 +21,8 @@ class Database(Singleton):
 
 
     def __init__(self):
-        self.con = sqlite3.connect("radio.db")
+        self.con = sqlite3.connect("radio.db",
+                                   check_same_thread=False)
         self.cur = self.con.cursor()
 
         self.lock = threading.Lock()
