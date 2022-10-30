@@ -14,18 +14,42 @@ class TestDb(TestCase):
         value = self.db.get_volume()
         self.assertEqual(value, 10)
 
-    def test_insert_all(self):
+    def test_init(self):
         self.db.create()
-        self.db.insert_volume(10)
-        self.db.insert_stream("abc")
-        self.db.insert_pos_lang_mittel_kurz(21)
-        self.db.insert_pos_ukw(22)
-        self.db.insert_button_ukw(0)
-        self.db.insert_button_lang(1)
-        self.db.insert_butto_mittel(1)
-        self.db.insert_button_kurz(0)
-        self.db.insert_button_on_off(0)
-        self.db.insert_button_spr_mus(0)
+        self.db.init()
+
+    def test_(self):
+        abc = self.db.cur.execute("PRAGMA index_list('radio');")
+        d = abc.fetchall()
+        print()
+
+    def test_replace_all(self):
+        self.db.replace_volume(2)
+        self.db.replace_stream("def")
+        self.db.replace_pos_lang_mittel_kurz(2)
+        self.db.replace_pos_ukw(2)
+        self.db.replace_button_ukw(2)
+        self.db.replace_button_lang(2)
+        self.db.replace_button_mittel(2)
+        self.db.replace_button_kurz(2)
+        self.db.replace_button_on_off(2)
+        self.db.replace_button_spr_mus(2)
+
+    def test_multiple(self):
+        for _ in range(100):
+            self.db.insert_volume(1)
+            self.db.insert_stream("asd")
+            self.db.insert_pos_lang_mittel_kurz(2)
+            self.db.insert_pos_ukw(2)
+            self.db.insert_button_ukw(2)
+            self.db.insert_button_lang(2)
+            self.db.insert_button_mittel(2)
+            self.db.insert_button_kurz(2)
+            self.db.insert_button_on_off(2)
+            self.db.insert_button_spr_mus(2)
+
+    def test_clear_db(self):
+        self.db.clear()
 
 
 

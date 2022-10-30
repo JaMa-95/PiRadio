@@ -8,7 +8,7 @@ from db.db import Database
 if __name__ == "__main__":
     db = Database()
     db.create()
-    db.test_data()
+    db.init()
 
     usb_reader = USBReader()
     #dataGetter = DataGetter(radio)

@@ -1,6 +1,5 @@
 from flask import Flask, redirect, url_for, render_template
 from turbo_flask import Turbo
-import random
 import threading
 import time
 from db.db import Database
@@ -20,7 +19,7 @@ def home():
     db.insert_pos_ukw(55)
     db.insert_button_ukw(22)
     db.insert_button_lang(100)
-    db.insert_butto_mittel(99)
+    db.insert_button_mittel(99)
     db.insert_button_kurz(98)
     db.insert_button_on_off(97)
     db.insert_button_spr_mus(96)
@@ -68,6 +67,7 @@ def update_load():
         while True:
             time.sleep(0.5)
             turbo.push(turbo.replace(render_template('loadavg.html'), 'load'))
+            db.clear()
 
 
 @app.route("/admin")
