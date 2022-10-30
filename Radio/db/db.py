@@ -26,6 +26,7 @@ class Database(Singleton):
         self.cur = self.con.cursor()
 
         self.lock = threading.Lock()
+
     """
     def create(self):
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
@@ -61,7 +62,6 @@ class Database(Singleton):
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
-
 
     def table_exists(self, table_name: str):
         with self.lock:
@@ -271,6 +271,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM volume ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
+            print(f"VALUE: {value}")
             return value[0][1]
 
     def get_pos_lang_mittel_kurz(self):
