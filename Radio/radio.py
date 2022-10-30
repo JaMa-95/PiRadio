@@ -140,7 +140,6 @@ class Radio:
     def process_hardware_change(self, changed_hardware_list):
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
-                # print("volume changed")
                 self.set_volume(self.current_command[changed_hardware])
             elif changed_hardware in ["buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus"]:
                 print("button changed")
@@ -235,18 +234,21 @@ class Radio:
             volume = 100
 
         self.db.replace_volume(volume)
-        print(f"volume: {volume}")
-        if self.volume_old:
-            if self.difference_volume_high(volume):
-                self.send_volume(volume)
-        else:
-            self.send_volume(volume)
+        self.send_volume(volume)
 
     def difference_volume_high(self, volume):
         if volume > self.volume_old:
             if volume > (self.volume_old + self.volume_sensitivity):
                 return True
         elif volume < (self.volume_old - self.volume_sensitivity):
+            return True
+        return False
+
+    def difference_poti_high(self, poti, poti_old):
+        if poti > poti_old:
+            if poti > (poti_old + self.volume_sensitivity):
+                return True
+        elif poti < (poti_old - self.volume_sensitivity):
             return True
         return False
 
@@ -295,8 +297,11 @@ class Radio:
         changed_hardware = []
         for command_, value in self.current_command.items():
             if value and self.old_command[command_]:
-                if command_ == "posLangKurzMittel" or command_ == "posUKW" or command_ == "potiValue":
+                if command_ == "posLangKurzMittel" or command_ == "posUKW":
                     if value != self.old_command[command_]:
+                        changed_hardware.append(command_)
+                if command_ == "potiValue":
+                    if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
                 if (value / self.old_command[command_]) < 0.5 and value < self.button_threshold \
                         and self.old_command[command_] > 30:
