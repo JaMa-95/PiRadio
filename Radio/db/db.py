@@ -137,7 +137,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -147,7 +146,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -157,7 +155,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -170,7 +167,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -180,7 +176,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -192,7 +187,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -202,7 +196,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -214,7 +207,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -224,7 +216,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -236,7 +227,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -246,7 +236,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -258,7 +247,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -268,7 +256,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             if value[0][0] == 0:
                 return "Off"
             return "On"
@@ -280,7 +267,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM volume ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -290,7 +276,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
@@ -300,7 +285,6 @@ class Database(Singleton):
             self.lock.acquire(True)
             res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
         finally:
             self.lock.release()
