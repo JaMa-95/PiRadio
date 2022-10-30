@@ -67,7 +67,6 @@ def update_load():
         while True:
             time.sleep(0.5)
             turbo.push(turbo.replace(render_template('loadavg.html'), 'load'))
-            db.clear()
 
 
 @app.route("/admin")

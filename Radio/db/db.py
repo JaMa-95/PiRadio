@@ -65,7 +65,7 @@ class Database(Singleton):
 
     def table_exists(self, table_name: str):
         with self.lock:
-            res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='{table_name}'")
             return res.fetchone() is not None
 
     ###################################################################################
@@ -271,7 +271,6 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
             value = res.fetchall()
-            print(f"VALUE: {value}")
             return value[0][1]
 
     def get_pos_lang_mittel_kurz(self):
