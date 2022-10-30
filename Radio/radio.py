@@ -306,8 +306,8 @@ class Radio:
         return changed_hardware
 
     def update_db(self, changed_hardware):
-        print(f"CHANGED HARDWARE: {changed_hardware}")
         if "posLangKurzMittel" in changed_hardware:
+            print(f"CHANGED HARDWARE: {changed_hardware}")
             self.db.insert_pos_lang_mittel_kurz(self.current_command["posLangKurzMittel"])
         if "posUKW" in changed_hardware:
             self.db.insert_pos_ukw(self.current_command["posUKW"])

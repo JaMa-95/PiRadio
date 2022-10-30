@@ -94,6 +94,7 @@ class Database(Singleton):
 
     def insert_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
+            print(f"INSERTED LANG; {value}")
             self.cur.execute("INSERT INTO posLangMittelKurz VALUES(?)", (value,))
             self.con.commit()
 
@@ -205,6 +206,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
+            print(f"GETLANG: {value[0][0]}")
             return value[0][0]
 
     def get_pos_ukw(self):
