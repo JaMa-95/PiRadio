@@ -42,7 +42,7 @@ class Radio:
         self.currentCommandString = None
         self.volume_old = None
         self.volume_sensitivity = 2
-        self.poti_sensivity = 10
+        self.poti_sensivity = 15
 
         self.broker: MqttBroker = None
         self.mqtt = mqtt
@@ -303,7 +303,6 @@ class Radio:
                         changed_hardware.append(command_)
                 if command_ == "potiValue":
                     if self.difference_poti_high(value, self.old_command[command_]):
-                        print(f"poti: {value}; potiOLD: {self.old_command[command_]}")
                         changed_hardware.append(command_)
                 if (value / self.old_command[command_]) < 0.5 and value < self.button_threshold \
                         and self.old_command[command_] > 30:
