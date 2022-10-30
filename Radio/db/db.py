@@ -206,11 +206,14 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
+            self.cur.execute("PRAGMA database_list;")
+            curr_table = self.cur.fetchall()
+            print(curr_table)
             print(f"GETLANG: {value[0][0]}")
             return value[0][0]
 
     def get_pos_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")#
             value = res.fetchall()
             return value[0][0]
