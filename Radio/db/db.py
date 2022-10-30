@@ -18,12 +18,14 @@ class Singleton:
 
 
 class Database(Singleton):
-    lock = threading.Lock()
+
 
     def __init__(self):
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()
+
+        self.lock = threading.Lock()
 
     def create(self):
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
@@ -44,6 +46,14 @@ class Database(Singleton):
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
+
+    @classmethod
+    def get_lock(cls):
+        cls.lock.acquire()
+
+    @classmethod
+    def release_lock(cls):
+        cls.lock.release()
 
     def table_exists(self, table_name: str):
         with self.lock:
@@ -102,19 +112,16 @@ class Database(Singleton):
 
     #######################################################################
 
-    @classmethod
-    def get_stream(cls):
-        with cls.lock:
-            res = cls.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
+    def get_stream(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            cls.lock.release()
             return value[0][0]
 
     def get_button_on_off(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            self.lock.release()
             return value[0][0]
 
     def get_button_on_off_web(self):
