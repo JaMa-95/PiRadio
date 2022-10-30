@@ -180,6 +180,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='stream'")
             value = res.fetchall()
+            print(f"GET STREAM: {value[0][1]}")
             return value[0][1]
 
     def get_button_on_off(self):
