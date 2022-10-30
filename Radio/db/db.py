@@ -18,12 +18,12 @@ class Singleton:
 
 
 class Database(Singleton):
+    lock = threading.Lock()
+
     def __init__(self):
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()
-
-        self.lock = threading.Lock()
 
     def create(self):
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
@@ -124,7 +124,6 @@ class Database(Singleton):
                 return "Off"
             return "On"
 
-
     def get_button_lang(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
@@ -212,4 +211,3 @@ class Database(Singleton):
             res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
             return value[0][0]
-
