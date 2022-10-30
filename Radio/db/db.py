@@ -125,7 +125,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
@@ -139,7 +139,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
@@ -153,7 +153,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
@@ -167,7 +167,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
@@ -181,7 +181,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
@@ -195,7 +195,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
             value = res.fetchall()
-            if value[0][0] == 0:
+            if value[0][0] > 50:
                 return "Off"
             return "On"
 
