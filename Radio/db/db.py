@@ -1,4 +1,5 @@
 import sqlite3
+import threading
 
 
 class Singleton(object):
@@ -17,6 +18,8 @@ class Database(Singleton):
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()
+
+        self.lock = threading.Lock()
 
     def create(self):
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
@@ -39,140 +42,267 @@ class Database(Singleton):
         self.insert_button_spr_mus(0)
 
     def table_exists(self, table_name: str):
-        res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
-        return res.fetchone() is not None
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
+            self.lock.release()
+            return res.fetchone() is not None
+        finally:
+            self.lock.release()
 
     def insert_stream(self, value: str):
-        self.cur.execute("INSERT INTO stream VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO stream VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
 
     def insert_button_on_off(self, value: int):
-        self.cur.execute("INSERT INTO buttonOnOff VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonOnOff VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_button_lang(self, value: int):
-        self.cur.execute("INSERT INTO buttonLang VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonLang VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_butto_mittel(self, value: int):
-        self.cur.execute("INSERT INTO buttonMittel VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonMittel VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_button_kurz(self, value: int):
-        self.cur.execute("INSERT INTO buttonKurz VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonKurz VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_button_ukw(self, value: int):
-        self.cur.execute("INSERT INTO buttonUKW VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonUKW VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_button_spr_mus(self, value: int):
-        self.cur.execute("INSERT INTO buttonSprMus VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO buttonSprMus VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_volume(self, value: int):
-        self.cur.execute("INSERT INTO volume VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO volume VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_pos_lang_mittel_kurz(self, value: int):
-        self.cur.execute("INSERT INTO posLangMittelKurz VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO posLangMittelKurz VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
         
     def insert_pos_ukw(self, value: int):
-        self.cur.execute("INSERT INTO posUKW VALUES(?)", (value,))
-        self.con.commit()
+        try:
+            self.lock.acquire(True)
+            self.cur.execute("INSERT INTO posUKW VALUES(?)", (value,))
+            self.con.commit()
+        finally:
+            self.lock.release()
 
     #######################################################################
 
     def get_stream(self):
-        res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_on_off(self):
-        res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_on_off_web(self):
-        res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
+
 
     def get_button_lang(self):
-        res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_lang_web(self):
-        res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
 
     def get_button_mittel(self):
-        res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_mittel_web(self):
-        res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
 
     def get_button_kurz(self):
-        res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_kurz_web(self):
-        res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
 
     def get_button_ukw(self):
-        res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_ukw_web(self):
-        res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
 
     def get_button_spr_mus(self):
-        res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_button_spr_mus_web(self):
-        res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        if value[0][0] == 0:
-            return "Off"
-        return "On"
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            if value[0][0] == 0:
+                return "Off"
+            return "On"
+        finally:
+            self.lock.release()
 
     def get_volume(self):
-        res = self.cur.execute("SELECT * FROM volume ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM volume ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_pos_lang_mittel_kurz(self):
-        res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
 
     def get_pos_ukw(self):
-        res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")
-        value = res.fetchall()
-        return value[0][0]
+        try:
+            self.lock.acquire(True)
+            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
+            self.lock.release()
+            return value[0][0]
+        finally:
+            self.lock.release()
+
 
