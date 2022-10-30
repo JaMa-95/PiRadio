@@ -114,6 +114,8 @@ class Database(Singleton):
             self.lock.acquire(True)
             self.cur.execute("INSERT INTO volume VALUES(?)", (value,))
             self.con.commit()
+        except Exception as e:
+            print(f"ERRPR: {e}")
         finally:
             self.lock.release()
 
