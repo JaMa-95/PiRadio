@@ -235,6 +235,7 @@ class Radio:
             volume = 100
 
         self.db.replace_volume(volume)
+        print(f"volume: {volume}")
         if self.volume_old:
             if self.difference_volume_high(volume):
                 self.send_volume(volume)
