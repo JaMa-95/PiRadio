@@ -49,7 +49,6 @@ class Database(Singleton):
         try:
             self.lock.acquire(True)
             res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
-            self.lock.release()
             return res.fetchone() is not None
         finally:
             self.lock.release()
