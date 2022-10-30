@@ -204,9 +204,11 @@ class Database(Singleton):
 
     def get_pos_lang_mittel_kurz(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value")
             value = res.fetchall()
             print(f"POS LANG: {value}")
+            res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
+            value = res.fetchall()
             return value[0][0]
 
     def get_pos_ukw(self):
