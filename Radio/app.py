@@ -8,10 +8,11 @@ from db.db import Database
 app = Flask(__name__)
 turbo = Turbo(app)
 
+db = Database()
+
 
 @app.route("/")
 def home():
-    db = Database()
     db.create()
     db.insert_volume(10)
     db.insert_stream("abc")
@@ -43,7 +44,6 @@ def user(name):
 
 @app.context_processor
 def inject_load():
-    db = Database()
     return {
         "volume": db.get_volume(),
         "stream": db.get_stream(),
