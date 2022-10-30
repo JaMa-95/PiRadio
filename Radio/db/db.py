@@ -47,14 +47,6 @@ class Database(Singleton):
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
 
-    @classmethod
-    def get_lock(cls):
-        cls.lock.acquire()
-
-    @classmethod
-    def release_lock(cls):
-        cls.lock.release()
-
     def table_exists(self, table_name: str):
         with self.lock:
             res = self.cur.execute(f"SELECT name FROM sqlite_master WHERE name='{table_name}'")
