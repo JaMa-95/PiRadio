@@ -42,6 +42,7 @@ class Radio:
         self.currentCommandString = None
         self.volume_old = None
         self.volume_sensitivity = 2
+        self.poti_sensivity = 10
 
         self.broker: MqttBroker = None
         self.mqtt = mqtt
@@ -246,9 +247,9 @@ class Radio:
 
     def difference_poti_high(self, poti, poti_old):
         if poti > poti_old:
-            if poti > (poti_old + self.volume_sensitivity):
+            if poti > (poti_old + self.poti_sensivity):
                 return True
-        elif poti < (poti_old - self.volume_sensitivity):
+        elif poti < (poti_old - self.poti_sensivity):
             return True
         return False
 
