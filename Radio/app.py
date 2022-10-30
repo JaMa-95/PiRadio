@@ -43,17 +43,18 @@ def user(name):
 
 @app.context_processor
 def inject_load():
+    db = Database()
     return {
-        "volume": random.random(),
-        "stream": random.random(),
-        "button_on_off": random.random(),
-        "button_lang": random.random(),
-        "button_mittel": random.random(),
-        "button_kurz": random.random(),
-        "button_ukw": random.random(),
-        "button_spr": random.random(),
-        "pos_lang_mittel_kurz": random.random(),
-        "pos_ukw_spr": random.random()
+        "volume": db.get_volume(),
+        "stream": db.get_stream(),
+        "button_on_off": db.get_button_on_off_web(),
+        "button_lang": db.get_button_lang_web(),
+        "button_mittel": db.get_button_mittel_web(),
+        "button_kurz": db.get_button_kurz_web(),
+        "button_ukw": db.get_button_ukw_web(),
+        "button_spr": db.get_button_spr_mus_web(),
+        "pos_lang_mittel_kurz": db.get_pos_lang_mittel_kurz(),
+        "pos_ukw_spr": db.get_pos_ukw()
     }
 
 
