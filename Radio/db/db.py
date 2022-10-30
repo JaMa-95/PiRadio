@@ -19,7 +19,6 @@ class Singleton:
 
 class Database(Singleton):
 
-
     def __init__(self):
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
@@ -33,16 +32,16 @@ class Database(Singleton):
             try:
                 self.cur.execute(f"CREATE TABLE {value}(value)")
             except sqlite3.OperationalError:
-                pass
+                self.cur.execute(f'DELETE FROM {value};', )
 
     def test_data(self):
-        self.insert_volume(10)
-        self.insert_stream("abc")
-        self.insert_pos_lang_mittel_kurz(21)
-        self.insert_pos_ukw(22)
+        self.insert_volume(0)
+        self.insert_stream("INITIALIZING")
+        self.insert_pos_lang_mittel_kurz(0)
+        self.insert_pos_ukw(0)
         self.insert_button_ukw(0)
-        self.insert_button_lang(1)
-        self.insert_butto_mittel(1)
+        self.insert_button_lang(0)
+        self.insert_butto_mittel(0)
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
@@ -213,6 +212,6 @@ class Database(Singleton):
 
     def get_pos_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")#
+            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")  #
             value = res.fetchall()
             return value[0][0]
