@@ -302,8 +302,8 @@ class Radio:
                     if value != self.old_command[command_]:
                         changed_hardware.append(command_)
                 if command_ == "potiValue":
-                    print(f"poti: {value}; potiOLD: {self.old_command[command_]}")
                     if self.difference_poti_high(value, self.old_command[command_]):
+                        print(f"poti: {value}; potiOLD: {self.old_command[command_]}")
                         changed_hardware.append(command_)
                 if (value / self.old_command[command_]) < 0.5 and value < self.button_threshold \
                         and self.old_command[command_] > 30:
