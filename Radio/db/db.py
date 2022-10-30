@@ -112,7 +112,6 @@ class Database(Singleton):
 
     def replace_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
-            print(f"REPLACEED LANG; {value}")
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='posLangMittelKurz'")
             self.con.commit()
 
@@ -165,7 +164,6 @@ class Database(Singleton):
 
     def insert_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
-            print(f"REPLACEED LANG; {value}")
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("posLangMittelKurz", value))
             self.con.commit()
 
@@ -180,14 +178,12 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='stream'")
             value = res.fetchall()
-            print(f"GET STREAM: {value[0][1]}")
             return value[0][1]
 
     def get_button_on_off(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
             value = res.fetchall()
-            print(f"Button On Off: {value[0][1]}")
             return value[0][1]
 
     def get_button_on_off_web(self):
