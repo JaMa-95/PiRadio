@@ -95,6 +95,9 @@ class Database(Singleton):
     def insert_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
             print(f"INSERTED LANG; {value}")
+            self.cur.execute("PRAGMA database_list;")
+            curr_table = self.cur.fetchall()
+            print(curr_table)
             self.cur.execute("INSERT INTO posLangMittelKurz VALUES(?)", (value,))
             self.con.commit()
 
