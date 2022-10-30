@@ -178,20 +178,20 @@ class Database(Singleton):
 
     def get_stream(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM stream ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='stream'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_on_off(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
             value = res.fetchall()
             print(f"Button On Off: {value[0][1]}")
             return value[0][1]
 
     def get_button_on_off_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonOnOff ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -199,13 +199,13 @@ class Database(Singleton):
 
     def get_button_lang(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_lang_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonLang ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -213,13 +213,13 @@ class Database(Singleton):
 
     def get_button_mittel(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonMittel'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_mittel_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonMittel ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonMittel'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -227,13 +227,13 @@ class Database(Singleton):
 
     def get_button_kurz(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonKurz'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_kurz_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonKurz ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonKurz'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -241,13 +241,13 @@ class Database(Singleton):
 
     def get_button_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonUKW'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_ukw_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonUKW ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonUKW'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -255,13 +255,13 @@ class Database(Singleton):
 
     def get_button_spr_mus(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
             value = res.fetchall()
             return value[0][1]
 
     def get_button_spr_mus_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM buttonSprMus ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonSprMus'")
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
@@ -269,19 +269,19 @@ class Database(Singleton):
 
     def get_volume(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM volume ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
             value = res.fetchall()
             print(f"VALUE: {value}")
             return value[0][1]
 
     def get_pos_lang_mittel_kurz(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM posLangMittelKurz ORDER BY value DESC LIMIT 1;")
+            res = self.cur.execute("SELECT * FROM radio WHERE name='posLangMittelKurz'")
             value = res.fetchall()
             return value[0][1]
 
     def get_pos_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM posUKW ORDER BY value DESC LIMIT 1;")  #
+            res = self.cur.execute("SELECT * FROM radio WHERE name='posUKW'")  #
             value = res.fetchall()
             return value[0][1]

@@ -9,8 +9,8 @@ class TestDb(TestCase):
     def test_create(self):
         self.db.create()
 
-    def test_insert_get(self):
-        self.db.insert_volume(10)
+    def test_get(self):
+        self.db.replace_volume(10)
         value = self.db.get_volume()
         self.assertEqual(value, 10)
 
