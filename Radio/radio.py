@@ -3,6 +3,7 @@ import glob
 import serial
 import time
 import traceback
+from dataclasses import dataclass
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
 from db.db import Database
@@ -14,14 +15,45 @@ glAudioPlayer = None
 stop = False
 
 
+# TODO: Change to button classes
+# TODO: Add turn on/off second speaker
+# TODO: Add web control
+
+@dataclass
+class Speakers:
+    play_radio: bool = True
+    play_central: bool = False
+
+    def change(self, play_central: bool, play_radio: bool):
+        self.play_radio = play_radio
+        self.play_central = play_central
+
+    def change_once(self):
+        """
+
+        :return: 0 -> turn off radio speaker
+                1 -> turn on central
+                2 -> turn on radio/ turn off central
+        """
+        if self.play_radio and self.play_central:
+            self.play_radio = False
+            return 0
+        elif self.play_radio:
+            self.play_central = True
+            return 1
+        elif self.play_central:
+            self.play_central = False
+            self.play_radio = True
+            return 2
+
+
 class Radio:
-    def __init__(self, mqtt: bool, play_central: bool, play_speaker: bool) -> None:
+    def __init__(self, mqtt: bool, play_central: bool, play_radio_speaker: bool) -> None:
         # init pub
         self.__subscribers = []
         self.__content = None
 
-        self.play_central = play_central
-        self.play_speaker = play_speaker
+        self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         # init radio frequencies
         self.raspberry = Raspberry()
@@ -117,6 +149,9 @@ class Radio:
             time.sleep(2)
             self.raspberry.turn_on_usb()
 
+    def check_button_on_off_double_click(self):
+        pass
+
     def button_counter(self, button_name):
         if self.current_command[button_name] > 30:
             if button_name == "buttonOnOff":
@@ -183,23 +218,23 @@ class Radio:
 
     def turn_off_radio(self):
         print("Turning off radio")
-        if self.play_speaker:
+        if self.speakers.play_radio:
             self.publish("stop")
         # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
-            if self.play_central:
+            if self.speakers.play_central:
                 self.broker.publish_start_stop("0")
 
     def start_stream(self, stream: RadioFrequency):
         print(f"Playing stream: {stream}")
-        if self.play_speaker:
+        if self.speakers.play_radio:
             self.publish(stream)
         self.db.replace_stream(stream.radio_url)
         self.current_stream = stream
         self.playing = True
         if self.mqtt:
-            if self.play_central:
+            if self.speakers.play_central:
                 self.broker.publish_start_stop("1")
                 self.broker.publish_stream(stream.radio_url)
 
@@ -262,10 +297,10 @@ class Radio:
 
     def send_volume(self, volume):
         self.volume_old = volume
-        if self.play_speaker:
+        if self.speakers.play_radio:
             self.publish(volume)
         if self.mqtt:
-            if self.play_central:
+            if self.speakers.play_central:
                 self.broker.publish_volume(volume)
 
     def extract_commands_from_string(self, command_: str):
@@ -346,7 +381,7 @@ class Radio:
                 if self.current_stream.radio_url != stream.radio_url:
                     print("Changing stream")
                     if self.playing:
-                        if self.play_speaker:
+                        if self.speakers.play_radio:
                             self.publish("stop")
                         self.playing = False
                         # self.stop_player()
@@ -356,7 +391,7 @@ class Radio:
                         # print(self.audio_player_thread)
                     if radio_frequency:
                         print(f"Playing playlist: {stream}")
-                        if self.play_speaker:
+                        if self.speakers.play_radio:
                             self.publish(stream)
 
                         self.playing = True
@@ -365,19 +400,19 @@ class Radio:
                         # self.audio_player_thread.start()
                         self.current_stream = stream
                         if self.mqtt:
-                            if self.play_central:
+                            if self.speakers.play_central:
                                 self.broker.publish_start_stop("1")
                                 self.broker.publish_stream(stream.radio_url)
         # elif self.audio_player_thread and button:
         #    self.stop_player()
 
     def stop_player(self):
-        if self.play_speaker:
+        if self.speakers.play_radio:
             self.publish("stop")
         # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
-            if self.play_central:
+            if self.speakers.play_central:
                 self.broker.publish_start_stop("0")
 
     def error(self):
