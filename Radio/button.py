@@ -5,8 +5,7 @@ from dataclasses import dataclass
 class Button:
     def __init__(self, click_threshold: int = 30, long_click_threshold: int = 400):
         self.value: int = 99
-        self.value_old = [60]
-        self.value_old_index = 0
+        self.value_old: int = None
         self.threshold: int = click_threshold
         self.long_threshold: int = long_click_threshold
         self.indexer = 0
@@ -42,30 +41,25 @@ class Button:
     def get_value(self):
         return self.value
 
-    def get_value_old(self):
-        return self.value_old[self.value_old_index]
-
-    def set_value_old(self, value):
-        self.value_old_index = (self.value_old_index + 1) % 20
-        self.value_old[self.value_old_index] = value
-
     def set_value(self, value: int):
         """
 
         :param value:
         :return: True if changed
         """
+        return_value = False
+        self.value_old = self.value
         self.value = value
         if value < self.threshold:
             self.is_clicked = True
             self.indexer += 1
-            if (value / self.get_value_old()) < 0.5 and self.get_value_old() > 30:
+            if (value / self.value_old) < 0.5 and self.value_old > 30:
                 return True
         else:
             self.on_off_wait = False
             self.is_clicked = False
             self.indexer = 0
-            if self.get_value_old() < self.threshold:
+            if self.value_old < self.threshold:
                 return True
         return False
 
