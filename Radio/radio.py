@@ -118,11 +118,7 @@ class Radio:
 
     def check_commands(self):
         global command
-        counter = 0
         while True:
-            if counter % 10 == 0:
-                pass  # print(self.current_command["posLangKurzMittel"], self.current_command["posUKW"])
-            counter += 1
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
@@ -155,11 +151,10 @@ class Radio:
     def check_change_speakers(self):
         if self.radio_buttons.button_on_off.double_click():
             self.speakers.change_once()
-            self.stop_player()
-
-    # def check_raspi_off(self):
-    #    if self.on_off_counter > 400 and self.spr_counter > 400:
-    #        self.raspberry.turn_raspi_off()
+            if not self.speakers.play_radio:
+                self.publish("stop")
+            if not self.speakers.play_central:
+                self.broker.publish_start_stop("0")
 
     def check_esp_reset(self):
         if self.radio_buttons.button_spr.long_click():
@@ -167,22 +162,6 @@ class Radio:
             self.raspberry.turn_off_usb()
             time.sleep(2)
             self.raspberry.turn_on_usb()
-
-    # def button_counter(self, button_name):
-    #    if self.current_command[button_name] > 30:
-    #        if button_name == "buttonOnOff":
-    #            self.on_off_counter = 0
-    #             self.on_off_wait = False
-    #         else:
-    #             self.spr_counter = 0
-    #    else:
-    #        if button_name == "buttonOnOff":
-    #            self.on_off_counter += 1
-    #            if self.on_off_counter > 10 and not self.on_off_wait:
-    #                self.turn_on_off_radio(self.current_command[button_name])
-    #                self.on_off_wait = True
-    #        else:
-    #            self.spr_counter += 1
 
     def set_old_command(self, command_):
         self.old_command["buttonOnOff"] = command_["buttonOnOff"]
@@ -204,18 +183,6 @@ class Radio:
                 print("encoder changed")
                 self.process_hardware_value_change()
 
-    #def turn_on_off_radio(self, value):
-    #    # TODO: turn on/off music
-    #    # TODO: turn on/off lights?
-    #    # TODO: when turn on check everything and play
-    #    if value < 30:
-    #        if self.on_off_counter > 5:
-    #            self.on = not self.on
-    #            if self.on:
-    #                self.turn_on_radio()
-    #            else:
-    #                self.turn_off_radio()
-
     def turn_on_radio(self):
         print("Turning on Radio")
         radio_frequency, encoder_value = self.get_button_frequency()
@@ -232,7 +199,6 @@ class Radio:
         print("Turning off radio")
         if self.speakers.play_radio:
             self.publish("stop")
-        # global_.stop = True
         self.current_stream.radio_url = None
         if self.mqtt:
             if self.speakers.play_central:
