@@ -79,8 +79,7 @@ class Button:
         return self.last_click_index
 
     def set_is_clicked(self):
-        if self.is_clicked and not self.value:
-            self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
+        self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
 
 
 @dataclass
