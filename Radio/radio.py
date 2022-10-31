@@ -360,6 +360,7 @@ class Radio:
                     if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
                 if self.radio_buttons.set_value(command_, value):
+                    print(f"BUTTON CHANGED: {command_}, VALUE: {value}")
                     changed_hardware.append(command_)
         self.update_db(changed_hardware)
         return changed_hardware

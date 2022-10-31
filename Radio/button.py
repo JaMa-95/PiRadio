@@ -47,7 +47,6 @@ class Button:
         :param value:
         :return: True if changed
         """
-        return_value = False
         self.value_old = self.value
         self.value = value
         if value < self.threshold:
