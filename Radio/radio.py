@@ -126,6 +126,7 @@ class Radio:
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
+            self.check_change_speakers()
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
@@ -151,7 +152,7 @@ class Radio:
             else:
                 self.turn_off_radio()
 
-    def change_speakers(self):
+    def check_change_speakers(self):
         if self.radio_buttons.button_on_off.double_click():
             self.speakers.change_once()
             self.stop_player()
