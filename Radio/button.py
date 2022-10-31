@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class Button:
     def __init__(self, click_threshold: int = 30, long_click_threshold: int = 400):
         self.value: int = 99
-        self.value_old = []
+        self.value_old = [60]
         self.value_old_index = 0
         self.threshold: int = click_threshold
         self.long_threshold: int = long_click_threshold
