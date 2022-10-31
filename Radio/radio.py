@@ -50,7 +50,6 @@ class Radio:
 
         self.db = Database()
 
-
     # PUB METHODS
     def attach(self, subscriber):
         self.__subscribers.append(subscriber)
@@ -61,7 +60,7 @@ class Radio:
     def get_subscribers(self):
         return [type(x).__name__ for x in self.__subscribers]
 
-    def updateSubscribers(self):
+    def update_subscribers(self):
         for sub in self.__subscribers:
             sub.update()
 
@@ -73,7 +72,7 @@ class Radio:
 
     def publish(self, data):
         self.add_content(data)
-        self.updateSubscribers()
+        self.update_subscribers()
 
     # END PUB METHODS
 
@@ -94,6 +93,7 @@ class Radio:
             if self.current_command["buttonSprMus"]:
                 self.button_counter("buttonSprMus")
             self.check_raspi_off()
+            self.check_raspi_off()
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
@@ -110,6 +110,12 @@ class Radio:
     def check_raspi_off(self):
         if self.on_off_counter > 400 and self.spr_counter > 400:
             self.raspberry.turn_raspi_off()
+
+    def check_esp_reset(self):
+        if self.on_off_counter > 500:
+            self.raspberry.turn_off_usb()
+            time.sleep(2)
+            self.raspberry.turn_on_usb()
 
     def button_counter(self, button_name):
         if self.current_command[button_name] > 30:
@@ -362,7 +368,7 @@ class Radio:
                             if self.play_central:
                                 self.broker.publish_start_stop("1")
                                 self.broker.publish_stream(stream.radio_url)
-        #elif self.audio_player_thread and button:
+        # elif self.audio_player_thread and button:
         #    self.stop_player()
 
     def stop_player(self):
