@@ -18,9 +18,12 @@ class Button:
         self.is_clicked: bool = False
         self.on_off_wait: bool = False
 
+        self.state = False
+
     def is_click(self):
-        if self.value < self.threshold and self.indexer > 10 and not self.on_off_wait:
+        if self.value < self.threshold and self.indexer > 5 and not self.on_off_wait:
             self.on_off_wait = True
+            self.state = not self.state
             return True
         return False
 
