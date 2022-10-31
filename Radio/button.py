@@ -90,17 +90,17 @@ class RadioButtons:
 
     def set_value(self, name: str, value: int):
         if name == "buttonOnOff":
-            self.button_on_off.set_value(value)
+            return self.button_on_off.set_value(value)
         elif name == "buttonLang":
-            self.button_lang.set_value(value)
+            return self.button_lang.set_value(value)
         elif name == "buttonMittel":
-            self.button_mittel.set_value(value)
+            return self.button_mittel.set_value(value)
         elif name == "buttonKurz":
-            self.button_kurz.set_value(value)
+            return self.button_kurz.set_value(value)
         elif name == "buttonUKW":
-            self.button_ukw.set_value(value)
+            return self.button_ukw.set_value(value)
         elif name == "buttonSprMus":
-            self.button_spr.set_value(value)
+            return self.button_spr.set_value(value)
 
     def get_pressed_button(self):
         if self.button_lang.is_click():
