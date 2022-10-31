@@ -24,12 +24,15 @@ class Button:
         if self.value < self.threshold and self.indexer > 5 and not self.on_off_wait:
             self.on_off_wait = True
             self.state = not self.state
+            self.set_is_clicked()
             return True
         return False
 
     def double_click(self):
         time_delta_a = self.last_click[0] - self.last_click[1]
         time_delta_b = self.last_click[1] - self.last_click[0]
+        print(f"lAST CLICK 0: {self.last_click[0]}")
+        print(f"lAST CLICK 1: {self.last_click[1]}")
         if time_delta_a.seconds < 4 or time_delta_b.seconds < 4:
             return True
         return False
@@ -72,10 +75,9 @@ class Button:
         self.last_click_index = (self.last_click_index + 1) % 2
         return self.last_click_index
 
-    def set_is_clicked(self, value: bool):
-        if self.is_clicked and not value:
+    def set_is_clicked(self):
+        if self.is_clicked and not self.value:
             self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
-        self.is_clicked = value
 
 
 @dataclass
