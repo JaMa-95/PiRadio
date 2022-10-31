@@ -161,7 +161,6 @@ class Radio:
     #        self.raspberry.turn_raspi_off()
 
     def check_esp_reset(self):
-        print(f"indexer: {self.radio_buttons.button_spr.indexer}")
         if self.radio_buttons.button_spr.long_click():
             print("RESET ESP")
             self.raspberry.turn_off_usb()
