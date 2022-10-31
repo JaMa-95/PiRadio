@@ -6,6 +6,8 @@ class Button:
     def __init__(self, click_threshold: int = 30, long_click_threshold: int = 400):
         self.value: int = 99
         self.value_old: int = None
+        self.value_olds = []
+        self.value_old_index = 0
         self.threshold: int = click_threshold
         self.long_threshold: int = long_click_threshold
         self.indexer = 0
@@ -47,6 +49,7 @@ class Button:
         :param value:
         :return: True if changed
         """
+        self.value_olds.append(value)
         self.value_old = self.value
         self.value = value
         if value < self.threshold:

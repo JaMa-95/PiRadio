@@ -201,10 +201,6 @@ class Radio:
                 print("------------------------------------")
                 print("encoder changed")
                 self.process_hardware_value_change()
-            else:
-                print("------------------------------------")
-                print("button changed")
-                self.process_hardware_value_change()
 
     #def turn_on_off_radio(self, value):
     #    # TODO: turn on/off music
@@ -259,15 +255,15 @@ class Radio:
                 return radio_frequency
 
     def get_button_frequency(self):
-        if self.radio_buttons.button_lang.is_click():
+        if self.radio_buttons.button_lang.is_clicked:
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_mittel.is_click():
+        elif self.radio_buttons.button_mittel.is_clicked:
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_kurz.is_click():
+        elif self.radio_buttons.button_kurz.is_clicked:
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_ukw.is_click():
+        elif self.radio_buttons.button_ukw.is_clicked:
             return UKWFrequencies(), self.current_command["posUKW"]
-        elif self.radio_buttons.button_spr.is_click():
+        elif self.radio_buttons.button_spr.is_clicked:
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             return None, None
@@ -395,27 +391,16 @@ class Radio:
                         if self.speakers.play_radio:
                             self.publish("stop")
                         self.playing = False
-                        # self.stop_player()
-                        print("STOP")
-                        time.sleep(1)
-                        # self.audio_player_thread = None
-                        # print(self.audio_player_thread)
                     if radio_frequency:
                         print(f"Playing playlist: {stream}")
                         if self.speakers.play_radio:
                             self.publish(stream)
-
                         self.playing = True
-                        # self.audio_player_thread = AudioPlayer(stream, encoder_value)
-                        # global_.stop = False
-                        # self.audio_player_thread.start()
                         self.current_stream = stream
                         if self.mqtt:
                             if self.speakers.play_central:
                                 self.broker.publish_start_stop("1")
                                 self.broker.publish_stream(stream.radio_url)
-        # elif self.audio_player_thread and button:
-        #    self.stop_player()
 
     def stop_player(self):
         if self.speakers.play_radio:
