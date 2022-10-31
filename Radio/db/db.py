@@ -193,6 +193,8 @@ class Database(Singleton):
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_button_lang(self):
@@ -207,6 +209,8 @@ class Database(Singleton):
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_button_mittel(self):
@@ -221,6 +225,8 @@ class Database(Singleton):
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_button_kurz(self):
@@ -235,6 +241,8 @@ class Database(Singleton):
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_button_ukw(self):
@@ -249,6 +257,8 @@ class Database(Singleton):
             value = res.fetchall()
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_button_spr_mus(self):
@@ -264,6 +274,8 @@ class Database(Singleton):
             print(f"BUTTON SPR: {value[0][1]}")
             if value[0][1] > 50:
                 return "Off"
+            elif value[0][1] == 0:
+                return "Error"
             return "On"
 
     def get_volume(self):
