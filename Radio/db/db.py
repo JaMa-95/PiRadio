@@ -81,6 +81,7 @@ class Database(Singleton):
             self.con.commit()
 
     def replace_button_lang(self, value: int):
+        print(f"REPLACE LANG: {value}")
         with self.lock:
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonLang'")
             self.con.commit()
@@ -204,6 +205,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
             value = res.fetchall()
+            print(f"BUTTON LANG: {value[0][1]}")
             if value[0][1] > 50:
                 return "Off"
             return "On"
