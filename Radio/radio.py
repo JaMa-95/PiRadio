@@ -356,14 +356,13 @@ class Radio:
                     if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
                 if self.radio_buttons.set_value(command_, value):
-                    print(f"BUTTON CHANGED: {command_}, VALUE: {value}")
+                    # only for db
                     changed_hardware.append(command_)
         self.update_db(changed_hardware)
         return changed_hardware
 
     def update_db(self, changed_hardware):
         if "posLangKurzMittel" in changed_hardware:
-            print(f"CHANGED HARDWARE: {changed_hardware}")
             self.db.replace_pos_lang_mittel_kurz(self.current_command["posLangKurzMittel"])
         if "posUKW" in changed_hardware:
             self.db.replace_pos_ukw(self.current_command["posUKW"])
