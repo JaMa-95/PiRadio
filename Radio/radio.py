@@ -124,10 +124,10 @@ class Radio:
             if counter % 10 == 0:
                 pass  # print(self.current_command["posLangKurzMittel"], self.current_command["posUKW"])
             counter += 1
-            if self.current_command["buttonOnOff"]:
-                self.button_counter("buttonOnOff")
-            if self.current_command["buttonSprMus"]:
-                self.button_counter("buttonSprMus")
+            #if self.current_command["buttonOnOff"]:
+            #    self.button_counter("buttonOnOff")
+            #if self.current_command["buttonSprMus"]:
+            #    self.button_counter("buttonSprMus")
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
