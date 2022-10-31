@@ -33,10 +33,7 @@ class Button:
             time_delta_a = self.last_click[0] - self.last_click[1]
             time_delta_b = self.last_click[1] - self.last_click[0]
             if time_delta_a.seconds < 4 or time_delta_b.seconds < 4:
-                print("_______________________________________")
-                print(f"lAST CLICK 0: {self.last_click[0]}")
-                print(f"lAST CLICK 1: {self.last_click[1]}")
-                print("_______________________________________")
+                self.reset_double_click()
                 return True
         return False
 
