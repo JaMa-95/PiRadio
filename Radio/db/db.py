@@ -205,7 +205,6 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
             value = res.fetchall()
-            print(f"BUTTON LANG: {value[0][1]}")
             if value[0][1] > 50:
                 return "Off"
             return "On"
@@ -262,6 +261,7 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonSprMus'")
             value = res.fetchall()
+            print(f"BUTTON SPR: {value[0][1]}")
             if value[0][1] > 50:
                 return "Off"
             return "On"
