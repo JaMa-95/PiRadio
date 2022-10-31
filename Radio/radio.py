@@ -1,3 +1,4 @@
+import datetime
 import sys
 import glob
 import serial
@@ -25,27 +26,25 @@ class Speakers:
     play_radio: bool = True
     play_central: bool = False
 
+    _change_wait: bool = datetime.datetime.now()
+
     def change(self, play_central: bool, play_radio: bool):
         self.play_radio = play_radio
         self.play_central = play_central
 
     def change_once(self):
-        """
-
-        :return: 0 -> turn off radio speaker
-                1 -> turn on central
-                2 -> turn on radio/ turn off central
-        """
-        if self.play_radio and self.play_central:
-            self.play_radio = False
-            return 0
-        elif self.play_radio:
-            self.play_central = True
-            return 1
-        elif self.play_central:
-            self.play_central = False
-            self.play_radio = True
-            return 2
+        now = datetime.datetime.now()
+        change_delta = now - self._change_wait
+        if change_delta.seconds > 2:
+            print("Change speaker")
+            self._change_wait = now
+            if self.play_radio and self.play_central:
+                self.play_radio = False
+            elif self.play_radio:
+                self.play_central = True
+            elif self.play_central:
+                self.play_central = False
+                self.play_radio = True
 
 
 class Radio:
@@ -151,6 +150,11 @@ class Radio:
                 self.turn_on_radio()
             else:
                 self.turn_off_radio()
+
+    def change_speakers(self):
+        if self.radio_buttons.button_on_off.double_click():
+            self.speakers.change_once()
+            self.stop_player()
 
     # def check_raspi_off(self):
     #    if self.on_off_counter > 400 and self.spr_counter > 400:
