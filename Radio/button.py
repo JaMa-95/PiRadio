@@ -29,14 +29,15 @@ class Button:
         return False
 
     def double_click(self):
-        time_delta_a = self.last_click[0] - self.last_click[1]
-        time_delta_b = self.last_click[1] - self.last_click[0]
-        print("_______________________________________")
-        print(f"lAST CLICK 0: {self.last_click[0]}")
-        print(f"lAST CLICK 1: {self.last_click[1]}")
-        print("_______________________________________")
-        if time_delta_a.seconds < 4 or time_delta_b.seconds < 4:
-            return True
+        if self.last_click[0] and self.last_click[1]:
+            time_delta_a = self.last_click[0] - self.last_click[1]
+            time_delta_b = self.last_click[1] - self.last_click[0]
+            print("_______________________________________")
+            print(f"lAST CLICK 0: {self.last_click[0]}")
+            print(f"lAST CLICK 1: {self.last_click[1]}")
+            print("_______________________________________")
+            if time_delta_a.seconds < 4 or time_delta_b.seconds < 4:
+                return True
         return False
 
     def reset_double_click(self):
