@@ -124,10 +124,6 @@ class Radio:
             if counter % 10 == 0:
                 pass  # print(self.current_command["posLangKurzMittel"], self.current_command["posUKW"])
             counter += 1
-            #if self.current_command["buttonOnOff"]:
-            #    self.button_counter("buttonOnOff")
-            #if self.current_command["buttonSprMus"]:
-            #    self.button_counter("buttonSprMus")
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
@@ -146,7 +142,7 @@ class Radio:
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
-            self.turn_on_off_radio()
+            self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
         if self.radio_buttons.button_on_off.is_click():
@@ -162,6 +158,7 @@ class Radio:
 
     def check_esp_reset(self):
         if self.radio_buttons.button_spr.long_click():
+            print("RESET ESP")
             self.raspberry.turn_off_usb()
             time.sleep(2)
             self.raspberry.turn_on_usb()

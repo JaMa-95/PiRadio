@@ -38,7 +38,6 @@ class MqttBroker:
             print(f"Failed to send message to topic {self.topic_start}")
 
     def publish_volume(self, volume):
-        print("publish volume")
         result = self.client.publish(self.topic_volume, volume)
         status = result[0]
         if status != 0:
