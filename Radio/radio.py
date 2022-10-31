@@ -6,6 +6,7 @@ import traceback
 from dataclasses import dataclass
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
+from button import RadioButtons
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
@@ -64,6 +65,9 @@ class Radio:
         self.on_off_wait = False
         self.on_off_counter = 0
         self.spr_counter = 0
+
+        self.radio_buttons = RadioButtons()
+
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                                 "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
@@ -124,6 +128,7 @@ class Radio:
                 self.button_counter("buttonOnOff")
             if self.current_command["buttonSprMus"]:
                 self.button_counter("buttonSprMus")
+            self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
             if command != self.currentCommandString:
@@ -140,33 +145,42 @@ class Radio:
         pass
 
     def check_raspi_off(self):
-        if self.on_off_counter > 400 and self.spr_counter > 400:
-            self.raspberry.turn_raspi_off()
+        if self.radio_buttons.button_on_off.long_click():
+            self.turn_on_off_radio()
+
+    def check_radio_on_off(self):
+        if self.radio_buttons.button_on_off.is_click():
+            self.on = not self.on
+            if self.on:
+                self.turn_on_radio()
+            else:
+                self.turn_off_radio()
+
+    # def check_raspi_off(self):
+    #    if self.on_off_counter > 400 and self.spr_counter > 400:
+    #        self.raspberry.turn_raspi_off()
 
     def check_esp_reset(self):
-        if self.on_off_counter > 500:
+        if self.radio_buttons.button_spr.long_click():
             self.raspberry.turn_off_usb()
             time.sleep(2)
             self.raspberry.turn_on_usb()
 
-    def check_button_on_off_double_click(self):
-        pass
-
-    def button_counter(self, button_name):
-        if self.current_command[button_name] > 30:
-            if button_name == "buttonOnOff":
-                self.on_off_counter = 0
-                self.on_off_wait = False
-            else:
-                self.spr_counter = 0
-        else:
-            if button_name == "buttonOnOff":
-                self.on_off_counter += 1
-                if self.on_off_counter > 10 and not self.on_off_wait:
-                    self.turn_on_off_radio(self.current_command[button_name])
-                    self.on_off_wait = True
-            else:
-                self.spr_counter += 1
+    # def button_counter(self, button_name):
+    #    if self.current_command[button_name] > 30:
+    #        if button_name == "buttonOnOff":
+    #            self.on_off_counter = 0
+    #             self.on_off_wait = False
+    #         else:
+    #             self.spr_counter = 0
+    #    else:
+    #        if button_name == "buttonOnOff":
+    #            self.on_off_counter += 1
+    #            if self.on_off_counter > 10 and not self.on_off_wait:
+    #                self.turn_on_off_radio(self.current_command[button_name])
+    #                self.on_off_wait = True
+    #        else:
+    #            self.spr_counter += 1
 
     def set_old_command(self, command_):
         self.old_command["buttonOnOff"] = command_["buttonOnOff"]
@@ -183,26 +197,26 @@ class Radio:
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
                 self.set_volume(self.current_command[changed_hardware])
-            elif changed_hardware in ["buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus"]:
-                print("button changed")
-                print("------------------------------------")
-                self.process_hardware_value_change()
             elif changed_hardware in ["posLangKurzMittel", "posUKW"]:
                 print("------------------------------------")
                 print("encoder changed")
                 self.process_hardware_value_change()
+            else:
+                print("------------------------------------")
+                print("button changed")
+                self.process_hardware_value_change()
 
-    def turn_on_off_radio(self, value):
-        # TODO: turn on/off music
-        # TODO: turn on/off lights?
-        # TODO: when turn on check everything and play
-        if value < 30:
-            if self.on_off_counter > 5:
-                self.on = not self.on
-                if self.on:
-                    self.turn_on_radio()
-                else:
-                    self.turn_off_radio()
+    #def turn_on_off_radio(self, value):
+    #    # TODO: turn on/off music
+    #    # TODO: turn on/off lights?
+    #    # TODO: when turn on check everything and play
+    #    if value < 30:
+    #        if self.on_off_counter > 5:
+    #            self.on = not self.on
+    #            if self.on:
+    #                self.turn_on_radio()
+    #            else:
+    #                self.turn_off_radio()
 
     def turn_on_radio(self):
         print("Turning on Radio")
@@ -245,27 +259,26 @@ class Radio:
                 return radio_frequency
 
     def get_button_frequency(self):
-        pressed_button = self.get_pressed_button()
-        if pressed_button == "buttonLang":
+        if self.radio_buttons.button_lang.is_click():
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
-        elif pressed_button == "buttonMittel":
+        elif self.radio_buttons.button_mittel.is_click():
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-        elif pressed_button == "buttonKurz":
+        elif self.radio_buttons.button_kurz.is_click():
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-        elif pressed_button == "buttonUKW":
+        elif self.radio_buttons.button_ukw.is_click():
             return UKWFrequencies(), self.current_command["posUKW"]
-        elif pressed_button == "buttonSprMus":
+        elif self.radio_buttons.button_spr.is_click():
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             return None, None
 
-    def get_pressed_button(self):
-        for button, value in self.current_command.items():
-            if value < self.button_threshold and button != "buttonOnOff":
-                return button
-            elif button == "posLangKurzMittel":
-                # reached end of buttons
-                return None
+    #def get_pressed_button(self):
+    #    for button, value in self.current_command.items():
+    #        if value < self.button_threshold and button != "buttonOnOff":
+    #            return button
+    #        elif button == "posLangKurzMittel":
+    #            # reached end of buttons
+    #            return None
 
     def set_volume(self, volume):
         volume = int((volume - 1500) / 25.95)
@@ -346,10 +359,7 @@ class Radio:
                 if command_ == "potiValue":
                     if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
-                if (value / self.old_command[command_]) < 0.5 and value < self.button_threshold \
-                        and self.old_command[command_] > 30:
-                    changed_hardware.append(command_)
-                elif value > 30 and self.old_command[command_] < 30:
+                if self.radio_buttons.set_value(command_, value):
                     changed_hardware.append(command_)
         self.update_db(changed_hardware)
         return changed_hardware
@@ -375,7 +385,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        if radio_frequency and self.on:
+        if radio_frequency and self.radio_buttons.button_on_off.is_clicked:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
             if stream:
                 if self.current_stream.radio_url != stream.radio_url:

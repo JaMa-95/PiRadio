@@ -1,10 +1,12 @@
 import datetime
+from dataclasses import dataclass
 
 
 class Button:
-    def __init__(self, click_threshold: int, long_click_threshold):
-        self.value: int = None
+    def __init__(self, click_threshold: int = 30, long_click_threshold: int = 400):
+        self.value: int = 99
         self.value_old = []
+        self.value_old_index = 0
         self.threshold: int = click_threshold
         self.long_threshold: int = long_click_threshold
         self.indexer = 0
@@ -13,9 +15,11 @@ class Button:
         self.last_click_index: int = 0
 
         self.is_clicked: bool = False
+        self.on_off_wait: bool = False
 
     def is_click(self):
-        if self.value < self.threshold:
+        if self.value < self.threshold and self.indexer > 10 and not self.on_off_wait:
+            self.on_off_wait = True
             return True
         return False
 
@@ -38,14 +42,32 @@ class Button:
     def get_value(self):
         return self.value
 
+    def get_value_old(self):
+        return self.value_old[self.value_old_index]
+
+    def set_value_old(self, value):
+        self.value_old_index = (self.value_old_index + 1) % 20
+        self.value_old[self.value_old_index] = value
+
     def set_value(self, value: int):
+        """
+
+        :param value:
+        :return: True if changed
+        """
         self.value = value
-        if value < 30:
+        if value < self.threshold:
             self.is_clicked = True
             self.indexer += 1
+            if (value / self.get_value_old()) < 0.5 and self.get_value_old() > 30:
+                return True
         else:
+            self.on_off_wait = False
             self.is_clicked = False
             self.indexer = 0
+            if self.get_value_old() < self.threshold:
+                return True
+        return False
 
     def get_last_clicked_index(self):
         self.last_click_index = (self.last_click_index + 1) % 2
@@ -55,3 +77,37 @@ class Button:
         if self.is_clicked and not value:
             self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
         self.is_clicked = value
+
+
+@dataclass
+class RadioButtons:
+    button_on_off: Button = Button()
+    button_lang: Button = Button()
+    button_mittel: Button = Button()
+    button_kurz: Button = Button()
+    button_ukw: Button = Button()
+    button_spr: Button = Button()
+
+    def set_value(self, name: str, value: int):
+        if name == "buttonOnOff":
+            self.button_on_off.set_value(value)
+        elif name == "buttonLang":
+            self.button_lang.set_value(value)
+        elif name == "buttonMittel":
+            self.button_mittel.set_value(value)
+        elif name == "buttonKurz":
+            self.button_kurz.set_value(value)
+        elif name == "buttonUKW":
+            self.button_ukw.set_value(value)
+        elif name == "buttonSprMus":
+            self.button_spr.set_value(value)
+
+    def get_pressed_button(self):
+        if self.button_lang.is_click():
+            return
+        for button, value in self.current_command.items():
+            if value < self.button_threshold and button != "buttonOnOff":
+                return button
+            elif button == "posLangKurzMittel":
+                # reached end of buttons
+                return None
