@@ -93,7 +93,7 @@ class Radio:
             if self.current_command["buttonSprMus"]:
                 self.button_counter("buttonSprMus")
             self.check_raspi_off()
-            self.check_raspi_off()
+            self.check_esp_reset()
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
