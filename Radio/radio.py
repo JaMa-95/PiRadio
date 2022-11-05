@@ -199,6 +199,7 @@ class Radio:
         if self.speakers.play_radio:
             self.publish(stream)
         self.db.replace_stream(stream.radio_url)
+        self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
         self.current_stream = stream
         self.playing = True
         if self.mqtt:

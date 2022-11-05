@@ -53,7 +53,8 @@ def inject_load():
         "button_ukw": db.get_button_ukw_web(),
         "button_spr": db.get_button_spr_mus_web(),
         "pos_lang_mittel_kurz": db.get_pos_lang_mittel_kurz(),
-        "pos_ukw_spr": db.get_pos_ukw()
+        "pos_ukw_spr": db.get_pos_ukw(),
+        "radio_name": db.get_radio_name()
     }
 
 

@@ -70,6 +70,11 @@ class Database(Singleton):
 
     ###################################################################################
 
+    def replace_radio_name(self, value: str):
+        with self.lock:
+            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "radio_name"))
+            self.con.commit()
+
     def replace_stream(self, value: str):
         with self.lock:
             self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "stream"))
@@ -122,6 +127,11 @@ class Database(Singleton):
 
     #########################################################################################
 
+    def insert_radio_name(self, value: str):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("radio_name", value))
+            self.con.commit()
+
     def insert_stream(self, value: str):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("stream", value))
@@ -173,6 +183,12 @@ class Database(Singleton):
             self.con.commit()
 
     #######################################################################
+
+    def get_radio_name(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM radio WHERE name='radio_name'")
+            value = res.fetchall()
+            return value[0][1]
 
     def get_stream(self):
         with self.lock:
