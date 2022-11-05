@@ -62,6 +62,7 @@ class Database(Singleton):
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
+        self.insert_radio_name("---")
 
     def table_exists(self, table_name: str):
         with self.lock:
