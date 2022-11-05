@@ -23,6 +23,7 @@ class RadioFrequency:
 
 
 class KurzFrequencies:
+    # NOT WORKING: Berum, Falun
     def __init__(self):
         self.frequencies = [
             RadioFrequency("BR-NDR", 0, 35, "ostseewelle",
@@ -78,6 +79,7 @@ class KurzFrequencies:
 
 
 class LangFrequencies:
+    # not working: That 70s Station, 80s80s Radio, 80s80s NDW, Eurodance 90, Radio 2000, rs2 -2010er, FM Top 40
     def __init__(self):
         self.frequencies = [
             RadioFrequency('Radio 20er', 0, 100, 'Bohemia Berlin',
@@ -195,6 +197,7 @@ class UKWFrequencies:
 
 
 class SprFrequencies:
+    # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
     def __init__(self):
         # spanisch
         # lateinamerika

@@ -18,7 +18,6 @@ stop = False
 
 
 # TODO: Change to button classes
-# TODO: Add turn on/off second speaker
 # TODO: Add web control
 
 @dataclass
@@ -36,13 +35,15 @@ class Speakers:
         now = datetime.datetime.now()
         change_delta = now - self._change_wait
         if change_delta.seconds > 2:
-            print("Change speaker")
             self._change_wait = now
             if self.play_radio and self.play_central:
+                print("CHANGE SPEAKER TO CENTRAL")
                 self.play_radio = False
             elif self.play_radio:
+                print("CHANGE SPEAKER TO CENTRAL/RADIO")
                 self.play_central = True
             elif self.play_central:
+                print("CHANGE SPEAKER TO RADIO")
                 self.play_central = False
                 self.play_radio = True
 
@@ -53,18 +54,11 @@ class Radio:
         self.__subscribers = []
         self.__content = None
 
-        self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
-
-        # init radio frequencies
         self.raspberry = Raspberry()
         self.playing = False
-        self.audio_player_thread = None
-        self.button_threshold = 30
         self.on = False
-        self.on_off_wait = False
-        self.on_off_counter = 0
-        self.spr_counter = 0
 
+        self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
         self.radio_buttons = RadioButtons()
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
@@ -131,10 +125,6 @@ class Radio:
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
-
-    def reset_all(self):
-        # TODO: reset poti, position
-        pass
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
@@ -235,14 +225,6 @@ class Radio:
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             return None, None
-
-    #def get_pressed_button(self):
-    #    for button, value in self.current_command.items():
-    #        if value < self.button_threshold and button != "buttonOnOff":
-    #            return button
-    #        elif button == "posLangKurzMittel":
-    #            # reached end of buttons
-    #            return None
 
     def set_volume(self, volume):
         volume = int((volume - 1500) / 25.95)

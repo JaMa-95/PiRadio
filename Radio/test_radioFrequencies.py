@@ -2,7 +2,7 @@ import time
 from playsound import playsound
 import vlc
 import unittest
-from radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies
+from radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
 from radio import USBReader
 
 
@@ -21,11 +21,9 @@ class TestFrequencies(unittest.TestCase):
         usb_reader.set_test_command(test_string)
         time.sleep(3)
 
-
     def test_play_local(self):
         playsound(r"C:/Users/Jakob/Documents/playlists/hipHop/DanielRifaterra-Amanni.mp3")
         playsound('C:/Users/Jakob/Documents/playlists/chillout/MOTZ4000HZ-GunFingers[MOTZVA04].mp3')
-
 
     def test_radio_frequencies_kurz(self):
         non_working_url = []
@@ -49,7 +47,6 @@ class TestFrequencies(unittest.TestCase):
             player.stop()
         print()
 
-
     def test_radio_frequencies_lang(self):
         non_working_url = []
         for radio_frequency in LangFrequencies().frequencies:
@@ -71,7 +68,6 @@ class TestFrequencies(unittest.TestCase):
                     is_playing = True
             player.stop()
         print()
-
 
     def test_radio_frequencies_mittel(self):
         non_working_url = []
@@ -95,7 +91,6 @@ class TestFrequencies(unittest.TestCase):
             player.stop()
         print()
 
-
     def test_radio_frequencies_ukw(self):
         non_working_url = []
         for radio_frequency in UKWFrequencies().frequencies:
@@ -118,6 +113,27 @@ class TestFrequencies(unittest.TestCase):
             player.stop()
         print()
 
+    def test_radio_frequencies_spr(self):
+        non_working_url = []
+        for radio_frequency in SprFrequencies().frequencies:
+            url = radio_frequency.radio_url
+            instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+            player = instance.media_player_new()
+            media = instance.media_new(url)
+            media.get_mrl()
+            player.set_media(media)
+            player.play()
+            counter = 0
+            is_playing = player.is_playing()
+            while not is_playing:
+                is_playing = player.is_playing()
+                time.sleep(1)
+                counter += 1
+                if counter == 10:
+                    non_working_url.append(radio_frequency)
+                    is_playing = True
+            player.stop()
+        print()
 
     def test_single_frequencies(self):
         url = "http://stream3.polskieradio.pl:8912/;"
@@ -131,7 +147,6 @@ class TestFrequencies(unittest.TestCase):
         time.sleep(10)
         player.audio_set_volume(10)
         time.sleep(4)
-
 
     def test_serial(self) -> None:
         import serial
