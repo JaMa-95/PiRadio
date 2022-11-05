@@ -343,6 +343,8 @@ class Radio:
                         self.playing = False
                     if radio_frequency:
                         print(f"Playing playlist: {stream}")
+                        self.db.replace_stream(stream.radio_url)
+                        self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
                         if self.speakers.play_radio:
                             self.publish(stream)
                         self.playing = True
