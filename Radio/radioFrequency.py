@@ -13,22 +13,24 @@ class RadioFrequency:
     radio_name: str
     radio_url: str
 
-    def __init__(self, name: str, minimum: int, maximum: int, radio_name: str, radio_url: str):
+    def __init__(self, name: str, minimum: int, maximum: int, radio_name: str, radio_url: str, radio_name_re: str = "",
+                 radio_url_re: str = ""):
         self.name = name
         self.minimum = minimum
         self.maximum = maximum
         self.sweet_spot = (maximum - minimum) / 2
         self.radio_name = radio_name
         self.radio_url = radio_url
+        self.radio_url_re = radio_url_re
 
 
 class KurzFrequencies:
-    # NOT WORKING: Berum, Falun
+    # NOT WORKING: Berum, stockholm,Falun
     def __init__(self):
         self.frequencies = [
             RadioFrequency("BR-NDR", 0, 35, "ostseewelle",
                            "http://ostseewelle--di--nacs-ais-lgc--07--cdn.cast.addradio.de/ostseewelle/nord/mp3/high?_art=dj0yJmlwPTM3LjQuMjMyLjIwNyZpZD1pY3NjeGwtazZhc2VscGdiJnQ9MTY2MjI4NTkwMSZzPTc4NjZmMjljIzM0MWIzMWQ1YTdhNmE4MWYwOTc4MzA3ZGIwYTI3NjQ2"),
-            RadioFrequency("Berom", 35, 140, "", ""),
+            RadioFrequency("Berum", 35, 140, "Wattwecker", "http://stream.laut.fm/wattwerker"),
             RadioFrequency("München", 135, 270, "Energy München", "http://nrj.de/muenchen"),
             RadioFrequency("Monte Ceneri", 270, 358, "Radio 3i", "https://icecast.gruppocdt.ch/radio3i-256.mp3"),
             RadioFrequency("Freies Berlin", 358, 421, "", "https://ais-edge37-live365-dal02.cdnstream.com/a51326"),
@@ -43,7 +45,8 @@ class KurzFrequencies:
             RadioFrequency("Athen", 1123, 1170, "Athen Free Radio", "http://stream.radiojar.com/e206r95qsp8uv"),
             RadioFrequency("Hilversum", 1170, 1234, "Radio Fantasy Rotterdam", "http://213.202.241.199:8024/stream"),
             RadioFrequency("Sottens", 1234, 1272, "Back2Noize Radio", "http://stream.back2noize.com:8000/Back2Noize"),
-            RadioFrequency("Stockholm", 1272, 1330, "Stockholm Närradio", "http://live.narradio.se:8030/;stream.mp3"),
+            RadioFrequency("Stockholm", 1272, 1330, "Stockholm Närradio", "http://live.narradio.se:8030/;stream.mp3",
+                           "Galaxy FM Sweden","https://galaxyfm.radioca.st/stream"),
             RadioFrequency("München", 1330, 1413, "Radio Gong München", "http://addrad.io/44558s5"),
             RadioFrequency("SWF", 1413, 1504, "Regenbogen 2", "https://stream.regenbogen2.de/rheinneckar/mp3-128"),
             RadioFrequency("Paris", 1504, 1596, "Hotel Radio Paris", "http://radio2.pro-fhi.net:9111/stream"),
@@ -115,6 +118,7 @@ class LangFrequencies:
 
 
 class MittelFrequencies:
+    # electro swing
     def __init__(self):
         self.frequencies = [
             RadioFrequency("Rock", 0, 100, "Rock Antenne",
@@ -133,6 +137,10 @@ class MittelFrequencies:
             RadioFrequency("90er", 0, 100, "http://addrad.io/4459c2f", "http://addrad.io/4459c2f"),
             RadioFrequency("eurodance", 0, 100, "Eurodance 90", "http://eurodance90stream.ddns.net/"),
             RadioFrequency("Techno", 0, 100, "Techno FM", "http://stream.techno.fm/radio320.mp3"),
+            RadioFrequency("Techno", 0, 100, "Digital Impulse", "http://orion.shoutca.st:8938/stream"),
+            RadioFrequency("Techno", 0, 100, "TECHNO STYLE Radio", "http://212.108.220.119:1039/stream.mp3"),
+            RadioFrequency("Electro Swing", 0, 100, "Electro Swing Revolution Radio",
+                           "http://stream-23.zeno.fm/gdtbdqwzrf9uv?zs=ZpZ8h41ISO6eVCeo2JJ3uQ"),
             RadioFrequency("Trance", 0, 100, "Digital Impulse - Trance Resident Paradise",
                            "http://orion.shoutca.st:8922/stream"),
             RadioFrequency("House", 0, 100, "0nlineradio HOUSE", "https://stream.0nlineradio.com/house?ref"),

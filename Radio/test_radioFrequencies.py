@@ -136,17 +136,16 @@ class TestFrequencies(unittest.TestCase):
         print()
 
     def test_single_frequencies(self):
-        url = "http://stream3.polskieradio.pl:8912/;"
+        url = "http://stream.laut.fm/wattwerker"
         instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         player = instance.media_player_new()
         media = instance.media_new(url)
         media.get_mrl()
         player.set_media(media)
-        player.audio_set_volume(20)
         player.play()
-        time.sleep(10)
-        player.audio_set_volume(10)
         time.sleep(4)
+        is_playing = player.is_playing()
+        print()
 
     def test_serial(self) -> None:
         import serial
