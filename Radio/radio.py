@@ -70,7 +70,7 @@ class Radio:
                             "posUKW": None}
         self.currentCommandString = None
         self.volume_old = None
-        self.volume_sensitivity = 2
+        self.volume_sensitivity = 1
         self.poti_sensivity = 15
 
         self.broker: MqttBroker = None
