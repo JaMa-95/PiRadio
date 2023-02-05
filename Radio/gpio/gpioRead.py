@@ -23,10 +23,11 @@ def button_pressed_callback(channel):
 
 if __name__ == '__main__':
     for button_name, button_io in buttons.items():
+
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(button_io, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(button_io, GPIO.FALLING,
                               callback=button_pressed_callback, bouncetime=100)
 
-        signal.signal(signal.SIGINT, signal_handler)
-        signal.pause()
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.pause()
