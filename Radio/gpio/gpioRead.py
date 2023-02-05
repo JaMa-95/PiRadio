@@ -18,7 +18,9 @@ def signal_handler(sig, frame):
 
 
 def button_pressed_callback(channel):
+    print("-------------")
     print(f"Button pressed! {channel}")
+    print("-------------")
 
 
 if __name__ == '__main__':
