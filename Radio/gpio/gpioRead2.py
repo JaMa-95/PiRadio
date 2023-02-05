@@ -13,7 +13,7 @@ def signal_handler(sig, frame):
 
 for button_pin, button_name in buttons.items():
     GPIO.setmode(GPIO.BCM)  # Broadcom pin-numbering scheme
-    GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # LED pin set as output
+    GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # LED pin set as output
     # GPIO.setup(butPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button pin set as input w/ pull-up
 
 while True:
