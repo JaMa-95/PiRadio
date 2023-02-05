@@ -32,3 +32,4 @@ while True:
         print("Pin 25 button is pressed")
     elif (GPIO.input(7) == GPIO.HIGH):
         print("Pin 25 button is pressed")
+    time.sleep(1)
