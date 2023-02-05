@@ -9,7 +9,7 @@ BUT_KURZ = 24
 BUT_UKW = 26
 BUT_SPR = 32
 
-buttons = {"BUT_ON": 23, "BUT_LANG": 24, "BUT_MITTEL": 25, "BUT_KURZ": 8, "BUT_UKW": 7, "BUT_SPR": 12}
+buttons = {"BUT_ON": 23, "BUT_LANG": 24, "BUT_MITTEL": 25,  "BUT_UKW": 7, "BUT_SPR": 12} # "BUT_KURZ": 8,
 
 
 def signal_handler(sig, frame):
