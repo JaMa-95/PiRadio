@@ -11,12 +11,24 @@ def signal_handler(sig, frame):
     GPIO.cleanup()
     sys.exit(0)
 
-for button_pin, button_name in buttons.items():
-    GPIO.setmode(GPIO.BCM)  # Broadcom pin-numbering scheme
-    GPIO.setup(button_pin, GPIO.IN)  # LED pin set as output
-    # GPIO.setup(butPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button pin set as input w/ pull-up
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(23, GPIO.IN)
+GPIO.setup(24, GPIO.IN)
+GPIO.setup(25, GPIO.IN)
+GPIO.setup(12, GPIO.IN)
+GPIO.setup(8, GPIO.IN)
+GPIO.setup(7, GPIO.IN)
 
 while True:
-    for button_pin, button_name in buttons.items():
-        print(f"{button_name}: {GPIO.input(button_pin)}")
-    time.sleep(1)
+    if (GPIO.input(23) == GPIO.LOW):
+        print("Pin 23 button is pressed")
+    elif (GPIO.input(24) == GPIO.LOW):
+        print("Pin 24 button is pressed")
+    elif (GPIO.input(25) == GPIO.LOW):
+        print("Pin 25 button is pressed")
+    elif (GPIO.input(12) == GPIO.LOW):
+        print("Pin 24 button is pressed")
+    elif (GPIO.input(8) == GPIO.LOW):
+        print("Pin 25 button is pressed")
+    elif (GPIO.input(7) == GPIO.LOW):
+        print("Pin 25 button is pressed")
