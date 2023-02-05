@@ -9,7 +9,7 @@ BUT_KURZ = 24
 BUT_UKW = 26
 BUT_SPR = 32
 
-buttons = {"BUT_ON": 23, "BUT_LANG": 24, "BUT_MITTEL": 25, "BUT_SPR": 12} # "BUT_KURZ": 8,  "BUT_UKW": 7,
+buttons = {23: "BUT_ON", 24: "BUT_LANG", 25: "BUT_MITTEL", 12: "BUT_SPR"} # "BUT_KURZ": 8,  "BUT_UKW": 7,
 
 
 def signal_handler(sig, frame):
@@ -19,16 +19,16 @@ def signal_handler(sig, frame):
 
 def button_pressed_callback(channel):
     print("-------------")
-    print(f"Button pressed! {channel}")
+    print(f"Button pressed! {buttons[channel]}")
     print("-------------")
 
 
 if __name__ == '__main__':
     for button_name, button_io in buttons.items():
-        print(button_name)
+        print(button_io)
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(button_io, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(button_io, GPIO.FALLING,
+        GPIO.setup(button_name, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(button_name, GPIO.FALLING,
                               callback=button_pressed_callback, bouncetime=100)
 
     signal.signal(signal.SIGINT, signal_handler)
