@@ -1,31 +1,25 @@
-from gpiozero import Button
-from signal import pause
+import signal
+import sys
 import time
-import _thread
+
+import RPi.GPIO as GPIO
 
 run = False
 
+buttons = {23: "BUT_ON", 24: "BUT_LANG", 25: "BUT_MITTEL", 12: "BUT_SPR"} # "BUT_KURZ": 8,  "BUT_UKW": 7,
+def signal_handler(sig, frame):
+    GPIO.cleanup()
+    sys.exit(0)
 
-def do_stuff():
-    while run:  # do stuff...
-        time.sleep(1)
-        print("waiting...")
+for button_pin, button_name in buttons.items():
+    GPIO.setmode(GPIO.BCM)  # Broadcom pin-numbering scheme
+    GPIO.setup(button_pin, GPIO.IN)  # LED pin set as output
+    # GPIO.setup(butPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button pin set as input w/ pull-up
 
+while True:
+    for button_pin, button_name in buttons.items():
+        GPIO.setmode(GPIO.BCM)  # Broadcom pin-numbering scheme
+        GPIO.setup(button_pin, GPIO.IN)  # LED pin set as output
 
-def first_button():
-    global run
-    print("First Pressed")
-    run = True
-    _thread.start_new_thread(do_stuff)
-
-
-def second_button():
-    global run
-    print("Second Pressed")
-    run = False
-
-
-b1 = Button(7)
-b1.when_pressed = first_button
-b2 = Button(8)
-b2.when_pressed = second_button
+        print(f"{button_name}: {GPIO.input(button_pin)}")
+    time.sleep(1)
