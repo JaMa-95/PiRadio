@@ -20,15 +20,15 @@ GPIO.setup(8, GPIO.IN)
 GPIO.setup(7, GPIO.IN)
 
 while True:
-    if (GPIO.input(23) == GPIO.LOW):
+    if (GPIO.input(23) == GPIO.HIGH):
         print("Pin 23 button is pressed")
-    elif (GPIO.input(24) == GPIO.LOW):
+    elif (GPIO.input(24) == GPIO.HIGH):
         print("Pin 24 button is pressed")
-    elif (GPIO.input(25) == GPIO.LOW):
+    elif (GPIO.input(25) == GPIO.HIGH):
         print("Pin 25 button is pressed")
-    elif (GPIO.input(12) == GPIO.LOW):
+    elif (GPIO.input(12) == GPIO.HIGH):
         print("Pin 24 button is pressed")
-    elif (GPIO.input(8) == GPIO.LOW):
+    elif (GPIO.input(8) == GPIO.HIGH):
         print("Pin 25 button is pressed")
-    elif (GPIO.input(7) == GPIO.LOW):
+    elif (GPIO.input(7) == GPIO.HIGH):
         print("Pin 25 button is pressed")
