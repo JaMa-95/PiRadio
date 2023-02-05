@@ -18,8 +18,5 @@ for button_pin, button_name in buttons.items():
 
 while True:
     for button_pin, button_name in buttons.items():
-        GPIO.setmode(GPIO.BCM)  # Broadcom pin-numbering scheme
-        GPIO.setup(button_pin, GPIO.IN)  # LED pin set as output
-
         print(f"{button_name}: {GPIO.input(button_pin)}")
     time.sleep(1)
