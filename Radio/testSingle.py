@@ -11,3 +11,11 @@ player.play()
 time.sleep(10)
 is_playing = player.is_playing()
 print(is_playing)
+
+import inspect
+import os
+from playsound import playsound
+dirname = os.path.dirname(os.path.abspath(inspect.stack()[0][1]))
+filename = os.path.join(dirname, "/data/Army-radio-static.mp3")
+print(filename)	
+playsound(filename)
