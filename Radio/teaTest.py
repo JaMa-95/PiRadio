@@ -13,7 +13,7 @@ time .sleep(2)
 def init_radio(address):
     """initialize hardware"""
     i2c.write_quick(address)
-    time.sleep(0.1)
+    time.sleep(1)
 
 
 def set_freq(address, freq):
