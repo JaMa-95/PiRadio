@@ -6,7 +6,7 @@ import curses
 import curses.textpad
 import time
 
-i2c = smbus.SMBus(1) # newer version RASP (512 megabytes)
+i2c = smbus.SMBus(0) # newer version RASP (512 megabytes)
 i2c_address = 0x60
 
 def init_radio(address):
