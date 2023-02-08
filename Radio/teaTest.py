@@ -8,6 +8,7 @@ import time
 
 i2c = smbus.SMBus(1) # newer version RASP (512 megabytes)
 i2c_address = 0x60
+time .sleep(2)
 
 def init_radio(address):
     """initialize hardware"""
@@ -28,7 +29,7 @@ def set_freq(address, freq):
     data[2] = 0x10 #0b00010000 # 4.bajt (SWP2; STBY, BL; XTAL; smut; HCC, SNC, SI)
     data[3] = 0x00 #0b00000000 # 5.bajt (PLREFF; DTC; 0; 0; 0; 0; 0; 0)
     try:
-      i2c.write_byte_data(address, init, data) # Setting a new frequency to the circuit
+      i2c.write_i2c_block_data(address, init, data) # Setting a new frequency to the circuit
       print("Frequency set to: " + str(freq))
     except IOError:
       subprocess.call(['i2cdetect', '-y', '1'])
