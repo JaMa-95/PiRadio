@@ -10,7 +10,7 @@ media.get_mrl()
 player.set_media(media)
 player.play()
 player.audio_set_volume(30)
-time.sleep(5)
+time.sleep(500)
 is_playing = player.is_playing()
 print(is_playing)
 
