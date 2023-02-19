@@ -114,10 +114,15 @@ class Radio:
         print("start checking commands")
         global command
         while True:
+            print("abc")
             self.check_radio_on_off()
+            print("s")
             self.check_raspi_off()
+            print("sa")
             self.check_esp_reset()
+            print("asd")
             self.check_change_speakers()
+            print("abc: " + command)
             if command != self.currentCommandString:
                 print(command)
                 self.set_old_command(self.current_command)
