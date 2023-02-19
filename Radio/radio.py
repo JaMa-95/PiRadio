@@ -338,21 +338,27 @@ class Radio:
         state = self.radio_buttons.button_on_off.state
         print(f"{self.current_command['buttonOnOff']}, {state}")
         if self.current_command["buttonOnOff"] != state:
+            self.current_command["buttonOnOff"] = state
             changed_hardware.append("buttonOnOff")
         state = self.radio_buttons.button_lang.state
         if self.current_command["buttonLang"] != state:
+            self.current_command["buttonLang"] = state
             changed_hardware.append("buttonLang")
         state = self.radio_buttons.button_mittel.state
         if self.current_command["buttonMittel"] != state:
+            self.current_command["buttonMittel"] = state
             changed_hardware.append("buttonMittel")
         state = self.radio_buttons.button_kurz.state
         if self.current_command["buttonKurz"] != state:
+            self.current_command["buttonKurz"] = state
             changed_hardware.append("buttonKurz")
         state = self.radio_buttons.button_ukw.state
         if self.current_command["buttonUKW"] != state:
+            self.current_command["buttonUKW"] = state
             changed_hardware.append("buttonUKW")
         state = self.radio_buttons.button_spr.state
         if self.current_command["buttonSprMus"] != state:
+            self.current_command["buttonSprMus"] = state
             changed_hardware.append("buttonSprMus")
         #print(f"changed hardware: {changed_hardware}")
         return changed_hardware
