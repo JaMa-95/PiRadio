@@ -119,6 +119,7 @@ class Radio:
             self.check_esp_reset()
             self.check_change_speakers()
             if command != self.currentCommandString:
+                print(command)
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
@@ -490,13 +491,10 @@ class USBReader:
             if ser.in_waiting > 1000:
                 ser.flushInput()
             try:
-                #command_ = ser.readline().decode("UTF-8")
                 command_ = ser.read_until(b';').decode("UTF-8")
-                print("command: " + command_)
-                if command_:
-                    command_ = command_.replace("\n", "").replace("\r", "")
-                    if command_[0] == "-" and command_[-1] == ";":
-                        command = command_[1:]
+                command_ = command_.replace("\n", "").replace("\r", "")
+                if command_[0] == "-" and command_[-1] == ";":
+                    command = command_[1:]
             except UnicodeDecodeError or serial.serialutil.SerialException as e:
                 print(print(traceback.format_exc()))
                 if e == serial.serialutil.SerialException and "readiness" in e:
