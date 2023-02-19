@@ -112,6 +112,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
+        print("start checking commands")
         global command
         while True:
             self.check_radio_on_off()
