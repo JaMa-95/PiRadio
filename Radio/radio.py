@@ -245,6 +245,7 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
+        volume = volume * -1
         volume = int((volume - 1500) / 25.95)
         # volume raspberry
         volume = int(volume / 1.5)
