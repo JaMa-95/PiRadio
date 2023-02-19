@@ -126,6 +126,7 @@ class Radio:
             self.check_esp_reset()
             self.check_change_speakers()
             changed_hardware = self.get_changed_buttons()
+            print("command: " + command)
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
