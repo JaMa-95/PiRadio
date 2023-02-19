@@ -6,11 +6,11 @@
 
 uint8_t potiPin = 25; // rechts -> 3,3v; links -> ground
 
-uint8_t langKurzMittelEncoderA = 26; // grün
-uint8_t langKurzMittelEncoderB = 27; // weiß
+uint8_t langKurzMittelEncoderA = 32; // grün
+uint8_t langKurzMittelEncoderB = 33; // weiß
 
-uint8_t ukwEncoderA = 32;
-uint8_t ukwEncoderB = 33;
+uint8_t ukwEncoderA = 27;
+uint8_t ukwEncoderB = 26;
 
 // ---------- do not edit -------------------
 RotaryEncoder encoderLangKurzMittel(langKurzMittelEncoderA, langKurzMittelEncoderB, RotaryEncoder::LatchMode::FOUR3);
