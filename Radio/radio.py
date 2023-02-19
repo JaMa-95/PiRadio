@@ -490,7 +490,7 @@ class USBReader:
             if ser.in_waiting > 1000:
                 ser.flushInput()
             try:
-                command_ = ser.readline()
+                command_ = ser.readline().decode("UTF-8")
                 print("command: " + command_)
                 #command_ = ser.read_until(b';').decode("UTF-8")
                 if command_:
