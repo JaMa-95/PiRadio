@@ -236,19 +236,14 @@ class Radio:
 
     def get_button_frequency(self):
         if self.radio_buttons.button_lang.state:
-            print("LANG IS CLICKED")
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_mittel.state:
-            print("MITTEL IS CLICKED")
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_kurz.state:
-            print("KURZ IS CLICKED")
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_ukw.state:
-            print("UKW IS CLICKED")
             return UKWFrequencies(), self.current_command["posUKW"]
         elif self.radio_buttons.button_spr.state:
-            print("SPR IS CLICKED")
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             return None, None
@@ -365,7 +360,6 @@ class Radio:
             print(f"BUTTON SPR CHANGED: {state}")
             self.current_command["buttonSprMus"] = state
             changed_hardware.append("buttonSprMus")
-        #print(f"changed hardware: {changed_hardware}")
         return changed_hardware
 
     def update_db(self, changed_hardware):
@@ -388,16 +382,13 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        print(f"radio_frequency: {radio_frequency}, ")
         if radio_frequency and self.on:
-            print("stream")
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
             if stream:
                 print(f"{self.current_stream.radio_url}, {stream.radio_url}")
                 if self.current_stream.radio_url != stream.radio_url:
                     print("Changing stream")
                     if self.playing:
-                        self.turn_off_amplifier()
                         if self.speakers.play_radio:
                             self.publish("stop")
                         self.playing = False
