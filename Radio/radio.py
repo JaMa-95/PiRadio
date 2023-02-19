@@ -132,6 +132,7 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
+        print("is_click: " + self.radio_buttons.button_on_off.is_click())
         if self.radio_buttons.button_on_off.is_click():
             self.on = not self.on
             if self.on:
