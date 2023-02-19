@@ -7,7 +7,7 @@ import traceback
 from dataclasses import dataclass
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
-from button import RadioButtons
+from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
@@ -59,7 +59,7 @@ class Radio:
         self.on = False
 
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
-        self.radio_buttons = RadioButtons()
+        self.radio_buttons = RadioButtonsRaspi()
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -119,7 +119,6 @@ class Radio:
             self.check_esp_reset()
             self.check_change_speakers()
             if command != self.currentCommandString:
-                print(command)
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
@@ -308,10 +307,31 @@ class Radio:
                 if command_ == "potiValue":
                     if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
-                if self.radio_buttons.set_value(command_, value):
-                    # only for db
-                    changed_hardware.append(command_)
+        changed_hardware.append(self.get_changed_buttons())
         self.update_db(changed_hardware)
+        return changed_hardware
+
+    def get_changed_buttons(self):
+        changed_hardware = []
+        self.radio_buttons.set_value()
+        state = self.radio_buttons.button_on_off.state
+        if self.current_command["buttonOnOff"] != state:
+            changed_hardware.append("buttonOnOff")
+        state = self.radio_buttons.button_lang.state
+        if self.current_command["buttonLang"] != state:
+            changed_hardware.append("buttonLang")
+        state = self.radio_buttons.button_mittel.state
+        if self.current_command["buttonMittel"] != state:
+            changed_hardware.append("buttonMittel")
+        state = self.radio_buttons.button_kurz.state
+        if self.current_command["buttonKurz"] != state:
+            changed_hardware.append("buttonKurz")
+        state = self.radio_buttons.button_ukw.state
+        if self.current_command["buttonUKW"] != state:
+            changed_hardware.append("buttonUKW")
+        state = self.radio_buttons.button_spr.state
+        if self.current_command["buttonSprMus"] != state:
+            changed_hardware.append("buttonSprMus")
         return changed_hardware
 
     def update_db(self, changed_hardware):
@@ -495,7 +515,6 @@ class USBReader:
                 command_ = command_.replace("\n", "").replace("\r", "")
                 if command_[0] == "-" and command_[-1] == ";":
                     command = command_[1:]
-                    print("command is: " + command)
             except UnicodeDecodeError or serial.serialutil.SerialException as e:
                 print(print(traceback.format_exc()))
                 if e == serial.serialutil.SerialException and "readiness" in e:

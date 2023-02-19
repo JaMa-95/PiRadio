@@ -29,6 +29,7 @@ void setup() {
 
 void loop() {
   // read buttons
+  output = "-";
   output += createPotiString(potiPin);
   output += processEncoders();
   if ((a%1000) == 0)
