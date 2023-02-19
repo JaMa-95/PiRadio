@@ -30,10 +30,9 @@ void setup() {
 void loop() {
   // read buttons
   output += createPotiString(potiPin);
-  
+  output += processEncoders();
   if ((a%1000) == 0)
   {
-    output += processEncoders();
     Serial.println(output);
   }
 
