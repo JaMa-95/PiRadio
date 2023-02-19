@@ -12,7 +12,7 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(23, GPIO.IN)
+GPIO.setup(23, GPIO.OUT)
 
 while True:
     print("---------------")
