@@ -491,9 +491,10 @@ class USBReader:
                 ser.flushInput()
             try:
                 command_ = ser.readline()
+                print("command: " + command_)
                 #command_ = ser.read_until(b';').decode("UTF-8")
                 if command_:
-                    print(command)
+
                     command_ = command_.replace("\n", "").replace("\r", "")
                     if command_[0] == "-" and command_[-1] == ";":
                         command = command_[1:]
