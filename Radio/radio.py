@@ -67,6 +67,8 @@ class Radio:
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
         self.radio_buttons = RadioButtonsRaspi()
 
+        self.current_volume_poti_value = 0
+
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                                 "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
@@ -254,25 +256,18 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
-
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
-    def difference_volume_high(self, volume):
-        if volume > self.volume_old:
-            if volume > (self.volume_old + self.volume_sensitivity):
+    def difference_poti_high(self, poti):
+        if poti > self.current_volume_poti_value:
+            if poti > (self.current_volume_poti_value + self.poti_sensivity):
+                self.current_volume_poti_value = poti
                 return True
-        elif volume < (self.volume_old - self.volume_sensitivity):
+        elif poti < (self.current_volume_poti_value - self.poti_sensivity):
+            self.current_volume_poti_value = poti
             return True
-        return False
-
-    def difference_poti_high(self, poti, poti_old):
-        if poti > poti_old:
-            if poti > (poti_old + self.poti_sensivity):
-                return True
-        elif poti < (poti_old - self.poti_sensivity):
-            return True
-        print(f"false: {poti}, {poti_old}")
+        print(f"false: {poti}, {self.current_volume_poti_value}")
         return False
 
     def send_volume(self, volume):
@@ -324,7 +319,7 @@ class Radio:
                     if value != self.old_command[command_]:
                         changed_hardware.append(command_)
                 if command_ == "potiValue":
-                    if self.difference_poti_high(value, self.old_command[command_]):
+                    if self.difference_poti_high(value):
                         changed_hardware.append(command_)
         self.update_db(changed_hardware)
         return changed_hardware
