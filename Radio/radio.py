@@ -335,6 +335,7 @@ class Radio:
     def get_changed_buttons(self):
         self.radio_buttons.set_value()
         changed_hardware = []
+        print(f"{self.current_command['buttonOnOff']}, {state}")
         state = self.radio_buttons.button_on_off.state
         if self.current_command["buttonOnOff"] != state:
             changed_hardware.append("buttonOnOff")
@@ -353,7 +354,7 @@ class Radio:
         state = self.radio_buttons.button_spr.state
         if self.current_command["buttonSprMus"] != state:
             changed_hardware.append("buttonSprMus")
-        print(f"changed hardware: {changed_hardware}")
+        #print(f"changed hardware: {changed_hardware}")
         return changed_hardware
 
     def update_db(self, changed_hardware):
