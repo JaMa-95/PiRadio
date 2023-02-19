@@ -132,7 +132,7 @@ class Radio:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
-                changed_hardware.append(self.get_changed_hardware())
+                changed_hardware.extend(self.get_changed_hardware())
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
