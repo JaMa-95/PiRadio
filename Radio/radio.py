@@ -67,8 +67,6 @@ class Radio:
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
         self.radio_buttons = RadioButtonsRaspi()
 
-        self.current_volume_poti_value = 0
-
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                                 "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
@@ -260,16 +258,13 @@ class Radio:
         self.send_volume(volume)
 
     def difference_poti_high(self, poti):
-        if poti > self.current_volume_poti_value:
-            if poti > (self.current_volume_poti_value + self.poti_sensivity):
-                self.current_volume_poti_value = poti
-                print("TTUE")
+        if poti > self.current_command["potiValue"]:
+            if poti > (self.current_command["potiValue"] + self.poti_sensivity):
+                self.current_command["potiValue"] = poti
                 return True
-        elif poti < (self.current_volume_poti_value - self.poti_sensivity):
-            self.current_volume_poti_value = poti
-            print("TRUE")
+        elif poti < (self.current_command["potiValue"] - self.poti_sensivity):
+            self.current_command["potiValue"] = poti
             return True
-        print(f"false: {poti}, {self.current_volume_poti_value}")
         return False
 
     def send_volume(self, volume):
