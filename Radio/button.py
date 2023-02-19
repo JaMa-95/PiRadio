@@ -170,11 +170,11 @@ class ButtonRaspi:
         """
         :return: True if changed
         """
-        state = GPIO.input(self.button_number)
-        self.value_olds.append(state)
+        self.state = GPIO.input(self.button_number)
+        self.value_olds.append(self.state)
         self.value_old = self.value
-        self.value = state
-        if state:
+        self.value = self.state
+        if self.state:
             self.is_clicked = True
             self.indexer += 1
             return True
