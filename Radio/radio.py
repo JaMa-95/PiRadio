@@ -152,8 +152,9 @@ class Radio:
             self.speakers.change_once()
             if not self.speakers.play_radio:
                 self.publish("stop")
-            if not self.speakers.play_central:
-                self.broker.publish_start_stop("0")
+            if self.mqtt:
+                if not self.speakers.play_central:
+                    self.broker.publish_start_stop("0")
 
     def check_esp_reset(self):
         if self.radio_buttons.button_spr.long_click():
@@ -179,7 +180,7 @@ class Radio:
                 self.set_volume(self.current_command[changed_hardware])
             elif changed_hardware in ["posLangKurzMittel", "posUKW"]:
                 print("------------------------------------")
-                print("encoder changed")
+                print(f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     def turn_off_amplifier(self):
