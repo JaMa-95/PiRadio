@@ -177,10 +177,8 @@ class Radio:
         self.old_command["posUKW"] = command_["posUKW"]
 
     def process_hardware_change(self, changed_hardware_list):
-        print(changed_hardware_list)
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
-                print("set-volume")
                 self.set_volume(self.current_command[changed_hardware])
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
@@ -253,11 +251,11 @@ class Radio:
 
     def set_volume(self, volume):
         volume = int(-0.062 * volume + 106.25)
-        print(f"volume: {volume}")
         if volume < 0:
             volume = 0
         elif volume > 100:
             volume = 100
+        print(f"volume: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
@@ -322,7 +320,6 @@ class Radio:
                 if command_ == "potiValue":
                     if self.difference_poti_high(value):
                         changed_hardware.append(command_)
-        print(changed_hardware)
         self.update_db(changed_hardware)
         return changed_hardware
 
