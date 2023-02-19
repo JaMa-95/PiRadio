@@ -318,6 +318,7 @@ class Radio:
                 if command_ == "potiValue":
                     if self.difference_poti_high(value):
                         changed_hardware.append(command_)
+        print(changed_hardware)
         self.update_db(changed_hardware)
         return changed_hardware
 
