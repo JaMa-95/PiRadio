@@ -228,8 +228,10 @@ class Radio:
     @staticmethod
     def get_frequency_stream(button_frequencies, encoder_value):
         for radio_frequency in button_frequencies.frequencies:
+            print(f"{radio_frequency.minimum}, {radio_frequency.maximum}, {encoder_value}")
             if radio_frequency.minimum <= encoder_value < radio_frequency.maximum:
                 return radio_frequency
+        return None
 
     def get_button_frequency(self):
         if self.radio_buttons.button_lang.state:
