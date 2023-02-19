@@ -248,6 +248,7 @@ class Radio:
         volume = int((volume - 1500) / 25.95)
         # volume raspberry
         volume = int(volume / 1.5)
+        print(volume)
         if volume < 0:
             volume = 0
         elif volume > 100:
