@@ -118,6 +118,7 @@ class Radio:
 
     def check_commands(self):
         print("start checking commands")
+        self.turn_off_amplifier()
         global command
         while True:
             self.radio_buttons.set_value()
@@ -130,7 +131,6 @@ class Radio:
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
                 changed_hardware = self.get_changed_hardware()
-                print(changed_hardware)
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
