@@ -118,13 +118,11 @@ class Radio:
             self.check_raspi_off()
             self.check_esp_reset()
             self.check_change_speakers()
-            print(command)
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
                 changed_hardware = self.get_changed_hardware()
-                print("changed_hardware: " + changed_hardware)
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
@@ -493,6 +491,7 @@ class USBReader:
                 ser.flushInput()
             try:
                 command_ = ser.read_until(b';').decode("UTF-8")
+                print(command)
                 command_ = command_.replace("\n", "").replace("\r", "")
                 if command_[0] == "-" and command_[-1] == ";":
                     command = command_[1:]
