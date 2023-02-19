@@ -122,7 +122,7 @@ class Radio:
             self.check_esp_reset()
             print("asd")
             self.check_change_speakers()
-            print("abc: " + command)
+            print("abc: ")
             if command != self.currentCommandString:
                 print(command)
                 self.set_old_command(self.current_command)
