@@ -336,7 +336,6 @@ class Radio:
         self.radio_buttons.set_value()
         changed_hardware = []
         state = self.radio_buttons.button_on_off.state
-        print(f"{self.current_command['buttonOnOff']}, {state}")
         if self.current_command["buttonOnOff"] != state:
             self.current_command["buttonOnOff"] = state
             changed_hardware.append("buttonOnOff")
