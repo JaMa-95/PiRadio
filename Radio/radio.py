@@ -114,15 +114,10 @@ class Radio:
         print("start checking commands")
         global command
         while True:
-            print("abc")
             self.check_radio_on_off()
-            print("s")
             self.check_raspi_off()
-            print("sa")
             self.check_esp_reset()
-            print("asd")
             self.check_change_speakers()
-            print("abc: ")
             if command != self.currentCommandString:
                 print(command)
                 self.set_old_command(self.current_command)
@@ -500,6 +495,7 @@ class USBReader:
                 command_ = command_.replace("\n", "").replace("\r", "")
                 if command_[0] == "-" and command_[-1] == ";":
                     command = command_[1:]
+                    print("command is: " + command)
             except UnicodeDecodeError or serial.serialutil.SerialException as e:
                 print(print(traceback.format_exc()))
                 if e == serial.serialutil.SerialException and "readiness" in e:
