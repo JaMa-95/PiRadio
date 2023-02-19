@@ -375,7 +375,8 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        if radio_frequency and self.radio_buttons.button_on_off.state:
+        print(f"radio_frequency: {radio_frequency}, ")
+        if radio_frequency and self.on:
             print("stream")
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
             if stream:

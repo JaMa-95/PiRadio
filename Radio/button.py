@@ -89,7 +89,6 @@ class RadioButtonsESP:
     button_ukw: ButtonESP = ButtonESP()
     button_spr: ButtonESP = ButtonESP()
 
-
     def set_value(self, name: str, value: int):
         if name == "buttonOnOff":
             return self.button_on_off.set_value(value)
