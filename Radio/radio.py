@@ -75,7 +75,8 @@ class Radio:
 
         self.broker: MqttBroker = None
         self.mqtt = mqtt
-        self.connect_mqtt()
+        if mqtt:
+            self.connect_mqtt()
 
         self.db = Database()
 
