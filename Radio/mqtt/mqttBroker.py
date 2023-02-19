@@ -6,7 +6,7 @@ from paho.mqtt import client as mqtt_client
 
 class MqttBroker:
     def __init__(self):
-        self.broker = "192.168.0.47"
+        self.broker = "192.168.0.49"
         self.port = 1883
         self.topic_start = "piradio/start"
         self.topic_stream = "piradio/stream"
