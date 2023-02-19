@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     usb_reader = USBReader()
     #dataGetter = DataGetter(radio)
-    radio = Radio(mqtt=True, play_central=True, play_radio_speaker=True)
+    radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
     audioPlayer = AudioPlayer(radio)
 
     radioThread = Thread(target=radio.check_commands)
