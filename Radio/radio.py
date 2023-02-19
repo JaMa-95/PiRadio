@@ -233,14 +233,19 @@ class Radio:
 
     def get_button_frequency(self):
         if self.radio_buttons.button_lang.is_clicked:
+            print("LANG IS CLICKED")
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_mittel.is_clicked:
+            print("MITTEL IS CLICKED")
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_kurz.is_clicked:
+            print("KURZ IS CLICKED")
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_ukw.is_clicked:
+            print("UKW IS CLICKED")
             return UKWFrequencies(), self.current_command["posUKW"]
         elif self.radio_buttons.button_spr.is_clicked:
+            print("SPR IS CLICKED")
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             return None, None
@@ -369,6 +374,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
+        print(f"{radio_frequency}, {encoder_value}")
         if radio_frequency and self.radio_buttons.button_on_off.state:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
             if stream:
