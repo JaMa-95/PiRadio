@@ -490,12 +490,13 @@ class USBReader:
             if ser.in_waiting > 1000:
                 ser.flushInput()
             try:
-                command_ = ser.read(10)
+                command_ = ser.readline()
                 #command_ = ser.read_until(b';').decode("UTF-8")
-                print(command)
-                command_ = command_.replace("\n", "").replace("\r", "")
-                if command_[0] == "-" and command_[-1] == ";":
-                    command = command_[1:]
+                if command_:
+                    print(command)
+                    command_ = command_.replace("\n", "").replace("\r", "")
+                    if command_[0] == "-" and command_[-1] == ";":
+                        command = command_[1:]
             except UnicodeDecodeError or serial.serialutil.SerialException as e:
                 print(print(traceback.format_exc()))
                 if e == serial.serialutil.SerialException and "readiness" in e:
