@@ -124,6 +124,7 @@ class Radio:
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
                 changed_hardware = self.get_changed_hardware()
+                print(changed_hardware)
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
@@ -314,7 +315,6 @@ class Radio:
 
     def get_changed_buttons(self):
         changed_hardware = []
-        self.radio_buttons.set_value()
         state = self.radio_buttons.button_on_off.state
         if self.current_command["buttonOnOff"] != state:
             changed_hardware.append("buttonOnOff")
