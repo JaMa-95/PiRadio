@@ -57,7 +57,6 @@ class Radio:
         self.raspberry = Raspberry()
         self.playing = False
         self.on = False
-        print("asdad")
 
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
         self.radio_buttons = RadioButtons()
@@ -73,14 +72,12 @@ class Radio:
         self.volume_old = None
         self.volume_sensitivity = 1
         self.poti_sensivity = 15
-        print("hello")
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
 
         self.db = Database()
-        print("bye")
 
     # PUB METHODS
     def attach(self, subscriber):

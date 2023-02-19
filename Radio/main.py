@@ -18,6 +18,7 @@ if __name__ == "__main__":
     radioThread = Thread(target=radio.check_commands)
     readerThread = Thread(target=usb_reader.read_usb)
 
+    print("radio thread start")
     radioThread.start()
     readerThread.start()
 
