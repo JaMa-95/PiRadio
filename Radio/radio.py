@@ -179,6 +179,7 @@ class Radio:
     def process_hardware_change(self, changed_hardware_list):
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
+                print("set-volume")
                 self.set_volume(self.current_command[changed_hardware])
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
@@ -263,11 +264,9 @@ class Radio:
         if poti > self.current_volume_poti_value:
             if poti > (self.current_volume_poti_value + self.poti_sensivity):
                 self.current_volume_poti_value = poti
-                print("TRUE")
                 return True
         elif poti < (self.current_volume_poti_value - self.poti_sensivity):
             self.current_volume_poti_value = poti
-            print("TRUE")
             return True
         return False
 
