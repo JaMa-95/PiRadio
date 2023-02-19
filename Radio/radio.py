@@ -232,19 +232,19 @@ class Radio:
                 return radio_frequency
 
     def get_button_frequency(self):
-        if self.radio_buttons.button_lang.is_clicked:
+        if self.radio_buttons.button_lang.state:
             print("LANG IS CLICKED")
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_mittel.is_clicked:
+        elif self.radio_buttons.button_mittel.state:
             print("MITTEL IS CLICKED")
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_kurz.is_clicked:
+        elif self.radio_buttons.button_kurz.state:
             print("KURZ IS CLICKED")
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_ukw.is_clicked:
+        elif self.radio_buttons.button_ukw.state:
             print("UKW IS CLICKED")
             return UKWFrequencies(), self.current_command["posUKW"]
-        elif self.radio_buttons.button_spr.is_clicked:
+        elif self.radio_buttons.button_spr.state:
             print("SPR IS CLICKED")
             return SprFrequencies(), self.current_command["posUKW"]
         else:
