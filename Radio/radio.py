@@ -261,9 +261,11 @@ class Radio:
         if poti > self.current_command["potiValue"]:
             if poti > (self.current_command["potiValue"] + self.poti_sensivity):
                 self.current_command["potiValue"] = poti
+                print("TRUE")
                 return True
         elif poti < (self.current_command["potiValue"] - self.poti_sensivity):
             self.current_command["potiValue"] = poti
+            print("TRUE")
             return True
         return False
 
