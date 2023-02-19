@@ -469,7 +469,7 @@ class USBReader:
             ser = self.get_usb_ser_linux_2()
         else:
             ser = self.get_usb_ser_win()
-        return ser[0]
+        return ser
 
     @staticmethod
     def check_connection(ser):
