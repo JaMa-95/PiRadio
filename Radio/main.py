@@ -12,13 +12,13 @@ if __name__ == "__main__":
 
     usb_reader = USBReader()
     #dataGetter = DataGetter(radio)
-    radio = Radio(mqtt=True, play_central=True, play_radio_speaker=True)
-    audioPlayer = AudioPlayer(radio)
+    #radio = Radio(mqtt=True, play_central=True, play_radio_speaker=True)
+    #audioPlayer = AudioPlayer(radio)
 
-    radioThread = Thread(target=radio.check_commands)
+    #radioThread = Thread(target=radio.check_commands)
     readerThread = Thread(target=usb_reader.read_usb)
 
-    radioThread.start()
+    #radioThread.start()
     readerThread.start()
 
     app.run(port=5555, host='0.0.0.0')
