@@ -174,6 +174,7 @@ class ButtonRaspi:
         self.value_olds.append(self.state)
         self.value_old = self.value
         self.value = self.state
+        print(f"{self.button_number}, {self.state}")
         if self.state:
             self.is_clicked = True
             self.indexer += 1
