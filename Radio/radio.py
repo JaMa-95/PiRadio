@@ -263,9 +263,11 @@ class Radio:
         if poti > self.current_volume_poti_value:
             if poti > (self.current_volume_poti_value + self.poti_sensivity):
                 self.current_volume_poti_value = poti
+                print("TTUE")
                 return True
         elif poti < (self.current_volume_poti_value - self.poti_sensivity):
             self.current_volume_poti_value = poti
+            print("TRUE")
             return True
         print(f"false: {poti}, {self.current_volume_poti_value}")
         return False
