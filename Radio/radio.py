@@ -121,18 +121,18 @@ class Radio:
         self.turn_off_amplifier()
         global command
         while True:
-            self.radio_buttons.set_value()
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
             self.check_change_speakers()
+            changed_hardware = self.get_changed_buttons()
             if command != self.currentCommandString:
                 self.set_old_command(self.current_command)
                 self.currentCommandString = command
                 self.extract_commands_from_string(command)
-                changed_hardware = self.get_changed_hardware()
-                if changed_hardware:
-                    self.process_hardware_change(changed_hardware)
+                changed_hardware.append(self.get_changed_hardware())
+            if changed_hardware:
+                self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
 
     def check_raspi_off(self):
@@ -329,11 +329,11 @@ class Radio:
                 if command_ == "potiValue":
                     if self.difference_poti_high(value, self.old_command[command_]):
                         changed_hardware.append(command_)
-        changed_hardware.append(self.get_changed_buttons())
         self.update_db(changed_hardware)
         return changed_hardware
 
     def get_changed_buttons(self):
+        self.radio_buttons.set_value()
         changed_hardware = []
         state = self.radio_buttons.button_on_off.state
         if self.current_command["buttonOnOff"] != state:
