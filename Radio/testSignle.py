@@ -2,14 +2,14 @@ import time
 import vlc
 from radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
 
-url = "http://184.154.43.106:8243/stream"
+url = "https://streams.radiomast.io/8846a94e-9874-4692-a1a0-ec7aadbe2771"
 instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
 player = instance.media_player_new()
 media = instance.media_new(url)
 media.get_mrl()
 player.set_media(media)
 player.play()
-player.audio_set_volume(30)
+player.audio_set_volume(50)
 time.sleep(500)
 is_playing = player.is_playing()
 print(is_playing)
