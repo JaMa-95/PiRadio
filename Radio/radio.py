@@ -178,9 +178,10 @@ class Radio:
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
                 self.set_volume(self.current_command[changed_hardware])
-            elif changed_hardware in ["posLangKurzMittel", "posUKW"]:
-                print("------------------------------------")
-                print(f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
+            else:
+                if changed_hardware in ["posLangKurzMittel", "posUKW"]:
+                    print("------------------------------------")
+                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     def turn_off_amplifier(self):
