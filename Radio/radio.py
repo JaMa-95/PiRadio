@@ -273,6 +273,7 @@ class Radio:
                 return True
         elif poti < (poti_old - self.poti_sensivity):
             return True
+        print(f"false: {poti}, {poti_old}")
         return False
 
     def send_volume(self, volume):
