@@ -138,6 +138,8 @@ class ButtonRaspi:
 
     def is_click(self):
         # TODO: check if indexer needed
+        if self.button_number == 23:
+            print(f"{self.on_off_wait} : {self.indexer}")
         if not self.on_off_wait and self.indexer > 5:
             self.on_off_wait = True
             self.state = GPIO.input(self.button_number)
@@ -194,12 +196,12 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi(16)
-    button_lang: ButtonRaspi = ButtonRaspi(18)
-    button_mittel: ButtonRaspi = ButtonRaspi(22)
-    button_kurz: ButtonRaspi = ButtonRaspi(24)
-    button_ukw: ButtonRaspi = ButtonRaspi(26)
-    button_spr: ButtonRaspi = ButtonRaspi(32)
+    button_on_off: ButtonRaspi = ButtonRaspi(23)
+    button_lang: ButtonRaspi = ButtonRaspi(24)
+    button_mittel: ButtonRaspi = ButtonRaspi(25)
+    button_kurz: ButtonRaspi = ButtonRaspi(8)
+    button_ukw: ButtonRaspi = ButtonRaspi(7)
+    button_spr: ButtonRaspi = ButtonRaspi(12)
 
     def set_value(self):
         self.button_on_off.set_value()

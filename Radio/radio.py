@@ -114,6 +114,7 @@ class Radio:
         print("start checking commands")
         global command
         while True:
+            self.radio_buttons.set_value()
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
@@ -132,7 +133,6 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
-        print(f"is_click: {self.radio_buttons.button_on_off.is_click()}")
         if self.radio_buttons.button_on_off.is_click():
             self.on = not self.on
             if self.on:
