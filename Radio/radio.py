@@ -11,6 +11,8 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
+import RPi.GPIO as GPIO
+
 
 command = None
 glAudioPlayer = None
@@ -57,6 +59,10 @@ class Radio:
         self.raspberry = Raspberry()
         self.playing = False
         self.on = False
+
+        self.amplifier_switch_pin = 4
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(4, GPIO.OUT)
 
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
         self.radio_buttons = RadioButtonsRaspi()
@@ -176,6 +182,12 @@ class Radio:
                 print("encoder changed")
                 self.process_hardware_value_change()
 
+    def turn_off_amplifier(self):
+        GPIO.output(self.amplifier_switch_pin, False)
+
+    def turn_on_amplifier(self):
+        GPIO.output(self.amplifier_switch_pin, True)
+
     def turn_on_radio(self):
         print("Turning on Radio")
         radio_frequency, encoder_value = self.get_button_frequency()
@@ -192,6 +204,7 @@ class Radio:
         print("Turning off radio")
         if self.speakers.play_radio:
             self.publish("stop")
+        self.turn_off_amplifier()
         self.current_stream.radio_url = None
         if self.mqtt:
             if self.speakers.play_central:
@@ -199,6 +212,7 @@ class Radio:
 
     def start_stream(self, stream: RadioFrequency):
         print(f"Playing stream: {stream}")
+        self.turn_on_amplifier()
         if self.speakers.play_radio:
             self.publish(stream)
         self.db.replace_stream(stream.radio_url)
@@ -361,6 +375,7 @@ class Radio:
                 if self.current_stream.radio_url != stream.radio_url:
                     print("Changing stream")
                     if self.playing:
+                        self.turn_off_amplifier()
                         if self.speakers.play_radio:
                             self.publish("stop")
                         self.playing = False
@@ -368,6 +383,7 @@ class Radio:
                         print(f"Playing playlist: {stream}")
                         self.db.replace_stream(stream.radio_url)
                         self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
+                        self.turn_on_amplifier()
                         if self.speakers.play_radio:
                             self.publish(stream)
                         self.playing = True
