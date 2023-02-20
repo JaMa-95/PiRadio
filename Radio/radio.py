@@ -38,8 +38,9 @@ class LedStrip:
         for i in range(self.pixels.count()):
             self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
             self.pixels.show()
-        time.sleep(10)
+        time.sleep(1)
         self.pixels.clear()
+        print("CLEAR")
 
 
 # TODO: Change to button classes
