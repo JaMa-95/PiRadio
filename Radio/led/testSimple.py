@@ -46,6 +46,12 @@ for i in range(PIXEL_COUNT):
 
 pixels.show()
 
+time.sleep(2)
+for i in range(PIXEL_COUNT):
+    pixels.set_pixel_rgb(i, 255, 155, 0)  # Set the RGB color (0-255) of pixel i.
+
+pixels.show()
+
 time.sleep(20)
 pixels.clear()
 pixels.show()
