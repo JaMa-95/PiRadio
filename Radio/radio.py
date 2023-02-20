@@ -5,13 +5,16 @@ import serial
 import time
 import traceback
 from dataclasses import dataclass
+import RPi.GPIO as GPIO
+import Adafruit_WS2801
+import Adafruit_GPIO.SPI as SPI
+
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
 from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
-import RPi.GPIO as GPIO
 
 
 command = None
@@ -19,9 +22,28 @@ glAudioPlayer = None
 stop = False
 
 
+
+class LedStrip:
+    def __init__(self):
+        # Configure the count of pixels:
+        pixel_count = 12
+
+        # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
+        spi_port = 0
+        spi_device = 0
+        self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
+
+    def blink_once(self, color=(240, 174, 68)):
+        self.pixels.clear()
+        for i in range(self.pixels.count()):
+            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+            self.pixels.show()
+            time.sleep(1)
+        self.pixels.clear()
+
+
 # TODO: Change to button classes
 # TODO: Add web control
-
 @dataclass
 class Speakers:
     play_radio: bool = True
@@ -85,6 +107,7 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
 
+        self.leds = LedStrip()
         self.db = Database()
 
     # PUB METHODS
@@ -119,6 +142,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
+        self.leds.blink_once()
         print("start checking commands")
         self.turn_off_amplifier()
         global command
