@@ -16,8 +16,8 @@ PIXEL_COUNT = 10
 # The WS2801 library makes use of the BCM pin numbering scheme. See the README.md for details.
 
 # Specify a software SPI connection for Raspberry Pi on the following pins:
-PIXEL_CLOCK = 10
-PIXEL_DOUT  = 11
+PIXEL_CLOCK = 11
+PIXEL_DOUT  = 10
 pixels = Adafruit_WS2801.WS2801Pixels(PIXEL_COUNT, clk=PIXEL_CLOCK, do=PIXEL_DOUT)
 
 # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
@@ -46,7 +46,7 @@ for i in range(PIXEL_COUNT):
 
 pixels.show()
 
-time.sleep(2)
+time.sleep(20)
 pixels.clear()
 pixels.show()
 # Not used but you can also read pixel colors with the get_pixel_rgb function:
