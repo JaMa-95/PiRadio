@@ -36,25 +36,23 @@ class LedStrip:
         self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, clk=PIXEL_CLOCK, do=PIXEL_DOUT)
         #self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
 
-    def blink_once(self, color=(0, 255, 0)):
+    def blink_once(self, color=(240, 174, 68)):
         self.pixels.clear()
         time.sleep(2)
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel_rgb(i, 255, 0, 0)
+            self.pixels.set_pixel_rgb(i, color[0], color[1], color[2])
         self.pixels.show()
+        time.sleep(0.2)
         self.pixels.clear()
-        time.sleep(1)
+        self.pixels.show()
+        time.sleep(0.2)
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel_rgb(i, 0, 255, 0)
+            self.pixels.set_pixel_rgb(i, color[0], color[1], color[2])
         self.pixels.show()
-        time.sleep(1)
-        self.pixels.clear()
-        for i in range(self.pixels.count()):
-            self.pixels.set_pixel_rgb(i, 0, 0, 255)
-        self.pixels.show()
-        time.sleep(1)
+        time.sleep(0.2)
         self.pixels.clear()
         self.pixels.show()
+
 
 
     # TODO: Change to button classes
