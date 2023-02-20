@@ -40,7 +40,9 @@ class LedStrip:
         color_start = (246, 205, 139)
         color_end = (240, 174, 68)
         self.pixels.clear()
+        self.pixels.show()
         time.sleep(2)
+        print("SHOW")
         for j in range(100, 1, 1):
             color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
             color[1] = color_start[1] + int((color_end[1] - color_start[1]) / j)
@@ -49,6 +51,7 @@ class LedStrip:
                 self.pixels.set_pixel_rgb(i, color[0], color[1], color[2])
             self.pixels.show()
             time.sleep(0.1)
+        print("FINSIHED")
 
 
 
