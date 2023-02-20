@@ -37,11 +37,10 @@ class LedStrip:
         #self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
 
     def blink_once(self, color=[240, 174, 68]):
-        color_start = [246, 205, 139]
+        color_start = (246, 205, 139)
         color_end = (240, 174, 68)
         self.pixels.clear()
         self.pixels.show()
-        time.sleep(2)
         print("SHOW")
         for j in range(100, 1, -1):
             color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
@@ -49,7 +48,7 @@ class LedStrip:
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
             print(f"color: {color}")
             for i in range(self.pixels.count()):
-                self.pixels.set_pixel_rgb(i, color[0], color[1], color[2])
+                self.pixels.set_pixel_rgb(i, 255, 0, 0)
             self.pixels.show()
             time.sleep(0.1)
         self.pixels.clear()
