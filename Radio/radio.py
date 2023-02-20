@@ -29,8 +29,8 @@ class LedStrip:
         pixel_count = 12
 
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
-        spi_port = 0
-        spi_device = 0
+        spi_port = 19
+        spi_device = 23
         self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
 
     def blink_once(self, color=(240, 174, 68)):
