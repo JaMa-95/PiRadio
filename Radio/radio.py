@@ -52,6 +52,8 @@ class LedStrip:
                 self.pixels.set_pixel_rgb(i, color[0], color[1], color[2])
             self.pixels.show()
             time.sleep(0.1)
+        self.pixels.clear()
+        self.pixels.show()
         print("FINSIHED")
 
 
