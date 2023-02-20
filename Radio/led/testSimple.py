@@ -43,6 +43,7 @@ for i in range(PIXEL_COUNT//3*2, PIXEL_COUNT):
 
 # Now make sure to call show() to update the pixels with the colors set above!
 pixels.show()
-
+time.sleep(2)
+pixels.clear()
 # Not used but you can also read pixel colors with the get_pixel_rgb function:
 #r, g, b = pixels.get_pixel_rgb(0)  # Read pixel 0 red, green, blue value.

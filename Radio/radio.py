@@ -39,15 +39,15 @@ class LedStrip:
     def blink_once(self, color=(0, 255, 0)):
         self.pixels.clear()
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(color[0], color[1], color[2]))
+            self.pixels.set_pixel_rgb(i, 255, 0, 0)
             self.pixels.show()
         time.sleep(1)
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(0, 0, 255))
+            self.pixels.set_pixel_rgb(i, 0, 255, 0)
             self.pixels.show()
         time.sleep(1)
         for i in range(self.pixels.count()):
-            self.pixels.set_pixel(i, Adafruit_WS2801.RGB_to_color(255, 0, 0))
+            self.pixels.set_pixel_rgb(i, 0, 0, 255)
             self.pixels.show()
         self.pixels.clear()
         print("CLEAR")
