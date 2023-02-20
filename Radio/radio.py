@@ -38,6 +38,7 @@ class LedStrip:
 
     def blink_once(self, color=(0, 255, 0)):
         self.pixels.clear()
+        time.sleep(2)
         for i in range(self.pixels.count()):
             self.pixels.set_pixel_rgb(i, 255, 0, 0)
         self.pixels.show()
