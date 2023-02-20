@@ -31,8 +31,8 @@ class LedStrip:
         # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
         spi_port = 0
         spi_device = 0
-        PIXEL_CLOCK = 23
-        PIXEL_DOUT = 19
+        PIXEL_CLOCK = 11
+        PIXEL_DOUT = 10
         self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, clk=PIXEL_CLOCK, do=PIXEL_DOUT)
         #self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
 
