@@ -52,8 +52,12 @@ class LedStrip:
         for i in range(self.pixels.count()):
             self.pixels.set_pixel_rgb(i, 0, 0, 255)
         self.pixels.show()
+        time.sleep(1)
         self.pixels.clear()
+        time.sleep(3)
         print("CLEAR")
+        for i in range(self.pixels.count()):
+            self.pixels.set_pixel_rgb(i, 0, 0, 0)
 
 
 # TODO: Change to button classes
