@@ -48,7 +48,7 @@ class LedStrip:
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
             print(f"color: {color}")
             for i in range(self.pixels.count()):
-                self.pixels.set_pixel_rgb(i, 255, 0, 0)
+                self.pixels.set_pixel_rgb(i, 255, 165, 0)
             self.pixels.show()
             time.sleep(0.1)
         self.pixels.clear()
