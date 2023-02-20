@@ -40,15 +40,17 @@ class LedStrip:
         self.pixels.clear()
         for i in range(self.pixels.count()):
             self.pixels.set_pixel_rgb(i, 255, 0, 0)
-            self.pixels.show()
+        self.pixels.show()
+        self.pixels.clear()
         time.sleep(1)
         for i in range(self.pixels.count()):
             self.pixels.set_pixel_rgb(i, 0, 255, 0)
-            self.pixels.show()
+        self.pixels.show()
         time.sleep(1)
+        self.pixels.clear()
         for i in range(self.pixels.count()):
             self.pixels.set_pixel_rgb(i, 0, 0, 255)
-            self.pixels.show()
+        self.pixels.show()
         self.pixels.clear()
         print("CLEAR")
 
