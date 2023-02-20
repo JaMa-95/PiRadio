@@ -43,7 +43,7 @@ class LedStrip:
         self.pixels.show()
         time.sleep(2)
         print("SHOW")
-        for j in range(100, 1, 1):
+        for j in range(100, 1, -1):
             color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
             color[1] = color_start[1] + int((color_end[1] - color_start[1]) / j)
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
