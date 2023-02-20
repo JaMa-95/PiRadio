@@ -54,7 +54,7 @@ class LedStrip:
         self.pixels.show()
         time.sleep(1)
         self.pixels.clear()
-        pixels.show()
+        self.pixels.show()
 
 
     # TODO: Change to button classes
