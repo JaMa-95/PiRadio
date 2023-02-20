@@ -30,21 +30,24 @@ pixels.clear()
 pixels.show()  # Make sure to call show() after changing any pixels!
 
 # Set the first third of the pixels red.
-for i in range(PIXEL_COUNT//3):
+for i in range(PIXEL_COUNT):
     pixels.set_pixel_rgb(i, 255, 0, 0)  # Set the RGB color (0-255) of pixel i.
-
-# Set the next third of pixels green.
-for i in range(PIXEL_COUNT//3, PIXEL_COUNT//3*2):
-    pixels.set_pixel_rgb(i, 0, 255, 0)
-
-# Set the last third of pixels blue.
-for i in range(PIXEL_COUNT//3*2, PIXEL_COUNT):
-    pixels.set_pixel_rgb(i, 0, 0, 255)
 
 # Now make sure to call show() to update the pixels with the colors set above!
 pixels.show()
 time.sleep(2)
-pixels.clear()
+for i in range(PIXEL_COUNT):
+    pixels.set_pixel_rgb(i, 0, 255, 0)  # Set the RGB color (0-255) of pixel i.
+
+pixels.show()
 time.sleep(2)
+for i in range(PIXEL_COUNT):
+    pixels.set_pixel_rgb(i, 0, 0, 255)  # Set the RGB color (0-255) of pixel i.
+
+pixels.show()
+
+time.sleep(2)
+pixels.clear()
+pixels.show()
 # Not used but you can also read pixel colors with the get_pixel_rgb function:
 #r, g, b = pixels.get_pixel_rgb(0)  # Read pixel 0 red, green, blue value.
