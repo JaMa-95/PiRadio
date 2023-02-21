@@ -47,13 +47,11 @@ class LedStrip:
             color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
             color[1] = color_start[1] + int((color_end[1] - color_start[1]) / j)
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
-            print(f"color: {color}")
             for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, color)
+                self.strip.setPixelColor(i, Color(color[0], color[2], color[1]))
             self.strip.show()
-            time.sleep(0.1)
+            time.sleep(0.05)
         self.clear()
-        self.strip.show()
         print("FINSIHED")
 
     def blink(self):
@@ -179,7 +177,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        self.ledStrip.blink()
+        self.ledStrip.blink_once()
         print("start checking commands")
         self.turn_off_amplifier()
         global command
