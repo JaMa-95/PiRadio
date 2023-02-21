@@ -39,7 +39,7 @@ class LedStrip:
     def blink_once(self, color=[240, 174, 68]):
         color_start = (246, 205, 139)
         color_end = (240, 174, 68)
-        self.strip.clear()
+        self.clear()
         self.strip.show()
         print("SHOW")
         for j in range(100, 1, -1):
@@ -51,10 +51,14 @@ class LedStrip:
                 self.strip.setPixelColor(i, color)
             self.strip.show()
             time.sleep(0.1)
-        self.strip.clear()
+        self.clear()
         self.strip.show()
         print("FINSIHED")
 
+    def clear(self):
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, Color(0 ,0 ,0))
+        self.strip.show()
 
 
     # TODO: Change to button classes
