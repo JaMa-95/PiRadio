@@ -35,6 +35,7 @@ class LedStrip:
         LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
         self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+        self.strip.begin()
 
     def blink_once(self, color=[240, 174, 68]):
         color_start = (246, 205, 139)
@@ -132,7 +133,7 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
 
-        self.leds = LedStrip()
+        self.ledStrip = LedStrip()
         self.db = Database()
 
     # PUB METHODS
@@ -167,7 +168,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        # self.leds.blink()
+        self.ledStrip.blink()
         print("start checking commands")
         self.turn_off_amplifier()
         global command
