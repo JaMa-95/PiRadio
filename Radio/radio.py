@@ -167,7 +167,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        self.leds.blink()
+        # self.leds.blink()
         print("start checking commands")
         self.turn_off_amplifier()
         global command
