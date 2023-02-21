@@ -9,8 +9,8 @@ import Adafruit_GPIO.SPI as SPI
 PIXEL_COUNT = 12
 
 # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
-SPI_PORT = 19
-SPI_DEVICE = 23
+SPI_PORT = 0
+SPI_DEVICE = 0
 pixels = Adafruit_WS2801.WS2801Pixels(PIXEL_COUNT, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE), gpio=GPIO)
 
 
