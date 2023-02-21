@@ -37,29 +37,32 @@ class LedStrip:
         self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
 
-    def blink_once(self, color=[240, 174, 68]):
-        color_start = (246, 205, 139)
-        color_end = (240, 174, 68)
-        self.clear()
-        self.strip.show()
-        print("SHOW")
-        for j in range(100, 1, -1):
-            color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
-            color[1] = color_start[1] + int((color_end[1] - color_start[1]) / j)
-            color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
-            for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, Color(color[0], color[2], color[1]))
-            self.strip.show()
-            time.sleep(0.05)
-        self.clear()
-        print("FINSIHED")
-
-    def blink(self):
+    def blink_once(self, color=Color(255, 0, 80), length=1):
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(255, 0, 80))
+            self.strip.setPixelColor(i, color)
         self.strip.show()
-        time.sleep(1)
+        time.sleep(length)
+        self.clear()
 
+    def blink_twice(self):
+        self.blink_once()
+        self.blink_once()
+
+    def fade(self, on=True, color_start=Color(255, 0, 80)):
+        if on:
+            start = 100
+            end = 1
+            step = -1
+        else:
+            start = 1
+            end = 100
+            step = 1
+        for j in range(start, end, step):
+            color = Color(color_start[0]/j, color_start[1]/j, color_start[2]/j)
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, color)
+            self.strip.show()
+            time.sleep(0.03)
 
     def clear(self):
         for i in range(self.strip.numPixels()):
@@ -167,7 +170,8 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        self.ledStrip.blink()
+        self.ledStrip.fade(on=True)
+        self.ledStrip.fade(on=False)
         print("start checking commands")
         self.turn_off_amplifier()
         global command
