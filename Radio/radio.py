@@ -56,22 +56,22 @@ class LedStrip:
 
     def blink(self):
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(255, 12, 100))
-        self.strip.show()
-        time.sleep(1)
-
-        for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, Color(255, 12, 80))
         self.strip.show()
         time.sleep(1)
 
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(255, 12, 60))
+            self.strip.setPixelColor(i, Color(255, 40, 80))
         self.strip.show()
         time.sleep(1)
 
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(255, 12, 40))
+            self.strip.setPixelColor(i, Color(255, 80, 80))
+        self.strip.show()
+        time.sleep(1)
+
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, Color(200, 12, 80))
         self.strip.show()
         time.sleep(1)
 
