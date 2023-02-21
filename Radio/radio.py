@@ -48,7 +48,7 @@ class LedStrip:
         self.blink_once()
         self.blink_once()
 
-    def fade(self, on=True, color_start=Color(255, 0, 80)):
+    def fade(self, on=True, color_start=(255, 0, 80)):
         if on:
             start = 100
             end = 1
