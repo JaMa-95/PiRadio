@@ -55,6 +55,12 @@ class LedStrip:
         self.strip.show()
         print("FINSIHED")
 
+    def blink(self):
+        color = Color(240, 174, 68)
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, color)
+        self.strip.show()
+
     def clear(self):
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, Color(0 ,0 ,0))
@@ -161,7 +167,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        self.leds.blink_once()
+        self.leds.blink()
         print("start checking commands")
         self.turn_off_amplifier()
         global command
