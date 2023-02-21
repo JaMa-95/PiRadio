@@ -198,7 +198,7 @@ class RadioButtonsRaspi:
     button_mittel: ButtonRaspi = ButtonRaspi(25)
     button_kurz: ButtonRaspi = ButtonRaspi(8)
     button_ukw: ButtonRaspi = ButtonRaspi(7)
-    button_spr: ButtonRaspi = ButtonRaspi(12)
+    button_spr: ButtonRaspi = ButtonRaspi(26)
 
     def set_value(self):
         self.button_on_off.set_value()

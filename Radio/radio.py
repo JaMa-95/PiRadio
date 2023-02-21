@@ -6,8 +6,7 @@ import time
 import traceback
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
-import Adafruit_WS2801
-import Adafruit_GPIO.SPI as SPI
+from rpi_ws281x import PixelStrip, Color
 
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
@@ -25,16 +24,17 @@ stop = False
 
 class LedStrip:
     def __init__(self):
-        # Configure the count of pixels:
-        pixel_count = 10
+        # LED strip configuration:
+        LED_COUNT = int(20/3)  # Number of LED pixels.
+        LED_PIN = 12  # GPIO pin connected to the pixels (18 uses PWM!).
+        # LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+        LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
+        LED_DMA = 10  # DMA channel to use for generating signal (try 10)
+        LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
+        LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
+        LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-        # Alternatively specify a hardware SPI connection on /dev/spidev0.0:
-        spi_port = 0
-        spi_device = 0
-        PIXEL_CLOCK = 11
-        PIXEL_DOUT = 10
-        self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, clk=PIXEL_CLOCK, do=PIXEL_DOUT)
-        #self.pixels = Adafruit_WS2801.WS2801Pixels(pixel_count, spi=SPI.SpiDev(spi_port, spi_device), gpio=GPIO)
+        self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
     def blink_once(self, color=[240, 174, 68]):
         color_start = (246, 205, 139)
@@ -48,7 +48,7 @@ class LedStrip:
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
             print(f"color: {color}")
             for i in range(self.pixels.count()):
-                self.pixels.set_pixel_rgb(i, 255, 165, 0)
+                self.pixels.setPixelColor(i, color)
             self.pixels.show()
             time.sleep(0.1)
         self.pixels.clear()
