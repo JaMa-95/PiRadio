@@ -63,7 +63,17 @@ class LedStrip:
         time.sleep(0.5)
 
         for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(255, 12, 170))
+            self.strip.setPixelColor(i, Color(162, 110, 14))
+        self.strip.show()
+        time.sleep(1)
+
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, Color(12, 12, 255))
+        self.strip.show()
+        time.sleep(1)
+
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, Color(55, 12, 255))
         self.strip.show()
         time.sleep(1)
 
