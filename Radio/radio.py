@@ -39,20 +39,20 @@ class LedStrip:
     def blink_once(self, color=[240, 174, 68]):
         color_start = (246, 205, 139)
         color_end = (240, 174, 68)
-        self.pixels.clear()
-        self.pixels.show()
+        self.strip.clear()
+        self.strip.show()
         print("SHOW")
         for j in range(100, 1, -1):
             color[0] = color_start[0] + int((color_end[0] - color_start[0]) / j)
             color[1] = color_start[1] + int((color_end[1] - color_start[1]) / j)
             color[2] = color_start[2] + int((color_end[2] - color_start[2]) / j)
             print(f"color: {color}")
-            for i in range(self.pixels.count()):
-                self.pixels.setPixelColor(i, color)
-            self.pixels.show()
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, color)
+            self.strip.show()
             time.sleep(0.1)
-        self.pixels.clear()
-        self.pixels.show()
+        self.strip.clear()
+        self.strip.show()
         print("FINSIHED")
 
 
