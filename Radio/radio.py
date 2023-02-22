@@ -49,6 +49,7 @@ class LedStrip:
         self.blink_once()
 
     def fade(self, on=True, color_start=(255, 0, 80)):
+        print("FADE")
         if on:
             start = 100
             end = 1
@@ -65,6 +66,7 @@ class LedStrip:
             time.sleep(0.03)
 
     def one_after_another(self, color=Color(255, 0, 80)):
+        print("ONE AFTER ANOTHER")
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
             time.sleep(2)
@@ -181,7 +183,7 @@ class Radio:
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
         self.ledStrip.one_after_another()
-        
+
         print("start checking commands")
         self.turn_off_amplifier()
         global command
