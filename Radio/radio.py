@@ -184,7 +184,7 @@ class Radio:
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
         #self.ledStrip.one_after_another()
-
+        
         print("start checking commands")
         self.turn_off_amplifier()
         global command
