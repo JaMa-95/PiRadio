@@ -36,7 +36,7 @@ class LedStrip:
 
         self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
-        self.ledStrip.clear()
+        self.clear()
 
     def blink_once(self, color=Color(255, 0, 80), length=1):
         for i in range(self.strip.numPixels()):
@@ -184,7 +184,7 @@ class Radio:
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
         #self.ledStrip.one_after_another()
-        
+
         print("start checking commands")
         self.turn_off_amplifier()
         global command
