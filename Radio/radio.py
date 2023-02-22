@@ -142,6 +142,7 @@ class Radio:
             self.connect_mqtt()
 
         self.ledStrip = LedStrip()
+        self.ledStrip.clear()
         self.db = Database()
 
     # PUB METHODS
@@ -179,6 +180,8 @@ class Radio:
         self.ledStrip.fade(on=True)
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
+        self.ledStrip.one_after_another()
+        
         print("start checking commands")
         self.turn_off_amplifier()
         global command
