@@ -69,6 +69,7 @@ class LedStrip:
         print("ONE AFTER ANOTHER")
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
+            self.strip.show()
             time.sleep(2)
             self.clear()
 
