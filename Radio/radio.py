@@ -334,7 +334,7 @@ class Radio:
     def set_poti_value(self, poti):
         self.poti_values[self.poti_value_index] = poti
 
-        self.poti_value_index = (self.poti_value_index + 1) / len(self.poti_values)
+        self.poti_value_index = (self.poti_value_index + 1) % len(self.poti_values)
 
     def get_poti_value(self):
         print("--------------------")
