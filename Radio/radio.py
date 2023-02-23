@@ -127,6 +127,8 @@ class Radio:
         self.radio_buttons = RadioButtonsRaspi()
 
         self.current_volume_poti_value = 0
+        self.poti_values = [0, 0, 0, 0, 0, 0]
+        self.poti_value_index = 0
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -329,7 +331,25 @@ class Radio:
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
+    def set_poti_value(self, poti):
+        self.poti_values[self.poti_value_index] = poti
+
+        self.poti_value_index = (self.poti_value_index + 1) / self.poti_values.count()
+
+    def get_poti_value(self):
+        print("--------------------")
+        print(self.poti_values)
+        value = 0
+        for poti_value in self.poti_values:
+            value += poti_value
+        value = value / self.poti_values
+        print(value)
+        print("--------------------")
+        return value
+
     def difference_poti_high(self, poti):
+        self.set_poti_value(poti)
+        poti = self.get_poti_value()
         if poti > self.current_volume_poti_value:
             if poti > (self.current_volume_poti_value + self.poti_sensivity):
                 self.current_volume_poti_value = poti
