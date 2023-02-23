@@ -328,6 +328,7 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
+        print(volume)
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
@@ -337,14 +338,10 @@ class Radio:
         self.poti_value_index = (self.poti_value_index + 1) % len(self.poti_values)
 
     def get_poti_value(self):
-        print("--------------------")
-        print(self.poti_values)
         value = 0
         for poti_value in self.poti_values:
             value += poti_value
         value = value / len(self.poti_values)
-        print(value)
-        print("--------------------")
         return value
 
     def difference_poti_high(self, poti):
