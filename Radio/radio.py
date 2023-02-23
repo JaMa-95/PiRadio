@@ -138,7 +138,7 @@ class Radio:
         self.currentCommandString = None
         self.volume_old = None
         self.volume_sensitivity = 1
-        self.poti_sensivity = 15
+        self.poti_sensivity = 30
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
