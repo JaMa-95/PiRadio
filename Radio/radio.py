@@ -21,7 +21,6 @@ glAudioPlayer = None
 stop = False
 
 
-
 class LedStrip:
     def __init__(self):
         # LED strip configuration:
@@ -316,11 +315,15 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
+        print("----------------")
+        print(volume)
         volume = int(-0.062 * volume + 106.25)
         if volume < 0:
             volume = 0
         elif volume > 100:
             volume = 100
+        print(volume)
+        print("----------------")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
