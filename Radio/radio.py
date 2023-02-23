@@ -127,7 +127,7 @@ class Radio:
         self.radio_buttons = RadioButtonsRaspi()
 
         self.current_volume_poti_value = 0
-        self.poti_values = [0, 0, 0, 0, 0, 0]
+        self.poti_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.poti_value_index = 0
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
