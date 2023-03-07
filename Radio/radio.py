@@ -188,18 +188,13 @@ class Radio:
 
         print("start checking commands")
         self.turn_off_amplifier()
-        global command
         while True:
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
             self.check_change_speakers()
             changed_hardware = self.get_changed_buttons()
-            if command != self.currentCommandString:
-                self.set_old_command(self.current_command)
-                self.currentCommandString = command
-                self.extract_commands_from_string(command)
-                changed_hardware.extend(self.get_changed_hardware())
+            changed_hardware.extend(self.get_changed_hardware())
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
             time.sleep(0.01)

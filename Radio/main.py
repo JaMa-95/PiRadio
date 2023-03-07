@@ -10,15 +10,15 @@ if __name__ == "__main__":
     db.create()
     db.init()
 
-    usb_reader = USBReader()
-    #dataGetter = DataGetter(radio)
+    # usb_reader = USBReader()
+    # dataGetter = DataGetter(radio)
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
     audioPlayer = AudioPlayer(radio)
 
     radioThread = Thread(target=radio.check_commands)
-    readerThread = Thread(target=usb_reader.read_usb)
+    # readerThread = Thread(target=usb_reader.read_usb)
 
     radioThread.start()
-    readerThread.start()
+    # readerThread.start()
 
     app.run(port=5555, host='0.0.0.0')
