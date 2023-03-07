@@ -137,6 +137,7 @@ class ButtonRaspi:
 
     def is_click(self):
         # TODO: check if indexer needed
+        print("INDEXER")
         if not self.on_off_wait and self.indexer > 5:
             self.on_off_wait = True
             self.state = GPIO.input(self.button_number)
