@@ -209,7 +209,6 @@ class Radio:
 
     def check_radio_on_off(self):
         if self.radio_buttons.button_on_off.is_click():
-            print("YAS")
             self.on = not self.on
             if self.on:
                 self.turn_on_radio()
@@ -342,6 +341,7 @@ class Radio:
         for poti_value in self.poti_values:
             value += poti_value
         value = value / len(self.poti_values)
+        print(f"poti: {value}")
         return value
 
     def difference_poti_high(self, poti):
