@@ -150,7 +150,7 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
 
-        self.ledStrip = LedStrip()
+        # self.ledStrip = LedStrip()
         self.db = Database()
 
     # PUB METHODS
@@ -185,9 +185,9 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        self.ledStrip.fade(on=True)
-        self.ledStrip.fade(on=False)
-        self.ledStrip.clear()
+        # self.ledStrip.fade(on=True)
+        # self.ledStrip.fade(on=False)
+        # self.ledStrip.clear()
         #self.ledStrip.one_after_another()
 
         print("start checking commands")
