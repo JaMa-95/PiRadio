@@ -14,7 +14,7 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
-from ads1115.adafruit import ADS
+from ads1115.adafruit import AdsObject
 
 
 command = None
@@ -131,8 +131,8 @@ class Radio:
         self.poti_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.poti_value_index = 0
 
-        self.mittel_poti = ADS(3)
-        self.volume_poti = ADS(2)
+        self.mittel_poti = AdsObject(3)
+        self.volume_poti = AdsObject(2)
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
