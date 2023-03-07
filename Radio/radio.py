@@ -14,6 +14,7 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
+from ads1115.adafruit import ADS
 
 
 command = None
@@ -129,6 +130,9 @@ class Radio:
         self.current_volume_poti_value = 0
         self.poti_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.poti_value_index = 0
+
+        self.mittel_poti = ADS(3)
+        self.volume_poti = ADS(2)
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -394,14 +398,14 @@ class Radio:
 
     def get_changed_hardware(self):
         changed_hardware = []
-        for command_, value in self.current_command.items():
-            if value and self.old_command[command_]:
-                if command_ == "posLangKurzMittel" or command_ == "posUKW":
-                    if value != self.old_command[command_]:
-                        changed_hardware.append(command_)
-                if command_ == "potiValue":
-                    if self.difference_poti_high(value):
-                        changed_hardware.append(command_)
+        value = self.mittel_poti.getValueSmoothed()
+        if value != self.old_command["posLangKurzMittel"]:
+            changed_hardware.append("posLangKurzMittel")
+            self.current_command["posLangKurzMittel"] = value
+        value = self.volume_poti.getValueSmoothed()
+        if self.difference_poti_high(value):
+            changed_hardware.append("potiValue")
+            self.current_command["potiValue"] = value
         self.update_db(changed_hardware)
         return changed_hardware
 
