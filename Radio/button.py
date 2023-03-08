@@ -196,7 +196,7 @@ class RadioButtonsRaspi:
     button_on_off: ButtonRaspi = ButtonRaspi(23)
     button_lang: ButtonRaspi = ButtonRaspi(24)
     button_mittel: ButtonRaspi = ButtonRaspi(25)
-    button_kurz: ButtonRaspi = ButtonRaspi(8)
+    button_kurz: ButtonRaspi = ButtonRaspi(9)
     button_ukw: ButtonRaspi = ButtonRaspi(11)
     button_spr: ButtonRaspi = ButtonRaspi(26)
 
