@@ -323,7 +323,7 @@ class Radio:
 
     def set_volume(self, volume):
         print(f"volume start:{volume}")
-        volume = int(0.00588235 * volume - 61.76)
+        volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0
         elif volume > 100:
