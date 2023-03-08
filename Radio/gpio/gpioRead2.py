@@ -33,6 +33,6 @@ while True:
         print("Pin 8 button is pressed")
     if (GPIO.input(7) == GPIO.HIGH):
         print("Pin 7 button is pressed")
-    if (GPIO.input(1) == GPIO.HIGH):
+    if (GPIO.input(11) == GPIO.HIGH):
         print("Pin 11 button is pressed")
     time.sleep(1)
