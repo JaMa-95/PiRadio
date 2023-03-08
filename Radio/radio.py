@@ -329,7 +329,6 @@ class Radio:
         elif volume > 100:
             volume = 100
         print(f"volume: {volume}")
-        volume = 40
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
