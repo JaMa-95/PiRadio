@@ -150,7 +150,7 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
 
-        # self.ledStrip = LedStrip()
+        self.ledStrip = LedStrip()
         self.db = Database()
 
     # PUB METHODS
