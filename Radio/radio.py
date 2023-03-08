@@ -322,7 +322,7 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
-        volume = int(-0.062 * volume + 106.25)
+        volume = int(0.0117233 * volume - 116.52)
         if volume < 0:
             volume = 0
         elif volume > 100:
