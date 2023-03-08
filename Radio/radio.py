@@ -71,7 +71,7 @@ class LedStrip:
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
             self.strip.show()
-            time.sleep(2)
+            time.sleep(1)
             self.clear()
 
     def clear(self):
@@ -185,10 +185,10 @@ class Radio:
         self.broker.client.loop_start()
 
     def check_commands(self):
-        # self.ledStrip.fade(on=True)
-        # self.ledStrip.fade(on=False)
-        # self.ledStrip.clear()
-        #self.ledStrip.one_after_another()
+        self.ledStrip.fade(on=True)
+        self.ledStrip.fade(on=False)
+        self.ledStrip.clear()
+        self.ledStrip.one_after_another()
 
         print("start checking commands")
         self.turn_off_amplifier()
