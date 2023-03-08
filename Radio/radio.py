@@ -322,13 +322,11 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
-        print(f"volume start:{volume}")
         volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0
         elif volume > 100:
             volume = 100
-        print(f"volume: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
