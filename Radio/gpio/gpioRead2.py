@@ -18,6 +18,7 @@ GPIO.setup(25, GPIO.OUT)
 GPIO.setup(12, GPIO.OUT)
 GPIO.setup(8, GPIO.OUT)
 GPIO.setup(7, GPIO.OUT)
+GPIO.setup(11, GPIO.OUT)
 
 while True:
     if (GPIO.input(23) == GPIO.HIGH):
@@ -32,4 +33,6 @@ while True:
         print("Pin 8 button is pressed")
     if (GPIO.input(7) == GPIO.HIGH):
         print("Pin 7 button is pressed")
+    if (GPIO.input(1) == GPIO.HIGH):
+        print("Pin 11 button is pressed")
     time.sleep(1)
