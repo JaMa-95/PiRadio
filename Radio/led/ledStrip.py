@@ -1,3 +1,4 @@
+from time import sleep
 from rpi_ws281x import PixelStrip, Color
 
 class LedStrip:
@@ -20,7 +21,7 @@ class LedStrip:
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
         self.strip.show()
-        time.sleep(length)
+        sleep(length)
         self.clear()
 
     def blink_twice(self):
@@ -42,14 +43,14 @@ class LedStrip:
             for i in range(self.strip.numPixels()):
                 self.strip.setPixelColor(i, color)
             self.strip.show()
-            time.sleep(0.03)
+            sleep(0.03)
 
     def one_after_another(self, color=Color(255, 0, 80)):
         print("ONE AFTER ANOTHER")
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
             self.strip.show()
-            time.sleep(1)
+            sleep(1)
             self.clear()
 
     def clear(self):
