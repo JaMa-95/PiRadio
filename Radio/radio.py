@@ -122,6 +122,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def run(self):
+
         self.ledStrip.fade(on=True)
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
@@ -130,6 +131,7 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
+            start = time.time()
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
@@ -139,6 +141,8 @@ class Radio:
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
             time.sleep(0.01)
+            end = time.time()
+            print(end - start)
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
