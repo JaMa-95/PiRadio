@@ -68,7 +68,7 @@ class Radio:
         self.pin_mittel = 3
         self.pin_volume = 2
 
-        self.radio_button = RadioButtonsRaspi()
+        self.radio_buttons = RadioButtonsRaspi()
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
