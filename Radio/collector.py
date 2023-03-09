@@ -10,6 +10,7 @@ class Collector:
         self.ads = AdsObject()
 
     def run(self):
-        self.buttons.set_values_to_db()
-        self.ads.set_to_db()
-        sleep(0.01)
+        while True:
+            self.buttons.set_values_to_db()
+            self.ads.set_to_db()
+            sleep(0.01)
