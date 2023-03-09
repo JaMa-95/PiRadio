@@ -81,6 +81,7 @@ class Database(Singleton):
 
     def replace_ads_pin_value(self, value: float, pin: int):
         with self.lock:
+            print(f"replace {pin} value: {value}")
             self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, f"ads_pin_{pin}"))
             self.con.commit()
 
