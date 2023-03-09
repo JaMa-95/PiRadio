@@ -241,19 +241,14 @@ class Radio:
 
     def get_button_frequency(self):
         if self.radio_buttons.button_lang.state:
-            print("using lang")
             return LangFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_mittel.state:
-            print("using mittel")
             return MittelFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_kurz.state:
-            print("using kurz")
             return KurzFrequencies(), self.current_command["posLangKurzMittel"]
         elif self.radio_buttons.button_ukw.state:
-            print("using ukw")
             return UKWFrequencies(), self.current_command["posUKW"]
         elif self.radio_buttons.button_spr.state:
-            print("using spr")
             return SprFrequencies(), self.current_command["posUKW"]
         else:
             print("using NONE")
