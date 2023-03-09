@@ -18,7 +18,7 @@ if __name__ == "__main__":
     audioPlayer = AudioPlayer(radio)
 
     radioThread = Thread(target=radio.run)
-    collectorThread = Thread(target=collector.run())
+    collectorThread = Thread(target=collector.run)
     # readerThread = Thread(target=usb_reader.read_usb)
 
     radioThread.start()
