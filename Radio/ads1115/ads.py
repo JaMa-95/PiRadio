@@ -3,7 +3,7 @@ import board
 import busio
 from adafruit_ads1x15.analog_in import AnalogIn
 
-from ..db.db import Database
+from Radio.db.db import Database
 
 
 class AdsObject:
