@@ -66,6 +66,10 @@ class Database(Singleton):
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
+        self.insert_ads_pin_value(0, 0)
+        self.insert_ads_pin_value(0, 1)
+        self.insert_ads_pin_value(0, 2)
+        self.insert_ads_pin_value(0, 3)
         self.insert_radio_name("---")
 
     def table_exists(self, table_name: str):
