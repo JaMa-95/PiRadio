@@ -13,7 +13,6 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
-from ads1115.ads import AdsSingle
 from led.ledStrip import LedStrip
 
 
