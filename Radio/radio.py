@@ -192,11 +192,11 @@ class Radio:
 
     def turn_off_amplifier(self):
         print("TURN OFF")
-        GPIO.output(self.amplifier_switch_pin, True)
+        GPIO.output(4, False)
 
     def turn_on_amplifier(self):
         print("Turn ON")
-        GPIO.output(self.amplifier_switch_pin, False)
+        GPIO.output(4, True)
 
     def turn_on_radio(self):
         print("Turning on Radio")
