@@ -1,7 +1,7 @@
 from time import sleep
 
 from button import RadioButtonsRaspi
-from Radio.ads import AdsObject
+from ads import AdsObject
 
 
 class Collector:
