@@ -6,7 +6,6 @@ import time
 import traceback
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
-from rpi_ws281x import PixelStrip, Color
 
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
     SprFrequencies
@@ -14,73 +13,10 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
-from ads1115.adafruit import AdsObject
+from ads1115.ads import AdsSingle
+from led.ledStrip import LedStrip
 
 
-command = None
-glAudioPlayer = None
-stop = False
-
-
-class LedStrip:
-    def __init__(self):
-        # LED strip configuration:
-        LED_COUNT = int(18/3)  # Number of LED pixels.
-        #LED_PIN = 12  # GPIO pin connected to the pixels (18 uses PWM!).
-        LED_PIN = 13        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
-        LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
-        LED_DMA = 10  # DMA channel to use for generating signal (try 10)
-        LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-        LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
-        LED_CHANNEL = 1  # set to '1' for GPIOs 13, 19, 41, 45 or 53
-
-        self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-        self.strip.begin()
-        self.clear()
-
-    def blink_once(self, color=Color(255, 0, 80), length=1):
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, color)
-        self.strip.show()
-        time.sleep(length)
-        self.clear()
-
-    def blink_twice(self):
-        self.blink_once()
-        self.blink_once()
-
-    def fade(self, on=True, color_start=(255, 0, 80)):
-        print("FADE")
-        if on:
-            start = 100
-            end = 1
-            step = -1
-        else:
-            start = 1
-            end = 100
-            step = 1
-        for j in range(start, end, step):
-            color = Color(int(color_start[0]/j), int(color_start[1]/j), int(color_start[2]/j))
-            for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, color)
-            self.strip.show()
-            time.sleep(0.03)
-
-    def one_after_another(self, color=Color(255, 0, 80)):
-        print("ONE AFTER ANOTHER")
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, color)
-            self.strip.show()
-            time.sleep(1)
-            self.clear()
-
-    def clear(self):
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(0, 0, 0))
-        self.strip.show()
-
-
-    # TODO: Change to button classes
 # TODO: Add web control
 @dataclass
 class Speakers:
@@ -122,17 +58,18 @@ class Radio:
 
         self.amplifier_switch_pin = 4
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(4, GPIO.OUT)
+        GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
 
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
-        self.radio_buttons = RadioButtonsRaspi()
 
         self.current_volume_poti_value = 0
         self.poti_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.poti_value_index = 0
 
-        self.mittel_poti = AdsObject(3)
-        self.volume_poti = AdsObject(2)
+        self.pin_mittel = 3
+        self.pin_volume = 2
+
+        self.radio_button = RadioButtonsRaspi()
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -184,7 +121,7 @@ class Radio:
         self.broker.connect_mqtt()
         self.broker.client.loop_start()
 
-    def check_commands(self):
+    def run(self):
         self.ledStrip.fade(on=True)
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
@@ -249,7 +186,8 @@ class Radio:
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
                     print("------------------------------------")
-                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
+                    print(
+                        f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     def turn_off_amplifier(self):
@@ -394,18 +332,16 @@ class Radio:
     returns what hardware changed
     for example sound volume, frequency, ...
     """
-
     def get_changed_hardware(self):
         changed_hardware = []
-        value = self.mittel_poti.getValueSmoothed()
+        value = self.db.get_ads_pin_value(self.pin_mittel)
         if value != self.old_command["posLangKurzMittel"]:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
-        value = self.volume_poti.getValueSmoothed()
+        value = self.db.get_ads_pin_value(self.pin_volume)
         if self.difference_poti_high(value):
             changed_hardware.append("potiValue")
             self.current_command["potiValue"] = value
-        self.update_db(changed_hardware)
         return changed_hardware
 
     def get_changed_buttons(self):
@@ -413,6 +349,7 @@ class Radio:
         changed_hardware = []
         state = self.radio_buttons.button_on_off.state
         if self.current_command["buttonOnOff"] != state:
+            print(f"BUTTON ON OFF CHANGED {state}")
             self.current_command["buttonOnOff"] = state
             changed_hardware.append("buttonOnOff")
         state = self.radio_buttons.button_lang.state
@@ -441,24 +378,6 @@ class Radio:
             self.current_command["buttonSprMus"] = state
             changed_hardware.append("buttonSprMus")
         return changed_hardware
-
-    def update_db(self, changed_hardware):
-        if "posLangKurzMittel" in changed_hardware:
-            self.db.replace_pos_lang_mittel_kurz(self.current_command["posLangKurzMittel"])
-        if "posUKW" in changed_hardware:
-            self.db.replace_pos_ukw(self.current_command["posUKW"])
-        if "buttonOnOff" in changed_hardware:
-            self.db.replace_button_on_off(self.current_command["buttonOnOff"])
-        if "buttonLang" in changed_hardware:
-            self.db.replace_button_lang(self.current_command["buttonOnOff"])
-        if "buttonMittel" in changed_hardware:
-            self.db.replace_button_mittel(self.current_command["buttonOnOff"])
-        if "buttonKurz" in changed_hardware:
-            self.db.replace_button_kurz(self.current_command["buttonOnOff"])
-        if "buttonUKW" in changed_hardware:
-            self.db.replace_button_ukw(self.current_command["buttonOnOff"])
-        if "buttonSprMus" in changed_hardware:
-            self.db.replace_button_spr_mus(self.current_command["buttonOnOff"])
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()

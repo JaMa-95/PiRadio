@@ -27,6 +27,11 @@ class Database(Singleton):
 
         self.lock = threading.Lock()
 
+        self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
+                           "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "stream", "ads_pin_1",
+                           "ads_pin_2",
+                           "ads_pin_3", "ads_pin_0"]
+
     """
     def create(self):
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
@@ -45,8 +50,7 @@ class Database(Singleton):
             pass
 
     def clear(self):
-        for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
-                      "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "stream"]:
+        for value in self.all_values:
             self.cur.execute(
                 f'DELETE from {value}  sqlite_master order by time desc limit 1);'
             )
@@ -70,6 +74,11 @@ class Database(Singleton):
             return res.fetchone() is not None
 
     ###################################################################################
+
+    def replace_ads_pin_value(self, value: float, pin: int):
+        with self.lock:
+            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, f"ads_pin_{pin}"))
+            self.con.commit()
 
     def replace_radio_name(self, value: str):
         with self.lock:
@@ -128,6 +137,11 @@ class Database(Singleton):
 
     #########################################################################################
 
+    def insert_ads_pin_value(self, value: float, pin: int):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", (f"ads_pin_{pin}", value))
+            self.con.commit()
+
     def insert_radio_name(self, value: str):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("radio_name", value))
@@ -184,6 +198,12 @@ class Database(Singleton):
             self.con.commit()
 
     #######################################################################
+
+    def get_ads_pin_value(self, pin: int):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='ads_pin_{pin}'")
+            value = res.fetchall()
+            return value[0][1]
 
     def get_radio_name(self):
         with self.lock:

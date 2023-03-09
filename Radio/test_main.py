@@ -16,7 +16,7 @@ class SimpleTest(unittest.TestCase):
         test_string = "buttonOnOff:1,buttonLang:0,buttonMittel:1,buttonKurz:0,buttonUKW:0,buttonSprMus:0,potiValue:50," \
                       "posLangKurzMittel:50,posUKW:0"
 
-        radioThread = Thread(target=radio.check_commands)
+        radioThread = Thread(target=radio.run)
         radioThread.start()
         usb_reader.set_test_command(test_string)
         time.sleep(5)

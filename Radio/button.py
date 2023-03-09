@@ -1,7 +1,7 @@
 import datetime
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
-
+from db.db import Database
 
 class ButtonESP:
     def __init__(self, click_threshold: int = 30, long_click_threshold: int = 50):
@@ -199,6 +199,17 @@ class RadioButtonsRaspi:
     button_kurz: ButtonRaspi = ButtonRaspi(9)
     button_ukw: ButtonRaspi = ButtonRaspi(11)
     button_spr: ButtonRaspi = ButtonRaspi(26)
+
+    db = Database()
+
+    def set_values_to_db(self):
+        self.set_value()
+        self.db.replace_button_ukw(self.button_ukw.state)
+        self.db.replace_button_spr_mus(self.button_spr.state)
+        self.db.replace_button_kurz(self.button_kurz.state)
+        self.db.replace_button_mittel(self.button_mittel.state)
+        self.db.replace_button_lang(self.button_lang.state)
+        self.db.replace_button_on_off(self.button_on_off.state)
 
     def set_value(self):
         self.button_on_off.set_value()
