@@ -186,8 +186,8 @@ class Radio:
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
                     print("------------------------------------")
-                    print(
-                        f"encoder changed {self.current_command['posLangKurzMittel']}, {self.current_command['posUKW']}")
+                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
+                          f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     def turn_off_amplifier(self):
