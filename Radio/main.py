@@ -24,4 +24,4 @@ if __name__ == "__main__":
     radioThread.start()
     # readerThread.start()
 
-    app.set_to_db(port=5555, host='0.0.0.0')
+    app.run(port=5555, host='0.0.0.0')
