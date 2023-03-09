@@ -130,7 +130,6 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
-            start = time.time()
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_esp_reset()
@@ -139,9 +138,7 @@ class Radio:
             changed_hardware.extend(self.get_changed_hardware())
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
-            time.sleep(0.1)
-            end = time.time()
-            print(end - start)
+            time.sleep(0.3)
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
@@ -268,6 +265,7 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
+        print(f"volume: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
