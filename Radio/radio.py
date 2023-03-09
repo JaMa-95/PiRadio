@@ -139,7 +139,7 @@ class Radio:
             changed_hardware.extend(self.get_changed_hardware())
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
-            time.sleep(0.01)
+            time.sleep(0.1)
             end = time.time()
             print(end - start)
 
