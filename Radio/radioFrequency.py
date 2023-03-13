@@ -29,9 +29,9 @@ class KurzFrequencies:
     # NOT WORKING: Berum, stockholm,Falun
     def __init__(self):
         self.frequencies = [
-            RadioFrequency("BR-NDR", 0, 35, "ostseewelle",
+            RadioFrequency("BR-NDR", 7400, 7435, "ostseewelle",
                            "http://ostseewelle--di--nacs-ais-lgc--07--cdn.cast.addradio.de/ostseewelle/nord/mp3/high?_art=dj0yJmlwPTM3LjQuMjMyLjIwNyZpZD1pY3NjeGwtazZhc2VscGdiJnQ9MTY2MjI4NTkwMSZzPTc4NjZmMjljIzM0MWIzMWQ1YTdhNmE4MWYwOTc4MzA3ZGIwYTI3NjQ2"),
-            RadioFrequency("Berum", 35, 140, "Wattwecker", "http://stream.laut.fm/wattwerker"),
+            RadioFrequency("Berum", 7436, 7, "Wattwecker", "http://stream.laut.fm/wattwerker"),
             RadioFrequency("München", 135, 270, "Energy München", "http://nrj.de/muenchen"),
             RadioFrequency("Monte Ceneri", 270, 358, "Radio 3i", "https://icecast.gruppocdt.ch/radio3i-256.mp3"),
             RadioFrequency("Freies Berlin", 358, 421, "", "https://ais-edge37-live365-dal02.cdnstream.com/a51326"),
