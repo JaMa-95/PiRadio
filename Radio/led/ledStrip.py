@@ -28,6 +28,11 @@ class LedStrip:
         self.blink_once()
         self.blink_once()
 
+    def all_on(self, color=(255, 0, 80)):
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, color)
+        self.strip.show()
+
     def fade(self, on=True, color_start=(255, 0, 80)):
         print("FADE")
         if on:

@@ -121,11 +121,11 @@ class Radio:
         self.broker.client.loop_start()
 
     def run(self):
-
         self.ledStrip.fade(on=True)
         self.ledStrip.fade(on=False)
         self.ledStrip.clear()
         self.ledStrip.one_after_another()
+        self.ledStrip.all_on()
 
         print("start checking commands")
         self.turn_off_amplifier()

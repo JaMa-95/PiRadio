@@ -29,7 +29,7 @@ class KurzFrequencies:
     # NOT WORKING: Berum, stockholm,Falun
     def __init__(self):
         self.frequencies = [
-            RadioFrequency("BR-NDR", 7400, 7435, "ostseewelle",
+            RadioFrequency("BR-NDR", 7400, 7420, "ostseewelle",
                            "http://ostseewelle--di--nacs-ais-lgc--07--cdn.cast.addradio.de/ostseewelle/nord/mp3/high?_art=dj0yJmlwPTM3LjQuMjMyLjIwNyZpZD1pY3NjeGwtazZhc2VscGdiJnQ9MTY2MjI4NTkwMSZzPTc4NjZmMjljIzM0MWIzMWQ1YTdhNmE4MWYwOTc4MzA3ZGIwYTI3NjQ2"),
             RadioFrequency("Berum", 7436, 7, "Wattwecker", "http://stream.laut.fm/wattwerker"),
             RadioFrequency("München", 135, 270, "Energy München", "http://nrj.de/muenchen"),
@@ -75,9 +75,9 @@ class KurzFrequencies:
                            "https://www.radioking.com/play/rfm-luxembourg/137599"),
             RadioFrequency("SV Rel", 2917, 2991, "Valencia", "http://samuel.i-radio.co:8000/djradio"),
             RadioFrequency("Südwestfunk", 2991, 3108, "Bogota", "http://162.213.121.189:8050/live"),
-            RadioFrequency("WDR", 3108, 3189, "WDR2",
+            RadioFrequency("WDR", 1910, 1944, "WDR2",
                            "https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3"),
-            RadioFrequency("Bayern", 3189, 3500, "Antenne Bayern",
+            RadioFrequency("Bayern", 1890, 1909, "Antenne Bayern",
                            "http://stream.antenne.de/antenne/stream/mp3?aw_0_1st.playerid=com")
         ]
 
