@@ -28,7 +28,8 @@ class LedStrip:
         self.blink_once()
         self.blink_once()
 
-    def all_on(self, color=(255, 0, 80)):
+    def all_on(self):
+        color = Color(255, 0, 80)
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
         self.strip.show()
