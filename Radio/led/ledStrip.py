@@ -238,62 +238,74 @@ class LedStrip:
             sleep(0.2)
 
     def on_button_on(self):
-        self.ledData.set_on_button_on()
+        # self.ledData.set_on_button_on()
+        self.ledData.on_button_on = False
         self.ledData.led_on[0] = 1
         self.led_on()
 
     def off_button_on(self):
-        self.ledData.set_off_button_on()
+        #self.ledData.set_off_button_on()
+        self.ledData.off_button_on = False
         self.ledData.led_on[0] = 0
         self.led_on()
 
     def on_button_lang(self):
-        self.ledData.set_on_button_lang()
+        # self.ledData.set_on_button_lang()
+        self.ledData.on_button_lang = False
         self.ledData.led_on[1] = 1
         self.led_on()
 
     def off_button_lang(self):
-        self.ledData.set_off_button_lang()
+        # .ledData.set_off_button_lang()
+        self.ledData.off_button_lang = False
         self.ledData.led_on[1] = 0
         self.led_on()
 
     def on_button_mittel(self):
-        self.ledData.set_on_button_mittel()
+        # self.ledData.set_on_button_mittel()
+        self.ledData.on_button_mittel = False
         self.ledData.led_on[2] = 1
         self.led_on()
 
     def off_button_mittel(self):
-        self.ledData.set_off_button_mittel()
+        # self.ledData.set_off_button_mittel()
+        self.ledData.off_button_mittel = False
         self.ledData.led_on[2] = 0
         self.led_on()
 
     def on_button_kurz(self):
-        self.ledData.set_on_button_kurz()
+        # self.ledData.set_on_button_kurz()
+        self.ledData.on_button_kurz = False
         self.ledData.led_on[3] = 1
         self.led_on()
 
     def off_button_kurz(self):
-        self.ledData.set_off_button_kurz()
+        # self.ledData.set_off_button_kurz()
+        self.ledData.off_button_kurz = False
         self.ledData.led_on[3] = 0
         self.led_on()
 
     def on_button_ukw(self):
-        self.ledData.set_on_button_ukw()
+        # self.ledData.set_on_button_ukw()
+        self.ledData.on_button_ukw = False
         self.ledData.led_on[4] = 1
         self.led_on()
 
     def off_button_ukw(self):
-        self.ledData.set_off_button_ukw()
+        # self.ledData.set_off_button_ukw()
+        self.ledData.off_button_ukw = False
         self.ledData.led_on[4] = 0
         self.led_on()
 
     def on_button_spr(self):
-        self.ledData.set_on_button_spr()
+        # self.ledData.set_on_button_spr()
+        self.ledData.on_button_spr = False
         self.ledData.led_on[5] = 1
         self.led_on()
 
     def off_button_spr(self):
-        self.ledData.set_off_button_spr()
+        # self.ledData.set_off_button_spr()
+        self.ledData.off_button_spr = False
         self.ledData.led_on[5] = 0
         self.led_on()
 
