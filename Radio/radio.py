@@ -142,6 +142,7 @@ class Radio:
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
+            self.ledStrip.raspi_off = True
             self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
@@ -200,6 +201,7 @@ class Radio:
         GPIO.output(4, True)
 
     def turn_on_radio(self):
+        self.ledStrip.radio_off = False
         print("Turning on Radio")
         radio_frequency, encoder_value = self.get_button_frequency()
         if radio_frequency and self.on:
@@ -212,6 +214,8 @@ class Radio:
             print("No button pressed. Playing nothing")
 
     def turn_off_radio(self):
+        self.ledStrip.radio_off = True
+        self.ledStrip.off_button_on = False
         print("Turning off radio")
         if self.speakers.play_radio:
             self.publish("stop")
@@ -348,31 +352,43 @@ class Radio:
         changed_hardware = []
         state = self.radio_buttons.button_on_off.state
         if self.current_command["buttonOnOff"] != state:
+            self.ledData.on_button_on = state
+            self.ledData.off_button_on = not state
             print(f"BUTTON ON OFF CHANGED {state}")
             self.current_command["buttonOnOff"] = state
             changed_hardware.append("buttonOnOff")
         state = self.radio_buttons.button_lang.state
         if self.current_command["buttonLang"] != state:
+            self.ledData.on_button_lang = state
+            self.ledData.off_button_lang = not state
             print(f"BUTTON LANG CHANGED: {state}")
             self.current_command["buttonLang"] = state
             changed_hardware.append("buttonLang")
         state = self.radio_buttons.button_mittel.state
         if self.current_command["buttonMittel"] != state:
+            self.ledData.on_button_mittel = state
+            self.ledData.off_button_mittel = not state
             print(f"BUTTON MITTEL CHANGED: {state}")
             self.current_command["buttonMittel"] = state
             changed_hardware.append("buttonMittel")
         state = self.radio_buttons.button_kurz.state
         if self.current_command["buttonKurz"] != state:
+            self.ledData.on_button_kurz = state
+            self.ledData.off_button_kurz = not state
             print(f"BUTTON KURZ CHANGED: {state}")
             self.current_command["buttonKurz"] = state
             changed_hardware.append("buttonKurz")
         state = self.radio_buttons.button_ukw.state
         if self.current_command["buttonUKW"] != state:
+            self.ledData.on_button_ukw = state
+            self.ledData.off_button_ukw = not state
             print(f"BUTTON UKW CHANGED: {state}")
             self.current_command["buttonUKW"] = state
             changed_hardware.append("buttonUKW")
         state = self.radio_buttons.button_spr.state
         if self.current_command["buttonSprMus"] != state:
+            self.ledData.on_button_spr = state
+            self.ledData.off_button_spr = not state
             print(f"BUTTON SPR CHANGED: {state}")
             self.current_command["buttonSprMus"] = state
             changed_hardware.append("buttonSprMus")
