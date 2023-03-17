@@ -324,7 +324,7 @@ class LedStrip:
 
     def led_on(self):
         print(f"led on:  {self.ledData.led_on}")
-        for led, on in enumerate(self.ledData.led_on):
+        for led, on in enumerate(reversed(self.ledData.led_on)):
             print(f"led, on: {led}, {on}")
 
             if on == 1:
