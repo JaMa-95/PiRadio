@@ -28,6 +28,7 @@ class LedData:
     off_button_kurz = False
     off_button_ukw = False
     off_button_spr = False
+    clear_now = False
 
     def set_one_after_another_on(self):
         self.one_after_another = True
@@ -231,7 +232,7 @@ class LedStrip:
             if self.ledData.blink_once:
                 print("blink once")
                 self.blink_once()
-            if self.ledData.clear:
+            if self.ledData.clear_now:
                 self.clear()
             if self.ledData.one_after_another:
                 print("one after another")
