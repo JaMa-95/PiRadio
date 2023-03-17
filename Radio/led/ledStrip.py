@@ -200,7 +200,18 @@ class LedStrip:
             if self.ledData.on_button_spr:
                 self.on_button_spr()
 
-
+            if self.ledData.off_button_on:
+                self.off_button_on()
+            if self.ledData.off_button_lang:
+                self.off_button_lang()
+            if self.ledData.off_button_mittel:
+                self.off_button_mittel()
+            if self.ledData.off_button_kurz:
+                self.off_button_kurz()
+            if self.ledData.off_button_ukw:
+                self.off_button_ukw()
+            if self.ledData.off_button_spr:
+                self.off_button_spr()
 
             if self.ledData.raspi_off:
                 self.raspi_off()
@@ -301,7 +312,10 @@ class LedStrip:
     def led_on(self):
         print(f"led on:  {self.ledData.led_on}")
         for led in self.ledData.led_on:
-            self.strip.setPixelColor(led, Color(255, 0, 80))
+            if led == 1:
+                self.strip.setPixelColor(led, Color(255, 0, 80))
+            else:
+                self.strip.setPixelColor(led, Color(0, 0, 0))
         self.strip.show()
 
     def blink_once(self, color=Color(255, 0, 80), length=1):
