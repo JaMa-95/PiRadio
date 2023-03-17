@@ -187,34 +187,13 @@ class LedStrip:
 
     def run(self):
         while True:
-            if self.ledData.on_button_on:
-                self.on_button_on()
-            if self.ledData.on_button_lang:
-                self.on_button_lang()
-            if self.ledData.on_button_mittel:
-                self.on_button_mittel()
-            if self.ledData.on_button_kurz:
-                self.on_button_kurz()
-            if self.ledData.on_button_ukw:
-                self.on_button_ukw()
-            if self.ledData.on_button_spr:
-                self.on_button_spr()
-            if self.ledData.off_button_on:
-                self.off_button_on()
-            if self.ledData.off_button_lang:
-                self.off_button_lang()
-            if self.ledData.off_button_mittel:
-                self.off_button_mittel()
-            if self.ledData.off_button_kurz:
-                self.off_button_kurz()
-            if self.ledData.off_button_ukw:
-                self.off_button_ukw()
-            if self.ledData.off_button_spr:
-                self.off_button_spr()
+
+
             if self.ledData.raspi_off:
                 self.raspi_off()
             if self.ledData.radio_off:
                 self.radio_off()
+
             if self.ledData.all_on:
                 print("all on")
                 self.all_on()
