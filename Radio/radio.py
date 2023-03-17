@@ -189,6 +189,7 @@ class Radio:
                 self.set_volume(self.current_command[changed_hardware])
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
+                    pass
                     # print("------------------------------------")
                     # print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
                     #       f"{self.current_command['posUKW']}")
