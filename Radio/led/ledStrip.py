@@ -325,9 +325,9 @@ class LedStrip:
         print(f"led on:  {self.ledData.led_on}")
         for led in self.ledData.led_on:
             if led == 1:
-                self.strip.setPixelColor(led, Color(255, 0, 80))
+                self.strip.setPixelColor(led + 1, Color(255, 0, 80))
             else:
-                self.strip.setPixelColor(led, Color(0, 0, 0))
+                self.strip.setPixelColor(led + 1, Color(0, 0, 0))
         self.strip.show()
 
     def blink_once(self, color=Color(255, 0, 80), length=1):
