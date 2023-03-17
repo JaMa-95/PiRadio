@@ -189,9 +189,9 @@ class Radio:
                 self.set_volume(self.current_command[changed_hardware])
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
-                    print("------------------------------------")
-                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
-                          f"{self.current_command['posUKW']}")
+                    # print("------------------------------------")
+                    # print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
+                    #       f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     def turn_off_amplifier(self):
@@ -266,7 +266,7 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
-        print(f"volume: {volume}")
+        # print(f"volume: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 

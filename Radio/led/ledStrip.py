@@ -97,18 +97,25 @@ class LedStrip:
     def run(self):
         while True:
             if self.ledData.all_on:
+                print("all on")
                 self.all_on()
             if self.ledData.fade:
+                print("fade")
                 self.fade()
             if self.ledData.blink_twice:
+                print("blink twice")
                 self.blink_twice()
             if self.ledData.blink_once:
+                print("blink once")
                 self.blink_once()
             if self.ledData.led_on:
+                print(f"led on: {self.ledData.led_on}")
                 self.led_on()
             if self.ledData.clear:
+                print("led clear")
                 self.clear()
             if self.ledData.one_after_another:
+                print("one after another")
                 self.one_after_another()
 
     def led_on(self):
