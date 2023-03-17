@@ -62,7 +62,7 @@ class Radio:
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         self.current_volume_poti_value = 0
-        self.poti_values = [0, 0, 0]
+        self.poti_values = [0, 0]
         self.poti_value_index = 0
 
         self.pin_mittel = 3
@@ -80,7 +80,7 @@ class Radio:
         self.currentCommandString = None
         self.volume_old = None
         self.volume_sensitivity = 1
-        self.poti_sensivity = 3
+        self.poti_sensivity = 1
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
