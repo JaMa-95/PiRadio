@@ -130,26 +130,25 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
-            start = time.time()
             self.check_radio_on_off()
-            end = time.time()
-            print(f"on off: {end - start}")
-            start = time.time()
             self.check_raspi_off()
-            end = time.time()
-            print(f"raspi on off: {end - start}")
-            start = time.time()
-
             self.check_change_speakers()
-            end = time.time()
-            print(f"change speaker: {end - start}")
+
             start = time.time()
             changed_hardware = self.get_changed_buttons()
-            changed_hardware.extend(self.get_changed_hardware())
-            if changed_hardware:
-                self.process_hardware_change(changed_hardware)
             end = time.time()
-            print(f"hardware change: {end - start}")
+            print(f"buttons change: {end - start}")
+
+            start = time.time()
+            changed_hardware.extend(self.get_changed_hardware())
+            end = time.time()
+            print(f"hardawre change: {end - start}")
+            
+            if changed_hardware:
+                start = time.time()
+                self.process_hardware_change(changed_hardware)
+                end = time.time()
+                print(f"process change: {end - start}")
             time.sleep(0.01)
 
     def check_raspi_off(self):
