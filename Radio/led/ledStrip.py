@@ -110,10 +110,8 @@ class LedStrip:
                 print("blink once")
                 self.blink_once()
             if self.ledData.led_on != [0, 0, 0, 0, 0, 0]:
-                print(f"led on: {self.ledData.led_on}")
                 self.led_on()
             if self.ledData.clear:
-                print("led clear")
                 self.clear()
             if self.ledData.one_after_another:
                 print("one after another")
