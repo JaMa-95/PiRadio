@@ -258,7 +258,7 @@ class Radio:
         elif self.radio_buttons.button_spr.state:
             return SprFrequencies(), self.current_command["posUKW"]
         else:
-            print("using NONE")
+            # print("using NONE")
             return None, None
 
     def set_volume(self, volume):
