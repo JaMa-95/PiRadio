@@ -111,6 +111,11 @@ class LedStrip:
             if self.ledData.one_after_another:
                 self.one_after_another()
 
+    def led_on(self):
+        for led in self.ledData.led_on:
+            self.strip.setPixelColor(led, Color(255, 0, 80))
+        self.strip.show()
+
     def blink_once(self, color=Color(255, 0, 80), length=1):
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
