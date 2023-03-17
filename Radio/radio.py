@@ -138,7 +138,7 @@ class Radio:
             changed_hardware.extend(self.get_changed_hardware())
             if changed_hardware:
                 self.process_hardware_change(changed_hardware)
-            time.sleep(0.3)
+            time.sleep(0.1)
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
