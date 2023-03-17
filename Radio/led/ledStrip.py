@@ -385,6 +385,7 @@ class LedStrip:
         self.ledData.set_one_after_another_off()
 
     def clear(self):
+        print("clear")
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, Color(0, 0, 0))
         self.strip.show()
