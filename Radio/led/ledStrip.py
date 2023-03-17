@@ -216,8 +216,10 @@ class LedStrip:
                 self.off_button_spr()
 
             if self.ledData.raspi_off:
+                print("raspi off")
                 self.raspi_off()
             if self.ledData.radio_off:
+                print("radio off")
                 self.radio_off()
 
             if self.ledData.all_on:
@@ -233,6 +235,7 @@ class LedStrip:
                 print("blink once")
                 self.blink_once()
             if self.ledData.clear_now:
+                print("clear now")
                 self.clear()
             if self.ledData.one_after_another:
                 print("one after another")
