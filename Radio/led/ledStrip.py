@@ -1,5 +1,6 @@
 from time import sleep
-from singleton import Singleton
+
+from .singleton import Singleton
 from rpi_ws281x import PixelStrip, Color
 
 
