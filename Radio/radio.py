@@ -123,8 +123,6 @@ class Radio:
 
     def run(self):
         self.ledData.fade = True
-        self.ledData.one_after_another = True
-        self.ledData.blink_twice = True
         self.ledData.all_on = True
 
         print("start checking commands")
