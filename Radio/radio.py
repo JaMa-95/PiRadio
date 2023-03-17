@@ -124,7 +124,7 @@ class Radio:
     def run(self):
         self.ledData.fade = True
         self.ledData.one_after_another = True
-        self.ledStrip.all_on = True
+        self.ledData.all_on = True
         # self.ledStrip.fade(on=True)
         # self.ledStrip.fade(on=False)
         # self.ledStrip.clear()
