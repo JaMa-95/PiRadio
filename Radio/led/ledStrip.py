@@ -323,8 +323,8 @@ class LedStrip:
 
     def led_on(self):
         print(f"led on:  {self.ledData.led_on}")
-        for led in self.ledData.led_on:
-            if led == 1:
+        for led, on in enumerate(self.ledData.led_on):
+            if on == 1:
                 self.strip.setPixelColor(led + 1, Color(255, 0, 80))
             else:
                 self.strip.setPixelColor(led + 1, Color(0, 0, 0))
