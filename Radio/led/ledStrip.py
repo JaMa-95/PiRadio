@@ -177,3 +177,11 @@ class LedStrip:
             self.strip.setPixelColor(i, Color(0, 0, 0))
         self.strip.show()
         self.ledData.set_led_off()
+
+
+if __name__ == "__main__":
+    ledStrip = LedStrip()
+    ledStrip.fade()
+    ledStrip.one_after_another()
+    ledStrip.blink_twice()
+    ledStrip.clear()
