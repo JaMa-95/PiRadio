@@ -1,3 +1,4 @@
+import time
 from time import sleep
 
 from .singleton import Singleton
@@ -332,6 +333,7 @@ class LedStrip:
             else:
                 self.strip.setPixelColor(led + 1, Color(0, 0, 0))
         self.strip.show()
+        time.sleep(4)
 
     def blink_once(self, color=Color(255, 0, 80), length=1):
         for i in range(self.strip.numPixels()):
