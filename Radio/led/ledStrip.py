@@ -78,6 +78,8 @@ class LedData:
 
 class LedStrip:
     def __init__(self):
+        self.ledData = LedData.instance()
+
         # LED strip configuration:
         led_count = int(18/3)  # Number of LED pixels.
         # led_pin = 12  # GPIO pin connected to the pixels (18 uses PWM!).
@@ -91,8 +93,6 @@ class LedStrip:
         self.strip = PixelStrip(led_count, led_pin, led_freq_hz, led_dma, led_invert, led_brightness, led_channel)
         self.strip.begin()
         self.clear()
-
-        self.ledData = LedData.instance()
 
     def run(self):
         while True:
