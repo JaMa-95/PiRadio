@@ -307,6 +307,7 @@ class LedStrip:
         self.ledData.set_clear()
 
     def led_on(self):
+        print(f"led on:  {self.ledData.led_on}")
         for led in self.ledData.led_on:
             self.strip.setPixelColor(led, Color(255, 0, 80))
         self.strip.show()
@@ -349,6 +350,7 @@ class LedStrip:
                 self.strip.setPixelColor(i, color)
             self.strip.show()
             sleep(0.03)
+        self.clear()
         self.ledData.set_fade_off()
 
     def one_after_another(self, color=Color(255, 0, 80)):
