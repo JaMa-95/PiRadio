@@ -1,9 +1,9 @@
 from time import sleep
-from dataclasses import dataclass
+from Singleton import Singleton
 from rpi_ws281x import PixelStrip, Color
 
 
-@dataclass
+@Singleton
 class LedData:
     blink_once = False
     blink_twice = False
