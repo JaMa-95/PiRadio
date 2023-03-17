@@ -143,7 +143,7 @@ class Radio:
             changed_hardware.extend(self.get_changed_hardware())
             end = time.time()
             print(f"hardawre change: {end - start}")
-            
+
             if changed_hardware:
                 start = time.time()
                 self.process_hardware_change(changed_hardware)

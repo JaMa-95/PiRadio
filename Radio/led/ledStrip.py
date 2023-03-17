@@ -116,6 +116,7 @@ class LedStrip:
             if self.ledData.one_after_another:
                 print("one after another")
                 self.one_after_another()
+            sleep(0.2)
 
     def led_on(self):
         for led in self.ledData.led_on:
