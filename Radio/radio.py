@@ -133,23 +133,12 @@ class Radio:
             self.check_radio_on_off()
             self.check_raspi_off()
             self.check_change_speakers()
-
-            start = time.time()
             changed_hardware = self.get_changed_buttons()
-            end = time.time()
-            print(f"buttons change: {end - start}")
-
-            start = time.time()
             changed_hardware.extend(self.get_changed_hardware())
-            end = time.time()
-            print(f"hardawre change: {end - start}")
 
             if changed_hardware:
-                start = time.time()
                 self.process_hardware_change(changed_hardware)
-                end = time.time()
-                print(f"process change: {end - start}")
-            time.sleep(0.01)
+            time.sleep(0.1)
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
