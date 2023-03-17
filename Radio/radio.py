@@ -13,7 +13,7 @@ from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
 from mqtt.mqttBroker import MqttBroker
-from led.ledStrip import LedStrip
+from led.ledStrip import LedStrip, LedData
 
 
 # TODO: Add web control
@@ -86,7 +86,8 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
 
-        self.ledStrip = LedStrip()
+        self.ledData = LedData.instance()
+        # self.ledStrip = LedStrip()
         self.db = Database()
 
     # PUB METHODS
@@ -121,11 +122,14 @@ class Radio:
         self.broker.client.loop_start()
 
     def run(self):
-        self.ledStrip.fade(on=True)
-        self.ledStrip.fade(on=False)
-        self.ledStrip.clear()
-        self.ledStrip.one_after_another()
-        self.ledStrip.all_on()
+        self.ledData.fade = True
+        self.ledData.one_after_another = True
+        self.ledStrip.all_on = True
+        # self.ledStrip.fade(on=True)
+        # self.ledStrip.fade(on=False)
+        # self.ledStrip.clear()
+        # self.ledStrip.one_after_another()
+        # self.ledStrip.all_on()
 
         print("start checking commands")
         self.turn_off_amplifier()
