@@ -1,0 +1,74 @@
+header img {
+    height: 48px;
+    margin-left: 48px;
+}
+
+body {
+    /* height: 125vh; */
+    /* background-image: url('background4.jpg'); */
+    background-size: cover;
+    font-family: sans-serif;
+    margin-top: 80px;
+    padding: 30px;
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.button_on {
+    position: absolute;
+    float:left;
+}
+.button_off {
+    position: relative;
+    float:left;
+}
+#buttonContainer {
+    border:2px;
+	position: relative;
+	left: 380px;
+}
+#redLine {
+    position: relative;
+    margin-left: 350px;
+}
+
+#radio {
+    position: absolute;
+}
+
+#redLine,#radio
+{
+    height: 300px;
+    height: 300px;
+}
+
+}
+
+main {
+    color: white;
+}
+
+header {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+header * {
+    display: inline;
+}
+
+header li {
+    margin: 20px;
+}
+
+header li a {
+    color: black;
+    text-decoration: none;
+}

@@ -1,13 +1,70 @@
 <!DOCTYPE html>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="{{ url_for('static', filename='/functions.js') }}"></script>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="navbar.css">
-    <title >PiRadio</title>
-    {{ turbo() }}
-</head>
-<body>
-    {% include "loadavg.html" %}
-    {% block content %}{% endblock %}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static', filename='/base.css') }}" rel="stylesheet">
+        <title >PiRadio</title>
+
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+
+        {{ turbo() }}
+    </head>
+    <body>
+        <header>
+               <img src="{{ url_for('static', filename='/radio-svgrepo-com.svg') }}"  id="radioLogo">
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/Settings">Settings</a></li>
+                    </ul>
+                </nav>
+        </header>
+        <main>
+            <div id="radioContainer">
+                <img src="{{ url_for('static', filename='/radioFront2.png') }}" alt="radio status" id="radio">
+                <img src="{{ url_for('static', filename='/redLine.png') }}" alt="current radio" id="redLine">
+                <div id="buttonContainer">
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="on_on" class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="on_off" class="button_off">
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="lang_on" class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="lang_off" class="button_off">
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="mittel_on" class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="mittel_off" class="button_off">
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="kurz_on" class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="kurz_off" class="button_off">
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="ukw_on" class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="ukw_off" class="button_off">
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="spr_on"class="button_on">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="spr_off" class="button_off">
+                    </div>
+
+                </div>
+            </div>
+            <button onclick="changeImage(1, 2)" id="button">Click me</button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            {% include "loadavg.html" %}
+            {% block content %}{% endblock %}
+        </main>
+    </body>
 </html>
