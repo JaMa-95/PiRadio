@@ -5,12 +5,8 @@
     <head>
         <meta charset="UTF-8">
         <link href="{{ url_for('static', filename='/base.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='/toggleSwitch.css') }}" rel="stylesheet">
         <title >PiRadio</title>
-
-        <label class="switch">
-          <input type="checkbox">
-          <span class="slider"></span>
-        </label>
 
         {{ turbo() }}
     </head>
@@ -23,6 +19,13 @@
                         <li><a href="/Settings">Settings</a></li>
                     </ul>
                 </nav>
+            <div>
+            <label class="toggle">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+            <td>web control</td>
+            </div>
         </header>
         <main>
             <div id="radioContainer">
