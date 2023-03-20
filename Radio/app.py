@@ -4,7 +4,7 @@ import time
 from db.db import Database
 from flask_cors import CORS
 
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, request, jsonify
 from turbo_flask import Turbo
 
 app = Flask(__name__)
@@ -91,11 +91,6 @@ def update_load():
             turbo.push(turbo.replace(render_template('loadavg.html'), 'load'))
 
 
-@app.route("/admin")
-def admin():
-    return redirect(url_for("user",
-                            name="Admin!"))
-
 @app.route('/data')
 def get_data():
     return {
@@ -111,6 +106,14 @@ def get_data():
         "pos_ukw_spr": db.get_pos_ukw(),
         "radio_name": db.get_radio_name()
     }
+
+
+@app.route('/web_control', methods=['GET', 'POST'])
+def switch_web_control():
+    state = request.form["state"]
+    db.replace_web_control_value(state)
+    return jsonify({'result': 'OK'})
+    # db.replace_web_control_value(state)
 
 
 if __name__ == "__main__":

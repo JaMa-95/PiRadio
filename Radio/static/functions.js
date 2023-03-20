@@ -70,3 +70,15 @@ function hello()
 {
     document.getElementById("button").style.color = "red"
 }
+
+function sendWebControlValue(checkbox)
+{
+    const value = checkbox.checked;
+    const formData = new FormData();
+    formData.append("state", "1");
+
+    fetch("/web_control", {
+        method: "POST",
+        body: formData
+    }).then();
+}

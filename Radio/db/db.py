@@ -1,6 +1,5 @@
 import sqlite3
 import threading
-import time
 
 
 class Singleton:
@@ -71,6 +70,7 @@ class Database(Singleton):
         self.insert_ads_pin_value(0, 2)
         self.insert_ads_pin_value(0, 3)
         self.insert_radio_name("---")
+        self.insert_web_control(False)
 
     def table_exists(self, table_name: str):
         with self.lock:
@@ -78,6 +78,11 @@ class Database(Singleton):
             return res.fetchone() is not None
 
     ###################################################################################
+
+    def replace_web_control_value(self, value: bool):
+        with self.lock:
+            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "web_control"))
+            self.con.commit()
 
     def replace_ads_pin_value(self, value: float, pin: int):
         with self.lock:
@@ -141,6 +146,11 @@ class Database(Singleton):
 
     #########################################################################################
 
+    def insert_web_control_value(self, value: bool):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("web_control", value))
+            self.con.commit()
+
     def insert_ads_pin_value(self, value: float, pin: int):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", (f"ads_pin_{pin}", value))
@@ -202,6 +212,12 @@ class Database(Singleton):
             self.con.commit()
 
     #######################################################################
+
+    def get_web_control_value(self):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='web_control'")
+            value = res.fetchall()
+            return value[0][1]
 
     def get_ads_pin_value(self, pin: int):
         with self.lock:
