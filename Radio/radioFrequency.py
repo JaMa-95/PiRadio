@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-min_value = 1840
-max_value_kurz_mittel_lang = 7400
-max_value_ukw = 875
+min_value = 20270
+max_value_kurz_mittel_lang = 21800
+max_value_ukw = 21800
 
 
 @dataclass
