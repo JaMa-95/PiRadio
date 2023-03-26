@@ -53,7 +53,6 @@ class AdsSingle:
         values = []
         for i in range(50):
             values.append(self.chan.value)
-            sleep(0.001)
 
         values.remove(max(values))
         values.remove(min(values))
