@@ -70,7 +70,7 @@ class Database(Singleton):
         self.insert_ads_pin_value(0, 2)
         self.insert_ads_pin_value(0, 3)
         self.insert_radio_name("---")
-        self.insert_web_control(False)
+        self.insert_web_control_value(False)
 
     def table_exists(self, table_name: str):
         with self.lock:
