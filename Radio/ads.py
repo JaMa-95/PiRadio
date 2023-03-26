@@ -51,8 +51,8 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
-        for i in range(100):
+        for i in range(50):
             values.append(self.chan.value)
-            sleep(0.001)
+            sleep(0.01)
 
         return mean(values)
