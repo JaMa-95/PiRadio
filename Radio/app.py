@@ -4,7 +4,7 @@ import time
 from db.db import Database
 from flask_cors import CORS
 
-from flask import Flask, redirect, url_for, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from turbo_flask import Turbo
 
 app = Flask(__name__)
@@ -46,7 +46,7 @@ def user(name):
 
 
 @app.context_processor
-def inject_load_():
+def inject_load():
     return {
         "volume": db.get_volume(),
         "stream": db.get_stream(),
@@ -56,27 +56,27 @@ def inject_load_():
         "button_kurz": db.get_button_kurz_web(),
         "button_ukw": db.get_button_ukw_web(),
         "button_spr": db.get_button_spr_mus_web(),
-        "pos_lang_mittel_kurz": db.get_pos_lang_mittel_kurz(),
+        "pos_lang_mittel_kurz": 1850, # db.get_pos_lang_mittel_kurz(),
         "pos_ukw_spr": db.get_pos_ukw(),
         "radio_name": db.get_radio_name()
     }
 
 
-@app.context_processor
-def inject_load():
-    return {
-        "volume": random.randint(0, 100),
-        "stream": db.get_stream(),
-        "button_on_off": random.randint(0, 1),
-        "button_lang": random.randint(0, 1),
-        "button_mittel": random.randint(0, 1),
-        "button_kurz": random.randint(0, 1),
-        "button_ukw": random.randint(0, 1),
-        "button_spr": random.randint(0, 1),
-        "pos_lang_mittel_kurz": random.randint(1850, 3000),
-        "pos_ukw_spr": random.randint(0, 3000),
-        "radio_name": db.get_radio_name()
-    }
+#@app.context_processor
+#def inject_load_rand():
+#    return {
+#        "volume": random.randint(0, 100),
+#        "stream": db.get_stream(),
+#        "button_on_off": random.randint(0, 1),
+#        "button_lang": random.randint(0, 1),
+#        "button_mittel": random.randint(0, 1),
+#        "button_kurz": random.randint(0, 1),
+#        "button_ukw": random.randint(0, 1),
+#        "button_spr": random.randint(0, 1),
+#        "pos_lang_mittel_kurz": random.randint(1850, 3000),
+#        "pos_ukw_spr": random.randint(0, 3000),
+#        "radio_name": db.get_radio_name()
+#    }
 
 
 @app.before_first_request
@@ -113,7 +113,26 @@ def switch_web_control():
     state = request.form["state"]
     db.replace_web_control_value(state)
     return jsonify({'result': 'OK'})
-    # db.replace_web_control_value(state)
+
+
+@app.route('/button_clicked/<name>/<state>', methods=['GET'])
+def button_clicked(name, state):
+    # state = request.form["state"]
+    if "on" in name:
+        db.replace_button_on_off(state)
+    elif "lang" in name:
+        db.replace_button_lang(state)
+    elif "mittel" in name:
+        db.replace_button_mittel(state)
+    elif "kurz" in name:
+        db.replace_button_kurz(state)
+    elif "ukw" in name:
+        db.replace_button_ukw(state)
+    elif "spr" in name:
+        db.replace_button_spr_mus(state)
+    else:
+        return f"Button name invalid: {name}", 400
+    return jsonify({'result': 'OK'})
 
 
 if __name__ == "__main__":

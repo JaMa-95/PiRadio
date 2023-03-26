@@ -1,30 +1,25 @@
 function rePosition() {
-        let value = Number(document.getElementById("valueLang").innerText);
-        var elem = document.getElementById('redLine');
-        let startPixel = 350;
-        let endPixel = 912;
-        let startValue = 3000;
-        let endValue = 1850;
+        var value = Number(document.getElementById("valueLang").innerText);
 
-        let movePercent = (value - endValue) / (startValue - endValue);
-        let movePixels = movePercent * (endPixel - startPixel);
-        let movePixelString = movePixels.toString() + 'px';
-        $(elem).animate({ 'left': movePixelString });
+        document.getElementById("sliderRadio").value = value;
 }
 
 function changeImage(elementId, value) {
     var element = document.getElementById(elementId);
-    if (value == 1)
+    if (value == 1 || value == "On")
     {
         element.style.visibility = 'hidden';
     }
-    else {
+    else if (value == 0 || value == "Off") {
         element.style.visibility = 'visible';
+    }
+    else {
+        // console.log("Error at buttons value");
     }
 }
 
 function rePositionButtons() {
-        let value = Number(document.getElementById("buttonOn").innerText);
+        var value = Number(document.getElementById("buttonOn").innerText);
         changeImage("on_off", value);
         value = Number(document.getElementById("buttonLang").innerText);
         changeImage("lang_off", value);
@@ -68,17 +63,30 @@ waitForElementToDisplay("#valueLang",function(){
 
 function hello()
 {
-    document.getElementById("button").style.color = "red"
+    alert("Hello World");
 }
 
 function sendWebControlValue(checkbox)
 {
     const value = checkbox.checked;
     const formData = new FormData();
-    formData.append("state", "1");
+    formData.append("state", value);
 
     fetch("/web_control", {
         method: "POST",
         body: formData
     }).then();
+}
+
+function buttonClicked(buttonName, state)
+{
+    const value = document.getElementById("toggleWebControl").checked;
+    if (value)
+    {
+        changeImage(buttonName, state);
+        var url = "/button_clicked/" + buttonName + "/" + state
+        fetch(url, {
+            method: "GET"
+        }).then();
+    }
 }

@@ -20,41 +20,45 @@
                     </ul>
                 </nav>
             <div>
-            <label class="toggle">
-              <input type="checkbox" onclick="sendWebControlValue(this)">
-              <span class="slider"></span>
-            </label>
-            <td>web control</td>
+                <label class="toggle">
+                  <input id="toggleWebControl" type="checkbox" onclick="sendWebControlValue(this)">
+                  <span class="slider"></span>
+                    <td id="labelWebControl">Web Control</td>
+                </label>
+
             </div>
         </header>
         <main>
             <div id="radioContainer">
                 <img src="{{ url_for('static', filename='/radioFront2.png') }}" alt="radio status" id="radio">
-                <img src="{{ url_for('static', filename='/redLine.png') }}" alt="current radio" id="redLine">
+                <div class="sliderRadioContainer">
+                  <input type="range" min="1850" max="3000" value="1850" class="slider" id="sliderRadio">
+                </div>
+
                 <div id="buttonContainer">
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="on_on" class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="on_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="on_on" class="button_on" onclick="buttonClicked('on_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="on_off" class="button_off" onclick="buttonClicked('on_off', 1)">
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="lang_on" class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="lang_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="lang_on" class="button_on" onclick="buttonClicked('lang_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="lang_off" class="button_off" onclick="buttonClicked('lang_off', 1)">
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="mittel_on" class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="mittel_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="mittel_on" class="button_on" onclick="buttonClicked('mittel_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="mittel_off" class="button_off" onclick="buttonClicked('mittel_off', 1)">
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="kurz_on" class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="kurz_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="kurz_on" class="button_on" onclick="buttonClicked('kurz_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="kurz_off" class="button_off" onclick="buttonClicked('kurz_off', 1)">
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="ukw_on" class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="ukw_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="ukw_on" class="button_on" onclick="buttonClicked('ukw_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="ukw_off" class="button_off" onclick="buttonClicked('ukw_off', 1)">
                     </div>
                     <div>
-                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="spr_on"class="button_on">
-                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="spr_off" class="button_off">
+                        <img src="{{ url_for('static', filename='/buttonSingleDown.png') }}" id="spr_on"class="button_on" onclick="buttonClicked('spr_off', 0)">
+                        <img src="{{ url_for('static', filename='/buttonSingleUp.png') }}" id="spr_off" class="button_off" onclick="buttonClicked('spr_off', 1)">
                     </div>
 
                 </div>

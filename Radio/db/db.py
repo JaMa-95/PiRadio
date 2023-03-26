@@ -247,11 +247,11 @@ class Database(Singleton):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
             value = res.fetchall()
-            if value[0][1] > 50:
-                return "Off"
+            if value[0][1] == 1:
+                return "On"
             elif value[0][1] == 0:
-                return "Error"
-            return "On"
+                return "Off"
+            return "Error"
 
     def get_button_lang(self):
         with self.lock:

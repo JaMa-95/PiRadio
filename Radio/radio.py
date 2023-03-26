@@ -184,17 +184,19 @@ class Radio:
                 self.set_volume(self.current_command[changed_hardware])
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
-                    pass
-                    # print("------------------------------------")
-                    # print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
-                    #       f"{self.current_command['posUKW']}")
+                    # pass
+                    print("------------------------------------")
+                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
+                          f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
-    def turn_off_amplifier(self):
+    @staticmethod
+    def turn_off_amplifier():
         print("TURN OFF")
         GPIO.output(4, False)
 
-    def turn_on_amplifier(self):
+    @staticmethod
+    def turn_on_amplifier():
         print("Turn ON")
         GPIO.output(4, True)
 
