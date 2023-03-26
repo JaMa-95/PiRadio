@@ -84,9 +84,8 @@ class KurzFrequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
-            self.frequencies[i].minimum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1) -
-                                              (max_value_kurz_mittel_lang / number_frequencies))
-            self.frequencies[i].maximum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1))
+            self.frequencies[i].minimum = min_value
+            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class LangFrequencies:
@@ -120,9 +119,8 @@ class LangFrequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
-            self.frequencies[i].minimum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1) -
-                                              (max_value_kurz_mittel_lang / number_frequencies))
-            self.frequencies[i].maximum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1))
+            self.frequencies[i].minimum = min_value
+            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class MittelFrequencies:
@@ -165,9 +163,8 @@ class MittelFrequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
-            self.frequencies[i].minimum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1) -
-                                              (max_value_kurz_mittel_lang / number_frequencies))
-            self.frequencies[i].maximum = int((max_value_kurz_mittel_lang / number_frequencies) * (i + 1))
+            self.frequencies[i].minimum = min_value
+            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class UKWFrequencies:
@@ -212,9 +209,8 @@ class UKWFrequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
-            self.frequencies[i].minimum = int((max_value_ukw / number_frequencies) * (i + 1) -
-                                              (max_value_ukw / number_frequencies))
-            self.frequencies[i].maximum = int((max_value_ukw / number_frequencies) * (i + 1))
+            self.frequencies[i].minimum = min_value
+            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class SprFrequencies:
@@ -278,10 +274,10 @@ class SprFrequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
-            self.frequencies[i].minimum = int((max_value_ukw / number_frequencies) * (i + 1) -
-                                              (max_value_ukw / number_frequencies))
-            self.frequencies[i].maximum = int((max_value_ukw / number_frequencies) * (i + 1))
+            self.frequencies[i].minimum = min_value
+            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 if __name__ == "__main__":
     ukw = UKWFrequencies()
+    print()
