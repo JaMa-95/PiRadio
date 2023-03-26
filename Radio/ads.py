@@ -49,7 +49,7 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
-        for i in range(100):
+        for i in range(500):
             value = self.chan.value
             values.append(value)
 
