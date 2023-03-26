@@ -4,6 +4,8 @@ import busio
 from adafruit_ads1x15.analog_in import AnalogIn
 
 from db.db import Database
+from time import sleep
+from statistics import mean
 
 
 class AdsObject:
@@ -49,11 +51,8 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
-        for i in range(500):
-            value = self.chan.value
-            values.append(value)
+        for i in range(100):
+            values.append(self.chan.value)
+            sleep(0.001)
 
-        value_smoothed = 0
-        for value in values:
-            value_smoothed += value
-        return value_smoothed / len(values)
+        return mean(values)
