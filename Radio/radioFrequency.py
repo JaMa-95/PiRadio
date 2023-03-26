@@ -24,6 +24,8 @@ class RadioFrequency:
         self.radio_url = radio_url
         self.radio_url_re = radio_url_re
 
+
+class Frequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         for i in range(number_frequencies):
@@ -35,7 +37,7 @@ class RadioFrequency:
                                               number_frequencies)
 
 
-class KurzFrequencies:
+class KurzFrequencies(Frequencies):
     # NOT WORKING: Berum, stockholm,Falun
     def __init__(self):
         self.frequencies = [
@@ -92,7 +94,7 @@ class KurzFrequencies:
         ]
 
 
-class LangFrequencies:
+class LangFrequencies(Frequencies):
     # not working: That 70s Station, 80s80s Radio, 80s80s NDW, Eurodance 90, Radio 2000, rs2 -2010er, FM Top 40
     def __init__(self):
         self.frequencies = [
@@ -121,7 +123,7 @@ class LangFrequencies:
         self.init_min_max()
 
 
-class MittelFrequencies:
+class MittelFrequencies(Frequencies):
     # electro swing
     def __init__(self):
         self.frequencies = [
@@ -159,7 +161,7 @@ class MittelFrequencies:
         self.init_min_max()
 
 
-class UKWFrequencies:
+class UKWFrequencies(Frequencies):
     def __init__(self):
         self.frequencies = [
             RadioFrequency("Relaxed", 0, 100, "1000Slots to relax", "http://hyades.shoutca.st:8714/stream"),
@@ -199,7 +201,7 @@ class UKWFrequencies:
         self.init_min_max()
 
 
-class SprFrequencies:
+class SprFrequencies(Frequencies):
     # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
     def __init__(self):
         # spanisch
