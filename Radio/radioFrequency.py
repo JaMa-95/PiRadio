@@ -261,5 +261,5 @@ class SprFrequencies(Frequencies):
 
 
 if __name__ == "__main__":
-    mittel = MittelFrequencies()
+    mittel = LangFrequencies()
     print()

@@ -70,8 +70,6 @@ class ApiSubscriber(Subscriber):
         print(type(self).__name__, self.publisher.get_content())
 
 
-
-
 def get_value_smoothed():
     values = []
     for i in range(100):
@@ -83,4 +81,14 @@ def get_value_smoothed():
     print(f"new value {value}")
     return value_smoothed / len(values)
 
-get_value_smoothed()
+from ads import AdsObject
+
+adsO = AdsObject()
+
+while True:
+    values = []
+    for i in range(50):
+        values.append(adsO.mittel_poti.get_value())
+    print(f"{min(values)} : {max(values)}")
+
+
