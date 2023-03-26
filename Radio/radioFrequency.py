@@ -24,6 +24,16 @@ class RadioFrequency:
         self.radio_url = radio_url
         self.radio_url_re = radio_url_re
 
+    def init_min_max(self):
+        number_frequencies = len(self.frequencies)
+        for i in range(number_frequencies):
+            if i == 0:
+                self.frequencies[i].minimum = min_value
+            else:
+                self.frequencies[i].minimum = self.frequencies[i - 1].maximum
+            self.frequencies[i].maximum = int(self.frequencies[i].minimum + (max_value_kurz_mittel_lang - min_value) / \
+                                              number_frequencies)
+
 
 class KurzFrequencies:
     # NOT WORKING: Berum, stockholm,Falun
@@ -81,12 +91,6 @@ class KurzFrequencies:
                            "http://stream.antenne.de/antenne/stream/mp3?aw_0_1st.playerid=com")
         ]
 
-    def init_min_max(self):
-        number_frequencies = len(self.frequencies)
-        for i in range(number_frequencies):
-            self.frequencies[i].minimum = min_value
-            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
-
 
 class LangFrequencies:
     # not working: That 70s Station, 80s80s Radio, 80s80s NDW, Eurodance 90, Radio 2000, rs2 -2010er, FM Top 40
@@ -115,12 +119,6 @@ class LangFrequencies:
             RadioFrequency("Top 40", 0, 100, "FM Top 40", "http://www.1.fm/tunestream/top40/listen.pls"),
         ]
         self.init_min_max()
-
-    def init_min_max(self):
-        number_frequencies = len(self.frequencies)
-        for i in range(number_frequencies):
-            self.frequencies[i].minimum = min_value
-            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class MittelFrequencies:
@@ -159,12 +157,6 @@ class MittelFrequencies:
             RadioFrequency("Klassik", 0, 100, "0nlineradio Klassik", "https://stream.0nlineradio.com/klassik?ref"),
         ]
         self.init_min_max()
-
-    def init_min_max(self):
-        number_frequencies = len(self.frequencies)
-        for i in range(number_frequencies):
-            self.frequencies[i].minimum = min_value
-            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class UKWFrequencies:
@@ -205,12 +197,6 @@ class UKWFrequencies:
                            "https://stream.epic-lounge.com/christmas-lounge?ref"),
         ]
         self.init_min_max()
-
-    def init_min_max(self):
-        number_frequencies = len(self.frequencies)
-        for i in range(number_frequencies):
-            self.frequencies[i].minimum = min_value
-            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 class SprFrequencies:
@@ -270,12 +256,6 @@ class SprFrequencies:
                            "http://stream.zenolive.com/ez10yx9e9neuv"),
         ]
         self.init_min_max()
-
-    def init_min_max(self):
-        number_frequencies = len(self.frequencies)
-        for i in range(number_frequencies):
-            self.frequencies[i].minimum = min_value
-            self.frequencies[i].maximum = (int((max_value_kurz_mittel_lang / number_frequencies) - min_value) * (i + 1))
 
 
 if __name__ == "__main__":
