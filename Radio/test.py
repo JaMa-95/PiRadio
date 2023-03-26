@@ -89,6 +89,6 @@ while True:
     values = []
     for i in range(50):
         values.append(adsO.mittel_poti.get_value())
-    print(f"{min(values)} : {max(values)}")
+    print(f"{min(values)} : {max(values) : {max(values) - min(values)}}")
 
 
