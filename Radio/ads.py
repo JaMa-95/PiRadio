@@ -55,4 +55,9 @@ class AdsSingle:
             values.append(self.chan.value)
             sleep(0.01)
 
+        values.remove(max(values))
+        values.remove(min(values))
+        values.remove(max(values))
+        values.remove(min(values))
+
         return mean(values)
