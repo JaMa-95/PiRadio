@@ -71,23 +71,16 @@ class ApiSubscriber(Subscriber):
 
 
 
-publisher = Publisher()
 
-for subs in [SiteSubscriber, IntranetSubscriber, ApiSubscriber]:
-    subs(publisher)
+def get_value_smoothed():
+    values = []
+    for i in range(100):
+        values.append(100)
 
-print("All Subscriber: ", publisher.get_subscribers())
-print("------------------------------------------------")
+    value_smoothed = 0
+    for value in values:
+        value_smoothed += value
+    print(f"new value {value}")
+    return value_smoothed / len(values)
 
-publisher.add_content('Update content on all subscribers.')
-publisher.updateSubscribers()
-
-print("------------------------------------------------")
-
-publisher.detach()
-
-print("Remaining Subscriber: ", publisher.get_subscribers())
-print("------------------------------------------------")
-
-publisher.add_content('Updated content for remaining subscriber.')
-publisher.updateSubscribers()
+get_value_smoothed()
