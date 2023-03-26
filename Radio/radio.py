@@ -283,6 +283,7 @@ class Radio:
         value = value / len(self.poti_values)
         return value
 
+    # deprecated
     def difference_poti_high(self, poti):
         self.set_poti_value(poti)
         poti = self.get_poti_value()
@@ -342,7 +343,7 @@ class Radio:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
         value = self.db.get_ads_pin_value(self.pin_volume)
-        if self.difference_poti_high(value):
+        if value != self.old_command["potiValue"]:
             changed_hardware.append("potiValue")
             self.current_command["potiValue"] = value
         return changed_hardware
