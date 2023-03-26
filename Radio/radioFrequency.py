@@ -261,5 +261,5 @@ class SprFrequencies(Frequencies):
 
 
 if __name__ == "__main__":
-    ukw = UKWFrequencies()
+    mittel = MittelFrequencies()
     print()
