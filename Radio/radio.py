@@ -128,14 +128,18 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
-            self.check_radio_on_off()
-            self.check_raspi_off()
-            self.check_change_speakers()
-            changed_hardware = self.get_changed_buttons()
-            changed_hardware.extend(self.get_changed_hardware())
+            if not self.db.get_web_control_value():
+                self.check_radio_on_off()
+                self.check_raspi_off()
+                self.check_change_speakers()
+                changed_hardware = self.get_changed_buttons()
+                changed_hardware.extend(self.get_changed_hardware())
 
-            if changed_hardware:
-                self.process_hardware_change(changed_hardware)
+                if changed_hardware:
+                    self.process_hardware_change(changed_hardware)
+            else:
+                # TODO: check db. if change
+                pass
             time.sleep(0.1)
 
     def check_raspi_off(self):
@@ -185,9 +189,9 @@ class Radio:
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
                     pass
-                    #print("------------------------------------")
-                    #print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
-                    #      f"{self.current_command['posUKW']}")
+                    print("------------------------------------")
+                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, "
+                          f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     @staticmethod
