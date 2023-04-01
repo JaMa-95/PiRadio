@@ -1,3 +1,5 @@
+import time
+
 import adafruit_ads1x15.ads1115 as ADS
 import board
 import busio
@@ -53,6 +55,7 @@ class AdsSingle:
         values = []
         for i in range(50):
             values.append(self.chan.value)
+            time.sleep(0.001)
 
         values.remove(max(values))
         values.remove(min(values))

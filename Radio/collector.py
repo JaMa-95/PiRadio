@@ -13,4 +13,4 @@ class Collector:
         while True:
             self.buttons.set_values_to_db()
             self.ads.set_to_db()
-            sleep(0.01)
+            sleep(0.005)
