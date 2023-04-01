@@ -73,19 +73,19 @@ class LedData:
         if led == [1, 1, 1, 1, 1]:
             self.all_on = True
             self.clear = False
-        elif led != [0, 0, 0, 0, 0]:
+        elif led != [0, 0, 0, 0, 0, 0]:
             self.all_on = False
             self.clear = False
         else:
             self.all_on = False
             self.clear = True
 
-    def set_led_off(self, led=[0, 0, 0, 0, 0]):
+    def set_led_off(self, led=[0, 0, 0, 0, 0, 0]):
         self.led_on = led
-        if led == [0, 0, 0, 0, 0]:
+        if led == [0, 0, 0, 0, 0, 0]:
             self.all_on = False
             self.clear = True
-        elif led != [0, 0, 0, 0, 0]:
+        elif led != [0, 0, 0, 0, 0, 0]:
             self.all_on = False
             self.clear = False
         else:
