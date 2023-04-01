@@ -88,7 +88,7 @@ adsO = AdsObject()
 while True:
     values = []
     for i in range(50):
-        values.append(adsO.mittel_poti.get_value())
+        values.append(adsO.volume_poti.get_value())
     print(f"{min(values)} : {max(values)} : {max(values) - min(values)}")
 
 
