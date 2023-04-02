@@ -290,19 +290,34 @@ class Radio:
         return None
 
     def get_button_frequency(self):
-        if self.radio_buttons.button_lang.state:
-            return LangFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_mittel.state:
-            return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_kurz.state:
-            return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-        elif self.radio_buttons.button_ukw.state:
-            return UKWFrequencies(), self.current_command["posUKW"]
-        elif self.radio_buttons.button_spr.state:
-            return SprFrequencies(), self.current_command["posUKW"]
+        if not self.db.get_web_control_value():
+            if self.radio_buttons.button_lang.state:
+                return LangFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.radio_buttons.button_mittel.state:
+                return MittelFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.radio_buttons.button_kurz.state:
+                return KurzFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.radio_buttons.button_ukw.state:
+                return UKWFrequencies(), self.current_command["posUKW"]
+            elif self.radio_buttons.button_spr.state:
+                return SprFrequencies(), self.current_command["posUKW"]
+            else:
+                # print("using NONE")
+                return None, None
         else:
-            # print("using NONE")
-            return None, None
+            if self.db.get_button_lang():
+                return LangFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.db.get_button_mittel():
+                return MittelFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.db.get_button_kurz():
+                return KurzFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.db.get_button_ukw():
+                return UKWFrequencies(), self.current_command["posUKW"]
+            elif self.db.get_button_spr_mus():
+                return SprFrequencies(), self.current_command["posUKW"]
+            else:
+                # print("using NONE")
+                return None, None
 
     def set_volume(self, volume):
         volume = int(0.00606 * volume - 63.63)
