@@ -145,6 +145,7 @@ class Radio:
                 if changed_hardware:
                     print("hardware changed!!!!!")
                     self.process_hardware_change(changed_hardware)
+                self.old_command = self.current_command
             time.sleep(0.5)
 
     def get_command_changed(self):
@@ -214,8 +215,8 @@ class Radio:
             else:
                 if changed_hardware in ["posLangKurzMittel", "posUKW"]:
                     pass
-                    print("------------------------------------")
-                    print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
+                    # print("------------------------------------")
+                    # print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
                     #      f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
