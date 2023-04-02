@@ -13,7 +13,7 @@ class Collector:
 
     def run(self):
         while True:
-            if self.db.get_web_control_value():
+            if not self.db.get_web_control_value():
                 self.buttons.set_values_to_db()
                 self.ads.set_to_db()
             sleep(0.005)
