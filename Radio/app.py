@@ -117,6 +117,7 @@ def switch_web_control():
 
 @app.route('/button_clicked/<name>/<state>', methods=['GET'])
 def button_clicked(name, state):
+    print(f"{name} nad {state}")
     # state = request.form["state"]
     if "on" in name:
         db.replace_button_on_off(state)
