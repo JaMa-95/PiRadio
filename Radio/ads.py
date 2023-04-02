@@ -61,5 +61,11 @@ class AdsSingle:
         values.remove(min(values))
         values.remove(max(values))
         values.remove(min(values))
+        values.remove(max(values))
+        values.remove(min(values))
+        values.remove(max(values))
+        values.remove(min(values))
+        values.remove(max(values))
+        values.remove(min(values))
 
         return mean(values)
