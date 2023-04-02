@@ -143,6 +143,7 @@ class Radio:
 
                 self.get_command_from_db()
                 changed_hardware = self.get_command_changed()
+                print(f"changed: {changed_hardware}")
                 if changed_hardware:
                     print("hardware changed!!!!!")
                     self.process_hardware_change(changed_hardware)
