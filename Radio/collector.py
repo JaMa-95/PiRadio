@@ -2,13 +2,13 @@ from time import sleep
 
 from button import RadioButtonsRaspi
 from ads import AdsObject
-from db import db
+from db.db import Database
 
 class Collector:
     def __init__(self):
         self.buttons = RadioButtonsRaspi()
         self.ads = AdsObject()
-        self.db = db
+        self.db = Database
 
     def run(self):
         while True:
