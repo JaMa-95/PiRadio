@@ -42,17 +42,19 @@ class Database(Singleton):
     """
 
     def create(self):
-        try:
-            self.cur.execute(f"CREATE TABLE radio(name, value)")
-            self.cur.execute("CREATE UNIQUE INDEX idx ON contacts (name);")
-        except sqlite3.OperationalError:
-            pass
+        with self.lock:
+            try:
+                self.cur.execute(f"CREATE TABLE radio(name, value)")
+                self.cur.execute("CREATE UNIQUE INDEX idx ON contacts (name);")
+            except sqlite3.OperationalError:
+                pass
 
     def clear(self):
-        for value in self.all_values:
-            self.cur.execute(
-                f'DELETE from {value}  sqlite_master order by time desc limit 1);'
-            )
+        with self.lock
+            for value in self.all_values:
+                self.cur.execute(
+                    f'DELETE from {value}  sqlite_master order by time desc limit 1);'
+                )
 
     def init(self):
         self.insert_volume(0)

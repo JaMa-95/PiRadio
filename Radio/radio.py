@@ -155,6 +155,7 @@ class Radio:
         for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz",
                       "buttonUKW", "buttonSprMus", "potiValue", "posLangKurzMittel",
                       "posUKW"]:
+            print(f"{self.current_command[value]}: {self.old_command[value]}")
             if self.current_command[value] != self.old_command[value]:
                 changed_hardware.append(value)
         return changed_hardware
