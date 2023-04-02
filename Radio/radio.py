@@ -175,12 +175,24 @@ class Radio:
 
     def get_command_changed(self):
         changed_hardware = []
-        for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz",
-                      "buttonUKW", "buttonSprMus", "potiValue", "posLangKurzMittel",
-                      "posUKW"]:
-            print(f"{self.current_command[value]}: {self.old_command[value]}")
-            if self.current_command[value] != self.old_command[value]:
-                changed_hardware.append(value)
+        if self.current_command["buttonOnOff"] != self.db.get_button_on_off():
+            changed_hardware.append("buttonOnOff")
+        if self.current_command["buttonLang"] != self.db.get_button_lang():
+            changed_hardware.append("buttonLang")
+        if self.current_command["buttonMittel"] != self.db.get_button_mittel():
+            changed_hardware.append("buttonMittel")
+        if self.current_command["buttonKurz"] != self.db.get_button_kurz():
+            changed_hardware.append("buttonKurz")
+        if self.current_command["buttonUKW"] != self.db.get_button_ukw():
+            changed_hardware.append("buttonUKW")
+        if self.current_command["buttonSprMus"] != self.db.get_button_spr_mus():
+            changed_hardware.append("buttonSprMus")
+        if self.current_command["potiValue"] != self.db.get_poti_value_web():
+            changed_hardware.append("potiValue")
+        if self.current_command["posLangKurzMittel"] != self.db.get_pos_lang_mittel_kurz():
+            changed_hardware.append("posLangKurzMittel")
+        if self.current_command["posUKW"] != self.db.get_pos_ukw():
+            changed_hardware.append("posUKW")
         return changed_hardware
 
     def get_command_from_db(self):
