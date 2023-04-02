@@ -71,6 +71,7 @@ class Database(Singleton):
         self.insert_ads_pin_value(0, 3)
         self.insert_radio_name("---")
         self.insert_web_control_value(False)
+        self.insert_poti_value_web(0)
 
     def table_exists(self, table_name: str):
         with self.lock:
