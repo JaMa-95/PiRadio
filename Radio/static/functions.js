@@ -7,6 +7,15 @@ function rePosition() {
     }
 }
 
+function updateVolume() {
+    const checked = document.getElementById("toggleWebControl").checked;
+    if (!checked)
+    {
+        var value = Number(document.getElementById("valueVolume").innerText);
+        document.getElementById("volumeKnob").value = value;
+    }
+}
+
 function changeImage(elementId, value) {
     var element = document.getElementById(elementId);
     if (value == 1 || value == "On")
@@ -60,6 +69,7 @@ waitForElementToDisplay("#valueLang",function(){
         var intervalId = window.setInterval(function(){
           rePosition();
           rePositionButtons();
+          updateVolume();
         }, 300);
     }
 },1000,9000);
@@ -74,6 +84,7 @@ function sendWebControlValue(checkbox)
     const value = checkbox.checked;
     const formData = new FormData();
     formData.append("state", value);
+    document.getElementById("volumeKnob").disabled = !value;
 
     fetch("/web_control", {
         method: "POST",
@@ -100,6 +111,20 @@ function buttonClicked(buttonName, state)
     {
         changeImage(buttonName, state);
         var url = "/button_clicked/" + buttonName + "/" + state
+        fetch(url, {
+            method: "GET"
+        }).then();
+    }
+}
+
+function sendVolume(volumeKnob)
+{
+    const checked = document.getElementById("toggleWebControl").checked;
+    if (checked)
+    {
+        const value = volumeKnob.value;
+        alert(value);
+        var url = "/volume/" + value
         fetch(url, {
             method: "GET"
         }).then();

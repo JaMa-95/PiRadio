@@ -63,20 +63,20 @@ def inject_load():
 
 
 #@app.context_processor
-#def inject_load_rand():
-#    return {
-#        "volume": random.randint(0, 100),
-#        "stream": db.get_stream(),
-#        "button_on_off": random.randint(0, 1),
-#        "button_lang": random.randint(0, 1),
-#        "button_mittel": random.randint(0, 1),
-#        "button_kurz": random.randint(0, 1),
-#        "button_ukw": random.randint(0, 1),
-#        "button_spr": random.randint(0, 1),
-#        "pos_lang_mittel_kurz": random.randint(1850, 3000),
-#        "pos_ukw_spr": random.randint(0, 3000),
-#        "radio_name": db.get_radio_name()
-#    }
+def inject_load_rand():
+    return {
+        "volume": random.randint(0, 100),
+        "stream": db.get_stream(),
+        "button_on_off": random.randint(0, 1),
+        "button_lang": random.randint(0, 1),
+        "button_mittel": random.randint(0, 1),
+        "button_kurz": random.randint(0, 1),
+        "button_ukw": random.randint(0, 1),
+        "button_spr": random.randint(0, 1),
+        "pos_lang_mittel_kurz": random.randint(1850, 3000),
+        "pos_ukw_spr": random.randint(0, 3000),
+        "radio_name": db.get_radio_name()
+    }
 
 
 @app.before_first_request
@@ -136,9 +136,14 @@ def button_clicked(name, state):
 
 
 @app.route('/pos_lang_kurz_mittel/<value>', methods=['GET'])
-def pso_changed(value):
-    print(f"pos lang kurz mittel {value}")
+def pos_changed(value):
     db.replace_pos_lang_mittel_kurz(value)
+    return jsonify({'result': 'OK'})
+
+
+@app.route('/volume/<value>', methods=['GET'])
+def volume_changed(value):
+    db.replace_volume(value)
     return jsonify({'result': 'OK'})
 
 

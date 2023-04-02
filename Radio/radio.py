@@ -144,8 +144,9 @@ class Radio:
                 self.get_command_from_db()
                 print(f"changed: {changed_hardware}")
                 if changed_hardware:
-                    print("hardware changed!!!!!")
-                    self.process_hardware_change(changed_hardware)
+                    if "potiValue" in changed_hardware:
+                        self.send_volume(self.current_command["potiValue"])
+                    self.process_hardware_value_change()
                     self.old_command = self.current_command
             time.sleep(1)
 
@@ -163,7 +164,7 @@ class Radio:
             changed_hardware.append("buttonUKW")
         if self.current_command["buttonSprMus"] != self.db.get_button_spr_mus():
             changed_hardware.append("buttonSprMus")
-        if self.current_command["potiValue"] != self.db.get_poti_value_web():
+        if self.current_command["potiValue"] != self.db.get_volume():
             changed_hardware.append("potiValue")
         if self.current_command["posLangKurzMittel"] != self.db.get_pos_lang_mittel_kurz():
             changed_hardware.append("posLangKurzMittel")
@@ -325,8 +326,6 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
-        volume = 20
-        print(f"volume: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
