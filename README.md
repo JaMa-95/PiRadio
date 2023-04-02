@@ -28,3 +28,7 @@ https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython
 Low-Pass Filter with 100yF Capacitor and 47k Ohm Resistance -> frequencies
 Low-Pass Filter with 22yF Capacitor and 47k Ohm Resistance -> volume -> must be faster
 https://www.instructables.com/Smooth-Potentiometer-Input/
+
+# ERROR
+## Segmentation fault
+https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
