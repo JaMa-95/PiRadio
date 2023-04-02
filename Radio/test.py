@@ -82,13 +82,21 @@ def get_value_smoothed():
     return value_smoothed / len(values)
 
 from ads import AdsObject
-
+import time
 adsO = AdsObject()
 
 while True:
     values = []
+
     for i in range(50):
         values.append(adsO.volume_poti.get_value())
+        time.sleep(0.001)
+
+    values.remove(max(values))
+    values.remove(min(values))
+    values.remove(max(values))
+    values.remove(min(values))
     print(f"{min(values)} : {max(values)} : {max(values) - min(values)}")
+    values = []
 
 
