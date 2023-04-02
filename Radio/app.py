@@ -135,5 +135,12 @@ def button_clicked(name, state):
     return jsonify({'result': 'OK'})
 
 
+@app.route('/pos_lang_kurz_mittel/<value>', methods=['GET'])
+def pso_changed(value):
+    print(f"pos lang kurz mittel {value}")
+    db.replace_pos_lang_mittel_kurz(value)
+    return jsonify({'result': 'OK'})
+
+
 if __name__ == "__main__":
     app.run(port=5000, host='0.0.0.0')

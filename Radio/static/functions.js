@@ -1,7 +1,10 @@
 function rePosition() {
+    const checked = document.getElementById("toggleWebControl").checked;
+    if (!checked)
+    {
         var value = Number(document.getElementById("valueLang").innerText);
-
         document.getElementById("sliderRadio").value = value;
+    }
 }
 
 function changeImage(elementId, value) {
@@ -78,10 +81,22 @@ function sendWebControlValue(checkbox)
     }).then();
 }
 
+function sendPosValue(value)
+{
+    const checked = document.getElementById("toggleWebControl").checked;
+    if (checked)
+    {
+        var url = "/pos_lang_kurz_mittel/" + value
+        fetch(url, {
+            method: "GET"
+        }).then();
+    }
+}
+
 function buttonClicked(buttonName, state)
 {
-    const value = document.getElementById("toggleWebControl").checked;
-    if (value)
+    const checked = document.getElementById("toggleWebControl").checked;
+    if (checked)
     {
         changeImage(buttonName, state);
         var url = "/button_clicked/" + buttonName + "/" + state

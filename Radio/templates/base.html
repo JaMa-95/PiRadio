@@ -32,7 +32,8 @@
             <div id="radioContainer">
                 <img src="{{ url_for('static', filename='/radioFront2.png') }}" alt="radio status" id="radio">
                 <div class="sliderRadioContainer">
-                  <input type="range" min="1850" max="3000" value="1850" class="slider" id="sliderRadio">
+                  <input type="range" min="1850" max="3000" value="1850" class="slider" id="sliderRadio"
+                         oninput="sendPosValue(this.value)">
                 </div>
 
                 <div id="buttonContainer">

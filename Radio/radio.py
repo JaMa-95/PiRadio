@@ -138,11 +138,12 @@ class Radio:
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             else:
+                print("web control")
                 self.get_command_from_db()
                 changed_hardware = self.get_command_changed()
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
-            time.sleep(0.1)
+            time.sleep(0.5)
 
     def get_command_changed(self):
         changed_hardware = []
