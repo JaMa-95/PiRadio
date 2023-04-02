@@ -138,6 +138,7 @@ class Radio:
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             else:
+                self.check_radio_on_off()
                 print("web control")
                 self.get_command_from_db()
                 changed_hardware = self.get_command_changed()
@@ -178,6 +179,10 @@ class Radio:
                 self.turn_on_radio()
             else:
                 self.turn_off_radio()
+        elif self.db.get_web_control_value() and self.db.get_button_on_off():
+            self.on = True
+        elif self.db.get_web_control_value() and not self.db.get_button_on_off():
+            self.on = False
 
     def check_change_speakers(self):
         if self.radio_buttons.button_on_off.double_click():
