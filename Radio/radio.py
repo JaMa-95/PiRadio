@@ -138,9 +138,31 @@ class Radio:
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             else:
-                # TODO: check db. if change
-                pass
+                self.get_command_from_db()
+                changed_hardware = self.get_command_changed()
+                if changed_hardware:
+                    self.process_hardware_change(changed_hardware)
             time.sleep(0.1)
+
+    def get_command_changed(self):
+        changed_hardware = []
+        for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz",
+                      "buttonUKW", "buttonSprMus", "potiValue", "posLangKurzMittel",
+                      "posUKW"]:
+            if self.current_command[value] != self.old_command[value]:
+                changed_hardware.append(value)
+        return changed_hardware
+
+    def get_command_from_db(self):
+        self.current_command["buttonOnOff"] = self.db.get_button_on_off()
+        self.current_command["buttonLang"] = self.db.get_button_lang()
+        self.current_command["buttonMittel"] = self.db.get_button_mittel()
+        self.current_command["buttonKurz"] = self.db.get_button_kurz()
+        self.current_command["buttonUKW"] = self.db.get_button_ukw()
+        self.current_command["buttonSprMus"] = self.db.get_button_spr_mus()
+        self.current_command["potiValue"] = self.db.get_poti_value_web()
+        self.current_command["posLangKurzMittel"] = self.db.get_pos_lang_mittel_kurz()
+        self.current_command["posUKW"] = self.db.get_pos_ukw()
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
@@ -164,13 +186,6 @@ class Radio:
                 if not self.speakers.play_central:
                     self.broker.publish_start_stop("0")
 
-    def check_esp_reset(self):
-        if self.radio_buttons.button_spr.long_click():
-            print("RESET ESP")
-            self.raspberry.turn_off_usb()
-            time.sleep(2)
-            self.raspberry.turn_on_usb()
-
     def set_old_command(self, command_):
         self.old_command["buttonOnOff"] = command_["buttonOnOff"]
         self.old_command["buttonLang"] = command_["buttonLang"]
@@ -183,6 +198,8 @@ class Radio:
         self.old_command["posUKW"] = command_["posUKW"]
 
     def process_hardware_change(self, changed_hardware_list):
+        # TODO: only set volume. rest is handled by process hardware value change
+        # mehtod can be deleted and set volume and change hardware
         for changed_hardware in changed_hardware_list:
             if changed_hardware == "potiValue":
                 self.set_volume(self.current_command[changed_hardware])
@@ -340,6 +357,7 @@ class Radio:
     returns what hardware changed
     for example sound volume, frequency, ...
     """
+
     def get_changed_hardware(self):
         changed_hardware = []
         value = self.db.get_ads_pin_value(self.pin_mittel)

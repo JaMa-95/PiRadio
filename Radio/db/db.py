@@ -144,6 +144,11 @@ class Database(Singleton):
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='posUKW'")
             self.con.commit()
 
+    def replace_poti_value_web(self, value: int):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='poti_value_web'")
+            self.con.commit()
+
     #########################################################################################
 
     def insert_web_control_value(self, value: bool):
@@ -211,7 +216,18 @@ class Database(Singleton):
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("posUKW", value))
             self.con.commit()
 
+    def insert_poti_value_web(self, value: int):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("poti_value_web", value))
+            self.con.commit()
+
     #######################################################################
+
+    def get_poti_value_web(self):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='poti_value_web'")
+            value = res.fetchall()
+            return value[0][1]
 
     def get_web_control_value(self):
         with self.lock:
