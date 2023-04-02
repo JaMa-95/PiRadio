@@ -25,5 +25,6 @@ To run pythons script and pulseAudio with root access. Root access is needed by 
 https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython
 
 # Pontentiometer
-Low-Pass Filter with 100yF Capacitor and 47k Ohm Resistance
+Low-Pass Filter with 100yF Capacitor and 47k Ohm Resistance -> frequencies
+Low-Pass Filter with 22yF Capacitor and 47k Ohm Resistance -> volume -> must be faster
 https://www.instructables.com/Smooth-Potentiometer-Input/
