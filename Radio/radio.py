@@ -138,13 +138,19 @@ class Radio:
                 if changed_hardware:
                     self.process_hardware_change(changed_hardware)
             else:
-                self.check_radio_on_off()
                 print("web control")
+                print(f"1: {self.db.get_button_on_off()}")
+                self.check_radio_on_off()
+                print(f"2: {self.db.get_button_on_off()}")
+
                 self.get_command_from_db()
+                print(f"3: {self.db.get_button_on_off()}")
                 changed_hardware = self.get_command_changed()
+                print(f"4: {self.db.get_button_on_off()}")
                 if changed_hardware:
                     print("hardware changed!!!!!")
                     self.process_hardware_change(changed_hardware)
+                print(f"5: {self.db.get_button_on_off()}")
                 self.old_command = self.current_command
             time.sleep(0.5)
 
