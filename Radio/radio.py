@@ -122,6 +122,7 @@ class Radio:
         self.broker.client.loop_start()
 
     def run(self):
+        self.db.replace_web_control_value(False)
         self.ledData.fade = True
         self.ledData.all_on = True
 
