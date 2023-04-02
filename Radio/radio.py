@@ -147,7 +147,7 @@ class Radio:
                 if changed_hardware:
                     print("hardware changed!!!!!")
                     self.process_hardware_change(changed_hardware)
-                self.old_command = self.current_command
+                    self.old_command = self.current_command
             time.sleep(0.5)
 
     def get_command_changed(self):
