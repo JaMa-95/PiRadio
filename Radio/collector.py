@@ -9,7 +9,7 @@ class Collector:
     def __init__(self):
         self.buttons = RadioButtonsRaspi()
         self.ads = AdsObject()
-        self.db = Database
+        self.db = Database()
 
     def run(self):
         while True:
