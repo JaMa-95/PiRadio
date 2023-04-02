@@ -23,3 +23,7 @@ To run pythons script and pulseAudio with root access. Root access is needed by 
 
 # ADS1x15
 https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython
+
+# Pontentiometer
+Low-Pass Filter with 100yF Capacitor and 47k Ohm Resistance
+https://www.instructables.com/Smooth-Potentiometer-Input/
