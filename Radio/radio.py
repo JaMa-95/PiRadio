@@ -139,16 +139,39 @@ class Radio:
                     self.process_hardware_change(changed_hardware)
             else:
                 print("web control")
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
                 self.check_radio_on_off()
-
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
                 self.get_command_from_db()
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
                 changed_hardware = self.get_command_changed()
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
                 print(f"changed: {changed_hardware}")
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
                 if changed_hardware:
                     print("hardware changed!!!!!")
                     self.process_hardware_change(changed_hardware)
                     self.old_command = self.current_command
-            time.sleep(0.5)
+                print("-------------")
+                print(self.current_command)
+                print(self.old_command)
+                print("-------------")
+            time.sleep(1)
 
     def get_command_changed(self):
         changed_hardware = []
@@ -177,7 +200,6 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
-        print(f"web control state: {self.db.get_web_control_value()}  {self.db.get_button_on_off()}")
         if self.radio_buttons.button_on_off.is_click() and not self.db.get_web_control_value():
             self.on = not self.on
             if self.on:
@@ -603,3 +625,7 @@ class USBReader:
     def set_test_command(self, command_):
         global command
         command = command_
+
+if __name__ == "__main__":
+    radio = Radio()
+    radio.run()
