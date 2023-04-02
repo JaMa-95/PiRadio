@@ -50,7 +50,7 @@ class Database(Singleton):
                 pass
 
     def clear(self):
-        with self.lock
+        with self.lock:
             for value in self.all_values:
                 self.cur.execute(
                     f'DELETE from {value}  sqlite_master order by time desc limit 1);'
