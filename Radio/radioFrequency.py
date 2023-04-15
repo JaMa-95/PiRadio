@@ -28,13 +28,16 @@ class RadioFrequency:
 class Frequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
+        frequency_width = int((max_value_kurz_mittel_lang - min_value) / number_frequencies)
         for i in reversed(range(number_frequencies)):
+            if i == number_frequencies - 1:
+                self.frequencies[i].maximum = max_value_kurz_mittel_lang
+            else:
+                self.frequencies[i].maximum = self.frequencies[i + 1].minimum
             if i == 0:
                 self.frequencies[i].minimum = min_value
-            else:
-                self.frequencies[i].minimum = self.frequencies[i - 1].maximum
-            self.frequencies[i].maximum = int(self.frequencies[i].minimum + (max_value_kurz_mittel_lang - min_value) / \
-                                              number_frequencies)
+
+            self.frequencies[i].minimum = self.frequencies[i].maximum - frequency_width
 
 
 class KurzFrequencies(Frequencies):
