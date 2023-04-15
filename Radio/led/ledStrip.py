@@ -1,4 +1,3 @@
-import time
 from time import sleep
 
 from .singleton import Singleton
@@ -68,7 +67,9 @@ class LedData:
         self.clear = True
         self.set_led_off()
 
-    def set_led_on(self, led=[1, 1, 1, 1, 1]):
+    def set_led_on(self, led=None):
+        if led is None:
+            led = [1, 1, 1, 1, 1]
         self.led_on = led
         if led == [1, 1, 1, 1, 1]:
             self.all_on = True
@@ -80,7 +81,9 @@ class LedData:
             self.all_on = False
             self.clear = True
 
-    def set_led_off(self, led=[0, 0, 0, 0, 0, 0]):
+    def set_led_off(self, led=None):
+        if led is None:
+            led = [0, 0, 0, 0, 0, 0]
         self.led_on = led
         if led == [0, 0, 0, 0, 0, 0]:
             self.all_on = False
@@ -319,7 +322,7 @@ class LedStrip:
 
     def radio_off(self):
         self.ledData.set_radio_off()
-        self.blink_onceColor(255, 255, 255)
+        self.blink_one_color(255, 255, 255)
         self.ledData.set_clear()
 
     def led_on(self):
@@ -385,6 +388,9 @@ class LedStrip:
             self.strip.setPixelColor(i, Color(0, 0, 0))
         self.strip.show()
         self.ledData.set_clear()
+
+    def blink_one_color(self, param, param1, param2):
+        pass
 
 
 if __name__ == "__main__":

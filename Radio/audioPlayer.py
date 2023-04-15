@@ -5,8 +5,8 @@ from util import Subscriber
 
 
 class AudioPlayer(Subscriber):
-
     def __init__(self, publisher):
+        self.noise_player = None  # Not implemented yet
         self.publisher = publisher
         self.publisher.attach(self)
         self.noise = 30
@@ -54,9 +54,7 @@ class AudioPlayer(Subscriber):
 
 
 if __name__ == "__main__":
-    audio_player = AudioPlayer(
-        RadioFrequency("München", 0, 100, "Energy München", "http://eu4.fastcast4u.com/proxy/carolanr2?mp=/1"), 1)
-    # audio_player.play()
-    audio_player.start()
-    # audio_player_thread.start()
+    audio_player = AudioPlayer(None)
+    audio_player.play(RadioFrequency("München", 0, 100, "Energy München",
+                                     "http://eu4.fastcast4u.com/proxy/carolanr2?mp=/1"))
     time.sleep(10)

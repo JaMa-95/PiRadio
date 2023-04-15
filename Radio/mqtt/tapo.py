@@ -4,9 +4,9 @@ from tapo_plug import tapoPlugApi
 class TapoPlug:
     def __init__(self):
         self.device = {
-            "tapoIp": "192.168.0.165",
-            "tapoEmail": "jakob.mattes1995@web.de",
-            "tapoPassword": "Uo5e6sk$sp"
+            "tapoIp": "--",
+            "tapoEmail": "--",
+            "tapoPassword": "--"
         }
 
     def turn_off(self):

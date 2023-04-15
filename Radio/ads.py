@@ -6,7 +6,6 @@ import busio
 from adafruit_ads1x15.analog_in import AnalogIn
 
 from db.db import Database
-from time import sleep
 from statistics import mean
 
 

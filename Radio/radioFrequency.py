@@ -19,7 +19,7 @@ class RadioFrequency:
         self.name = name
         self.minimum = minimum
         self.maximum = maximum
-        self.sweet_spot = (maximum - minimum) / 2
+        self.sweet_spot = int((maximum - minimum) / 2)
         self.radio_name = radio_name
         self.radio_url = radio_url
         self.radio_url_re = radio_url_re

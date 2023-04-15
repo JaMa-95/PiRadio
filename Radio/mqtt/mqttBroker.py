@@ -17,7 +17,8 @@ class MqttBroker:
         self.password = 'piradio'
         self.client = None
 
-    def on_connect(self, client, userdata, flags, rc):
+    @staticmethod
+    def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
@@ -43,7 +44,7 @@ class MqttBroker:
         if status != 0:
             print(f"Failed to send message to topic {self.topic_volume}")
 
-    def publish_stream(self, stream: None):
+    def publish_stream(self, stream: str = None):
         print("publish stream")
         result = self.client.publish(self.topic_stream, stream)
         status = result[0]

@@ -366,6 +366,6 @@ class Database(Singleton):
 
     def get_pos_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='posUKW'")  #
+            res = self.cur.execute("SELECT * FROM radio WHERE name='posUKW'")
             value = res.fetchall()
             return value[0][1]

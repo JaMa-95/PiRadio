@@ -18,7 +18,7 @@ class Publisher:
     def get_subscribers(self):
         return [type(x).__name__ for x in self.__subscribers]
 
-    def updateSubscribers(self):
+    def update_subscribers(self):
         for sub in self.__subscribers:
             sub.update()
 
@@ -26,7 +26,7 @@ class Publisher:
         self.__content = content
 
     def get_content(self):
-        return ("Content:" + self.__content)
+        return "Content:" + self.__content
 
 
 # -------------------------------------
@@ -37,30 +37,6 @@ class Subscriber(ABC):
     @abstractmethod
     def update(self):
         pass
-
-
-"""
-publisher = Publisher()
-
-for subs in [SiteSubscriber, IntranetSubscriber, ApiSubscriber]:
-    subs(publisher)
-
-print("All Subscriber: ", publisher.get_subscribers())
-print("------------------------------------------------")
-
-publisher.add_content('Update content on all subscribers.')
-publisher.updateSubscribers()
-
-print("------------------------------------------------")
-
-publisher.detach()
-
-print("Remaining Subscriber: ", publisher.get_subscribers())
-print("------------------------------------------------")
-
-publisher.add_content('Updated content for remaining subscriber.')
-publisher.updateSubscribers()
-"""
 
 
 class Singleton(object):
