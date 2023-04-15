@@ -29,11 +29,11 @@ class Frequencies:
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         frequency_width = int((max_value_kurz_mittel_lang - min_value) / number_frequencies)
-        for i in reversed(range(number_frequencies)):
-            if i == number_frequencies - 1:
+        for i in range(number_frequencies):
+            if i == 0:
                 self.frequencies[i].maximum = max_value_kurz_mittel_lang
             else:
-                self.frequencies[i].maximum = self.frequencies[i + 1].minimum
+                self.frequencies[i].maximum = self.frequencies[i - 1].minimum
             if i == 0:
                 self.frequencies[i].minimum = min_value
 
@@ -264,5 +264,6 @@ class SprFrequencies(Frequencies):
 
 
 if __name__ == "__main__":
+    lang = LangFrequencies()
     mittel = MittelFrequencies()
     print()
