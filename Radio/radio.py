@@ -216,7 +216,7 @@ class Radio:
                     # pass
                     print("------------------------------------")
                     print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
-                         f"{self.current_command['posUKW']}")
+                   #      f"{self.current_command['posUKW']}")
                 self.process_hardware_value_change()
 
     @staticmethod
