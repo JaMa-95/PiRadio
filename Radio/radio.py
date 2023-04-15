@@ -1,9 +1,5 @@
 import datetime
-import sys
-import glob
-import serial
 import time
-import traceback
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
@@ -209,17 +205,6 @@ class Radio:
                 if not self.speakers.play_central:
                     self.broker.publish_start_stop("0")
 
-    def set_old_command(self, command_):
-        self.old_command["buttonOnOff"] = command_["buttonOnOff"]
-        self.old_command["buttonLang"] = command_["buttonLang"]
-        self.old_command["buttonMittel"] = command_["buttonMittel"]
-        self.old_command["buttonKurz"] = command_["buttonKurz"]
-        self.old_command["buttonUKW"] = command_["buttonUKW"]
-        self.old_command["buttonSprMus"] = command_["buttonSprMus"]
-        self.old_command["potiValue"] = command_["potiValue"]
-        self.old_command["posLangKurzMittel"] = command_["posLangKurzMittel"]
-        self.old_command["posUKW"] = command_["posUKW"]
-
     def process_hardware_change(self, changed_hardware_list):
         # TODO: only set volume. rest is handled by process hardware value change
         # mehtod can be deleted and set volume and change hardware
@@ -341,19 +326,6 @@ class Radio:
         value = value / len(self.poti_values)
         return value
 
-    # deprecated
-    def difference_poti_high(self, poti):
-        self.set_poti_value(poti)
-        poti = self.get_poti_value()
-        if poti > self.current_volume_poti_value:
-            if poti > (self.current_volume_poti_value + self.poti_sensivity):
-                self.current_volume_poti_value = poti
-                return True
-        elif poti < (self.current_volume_poti_value - self.poti_sensivity):
-            self.current_volume_poti_value = poti
-            return True
-        return False
-
     def send_volume(self, volume):
         self.volume_old = volume
         if self.speakers.play_radio:
@@ -466,139 +438,6 @@ class Radio:
         # light up red lamp
         pass
 
-
-class USBReader:
-    @staticmethod
-    def serial_ports():
-        """ Lists serial port names
-            :raises EnvironmentError:
-                On unsupported or unknown platforms
-            :returns:
-                A list of the serial ports available on the system
-        """
-        if sys.platform.startswith('win'):
-            ports = ['COM%s' % (i + 1) for i in range(256)]
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            # this excludes your current terminal "/dev/tty"
-            ports = glob.glob('/dev/tty[A-Za-z]*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/tty.*')
-        else:
-            raise EnvironmentError('Unsupported platform')
-
-        result = []
-        for port in ports:
-            try:
-                s = serial.Serial(port)
-                s.close()
-                result.append(port)
-            except (OSError, serial.SerialException):
-                pass
-        return result
-
-    def get_usb_ser_linux(self):
-        serial_ports = self.serial_ports()
-        print(serial_ports)
-        run = True
-        counter = 0
-        while run:
-            if counter == 5:
-                try:
-                    ser = serial.Serial(port="dev/ttyUSB1", baudrate=500000)
-                    return ser
-                except serial.serialutil.SerialException:
-                    print("Try USB1 failed")
-                    counter = 0
-            for device in serial_ports:
-                if "USB" in device:
-                    try:
-                        ser = serial.Serial(port=device, baudrate=500000)
-                    except serial.serialutil.SerialException:
-                        print("Unplugged device")
-                    print(f"Using: {device}")
-                    # success = self.check_connection(ser)
-                    # if not success:
-                    # sys.stdout.flush()
-                    return ser
-                    print("Connection failed")
-            serial_ports = self.serial_ports()
-            print(serial_ports)
-            print("ESP not connected. Waiting ...")
-            # sys.stdout.flush()
-            counter += 1
-            time.sleep(1)
-
-    def get_usb_ser_linux_2(self):
-        serial_ports = self.serial_ports()
-        print(serial_ports)
-        run = True
-        counter = 0
-        while run:
-            for device in serial_ports:
-                if "USB" in device:
-                    try:
-                        ser = serial.Serial(port=device, baudrate=500000)
-                    except serial.serialutil.SerialException:
-                        print("Unplugged device")
-                    print(f"Using: {device}")
-                    return ser
-            serial_ports = self.serial_ports()
-            print(serial_ports)
-            print("ESP not connected. Waiting ...")
-            # sys.stdout.flush()
-            counter += 1
-            time.sleep(1)
-
-    def get_usb_ser_win(self):
-        serial_ports = self.serial_ports()
-        while len(serial_ports) == 0:
-            serial_ports = self.serial_ports()
-            print("ESP not connected. Waiting ...")
-            # sys.stdout.flush()
-            time.sleep(1)
-        print(f"Using: {serial_ports[0]}")
-        # sys.stdout.flush()
-        ser = serial.Serial(port=serial_ports[0], baudrate=500000)
-        return ser
-
-    def get_usb_ser(self):
-        if sys.platform.startswith('linux'):
-            ser = self.get_usb_ser_linux_2()
-        else:
-            ser = self.get_usb_ser_win()
-        return ser
-
-    @staticmethod
-    def check_connection(ser):
-        try:
-            if ser.read():
-                return True
-        except serial.serialutil.SerialException:
-            return False
-
-    def read_usb(self):
-        # compare with old usb string
-        # update new values
-        # update usb string
-        ser = self.get_usb_ser()
-        print("Start running")
-        global command
-        while True:
-            if ser.in_waiting > 1000:
-                ser.flushInput()
-            try:
-                command_ = ser.read_until(b';').decode("UTF-8")
-                command_ = command_.replace("\n", "").replace("\r", "")
-                if command_[0] == "-" and command_[-1] == ";":
-                    command = command_[1:]
-            except UnicodeDecodeError or serial.serialutil.SerialException as e:
-                print(print(traceback.format_exc()))
-                if e == serial.serialutil.SerialException and "readiness" in e:
-                    pass  # error 2
-
-    def set_test_command(self, command_):
-        global command
-        command = command_
 
 if __name__ == "__main__":
     radio = Radio()
