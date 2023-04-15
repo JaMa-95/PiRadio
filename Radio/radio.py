@@ -125,7 +125,6 @@ class Radio:
         self.db.replace_web_control_value(False)
         self.ledData.fade = True
         self.ledData.all_on = True
-
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
@@ -363,39 +362,6 @@ class Radio:
             if self.speakers.play_central:
                 self.broker.publish_volume(volume)
 
-    def extract_commands_from_string(self, command_: str):
-        command_name = ""
-        command_value = ""
-        process_name = True
-        for char in command_:
-            if char == ":":
-                process_name = False
-            elif char == ";":
-                try:
-                    self.current_command[command_name] = int(command_value)
-                    return 0
-                except ValueError as e:
-                    print(print(traceback.format_exc()))
-                    print(command_value)
-            elif char == ",":
-                process_name = True
-                try:
-                    self.current_command[command_name] = int(command_value)
-                except ValueError as e:
-                    print(print(traceback.format_exc()))
-                    print(command_value)
-                command_name = ""
-                command_value = ""
-            elif process_name:
-                command_name += char
-            else:
-                command_value += char
-
-    """
-    returns what hardware changed
-    for example sound volume, frequency, ...
-    """
-
     def get_changed_hardware(self):
         changed_hardware = []
         value = self.db.get_ads_pin_value(self.pin_mittel)
@@ -458,7 +424,12 @@ class Radio:
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
         print(f"radio_frequency {radio_frequency} and {self.on}")
-        if radio_frequency and self.on:
+        if not radio_frequency:
+            if self.playing:
+                if self.speakers.play_radio:
+                    self.publish("stop")
+                self.playing = False
+        elif radio_frequency and self.on:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
             if stream:
                 if self.current_stream.radio_url != stream.radio_url:
