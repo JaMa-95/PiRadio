@@ -147,7 +147,7 @@ class Radio:
                         self.send_volume(self.current_command["potiValue"])
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
-            time.sleep(1)
+            time.sleep(0.05)
 
     def get_command_changed(self):
         changed_hardware = []
