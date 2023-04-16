@@ -130,10 +130,10 @@ class Radio:
                 self.check_raspi_off()
                 self.check_change_speakers()
                 self.check_radio_lock()
+                self.check_poti_change()
                 if not self.radio_lock:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_changed_hardware())
-
                     if changed_hardware:
                         self.process_hardware_change(changed_hardware)
             else:
@@ -217,15 +217,12 @@ class Radio:
         # TODO: only set volume. rest is handled by process hardware value change
         # mehtod can be deleted and set volume and change hardware
         for changed_hardware in changed_hardware_list:
-            if changed_hardware == "potiValue":
-                self.set_volume(self.current_command[changed_hardware])
-            else:
-                if changed_hardware in ["posLangKurzMittel", "posUKW"]:
-                    pass
-                    # print("------------------------------------")
-                    # print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
-                    #      f"{self.current_command['posUKW']}")
-                self.process_hardware_value_change()
+            if changed_hardware in ["posLangKurzMittel", "posUKW"]:
+                pass
+                # print("------------------------------------")
+                # print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
+                #      f"{self.current_command['posUKW']}")
+            self.process_hardware_value_change()
 
     @staticmethod
     def turn_off_amplifier():
@@ -349,11 +346,13 @@ class Radio:
         if value != self.old_command["posLangKurzMittel"]:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
+        return changed_hardware
+
+    def check_poti_change(self):
         value = self.db.get_ads_pin_value(self.pin_volume)
         if value != self.old_command["potiValue"]:
-            changed_hardware.append("potiValue")
             self.current_command["potiValue"] = value
-        return changed_hardware
+            self.set_volume(value)
 
     def get_changed_buttons(self):
         self.radio_buttons.set_value()
@@ -393,8 +392,8 @@ class Radio:
             print(f"BUTTON UKW CHANGED: {state}")
             self.current_command["buttonUKW"] = state
             changed_hardware.append("buttonUKW")
-        state = self.radio_buttons.button_spr.state
         """
+        state = self.radio_buttons.button_spr.state
         if self.current_command["buttonSprMus"] != state:
             self.ledData.on_button_spr = state
             self.ledData.off_button_spr = not state
