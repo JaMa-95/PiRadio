@@ -1,5 +1,5 @@
 [
-  ['Radio 20er', 0, 100, 'Bohemia Berlin', 'http://streams.fluxfm.de/berlinboheme/mp3-320/streams.fluxfm.de/'],
+  ["Radio 20er", 0, 100, "Bohemia Berlin", "http://streams.fluxfm.de/berlinboheme/mp3-320/streams.fluxfm.de/"],
   ["Oldies", 100, 200, "Golden Grooves Radio", "http://eu4.fastcast4u.com/proxy/carolanr2?mp=/1"],
   ["20-50s", 0, 100, "Cheap Music Popular", "http://s2.voscast.com:11688/live"],
   ["50s", 0, 100, "Onlineradio 50s", "https://stream.0nlineradio.com/50s?ref"],
@@ -16,5 +16,5 @@
   ["2000s", 0, 100, "Radio 2000s", "https://stream.radio2000.it/"],
   ["2010s", 0, 100, "rs2 - 2010er", "https://stream.rs2.de/rs2-2010er/mp3-192/?ref"],
   ["2010s", 0, 100, "FFH DIE 2010ER", "https://streams.ffh.de/ffhchannels/mp3/playerid:RTFFH/hq2010er.mp3"],
-  ["Top 40", 0, 100, "FM Top 40", "http://www.1.fm/tunestream/top40/listen.pls"],
+  ["Top 40", 0, 100, "FM Top 40", "http://www.1.fm/tunestream/top40/listen.pls"]
 ]

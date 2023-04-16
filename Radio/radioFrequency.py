@@ -60,8 +60,10 @@ class Frequencies:
         with open(path) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
+            freq = RadioFrequency()
+            freq.from_list(data)
             self.frequencies.append(
-                RadioFrequency().from_list(data)
+                freq
             )
 
     @staticmethod
