@@ -393,12 +393,14 @@ class Radio:
             self.current_command["buttonUKW"] = state
             changed_hardware.append("buttonUKW")
         state = self.radio_buttons.button_spr.state
+        """
         if self.current_command["buttonSprMus"] != state:
             self.ledData.on_button_spr = state
             self.ledData.off_button_spr = not state
             print(f"BUTTON SPR CHANGED: {state}")
             self.current_command["buttonSprMus"] = state
             changed_hardware.append("buttonSprMus")
+        """
         return changed_hardware
 
     def process_hardware_value_change(self):
