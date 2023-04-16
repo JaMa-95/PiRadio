@@ -11,3 +11,8 @@ https://raspberrypi.stackexchange.com/questions/108694/how-to-start-a-python-scr
 sudo nano /lib/systemd/system/radio.service
 
 https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
+
+
+# react
+
+npm install react-bootstrap bootstrap
