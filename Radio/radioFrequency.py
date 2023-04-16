@@ -56,7 +56,7 @@ class Frequencies:
 
     def load_from_file(self, path: Path = None):
         if not path:
-            path = self.get_project_root() / "Radio/data/frequ_kurz.json"
+            path = self.get_project_root() / "Radio/data/freq_kurz.json"
         with open(path) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
@@ -73,14 +73,14 @@ class KurzFrequencies(Frequencies):
     # NOT WORKING: Berum, stockholm,Falun
     def __init__(self):
         self.frequencies = []
-        self.load_from_file()
+        self.load_from_file(self.get_project_root() / "Radio/data/freq_kurz.json")
 
 
 class LangFrequencies(Frequencies):
     # not working: That 70s Station, 80s80s Radio, 80s80s NDW, Eurodance 90, Radio 2000, rs2 -2010er, FM Top 40
     def __init__(self):
         self.frequencies = []
-        self.load_from_file(self.get_project_root() / "Radio/data/frequ_lang.json")
+        self.load_from_file(self.get_project_root() / "Radio/data/freq_lang.json")
         self.init_min_max()
 
 
