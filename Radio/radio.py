@@ -184,7 +184,7 @@ class Radio:
 
     def check_radio_lock(self):
         if self.radio_buttons.button_spr.is_click():
-            self.radio_lock != self.radio_lock
+            self.radio_lock = not self.radio_lock
             print(f"radio lock changed: {self.radio_lock}")
 
     def check_raspi_off(self):
