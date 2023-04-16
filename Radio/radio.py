@@ -284,6 +284,7 @@ class Radio:
         return None
 
     def get_button_frequency(self):
+        # TODO: do i need change button change, when here button state is retrieved again
         if not self.db.get_web_control_value():
             if self.radio_buttons.button_lang.state:
                 return LangFrequencies(), self.current_command["posLangKurzMittel"]
@@ -293,8 +294,8 @@ class Radio:
                 return KurzFrequencies(), self.current_command["posLangKurzMittel"]
             elif self.radio_buttons.button_ukw.state:
                 return UKWFrequencies(), self.current_command["posUKW"]
-            elif self.radio_buttons.button_spr.state:
-                return SprFrequencies(), self.current_command["posUKW"]
+            # elif self.radio_buttons.button_spr.state:
+            #     return SprFrequencies(), self.current_command["posUKW"]
             else:
                 # print("using NONE")
                 return None, None
