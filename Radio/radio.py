@@ -65,6 +65,7 @@ class Radio:
         self.pin_volume = 2
 
         self.radio_buttons = RadioButtonsRaspi()
+        self.radio_lock: bool = False
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -128,11 +129,13 @@ class Radio:
                 self.check_radio_on_off()
                 self.check_raspi_off()
                 self.check_change_speakers()
-                changed_hardware = self.get_changed_buttons()
-                changed_hardware.extend(self.get_changed_hardware())
+                self.check_radio_lock()
+                if not self.radio_lock:
+                    changed_hardware = self.get_changed_buttons()
+                    changed_hardware.extend(self.get_changed_hardware())
 
-                if changed_hardware:
-                    self.process_hardware_change(changed_hardware)
+                    if changed_hardware:
+                        self.process_hardware_change(changed_hardware)
             else:
                 print("web control")
                 self.check_radio_on_off()
@@ -178,6 +181,10 @@ class Radio:
         self.current_command["potiValue"] = self.db.get_poti_value_web()
         self.current_command["posLangKurzMittel"] = self.db.get_pos_lang_mittel_kurz()
         self.current_command["posUKW"] = self.db.get_pos_ukw()
+
+    def check_radio_lock(self):
+        if self.radio_buttons.button_spr.is_click():
+            self.radio_lock != self.radio_lock
 
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
