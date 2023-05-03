@@ -60,9 +60,11 @@ class AdsSingle:
         print(max(values) - min(values))
         print("---------------")
         # delete min man values
-        for _ in range(5):
-            values.remove(max(values))
-            values.remove(min(values))
-
+        for _ in range(15):
+            if (max(values) -min(values) > 15):
+                values.remove(max(values))
+                values.remove(min(values))
+            else:
+                break
 
         return mean(values)
