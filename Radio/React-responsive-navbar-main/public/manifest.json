@@ -1,6 +1,6 @@
 {
-  "short_name": "PiRadio App",
-  "name": "Play your favorite radio stream",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,0 +1,28 @@
+/* ------------ radio slider ---------------------------- */
+
+#sliderRadio {
+    width: 560px;
+    left: 500px;
+    top: 150px;
+    position: absolute;
+}
+
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  width: 15rem;
+}
+
+input[type="range"].slider::-webkit-slider-thumb {
+   -webkit-appearance: none;
+   appearance: none;
+   margin-top: -80px;
+   background-color: #ff0000;
+   height: 200px;
+   width: 8px;
+}
+
+
+/* ---- end ----- */

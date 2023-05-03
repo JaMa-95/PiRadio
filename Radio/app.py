@@ -115,7 +115,7 @@ def switch_web_control():
     return jsonify({'result': 'OK'})
 
 
-@app.route('/button_clicked/<name>/<state>', methods=['GET'])
+@app.route('/button_clicked/<name>/<state>', methods=['GET', 'POST'])
 def button_clicked(name, state):
     # state = request.form["state"]
     if "on" in name:
@@ -135,13 +135,13 @@ def button_clicked(name, state):
     return jsonify({'result': 'OK'})
 
 
-@app.route('/pos_lang_kurz_mittel/<value>', methods=['GET'])
+@app.route('/pos_lang_kurz_mittel/<value>', methods=['GET', 'POST'])
 def pos_changed(value):
     db.replace_pos_lang_mittel_kurz(value)
     return jsonify({'result': 'OK'})
 
 
-@app.route('/volume/<value>', methods=['GET'])
+@app.route('/volume/<value>', methods=['GET', 'POST'])
 def volume_changed(value):
     db.replace_volume(value)
     return jsonify({'result': 'OK'})
