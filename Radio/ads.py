@@ -54,16 +54,16 @@ class AdsSingle:
         values = []
         for i in range(50):
             values.append(self.chan.value)
-            time.sleep(0.01)
+
+
+        # delete min man values
+        for _ in range(5):
+            values.remove(max(values))
+            values.remove(min(values))
 
         print(max(values))
         print(min(values))
         print(mean(values))
         print(max(values) - min(values))
         print("---------------")
-        # delete min man values
-        for _ in range(5):
-            values.remove(max(values))
-            values.remove(min(values))
-
         return mean(values)
