@@ -59,6 +59,7 @@ class AdsSingle:
         print(max(values))
         print(min(values))
         print(mean(values))
+        print(max(values) - min(values))
         print("---------------")
         # delete min man values
         for _ in range(5):
