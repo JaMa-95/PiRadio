@@ -15,10 +15,12 @@ chan1 = AnalogIn(ads, ADS.P2)  # Create single-ended input on channel 0
 while True:
     values = []
     for i in range(50):
-        values.append(chan1.value)
+        values.append(chan.value)
     print(max(values))
     print(min(values))
     print(mean(values))
     print(max(values) - min(values))
     print("---------------")
+
+
     time.sleep(1)
