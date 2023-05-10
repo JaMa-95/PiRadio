@@ -37,6 +37,8 @@ https://www.instructables.com/Smooth-Potentiometer-Input/
 ## Segmentation fault
 https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
 
+# DEPENDENCIES
+pip3 install adafruit-circuitpython-ads1x15
 
 # radioStart.sh
 
