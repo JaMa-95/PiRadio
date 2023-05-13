@@ -97,6 +97,7 @@ class MittelFrequencies(Frequencies):
 
 class UKWFrequencies(Frequencies):
     def __init__(self):
+        """
         self.frequencies = [
             RadioFrequency("Relaxed", 0, 100, "1000Slots to relax", "http://hyades.shoutca.st:8714/stream"),
             RadioFrequency("Classic relax", 0, 100, "YourClassical Relax",
@@ -132,26 +133,16 @@ class UKWFrequencies(Frequencies):
             RadioFrequency("Christmas Loung", 0, 100, "Epic Lounge - Christmas Lounge",
                            "https://stream.epic-lounge.com/christmas-lounge?ref"),
         ]
+        """
+        self.frequencies = []
+        self.load_from_file(self.get_project_root() / "Radio/data/freq_ukw.json")
         self.init_min_max()
 
 
 class SprFrequencies(Frequencies):
     # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
     def __init__(self):
-        # spanisch
-        # lateinamerika
-        # englisch
-        # amerika
-        # australien
-        # französisch
-        # deutsch
-        # holländisch
-        # italienisch
-        # japanisch
-        # koreanisch
-        # afrikanisch
-        # polnisch
-        # ukraine
+        """
         self.frequencies = [
             RadioFrequency("Espana", 0, 100, "LA MEGA ESPAÑA", "https://server6.hostradios.com/8048/stream"),
             RadioFrequency("Espana", 0, 100, "FM Malaga España", "https://eu1.lhdserver.es:9035/stream"),
@@ -191,6 +182,9 @@ class SprFrequencies(Frequencies):
             RadioFrequency("Africa", 0, 100, "UbuntuFM Radio Africa",
                            "http://stream.zenolive.com/ez10yx9e9neuv"),
         ]
+        """
+        self.frequencies = []
+        self.load_from_file(self.get_project_root() / "Radio/data/freq_spr.json")
         self.init_min_max()
 
 
