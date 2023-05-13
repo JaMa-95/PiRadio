@@ -76,6 +76,7 @@ class KurzFrequencies(Frequencies):
     def __init__(self):
         self.frequencies = []
         self.load_from_file(self.get_project_root() / "Radio/data/freq_kurz.json")
+        self.init_min_max()
 
 
 class LangFrequencies(Frequencies):
