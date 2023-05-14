@@ -190,6 +190,7 @@ class Radio:
     def check_raspi_off(self):
         if self.radio_buttons.button_on_off.long_click():
             self.ledStrip.raspi_off = True
+            time.sleep(4)
             self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
