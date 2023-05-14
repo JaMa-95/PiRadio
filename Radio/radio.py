@@ -291,7 +291,7 @@ class Radio:
             elif self.radio_buttons.button_kurz.state:
                 return KurzFrequencies(), self.current_command["posLangKurzMittel"]
             elif self.radio_buttons.button_ukw.state:
-                return UKWFrequencies(), self.current_command["posUKW"]
+                return UKWFrequencies(), self.current_command["posLangKurzMittel"] # self.current_command["posUKW"]
             # elif self.radio_buttons.button_spr.state:
             #     return SprFrequencies(), self.current_command["posUKW"]
             else:
