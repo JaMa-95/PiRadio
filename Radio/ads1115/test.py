@@ -23,5 +23,4 @@ while True:
     print(max(values) - min(values))
     print("---------------")
 
-
     time.sleep(1)

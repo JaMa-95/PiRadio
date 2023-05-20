@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from pathlib import Path
 import json
 
-min_value = 19800
-max_value_kurz_mittel_lang = 21100
+min_value = 14175
+max_value_kurz_mittel_lang = 15215  # 21100
 max_value_ukw = 21100
 
 
