@@ -317,9 +317,9 @@ class Radio:
         # min: 19000
         x1 = 18900
         x2 = 7150
-        print(f"VOLUME A: {volume}")
+        # print(f"VOLUME A: {volume}")
         volume = int(-(volume - x1) / (x1 - x2) * 100)
-        print(f"VOLUME: {volume}")
+        # print(f"VOLUME: {volume}")
         # volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0
