@@ -315,8 +315,8 @@ class Radio:
     def set_volume(self, volume):
         # max: 7095
         # min: 19000
-        x1 = 19000
-        x2 = 7095
+        x1 = 18900
+        x2 = 7150
         print(f"VOLUME A: {volume}")
         volume = int(-(volume - x1) / (x1 - x2) * 100)
         print(f"VOLUME: {volume}")
