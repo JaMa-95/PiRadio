@@ -27,7 +27,7 @@ class AdsSingle:
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
         self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
         self.RATE = 860
-        self.ads.mode = Mode.CONTINIOUS
+        self.ads.mode = Mode.CONTINUOUS
         self.ads.data_rate = self.RATE
         self.pin = pin
         self.db = Database()
@@ -63,7 +63,7 @@ class AdsSingle:
             self.chan = AnalogIn(self.ads, ADS.P3)
             num_values = 700
         else:
-            num_values = 50
+            num_values = 150
         for i in range(num_values):
             values.append(self.chan.value)
         middle = datetime.datetime.now()
