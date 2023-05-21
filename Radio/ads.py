@@ -54,15 +54,16 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         start = datetime.datetime.now()
-        for i in range(50):
+        num_values = 100
+        for i in range(num_values):
             values.append(self.chan.value)
         print(max(values))
         print(min(values))
-        print(mean(values))
+        print(f"MEAN: {mean(values)}")
         print(max(values) - min(values))
 
         # delete min man values
-        for _ in range(30):
+        for _ in range(num_values / 4):
             if (max(values) -min(values) > 5):
                 values.remove(max(values))
                 values.remove(min(values))
@@ -71,5 +72,6 @@ class AdsSingle:
         end = datetime.datetime.now()
         print(end - start)
         print(max(values) - min(values))
+        print(f"MEAN: {mean(values)}")
         print("---------------")
         return mean(values)
