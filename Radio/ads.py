@@ -60,8 +60,6 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
-        start = datetime.datetime.now()
-        print(self.pin)
         if self.pin == 3:
             num_values = 1000
             self.chan = AnalogIn(self.ads, ADS.P3)
@@ -77,8 +75,8 @@ class AdsSingle:
                 values.remove(min(values))
             else:
                 break
-        end = datetime.datetime.now()
-        print(max(values) - min(values))
-        print(f"MEAN: {mean(values)}")
-        print("---------------")
+        if self.pin == 3:
+            print(max(values) - min(values))
+            print(f"MEAN: {mean(values)}")
+            print("---------------")
         return mean(values)
