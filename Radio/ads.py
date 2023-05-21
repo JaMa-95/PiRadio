@@ -58,14 +58,14 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         start = datetime.datetime.now()
-        if self.pin == 2:
+        if self.pin == 3:
             num_values = 700
         else:
             num_values = 150
         for i in range(num_values):
             values.append(self.chan.value)
         middle = datetime.datetime.now()
-        if self.pin == 2:
+        if self.pin == 3:
             print(max(values))
             print(min(values))
             print(f"MEAN: {mean(values)}")
@@ -79,7 +79,7 @@ class AdsSingle:
             else:
                 break
         end = datetime.datetime.now()
-        if self.pin == 2:
+        if self.pin == 3:
             print(middle - start)
             print(end - middle)
             print(max(values) - min(values))
