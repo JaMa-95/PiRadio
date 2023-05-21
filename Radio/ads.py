@@ -25,7 +25,7 @@ class AdsSingle:
         i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
         self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
-        self.RATE = 860
+        self.RATE = 320
         self.SAMPLES = 1000
         self.ads.mode = Mode.CONTINUOUS
         self.ads.data_rate = self.RATE
