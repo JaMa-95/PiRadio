@@ -64,7 +64,7 @@ class AdsSingle:
             print(max(values) - min(values))
 
         # delete min man values
-        for _ in range(int(num_values / 4)):
+        for _ in range(5):
             if (max(values) -min(values) > 5):
                 values.remove(max(values))
                 values.remove(min(values))
