@@ -56,7 +56,7 @@ class AdsSingle:
         start = datetime.datetime.now()
         num_values = 50
         for i in range(num_values):
-            values.append(self.chan.value)
+            values.append(self.chan.voltage)
         middle = datetime.datetime.now()
         if self.pin == 3:
             print(max(values))

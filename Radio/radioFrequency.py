@@ -192,4 +192,5 @@ if __name__ == "__main__":
     kurz = KurzFrequencies()
     lang = LangFrequencies()
     mittel = MittelFrequencies()
+    ukw = UKWFrequencies()
     print()
