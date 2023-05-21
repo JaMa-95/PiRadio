@@ -63,7 +63,7 @@ class AdsSingle:
         start = datetime.datetime.now()
         print(self.pin)
         if self.pin == 3:
-            num_values = 700
+            num_values = 1000
             self.chan = AnalogIn(self.ads, ADS.P3)
         else:
             num_values = 150
