@@ -58,7 +58,7 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         start = datetime.datetime.now()
-        num_values = 50
+        num_values = 500
         for i in range(num_values):
             values.append(self.chan.value)
         middle = datetime.datetime.now()
