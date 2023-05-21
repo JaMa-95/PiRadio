@@ -69,11 +69,6 @@ class AdsSingle:
             num_values = 150
         for i in range(num_values):
             values.append(self.chan.value)
-        middle = datetime.datetime.now()
-        print(max(values))
-        print(min(values))
-        print(f"MEAN: {mean(values)}")
-        print(max(values) - min(values))
 
         # delete min man values
         for _ in range(10):
@@ -83,8 +78,6 @@ class AdsSingle:
             else:
                 break
         end = datetime.datetime.now()
-        print(middle - start)
-        print(end - middle)
         print(max(values) - min(values))
         print(f"MEAN: {mean(values)}")
         print("---------------")
