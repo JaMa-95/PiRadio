@@ -43,7 +43,7 @@ class AdsSingle:
             self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
 
         self.ads.mode = Mode.CONTINUOUS
-        self.ads.data_rate = self.RATE
+        # self.ads.data_rate = self.RATE
 
     def set_to_db(self):
         value = self.get_value()
@@ -65,6 +65,7 @@ class AdsSingle:
         print(self.pin)
         if self.pin == 3:
             num_values = 700
+            self.chan = AnalogIn(self.ads, ADS.P3)
         else:
             num_values = 150
         for i in range(num_values):
