@@ -12,8 +12,9 @@ from adafruit_ads1x15.ads1x15 import Mode
 
 class AdsObject:
     def __init__(self):
-        self.mittel_poti = AdsSingle(3)
         self.volume_poti = AdsSingle(2)
+        self.mittel_poti = AdsSingle(3)
+
 
     def set_to_db(self):
         self.mittel_poti.set_to_db_smoothed()
@@ -26,7 +27,7 @@ class AdsSingle:
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
         self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
         self.RATE = 860
-        self.ads.mode = Mode.CONTINUOUS
+        self.ads.mode = Mode.CONTINIOUS
         self.ads.data_rate = self.RATE
         self.pin = pin
         self.db = Database()
@@ -62,7 +63,7 @@ class AdsSingle:
             self.chan = AnalogIn(self.ads, ADS.P3)
             num_values = 700
         else:
-            num_values = 150
+            num_values = 50
         for i in range(num_values):
             values.append(self.chan.value)
         middle = datetime.datetime.now()
