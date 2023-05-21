@@ -57,10 +57,11 @@ class AdsSingle:
         num_values = 100
         for i in range(num_values):
             values.append(self.chan.value)
-        print(max(values))
-        print(min(values))
-        print(f"MEAN: {mean(values)}")
-        print(max(values) - min(values))
+        if self.pin == 3:
+            print(max(values))
+            print(min(values))
+            print(f"MEAN: {mean(values)}")
+            print(max(values) - min(values))
 
         # delete min man values
         for _ in range(int(num_values / 4)):
@@ -70,8 +71,9 @@ class AdsSingle:
             else:
                 break
         end = datetime.datetime.now()
-        print(end - start)
-        print(max(values) - min(values))
-        print(f"MEAN: {mean(values)}")
-        print("---------------")
+        if self.pin == 3:
+            print(end - start)
+            print(max(values) - min(values))
+            print(f"MEAN: {mean(values)}")
+            print("---------------")
         return mean(values)
