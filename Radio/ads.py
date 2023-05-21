@@ -16,7 +16,6 @@ class AdsObject:
         self.mittel_poti = AdsSingle(3)
 
     def set_to_db(self):
-        self.volume_poti = AdsSingle(2)
         self.volume_poti.set_to_db_smoothed()
         self.mittel_poti = AdsSingle(3)
         self.mittel_poti.set_to_db_smoothed()
@@ -35,17 +34,14 @@ class AdsSingle:
         if pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
         elif pin == 2:
-            print("ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
             self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
         elif pin == 3:
-            print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
             self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
         else:
             self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
 
-        if pin == 3:
-            self.ads.mode = Mode.CONTINUOUS
-            self.ads.data_rate = self.RATE
+        self.ads.mode = Mode.CONTINUOUS
+        self.ads.data_rate = self.RATE
 
     def set_to_db(self):
         value = self.get_value()
