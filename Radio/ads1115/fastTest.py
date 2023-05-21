@@ -6,7 +6,6 @@ import board
 import busio
 from adafruit_ads1x15.analog_in import AnalogIn
 
-from db.db import Database
 from statistics import mean
 from adafruit_ads1x15.ads1x15 import Mode
 
@@ -18,7 +17,6 @@ class AdsSingle:
         self.RATE = 860
 
         self.pin = pin
-        self.db = Database()
 
         if pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
