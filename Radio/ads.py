@@ -27,18 +27,23 @@ class AdsSingle:
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
         self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
         self.RATE = 860
-        self.ads.data_rate = self.RATE
+
         self.pin = pin
         self.db = Database()
 
         if pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
         elif pin == 2:
+            print("ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
             self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
         elif pin == 3:
+            print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
             self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
         else:
             self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
+
+        self.ads.mode = Mode.CONTINUOUS
+        self.ads.data_rate = self.RATE
 
     def set_to_db(self):
         value = self.get_value()
