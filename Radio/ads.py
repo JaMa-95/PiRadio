@@ -42,8 +42,9 @@ class AdsSingle:
         else:
             self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
 
-        #self.ads.mode = Mode.CONTINUOUS
-        self.ads.data_rate = self.RATE
+        if pin == 3:
+            self.ads.mode = Mode.CONTINUOUS
+            self.ads.data_rate = self.RATE
 
     def set_to_db(self):
         value = self.get_value()
