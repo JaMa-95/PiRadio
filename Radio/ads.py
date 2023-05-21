@@ -1,3 +1,4 @@
+import datetime
 import time
 
 import adafruit_ads1x15.ads1115 as ADS
@@ -52,6 +53,7 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
+        start = datetime.datetime.now()
         for i in range(50):
             values.append(self.chan.value)
         print(max(values))
@@ -60,12 +62,14 @@ class AdsSingle:
         print(max(values) - min(values))
 
         # delete min man values
-        for _ in range(15):
+        for _ in range(30):
             if (max(values) -min(values) > 5):
                 values.remove(max(values))
                 values.remove(min(values))
             else:
                 break
+        end = datetime.datetime.now()
+        print(end - start)
         print(max(values) - min(values))
         print("---------------")
         return mean(values)
