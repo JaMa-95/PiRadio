@@ -61,7 +61,7 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         if self.pin == 3:
-            num_values = 1000
+            num_values = 700
             self.chan = AnalogIn(self.ads, ADS.P3)
         else:
             num_values = 150
@@ -70,7 +70,7 @@ class AdsSingle:
 
         # delete min man values
         for _ in range(10):
-            if (max(values) -min(values) > 5):
+            for _ in range(int(num_values/10)):
                 values.remove(max(values))
                 values.remove(min(values))
             else:
