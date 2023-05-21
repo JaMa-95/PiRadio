@@ -58,7 +58,7 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         start = datetime.datetime.now()
-        if self.pin == 3:
+        if self.pin == 2:
             num_values = 700
         else:
             num_values = 150
