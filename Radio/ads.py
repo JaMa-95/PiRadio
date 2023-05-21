@@ -16,7 +16,7 @@ class AdsObject:
         self.volume_poti = AdsSingle(2)
 
     def set_to_db(self):
-        self.mittel_poti.fast_read()
+        self.mittel_poti.set_to_db_smoothed()
         self.volume_poti.set_to_db_smoothed()
 
 
