@@ -54,7 +54,7 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         start = datetime.datetime.now()
-        num_values = 100
+        num_values = 50
         for i in range(num_values):
             values.append(self.chan.value)
         if self.pin == 3:
@@ -64,7 +64,7 @@ class AdsSingle:
             print(max(values) - min(values))
 
         # delete min man values
-        for _ in range(5):
+        for _ in range(int(num_values / 4)):
             if (max(values) -min(values) > 5):
                 values.remove(max(values))
                 values.remove(min(values))
