@@ -66,11 +66,10 @@ class AdsSingle:
         for i in range(num_values):
             values.append(self.chan.value)
         middle = datetime.datetime.now()
-        if self.pin == 3:
-            print(max(values))
-            print(min(values))
-            print(f"MEAN: {mean(values)}")
-            print(max(values) - min(values))
+        print(max(values))
+        print(min(values))
+        print(f"MEAN: {mean(values)}")
+        print(max(values) - min(values))
 
         # delete min man values
         for _ in range(10):
@@ -80,12 +79,11 @@ class AdsSingle:
             else:
                 break
         end = datetime.datetime.now()
-        if self.pin == 3:
-            print(middle - start)
-            print(end - middle)
-            print(max(values) - min(values))
-            print(f"MEAN: {mean(values)}")
-            print("---------------")
+        print(middle - start)
+        print(end - middle)
+        print(max(values) - min(values))
+        print(f"MEAN: {mean(values)}")
+        print("---------------")
         return mean(values)
 
     def fast_read(self):
