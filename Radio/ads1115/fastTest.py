@@ -47,7 +47,7 @@ class AdsSingle:
     def get_value_smoothed(self):
         values = []
         if self.pin == 3:
-            num_values = 1000
+            num_values = 700
             self.chan = AnalogIn(self.ads, ADS.P3)
         else:
             num_values = 150
