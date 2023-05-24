@@ -354,9 +354,9 @@ class Radio:
         self.send_volume(volume)
 
     def set_treble(self, treble):
-        print(f"value: {treble}")
+        # print(f"value: {treble}")
         treble = int(-(treble - self.treble_max) / (self.treble_max - self.treble_min) * 100)
-        print(f"treble: {treble}")
+        # print(f"treble: {treble}")
         if treble < 0:
             treble = 0
         elif treble > 100:
@@ -482,7 +482,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        #print(f"radio_frequency {radio_frequency} and {self.on}")
+        print(f"radio_frequency {radio_frequency} and {self.on}")
         if not radio_frequency:
             if self.playing:
                 if self.speakers.play_radio:
