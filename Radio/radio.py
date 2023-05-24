@@ -153,7 +153,7 @@ class Radio:
         while True:
             if not self.db.get_web_control_value():
                 self.check_radio_on_off()
-                self.check_raspi_off()
+                # self.check_raspi_off()
                 self.check_change_speakers()
                 self.check_radio_lock()
                 self.check_poti_change()
