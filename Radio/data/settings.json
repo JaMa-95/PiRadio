@@ -9,18 +9,18 @@
     "min": 610,
     "max": 17150,
     "on": true,
-    "pin": 2
+    "pin": 1
   },
   "bass": {
     "min": 0,
     "max": 2640,
     "on": true,
-    "pin": 1
+    "pin": 0
   },
   "treble": {
     "min": 2415,
     "max": 2638,
     "on": true,
-    "pin": 0
+    "pin": 2
   }
 }
