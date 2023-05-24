@@ -13,13 +13,19 @@ from adafruit_ads1x15.ads1x15 import Mode
 class AdsObject:
     def __init__(self):
         self.volume_poti = AdsSingle(2)
-        self.mittel_poti = AdsSingle(3)
+        self.frequency_poti = AdsSingle(1)
+        self.bass_poti = AdsSingle(0)
+        self.treble_poti = AdsSingle(3)
 
     def set_to_db(self):
         self.volume_poti = AdsSingle(2)
         self.volume_poti.set_to_db_smoothed()
-        self.mittel_poti = AdsSingle(3)
-        self.mittel_poti.set_to_db_smoothed()
+        self.frequency_poti = AdsSingle(1)
+        self.frequency_poti.set_to_db_smoothed()
+        self.bass_poti = AdsSingle(0)
+        self.bass_poti.set_to_db_smoothed()
+        self.treble_poti = AdsSingle(3)
+        self.treble_poti.set_to_db_smoothed()
 
 
 class AdsSingle:
@@ -60,7 +66,7 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         values = []
-        if self.pin == 3:
+        if self.pin == 1:
             num_values = 700
             self.chan = AnalogIn(self.ads, ADS.P3)
         else:
