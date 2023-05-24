@@ -1,6 +1,7 @@
 # ---------------------------------------------------
 # Observer Pattern in publisher and subscriber model.
 # ---------------------------------------------------
+import json
 from abc import ABC, abstractmethod
 
 class Publisher:
@@ -81,28 +82,26 @@ def get_value_smoothed():
     print(f"new value {value}")
     return value_smoothed / len(values)
 
-from ads import AdsObject
-import time
-adsO = AdsObject()
 
-while True:
-    values = []
+class RadioMockup:
+    def __init__(self):
+        self.load_settings()
 
-    for i in range(50):
-        values.append(adsO.volume_poti.get_value())
-        time.sleep(0.001)
-
-    values.remove(max(values))
-    values.remove(min(values))
-    values.remove(max(values))
-    values.remove(min(values))
-    values.remove(max(values))
-    values.remove(min(values))
-    values.remove(max(values))
-    values.remove(min(values))
-    values.remove(max(values))
-    values.remove(min(values))
-    print(f"{min(values)} : {max(values)} : {max(values) - min(values)}")
-    values = []
+    def load_settings(self):
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        self.volume_min = settings["volume"]["min"]
+        self.volume_max = settings["volume"]["max"]
+        self.volume_on = settings["volume"]["on"]
+        self.bass_min = settings["bass"]["min"]
+        self.bass_max = settings["bass"]["max"]
+        self.bass_on = settings["bass"]["on"]
+        self.treble_min = settings["treble"]["min"]
+        self.treble_max = settings["treble"]["max"]
+        self.treble_on = settings["treble"]["on"]
 
 
+
+if __name__ == "__main__":
+    radio = RadioMockup()
+    print()

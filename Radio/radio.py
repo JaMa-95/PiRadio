@@ -1,4 +1,5 @@
 import datetime
+import json
 import time
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
@@ -57,27 +58,17 @@ class Radio:
 
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
-        self.current_volume_poti_value = 0
-        self.poti_values = [0, 0]
-        self.poti_value_index = 0
-
-        self.pin_mittel = 3
-        self.pin_volume = 2
-
         self.radio_buttons = RadioButtonsRaspi()
         self.radio_lock: bool = False
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
-                                "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
-                                "posUKW": None}
+                                "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
+                                "posUKW": None, "treble": None, "bass": None}
         self.old_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
-                            "buttonUKW": None, "buttonSprMus": None, "potiValue": None, "posLangKurzMittel": None,
-                            "posUKW": None}
+                            "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
+                            "posUKW": None, "treble": None, "bass": None}
         self.currentCommandString = None
-        self.volume_old = None
-        self.volume_sensitivity = 1
-        self.poti_sensivity = 1
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
@@ -86,6 +77,41 @@ class Radio:
         self.ledData = LedData.instance()
         self.ledStrip = LedStrip()
         self.db = Database()
+
+        self.volume_min = 0
+        self.volume_max = 0
+        self.volume_on = False
+        self.bass_min = 0
+        self.bass_max = 0
+        self.bass_on = False
+        self.treble_min = 0
+        self.treble_max = 0
+        self.treble_on = False
+
+        self.pin_frequencies = 3
+        self.pin_volume = 2
+        self.pin_bass = 3
+        self.pin_treble = 2
+        self.load_settings()
+
+    def load_settings(self):
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        self.volume_min = settings["volume"]["min"]
+        self.volume_max = settings["volume"]["max"]
+        self.volume_on = settings["volume"]["on"]
+        self.pin_volume = settings["volume"]["pin"]
+        self.bass_min = settings["bass"]["min"]
+        self.bass_max = settings["bass"]["max"]
+        self.bass_on = settings["bass"]["on"]
+        self.pin_bass = settings["bass"]["pin"]
+        self.treble_min = settings["treble"]["min"]
+        self.treble_max = settings["treble"]["max"]
+        self.treble_on = settings["treble"]["on"]
+        self.pin_treble = settings["treble"]["pin"]
+        self.pin_frequencies = settings["frequencies"]["pin"]
+
+    ####################################
 
     # PUB METHODS
     def attach(self, subscriber):
@@ -143,8 +169,8 @@ class Radio:
                 self.get_command_from_db()
                 print(f"changed: {changed_hardware}")
                 if changed_hardware:
-                    if "potiValue" in changed_hardware:
-                        self.send_volume(self.current_command["potiValue"])
+                    if "volume" in changed_hardware:
+                        self.send_volume(self.current_command["volume"])
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
             time.sleep(0.01)
@@ -163,8 +189,8 @@ class Radio:
             changed_hardware.append("buttonUKW")
         if self.current_command["buttonSprMus"] != self.db.get_button_spr_mus():
             changed_hardware.append("buttonSprMus")
-        if self.current_command["potiValue"] != self.db.get_volume():
-            changed_hardware.append("potiValue")
+        if self.current_command["volume"] != self.db.get_volume():
+            changed_hardware.append("volume")
         if self.current_command["posLangKurzMittel"] != self.db.get_pos_lang_mittel_kurz():
             changed_hardware.append("posLangKurzMittel")
         if self.current_command["posUKW"] != self.db.get_pos_ukw():
@@ -178,7 +204,9 @@ class Radio:
         self.current_command["buttonKurz"] = self.db.get_button_kurz()
         self.current_command["buttonUKW"] = self.db.get_button_ukw()
         self.current_command["buttonSprMus"] = self.db.get_button_spr_mus()
-        self.current_command["potiValue"] = self.db.get_poti_value_web()
+        self.current_command["volume"] = self.db.get_poti_value_web()
+        self.current_command["bass"] = self.db.get_bass_value_web()
+        self.current_command["treble"] = self.db.get_treble_value_web()
         self.current_command["posLangKurzMittel"] = self.db.get_pos_lang_mittel_kurz()
         self.current_command["posUKW"] = self.db.get_pos_ukw()
 
@@ -313,14 +341,10 @@ class Radio:
                 return None, None
 
     def set_volume(self, volume):
-        # max: 7095
-        # min: 19000
-        x1 = 18900
-        x2 = 7150
         # print(f"VOLUME A: {volume}")
-        # volume = int(-(volume - x1) / (x1 - x2) * 100)
-        #print(f"VOLUME: {volume}")
-        volume = int(0.00606 * volume - 63.63)
+        volume = int(-(volume - self.volume_max) / (self.volume_max - self.volume_min) * 100)
+        print(f"VOLUME: {volume}")
+        # volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0
         elif volume > 100:
@@ -328,39 +352,85 @@ class Radio:
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
-    def set_poti_value(self, poti):
-        self.poti_values[self.poti_value_index] = poti
+    def set_treble(self, treble):
+        # print(f"VOLUME A: {volume}")
+        treble = int(-(treble - self.treble_max) / (self.treble_max - self.treble_min) * 100)
+        print(f"treble: {treble}")
+        # volume = int(0.00606 * volume - 63.63)
+        if treble < 0:
+            treble = 0
+        elif treble > 100:
+            treble = 100
+        self.db.replace_treble(treble)
+        self.send_treble(treble)
 
-        self.poti_value_index = (self.poti_value_index + 1) % len(self.poti_values)
-
-    def get_poti_value(self):
-        value = 0
-        for poti_value in self.poti_values:
-            value += poti_value
-        value = value / len(self.poti_values)
-        return value
+    def set_bass(self, bass):
+        # print(f"VOLUME A: {volume}")
+        bass = int(-(bass - self.bass_max) / (self.bass_max - self.bass_min) * 100)
+        print(f"bass: {bass}")
+        # volume = int(0.00606 * volume - 63.63)
+        if bass < 0:
+            bass = 0
+        elif bass > 100:
+            bass = 100
+        self.db.replace_bass(bass)
+        self.send_bass(bass)
 
     def send_volume(self, volume):
-        self.volume_old = volume
         if self.speakers.play_radio:
             self.publish(volume)
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_volume(volume)
 
+    def send_bass(self, volume):
+        if self.speakers.play_radio:
+            self.publish(volume)
+        if self.mqtt:
+            if self.speakers.play_central:
+                self.broker.publish_volume(volume)
+
+    def send_treble(self, treble):
+        if self.speakers.play_radio:
+            self.publish(treble)
+        if self.mqtt:
+            if self.speakers.play_central:
+                self.broker.publish_treble(treble)
+
+    def send_bass(self, bass):
+        self.bass_old = bass
+        if self.speakers.play_radio:
+            self.publish(bass)
+        if self.mqtt:
+            if self.speakers.play_central:
+                self.broker.publish_bass(bass)
+
     def get_changed_hardware(self):
         changed_hardware = []
-        value = self.db.get_ads_pin_value(self.pin_mittel)
+        value = self.db.get_ads_pin_value(self.pin_frequencies)
         if value != self.old_command["posLangKurzMittel"]:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
         return changed_hardware
 
     def check_poti_change(self):
-        value = self.db.get_ads_pin_value(self.pin_volume)
-        if value != self.old_command["potiValue"]:
-            self.current_command["potiValue"] = value
-            self.set_volume(value)
+        if self.volume_on:
+            value = self.db.get_ads_pin_value(self.pin_volume)
+            if value != self.old_command["volume"]:
+                self.current_command["volume"] = value
+                self.set_volume(value)
+
+        if self.bass_on:
+            value = self.db.get_ads_pin_value(self.pin_bass)
+            if value != self.old_command["bass"]:
+                self.current_command["bass"] = value
+                self.set_bass(value)
+
+        if self.treble_on:
+            value = self.db.get_ads_pin_value(self.pin_treble)
+            if value != self.old_command["treble"]:
+                self.current_command["treble"] = value
+                self.set_treble(value)
 
     def get_changed_buttons(self):
         self.radio_buttons.set_value()

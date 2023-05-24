@@ -27,9 +27,8 @@ class Database(Singleton):
         self.lock = threading.Lock()
 
         self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
-                           "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "stream", "ads_pin_1",
-                           "ads_pin_2",
-                           "ads_pin_3", "ads_pin_0"]
+                           "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "bass", "treble", "stream",
+                           "ads_pin_0", "ads_pin_1", "ads_pin_2", "ads_pin_3"]
 
     """
     def create(self):
@@ -137,6 +136,16 @@ class Database(Singleton):
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='volume'")
             self.con.commit()
 
+    def replace_bass(self, value: int):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='bass'")
+            self.con.commit()
+
+    def replace_treble(self, value: int):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='treble'")
+            self.con.commit()
+
     def replace_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='posLangMittelKurz'")
@@ -209,6 +218,16 @@ class Database(Singleton):
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("volume", value))
             self.con.commit()
 
+    def insert_bass(self, value: int):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("bass", value))
+            self.con.commit()
+
+    def insert_treble(self, value: int):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("treble", value))
+            self.con.commit()
+
     def insert_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("posLangMittelKurz", value))
@@ -226,9 +245,21 @@ class Database(Singleton):
 
     #######################################################################
 
-    def get_poti_value_web(self):
+    def get_volume_value_web(self):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='poti_value_web'")
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='volume_web'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_bass_value_web(self):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='bass_web'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_treble_value_web(self):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='treble_web'")
             value = res.fetchall()
             return value[0][1]
 
@@ -355,6 +386,18 @@ class Database(Singleton):
     def get_volume(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_treble(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM radio WHERE name='treble'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_bass(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM radio WHERE name='bass'")
             value = res.fetchall()
             return value[0][1]
 

@@ -11,6 +11,7 @@ def signal_handler(sig, frame):
     GPIO.cleanup()
     sys.exit(0)
 
+GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(23, GPIO.OUT)
 GPIO.setup(24, GPIO.OUT)
@@ -19,7 +20,9 @@ GPIO.setup(12, GPIO.OUT)
 GPIO.setup(9, GPIO.OUT)
 GPIO.setup(11, GPIO.OUT)
 GPIO.setup(26, GPIO.OUT)
-
+GPIO.setup(7, GPIO.OUT)
+GPIO.setup(8, GPIO.OUT)
+GPIO.setup(13, GPIO.OUT)
 while True:
     if (GPIO.input(23) == GPIO.HIGH):
         print("Pin 23 button is pressed")
@@ -35,4 +38,10 @@ while True:
         print("Pin 11 button is pressed")
     if (GPIO.input(26) == GPIO.HIGH):
         print("Pin 26 button is pressed")
+    if (GPIO.input(7) == GPIO.HIGH):
+        print("Pin 7 button is pressed")
+    if (GPIO.input(8) == GPIO.HIGH):
+        print("Pin 8 is pressed")
+    if (GPIO.input(13) == GPIO.HIGH):
+        print("Pin 13 is pressed")
     time.sleep(1)
