@@ -5,7 +5,7 @@ from db.db import Database
 
 
 class ButtonRaspi:
-    def __init__(self, button_number: int = 0, long_click_threshold: int = 50):
+    def __init__(self, button_number: int = 0, reversed: bool = False, long_click_threshold: int = 50):
         # BCM-Nummerierung verwenden
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(button_number, GPIO.OUT)
@@ -15,6 +15,8 @@ class ButtonRaspi:
         self.value_olds = []
         self.value_old_index = 0
         self.indexer = 0
+
+        self.reversed = reversed
 
         self.long_threshold: int = long_click_threshold
 
@@ -64,6 +66,8 @@ class ButtonRaspi:
         self.value_olds.append(self.state)
         self.value_old = self.value
         self.value = self.state
+        if self.reversed:
+            self.state != self.state
         if self.state:
             self.is_clicked = True
             self.indexer += 1
@@ -84,7 +88,7 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi(23)
+    button_on_off: ButtonRaspi = ButtonRaspi(23, True)
     button_lang: ButtonRaspi = ButtonRaspi(24)
     button_mittel: ButtonRaspi = ButtonRaspi(25)
     button_kurz: ButtonRaspi = ButtonRaspi(9)

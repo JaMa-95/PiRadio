@@ -22,5 +22,11 @@
     "max": 2638,
     "on": true,
     "pin": 2
+  },
+  "butons": {
+    "on_off": {
+      "pin": 26,
+      "reversed": true
+    }
   }
 }
