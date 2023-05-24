@@ -75,7 +75,7 @@ class AdsSingle:
                 values.remove(min(values))
             else:
                 break
-        if self.pin == 3:
+        if self.pin == 5:
             print(max(values) - min(values))
             print(f"MEAN: {mean(values)}")
             print("---------------")
