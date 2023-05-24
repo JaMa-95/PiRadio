@@ -38,7 +38,15 @@ https://www.instructables.com/Smooth-Potentiometer-Input/
 https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
 
 # DEPENDENCIES
-pip3 install adafruit-circuitpython-ads1x15
+sudo pip install adafruit-circuitpython-ads1x15
+sudo pip install paho-mqtt
+sudo pip install adafruit-circuitpython-ads1x15
+
+Depence on led strip
+sudo pip install rpi-ws281x
+##deprecated
+sudo pip install Flask-Cors
+sudo pip install Turbo-Flask
 
 # radioStart.sh
 
