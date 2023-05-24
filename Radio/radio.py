@@ -368,7 +368,7 @@ class Radio:
     def set_bass(self, bass):
         # print(f"VOLUME A: {volume}")
         print(f"value: {bass}")
-        bass = int(-(bass - self.bass_max) / (self.bass_max - self.bass_min) * 100)
+        bass = int((bass - self.bass_max) / (self.bass_max - self.bass_min) * 100)
         print(f"bass: {bass}")
         # volume = int(0.00606 * volume - 63.63)
         if bass < 0:
