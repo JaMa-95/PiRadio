@@ -93,6 +93,7 @@ class AdsSingle:
         if self.pin == 1:
             print(max(values) - min(values))
             print(f"MEAN: {mean(values)}")
+            print(f"pin: {self.pin}")
             print("---------------")
         return mean(values)
 
