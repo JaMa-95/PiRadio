@@ -3,7 +3,7 @@
     "min": 0,
     "max": 26400,
     "on": true,
-    "pin": 2
+    "pin": 3
   },
   "frequencies": {
     "min": 610,
