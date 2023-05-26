@@ -21,7 +21,7 @@
     "min": 24230,
     "max": 26105,
     "on": true,
-    "pin": 3
+    "pin": 2
   },
   "buttons": {
     "on_off": {
