@@ -342,9 +342,9 @@ class Radio:
 
     def set_volume(self, volume):
         # print(f"VOLUME A: {volume}")
-        #print(f"value: {volume}")
+        print(f"value: {volume}")
         volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
-        #print(f"VOLUME: {volume}")
+        print(f"VOLUME: {volume}")
         # volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0

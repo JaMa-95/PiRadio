@@ -11,7 +11,7 @@ from adafruit_ads1x15.ads1x15 import Mode
 
 
 class AdsObject:
-    # TODO: get pin from json
+    # TODO: Refactor
     def __init__(self, pin_frequency: int, pin_volume: int, pin_bass: int, pin_treble: int):
         self.pin_frequency = pin_frequency
         self.pin_volume = pin_volume
@@ -19,14 +19,10 @@ class AdsObject:
         self.pin_treble = pin_treble
         self.pins = [pin_frequency, pin_volume, pin_bass, pin_treble]
 
-        self.volume_poti = AdsSingle(pin_volume)
-        self.frequency_poti = AdsSingle(pin_frequency)
-        self.bass_poti = AdsSingle(pin_bass)
-        self.treble_poti = AdsSingle(pin_treble)
+        self.ads = AdsSingle(None)
 
     def set_to_db(self):
         for pin in self.pins:
-            print(pin)
             self.volume_poti.set_to_db_smoothed_by_pin(pin)
 
 
@@ -112,7 +108,7 @@ class AdsSingle:
 
         for i in range(num_values):
             values.append(self.chan.value)
-            
+
         # delete min man values
         for _ in range(10):
             for _ in range(int(num_values/10)):
