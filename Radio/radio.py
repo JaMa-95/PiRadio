@@ -482,8 +482,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        print(f"encoder value: {encoder_value}")
-        print(f"radio_frequency {radio_frequency} and {self.on}")
+        # print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
         if not radio_frequency:
             if self.playing:
                 if self.speakers.play_radio:
