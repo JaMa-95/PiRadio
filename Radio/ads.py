@@ -95,7 +95,7 @@ class AdsSingle:
 
 
 if __name__ == "__main__":
-    ads = AdsObject(0, 1, 2, 3)
+    ads = AdsObject(pin_frequency=1, pin_volume=2, pin_treble=0, pin_bass=3)
     while True:
         value = ads.frequency_poti.get_value_smoothed()
         print(value)
