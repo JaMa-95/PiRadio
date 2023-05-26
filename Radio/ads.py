@@ -26,6 +26,7 @@ class AdsObject:
 
     def set_to_db(self):
         for pin in self.pins:
+            print(pin)
             self.volume_poti.set_to_db_smoothed_by_pin(pin)
 
 
@@ -109,6 +110,9 @@ class AdsSingle:
         else:
             self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
 
+        for i in range(num_values):
+            values.append(self.chan.value)
+            
         # delete min man values
         for _ in range(10):
             for _ in range(int(num_values/10)):
