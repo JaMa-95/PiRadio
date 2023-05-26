@@ -37,7 +37,7 @@ class AdsObject:
         self.treble_poti.set_to_db_smoothed()
 
 
-class AdsSingle:
+class AdsSingle():
     def __init__(self, pin):
         i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
@@ -90,7 +90,7 @@ class AdsSingle:
                 values.remove(min(values))
             else:
                 break
-        if self.pin == 1:
+        if self.pin == 5:
             print(max(values) - min(values))
             print(f"MEAN: {mean(values)}")
             print(f"pin: {self.pin}")
@@ -101,6 +101,7 @@ class AdsSingle:
 if __name__ == "__main__":
     ads = AdsObject(pin_frequency=1, pin_volume=2, pin_treble=0, pin_bass=3)
     while True:
+        # TODO: Error all classes become same
         value = ads.frequency_poti.get_value_smoothed()
         print(value)
         value = ads.volume_poti.get_value_smoothed()
