@@ -37,7 +37,7 @@ class AdsObject:
         self.treble_poti.set_to_db_smoothed()
 
 
-class AdsSingle():
+class AdsSingle(object):
     def __init__(self, pin):
         i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
