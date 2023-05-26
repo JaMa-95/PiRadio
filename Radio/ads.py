@@ -17,6 +17,7 @@ class AdsObject:
         self.pin_volume = pin_volume
         self.pin_bass = pin_bass
         self.pin_treble = pin_treble
+        self.pins = [pin_frequency, pin_volume, pin_bass, pin_treble]
 
         self.volume_poti = AdsSingle(pin_volume)
         self.frequency_poti = AdsSingle(pin_frequency)
@@ -24,17 +25,8 @@ class AdsObject:
         self.treble_poti = AdsSingle(pin_treble)
 
     def set_to_db(self):
-        self.volume_poti = AdsSingle(self.pin_volume)
-        self.volume_poti.set_to_db_smoothed()
-
-        self.frequency_poti = AdsSingle(self.pin_frequency)
-        self.frequency_poti.set_to_db_smoothed()
-
-        self.bass_poti = AdsSingle(self.pin_bass)
-        self.bass_poti.set_to_db_smoothed()
-
-        self.treble_poti = AdsSingle(self.pin_treble)
-        self.treble_poti.set_to_db_smoothed()
+        for pin in self.pins:
+            self.volume_poti.set_to_db_smoothed_by_pin(pin)
 
 
 class AdsSingle:
@@ -63,9 +55,17 @@ class AdsSingle:
         value = self.get_value()
         self.db.replace_ads_pin_value(value, self.pin)
 
+    def set_to_db_by_pin(self, pin):
+        value = self.get_value()
+        self.db.replace_ads_pin_value(value, pin)
+
     def set_to_db_smoothed(self):
         value = self.get_value_smoothed()
         self.db.replace_ads_pin_value(value, self.pin)
+
+    def set_to_db_smoothed_by_pin(self, pin):
+        value = self.get_value_smoothed_by_pin(pin)
+        self.db.replace_ads_pin_value(value, pin)
 
     def get_value(self):
         return self.chan.value
@@ -95,6 +95,27 @@ class AdsSingle:
             print(f"MEAN: {mean(values)}")
             print(f"pin: {self.pin}")
             print("---------------")
+        return mean(values)
+
+    def get_value_smoothed_by_pin(self, pin):
+        values = []
+        num_values = 700
+        if pin == 1:
+            self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
+        elif pin == 2:
+            self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
+        elif pin == 3:
+            self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
+        else:
+            self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
+
+        # delete min man values
+        for _ in range(10):
+            for _ in range(int(num_values/10)):
+                values.remove(max(values))
+                values.remove(min(values))
+            else:
+                break
         return mean(values)
 
 
