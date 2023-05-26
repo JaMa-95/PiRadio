@@ -103,4 +103,10 @@ if __name__ == "__main__":
     while True:
         value = ads.frequency_poti.get_value_smoothed()
         print(value)
+        value = ads.volume_poti.get_value_smoothed()
+        print(value)
+        value = ads.bass_poti.get_value_smoothed()
+        print(value)
+        value = ads.treble_poti.get_value_smoothed()
+        print(value)
         time.sleep(1)
