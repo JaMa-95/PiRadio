@@ -407,7 +407,6 @@ class Radio:
     def get_frequency_change(self):
         changed_hardware = []
         value = self.db.get_ads_pin_value(self.pin_frequencies)
-        print(f"self.pin_frequencies: {self.pin_frequencies}")
         if value != self.old_command["posLangKurzMittel"]:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
