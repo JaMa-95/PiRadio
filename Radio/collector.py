@@ -1,3 +1,4 @@
+import json
 from time import sleep
 
 from button import RadioButtonsRaspi
@@ -7,9 +8,23 @@ from db.db import Database
 
 class Collector:
     def __init__(self):
+        self.pin_volume = None
+        self.pin_bass = None
+        self.pin_treble = None
+        self.pin_frequencies = None
+        self.load_settings()
         self.buttons = RadioButtonsRaspi()
-        self.ads = AdsObject()
+        self.ads = AdsObject(pin_frequency=self.pin_frequencies, pin_bass=self.pin_bass, pin_treble=self.pin_treble,
+                             pin_volume=self.pin_volume)
         self.db = Database()
+
+    def load_settings(self):
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        self.pin_volume = settings["volume"]["pin"]
+        self.pin_bass = settings["bass"]["pin"]
+        self.pin_treble = settings["treble"]["pin"]
+        self.pin_frequencies = settings["frequencies"]["pin"]
 
     def run(self):
         while True:

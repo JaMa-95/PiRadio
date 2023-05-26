@@ -10,21 +10,27 @@ from db.db import Database
 from statistics import mean
 from adafruit_ads1x15.ads1x15 import Mode
 
+
 class AdsObject:
-    def __init__(self):
-        self.volume_poti = AdsSingle(2)
-        self.frequency_poti = AdsSingle(1)
-        self.bass_poti = AdsSingle(0)
-        self.treble_poti = AdsSingle(3)
+    # TODO: get pin from json
+    def __init__(self, pin_frequency: int, pin_volume: int, pin_bass: int, pin_treble: int):
+        self.pin_frequency = pin_frequency
+        self.pin_volume = pin_volume
+        self.pin_bass = pin_bass
+        self.pin_treble = pin_treble
+        self.volume_poti = AdsSingle(pin_volume)
+        self.frequency_poti = AdsSingle(pin_frequency)
+        self.bass_poti = AdsSingle(pin_bass)
+        self.treble_poti = AdsSingle(pin_treble)
 
     def set_to_db(self):
-        self.volume_poti = AdsSingle(2)
+        self.volume_poti = AdsSingle(self.volume_poti)
         self.volume_poti.set_to_db_smoothed()
-        self.frequency_poti = AdsSingle(1)
+        self.frequency_poti = AdsSingle(self.frequency_poti)
         self.frequency_poti.set_to_db_smoothed()
-        self.bass_poti = AdsSingle(0)
+        self.bass_poti = AdsSingle(self.pin_bass)
         self.bass_poti.set_to_db_smoothed()
-        self.treble_poti = AdsSingle(3)
+        self.treble_poti = AdsSingle(self.pin_treble)
         self.treble_poti.set_to_db_smoothed()
 
 

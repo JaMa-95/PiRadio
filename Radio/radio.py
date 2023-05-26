@@ -88,10 +88,10 @@ class Radio:
         self.treble_max = 0
         self.treble_on = False
 
-        self.pin_frequencies = 3
-        self.pin_volume = 2
-        self.pin_bass = 3
-        self.pin_treble = 2
+        self.pin_frequencies = None
+        self.pin_volume = None
+        self.pin_bass = None
+        self.pin_treble = None
         self.load_settings()
 
     def load_settings(self):

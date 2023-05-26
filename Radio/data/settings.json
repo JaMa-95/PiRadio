@@ -3,7 +3,7 @@
     "min": 0,
     "max": 26400,
     "on": true,
-    "pin": 3
+    "pin": 2
   },
   "frequencies": {
     "min": 610,
@@ -21,7 +21,7 @@
     "min": 24230,
     "max": 26105,
     "on": true,
-    "pin": 2
+    "pin": 3
   },
   "buttons": {
     "on_off": {
