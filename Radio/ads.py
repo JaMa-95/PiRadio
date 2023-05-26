@@ -23,7 +23,7 @@ class AdsObject:
 
     def set_to_db(self):
         for pin in self.pins:
-            self.volume_poti.set_to_db_smoothed_by_pin(pin)
+            self.ads.set_to_db_smoothed_by_pin(pin)
 
 
 class AdsSingle:
