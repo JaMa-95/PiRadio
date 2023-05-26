@@ -159,7 +159,7 @@ class Radio:
                 self.check_poti_change()
                 if not self.radio_lock:
                     changed_hardware = self.get_changed_buttons()
-                    changed_hardware.extend(self.get_changed_hardware())
+                    changed_hardware.extend(self.get_frequency_change())
                     if changed_hardware:
                         self.process_hardware_change(changed_hardware)
             else:
@@ -404,9 +404,10 @@ class Radio:
             if self.speakers.play_central:
                 self.broker.publish_bass(bass)
 
-    def get_changed_hardware(self):
+    def get_frequency_change(self):
         changed_hardware = []
         value = self.db.get_ads_pin_value(self.pin_frequencies)
+        print(f"self.pin_frequencies: {self.pin_frequencies}")
         if value != self.old_command["posLangKurzMittel"]:
             changed_hardware.append("posLangKurzMittel")
             self.current_command["posLangKurzMittel"] = value
