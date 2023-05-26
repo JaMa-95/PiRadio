@@ -24,12 +24,15 @@ class AdsObject:
         self.treble_poti = AdsSingle(pin_treble)
 
     def set_to_db(self):
-        self.volume_poti = AdsSingle(self.volume_poti)
+        self.volume_poti = AdsSingle(self.pin_volume)
         self.volume_poti.set_to_db_smoothed()
-        self.frequency_poti = AdsSingle(self.frequency_poti)
+
+        self.frequency_poti = AdsSingle(self.pin_frequency)
         self.frequency_poti.set_to_db_smoothed()
+
         self.bass_poti = AdsSingle(self.pin_bass)
         self.bass_poti.set_to_db_smoothed()
+
         self.treble_poti = AdsSingle(self.pin_treble)
         self.treble_poti.set_to_db_smoothed()
 
