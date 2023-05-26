@@ -24,7 +24,6 @@ class AdsObject:
         self.treble_poti = AdsSingle(pin_treble)
 
     def set_to_db(self):
-        print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
         self.volume_poti = AdsSingle(self.volume_poti)
         self.volume_poti.set_to_db_smoothed()
         self.frequency_poti = AdsSingle(self.frequency_poti)
@@ -93,3 +92,11 @@ class AdsSingle:
             print(f"MEAN: {mean(values)}")
             print("---------------")
         return mean(values)
+
+
+if __name__ == "__main__":
+    ads = AdsObject(0, 1, 2, 3)
+    while True:
+        value = ads.frequency_poti.get_value_smoothed()
+        print(value)
+        time.sleep(1)

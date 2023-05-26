@@ -18,7 +18,7 @@ while True:
     values = []
     values = []
     for i in range(50):
-        values.append(chan3.value)
+        values.append(chan1.value)
     print(max(values))
     print(min(values))
     print(mean(values))
