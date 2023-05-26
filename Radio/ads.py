@@ -1,4 +1,3 @@
-import datetime
 import time
 
 import adafruit_ads1x15.ads1115 as ADS
@@ -18,6 +17,7 @@ class AdsObject:
         self.pin_volume = pin_volume
         self.pin_bass = pin_bass
         self.pin_treble = pin_treble
+
         self.volume_poti = AdsSingle(pin_volume)
         self.frequency_poti = AdsSingle(pin_frequency)
         self.bass_poti = AdsSingle(pin_bass)
@@ -37,7 +37,7 @@ class AdsObject:
         self.treble_poti.set_to_db_smoothed()
 
 
-class AdsSingle(object):
+class AdsSingle:
     def __init__(self, pin):
         i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
@@ -46,7 +46,7 @@ class AdsSingle(object):
 
         self.pin = pin
         self.db = Database()
-        print(self.pin)
+
         if self.pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
         elif self.pin == 2:
@@ -111,3 +111,5 @@ if __name__ == "__main__":
         value = ads.treble_poti.get_value_smoothed()
         print(value)
         time.sleep(1)
+        if ads.treble_poti == ads.volume_poti:
+            print("YESSSSSSSS")
