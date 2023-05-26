@@ -23,10 +23,11 @@
     "on": true,
     "pin": 2
   },
-  "butons": {
+  "buttons": {
     "on_off": {
-      "pin": 26,
-      "reversed": true
+      "pin": 0,
+      "reversed": true,
+      "active": false
     }
   }
 }
