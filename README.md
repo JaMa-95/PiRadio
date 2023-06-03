@@ -16,7 +16,8 @@ sudo nano /lib/systemd/system/radio.service
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login
 https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
 
-
+# Power up
+https://embeddedcomputing.com/technology/open-source/development-kits/raspberry-pi-power-up-and-shutdown-with-a-physical-button
 
 # LED
 https://dordnung.de/raspberrypi-ledstrip/ws2812
