@@ -10,3 +10,4 @@ while True:
     GPIO.wait_for_edge(3, GPIO.FALLING)
 
     print(f"SHUTDOWN NOW {time.time()}")
+    time.sleep(0.1)
