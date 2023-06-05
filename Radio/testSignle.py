@@ -24,13 +24,13 @@ print(equalizer.get_amp_at_index(6))  # 6 kHz
 print(equalizer.get_amp_at_index(7))  # 12 kHz
 
 equalizer.set_amp_at_index(0, 10)  # 60 Hz
-equalizer.set_amp_at_index(1, 8)  # 170 Hz
-equalizer.set_amp_at_index(2, 4)  # 310 Hz
-equalizer.set_amp_at_index(3, 0)  # 600 Hz
-equalizer.set_amp_at_index(4, 0)  # 1 kHz
-equalizer.set_amp_at_index(5, 0)  # 3 kHz
-equalizer.set_amp_at_index(6, 0)  # 6 kHz
-equalizer.set_amp_at_index(7, 0)  # 12 kHz
+equalizer.set_amp_at_index(1, 10)  # 170 Hz
+equalizer.set_amp_at_index(2, 10)  # 310 Hz
+equalizer.set_amp_at_index(3, 10)  # 600 Hz
+equalizer.set_amp_at_index(4, 10)  # 1 kHz
+equalizer.set_amp_at_index(5, 10)  # 3 kHz
+equalizer.set_amp_at_index(6, 10)  # 6 kHz
+equalizer.set_amp_at_index(7, 10)  # 12 kHz
 player.set_equalizer(equalizer)
 print("eualizer set")
 time.sleep(10)
