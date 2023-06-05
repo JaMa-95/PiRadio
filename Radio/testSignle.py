@@ -11,8 +11,10 @@ media.get_mrl()
 player.set_media(media)
 player.play()
 print("start")
-player.audio_set_volume(100)
+player.audio_set_volume(50)
 time.sleep(5)
+
+print(f"preamp: {equalizer.get_preamp()}")
 
 print(equalizer.get_amp_at_index(0))  # 60 Hz
 print(equalizer.get_amp_at_index(1))  # 170 Hz
@@ -33,10 +35,9 @@ print(equalizer.set_amp_at_index(0, 5))  # 3 kHz
 print(equalizer.set_amp_at_index(0, 6))  # 6 kHz
 print(equalizer.set_amp_at_index(0, 7))  # 12 kHz
 player.set_equalizer(equalizer)
-player.audio_set_volume(100)
 print("eualizer set")
 print("------------------")
-
+print(f"preamp: {equalizer.get_preamp()}")
 
 print(equalizer.get_amp_at_index(0))  # 60 Hz
 print(equalizer.get_amp_at_index(1))  # 170 Hz
