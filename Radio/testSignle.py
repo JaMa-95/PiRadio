@@ -14,6 +14,15 @@ print("start")
 player.audio_set_volume(20)
 time.sleep(5)
 
+print(equalizer.get_amp_at_index(0))  # 60 Hz
+print(equalizer.get_amp_at_index(1))  # 170 Hz
+print(equalizer.get_amp_at_index(2))  # 310 Hz
+print(equalizer.get_amp_at_index(3))  # 600 Hz
+print(equalizer.get_amp_at_index(4))  # 1 kHz
+print(equalizer.get_amp_at_index(5))  # 3 kHz
+print(equalizer.get_amp_at_index(6))  # 6 kHz
+print(equalizer.get_amp_at_index(7))  # 12 kHz
+
 equalizer.set_amp_at_index(0, 5)  # 60 Hz
 equalizer.set_amp_at_index(1, 4)  # 170 Hz
 equalizer.set_amp_at_index(2, 3)  # 310 Hz
