@@ -33,6 +33,7 @@ print(equalizer.set_amp_at_index(10, 5))  # 3 kHz
 print(equalizer.set_amp_at_index(10, 6))  # 6 kHz
 print(equalizer.set_amp_at_index(10, 7))  # 12 kHz
 player.set_equalizer(equalizer)
+player.audio_set_volume(30)
 print("eualizer set")
 print("------------------")
 
