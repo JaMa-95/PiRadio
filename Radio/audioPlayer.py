@@ -16,6 +16,9 @@ class AudioPlayer(Subscriber):
         self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player = self.instance.media_player_new()
 
+        self.set_treble(0)
+        self.set_bass(0)
+
     def update(self):
         content = self.publisher.get_content()
         if type(content) == RadioFrequency:
@@ -48,25 +51,17 @@ class AudioPlayer(Subscriber):
         self.volume = volume
 
     def set_bass(self, bass):
-        self.equalizer.set_amp_at_index(0, 0)  # 60 Hz
-        self.equalizer.set_amp_at_index(1, 0)  # 170 Hz
-        self.equalizer.set_amp_at_index(2, 0)  # 310 Hz
-        self.equalizer.set_amp_at_index(3, 0)  # 600 Hz
-        self.equalizer.set_amp_at_index(4, 0)  # 1 kHz
-        self.equalizer.set_amp_at_index(5, 0)  # 3 kHz
-        self.equalizer.set_amp_at_index(6, 0)  # 6 kHz
-        self.equalizer.set_amp_at_index(7, 0)  # 12 kHz
+        self.equalizer.set_amp_at_index(bass, 0)  # 60 Hz
+        self.equalizer.set_amp_at_index(bass / 2, 1)  # 170 Hz
+        self.equalizer.set_amp_at_index(bass / 3, 2)  # 310 Hz
+        self.equalizer.set_amp_at_index(bass / 4, 3)  # 600 Hz
         self.player.set_equalizer(self.equalizer)
 
     def set_treble(self, treble):
-        self.equalizer.set_amp_at_index(0, 0)  # 60 Hz
-        self.equalizer.set_amp_at_index(1, 0)  # 170 Hz
-        self.equalizer.set_amp_at_index(2, 0)  # 310 Hz
-        self.equalizer.set_amp_at_index(3, 0)  # 600 Hz
-        self.equalizer.set_amp_at_index(4, 0)  # 1 kHz
-        self.equalizer.set_amp_at_index(5, 0)  # 3 kHz
-        self.equalizer.set_amp_at_index(6, 0)  # 6 kHz
-        self.equalizer.set_amp_at_index(7, 0)  # 12 kHz
+        self.equalizer.set_amp_at_index(treble / 4, 4)  # 1 kHz
+        self.equalizer.set_amp_at_index(treble / 3, 5)  # 3 kHz
+        self.equalizer.set_amp_at_index(treble / 2, 6)  # 6 kHz
+        self.equalizer.set_amp_at_index(treble, 7)  # 12 kHz
         self.player.set_equalizer(self.equalizer)
 
     def add_static_noise(self, level):

@@ -2,7 +2,7 @@ from json import load
 from time import sleep
 import RPi.GPIO as GPIO
 
-from Radio.db.db import Database
+from db.db import Database
 
 
 class ShutdownGpio:
