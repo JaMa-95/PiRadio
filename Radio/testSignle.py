@@ -23,6 +23,8 @@ equalizer.set_amp_at_index(5, 0)  # 3 kHz
 equalizer.set_amp_at_index(6, 0)  # 6 kHz
 equalizer.set_amp_at_index(7, 0)  # 12 kHz
 player.set_equalizer(equalizer)
+print("eualizer set")
+time.sleep(10)
 
 is_playing = player.is_playing()
 print(is_playing)
