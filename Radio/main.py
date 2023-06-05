@@ -6,7 +6,7 @@ from app import app
 from db.db import Database
 from collector import Collector
 from led.ledStrip import LedStrip
-from Radio.checkShutdown import ShutdownGpio
+from checkShutdown import ShutdownGpio
 
 if __name__ == "__main__":
     db = Database()
