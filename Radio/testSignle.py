@@ -11,7 +11,7 @@ media.get_mrl()
 player.set_media(media)
 player.play()
 print("start")
-player.audio_set_volume(30)
+player.audio_set_volume(100)
 time.sleep(5)
 
 print(equalizer.get_amp_at_index(0))  # 60 Hz
