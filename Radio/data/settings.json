@@ -28,6 +28,9 @@
       "pin": 0,
       "reversed": true,
       "active": false
+    },
+    "shutdown": {
+      "pin": 3
     }
   }
 }

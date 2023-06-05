@@ -28,17 +28,7 @@ class Database(Singleton):
 
         self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
                            "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "bass", "treble", "stream",
-                           "ads_pin_0", "ads_pin_1", "ads_pin_2", "ads_pin_3"]
-
-    """
-    def create(self):
-        for value in ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
-                      "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "stream"]:
-            try:
-                self.cur.execute(f"CREATE TABLE {value}(time, value)")
-            except sqlite3.OperationalError:
-                self.cur.execute(f'DELETE FROM {value};', )
-    """
+                           "ads_pin_0", "ads_pin_1", "ads_pin_2", "ads_pin_3", "shutdown"]
 
     def create(self):
         with self.lock:
@@ -73,6 +63,7 @@ class Database(Singleton):
         self.insert_radio_name("---")
         self.insert_web_control_value(False)
         self.insert_poti_value_web(0)
+        self.insert_shutdown(False)
 
     def table_exists(self, table_name: str):
         with self.lock:
@@ -161,6 +152,11 @@ class Database(Singleton):
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='poti_value_web'")
             self.con.commit()
 
+    def replace_shutdown(self, value: bool):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='shutdown'")
+            self.con.commit()
+
     #########################################################################################
 
     def insert_web_control_value(self, value: bool):
@@ -241,6 +237,11 @@ class Database(Singleton):
     def insert_poti_value_web(self, value: int):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("poti_value_web", value))
+            self.con.commit()
+
+    def insert_shutdown(self, value: bool):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("shutdown", value))
             self.con.commit()
 
     #######################################################################
@@ -410,5 +411,11 @@ class Database(Singleton):
     def get_pos_ukw(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='posUKW'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_pos_ukw(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM radio WHERE name='shutdown'")
             value = res.fetchall()
             return value[0][1]
