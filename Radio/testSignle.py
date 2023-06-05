@@ -24,7 +24,7 @@ print(equalizer.get_amp_at_index(6))  # 6 kHz
 print(equalizer.get_amp_at_index(7))  # 12 kHz
 
 print("------------------")
-print(equalizer.set_amp_at_index(20, 0))  # 60 Hz
+print(equalizer.set_amp_at_index(40, 0))  # 60 Hz
 print(equalizer.set_amp_at_index(20, 1))  # 170 Hz
 print(equalizer.set_amp_at_index(20, 2))  # 310 Hz
 print(equalizer.set_amp_at_index(0, 3))  # 600 Hz
