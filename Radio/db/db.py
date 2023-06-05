@@ -414,7 +414,7 @@ class Database(Singleton):
             value = res.fetchall()
             return value[0][1]
 
-    def get_pos_ukw(self):
+    def get_shutdown(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='shutdown'")
             value = res.fetchall()

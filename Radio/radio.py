@@ -153,7 +153,7 @@ class Radio:
         while True:
             if not self.db.get_web_control_value():
                 self.check_radio_on_off()
-                # self.check_raspi_off()
+                self.check_shutdown_raspi()
                 self.check_change_speakers()
                 self.check_radio_lock()
                 self.check_poti_change()
@@ -210,16 +210,16 @@ class Radio:
         self.current_command["posLangKurzMittel"] = self.db.get_pos_lang_mittel_kurz()
         self.current_command["posUKW"] = self.db.get_pos_ukw()
 
+    def check_shutdown_raspi(self):
+        if self.db.get_shutdown():
+            self.ledStrip.raspi_off = True
+            time.sleep(4)
+            self.raspberry.turn_raspi_off()
+
     def check_radio_lock(self):
         if self.radio_buttons.button_spr.is_click():
             self.radio_lock = not self.radio_lock
             print(f"radio lock changed: {self.radio_lock}")
-
-    def check_raspi_off(self):
-        if self.radio_buttons.button_on_off.long_click():
-            self.ledStrip.raspi_off = True
-            time.sleep(4)
-            self.raspberry.turn_raspi_off()
 
     def check_radio_on_off(self):
         if self.radio_buttons.button_on_off.is_click() and not self.db.get_web_control_value():

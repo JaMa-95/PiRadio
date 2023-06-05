@@ -12,6 +12,7 @@ class AudioPlayer(Subscriber):
         self.noise = 30
         self.volume = 50
 
+        self.equalizer = vlc.AudioEqualizer()
         self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player = self.instance.media_player_new()
 
@@ -45,6 +46,28 @@ class AudioPlayer(Subscriber):
         if self.player:
             self.player.audio_set_volume(volume)
         self.volume = volume
+
+    def set_bass(self, bass):
+        self.equalizer.set_amp_at_index(0, 0)  # 60 Hz
+        self.equalizer.set_amp_at_index(1, 0)  # 170 Hz
+        self.equalizer.set_amp_at_index(2, 0)  # 310 Hz
+        self.equalizer.set_amp_at_index(3, 0)  # 600 Hz
+        self.equalizer.set_amp_at_index(4, 0)  # 1 kHz
+        self.equalizer.set_amp_at_index(5, 0)  # 3 kHz
+        self.equalizer.set_amp_at_index(6, 0)  # 6 kHz
+        self.equalizer.set_amp_at_index(7, 0)  # 12 kHz
+        self.player.set_equalizer(self.equalizer)
+
+    def set_treble(self, treble):
+        self.equalizer.set_amp_at_index(0, 0)  # 60 Hz
+        self.equalizer.set_amp_at_index(1, 0)  # 170 Hz
+        self.equalizer.set_amp_at_index(2, 0)  # 310 Hz
+        self.equalizer.set_amp_at_index(3, 0)  # 600 Hz
+        self.equalizer.set_amp_at_index(4, 0)  # 1 kHz
+        self.equalizer.set_amp_at_index(5, 0)  # 3 kHz
+        self.equalizer.set_amp_at_index(6, 0)  # 6 kHz
+        self.equalizer.set_amp_at_index(7, 0)  # 12 kHz
+        self.player.set_equalizer(self.equalizer)
 
     def add_static_noise(self, level):
         self.noise_player.audio_set_volume(level)
