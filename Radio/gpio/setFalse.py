@@ -11,6 +11,8 @@ GPIO.setup(9, GPIO.OUT)
 GPIO.output(9, False)
 GPIO.setup(26, GPIO.OUT) # set a port/pin as an output
 GPIO.output(26, False)
+GPIO.setup(20, GPIO.OUT) # set a port/pin as an output
+GPIO.output(20, False)       # set port/pin value to 1/GPIO.HIGH/True
 
 GPIO.cleanup()
 print(False)
