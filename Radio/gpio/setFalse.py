@@ -12,5 +12,5 @@ GPIO.output(10, False)
 GPIO.setup(9, GPIO.OUT)
 GPIO.output(9, False)
 
-
+GPIO.cleanup()
 print(False)
