@@ -7,6 +7,8 @@ GPIO.setup(27, GPIO.OUT)
 GPIO.output(27, False)
 GPIO.setup(10, GPIO.OUT)
 GPIO.output(10, False)
+GPIO.setup(13, GPIO.OUT)
+GPIO.output(13, False)
 GPIO.setup(9, GPIO.OUT)
 GPIO.output(9, False)
 GPIO.setup(26, GPIO.OUT) # set a port/pin as an output
