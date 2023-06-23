@@ -12,7 +12,7 @@ player.set_media(media)
 player.play()
 print("start")
 player.audio_set_volume(15)
-time.sleep(5)
+time.sleep(50)
 
 print(f"preamp: {equalizer.get_preamp()}")
 
