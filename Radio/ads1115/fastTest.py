@@ -70,11 +70,11 @@ class AdsSingle:
 if __name__ == "__main__":
     while True:
         adsO = AdsSingle(0)
-        adsO.get_value_smoothed()
+        print(adsO.get_value_smoothed())
         ads1 = AdsSingle(1)
-        ads1.get_value_smoothed()
+        print(ads1.get_value_smoothed())
         ads2 = AdsSingle(2)
-        ads2.get_value_smoothed()
+        print(ads2.get_value_smoothed())
         ads3 = AdsSingle(3)
-        ads3.get_value_smoothed()
+        print(ads3.get_value_smoothed())
         time.sleep(1)
