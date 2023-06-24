@@ -14,7 +14,7 @@ if __name__ == "__main__":
     db.init()
     collector = Collector()
 
-    shutdownPin = ShutdownGpio()
+    # shutdownPin = ShutdownGpio()
 
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
     audioPlayer = AudioPlayer(radio)
@@ -22,10 +22,10 @@ if __name__ == "__main__":
 
     radioThread = Thread(target=radio.run)
     collectorThread = Thread(target=collector.run)
-    shutdownThread = Thread(target=shutdownPin.run)
+    # shutdownThread = Thread(target=shutdownPin.run)
     ledThread = Thread(target=ledStrip.run)
 
-    shutdownThread.start()
+    # shutdownThread.start()
     radioThread.start()
     collectorThread.start()
     ledThread.start()
