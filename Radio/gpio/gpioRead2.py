@@ -29,38 +29,42 @@ GPIO.setup(27, GPIO.OUT)
 GPIO.setup(22, GPIO.OUT)
 GPIO.setup(9, GPIO.OUT)
 GPIO.setup(3, GPIO.OUT)
+try:
+        while True:
+        if (GPIO.input(23) == GPIO.HIGH):
+            print("Pin 23 button is pressed")
+        if (GPIO.input(24) == GPIO.HIGH):
+            print("Pin 24 button is pressed")
+        if (GPIO.input(25) == GPIO.HIGH):
+            print("Pin 25 button is pressed")
+        if (GPIO.input(12) == GPIO.HIGH):
+            print("Pin 12 button is pressed")
+        if (GPIO.input(9) == GPIO.HIGH):
+            print("Pin 9 button is pressed")
+        if (GPIO.input(11) == GPIO.HIGH):
+            print("Pin 11 button is pressed")
+        if (GPIO.input(26) == GPIO.HIGH):
+            print("Pin 26 button is pressed")
+        if (GPIO.input(7) == GPIO.HIGH):
+            print("Pin 7 button is pressed")
+        if (GPIO.input(8) == GPIO.HIGH):
+            print("Pin 8 is pressed")
+        if (GPIO.input(13) == GPIO.HIGH):
+            print("Pin 13 is pressed")
+        if (GPIO.input(9) == GPIO.HIGH):
+            print("Pin 9 button is pressed")
+        if (GPIO.input(22) == GPIO.HIGH):
+            print("Pin 22 button is pressed")
+        if (GPIO.input(27) == GPIO.HIGH):
+            print("Pin 27 is pressed")
+        if (GPIO.input(17) == GPIO.HIGH):
+            print("Pin 17 is pressed")
+        #if (GPIO.input(3) == GPIO.LOW):
+        #    print("Pin 3 is LOOOOW")
+        if (GPIO.input(3) == GPIO.HIGH):
+            print("Pin 3 is pressed")
+        time.sleep(0.01)
 
-while True:
-    if (GPIO.input(23) == GPIO.HIGH):
-        print("Pin 23 button is pressed")
-    if (GPIO.input(24) == GPIO.HIGH):
-        print("Pin 24 button is pressed")
-    if (GPIO.input(25) == GPIO.HIGH):
-        print("Pin 25 button is pressed")
-    if (GPIO.input(12) == GPIO.HIGH):
-        print("Pin 12 button is pressed")
-    if (GPIO.input(9) == GPIO.HIGH):
-        print("Pin 9 button is pressed")
-    if (GPIO.input(11) == GPIO.HIGH):
-        print("Pin 11 button is pressed")
-    if (GPIO.input(26) == GPIO.HIGH):
-        print("Pin 26 button is pressed")
-    if (GPIO.input(7) == GPIO.HIGH):
-        print("Pin 7 button is pressed")
-    if (GPIO.input(8) == GPIO.HIGH):
-        print("Pin 8 is pressed")
-    if (GPIO.input(13) == GPIO.HIGH):
-        print("Pin 13 is pressed")
-    if (GPIO.input(9) == GPIO.HIGH):
-        print("Pin 9 button is pressed")
-    if (GPIO.input(22) == GPIO.HIGH):
-        print("Pin 22 button is pressed")
-    if (GPIO.input(27) == GPIO.HIGH):
-        print("Pin 27 is pressed")
-    if (GPIO.input(17) == GPIO.HIGH):
-        print("Pin 17 is pressed")
-    #if (GPIO.input(3) == GPIO.LOW):
-    #    print("Pin 3 is LOOOOW")
-    if (GPIO.input(3) == GPIO.HIGH):
-        print("Pin 3 is pressed")
-    time.sleep(0.01)
+except KeyboardInterrupt:
+    print("Bye Bye")
+    GPIO.cleanup()
