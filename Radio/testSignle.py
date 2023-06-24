@@ -11,7 +11,7 @@ media.get_mrl()
 player.set_media(media)
 player.play()
 print("start")
-player.audio_set_volume(15)
+player.audio_set_volume(30)
 time.sleep(50)
 
 print(f"preamp: {equalizer.get_preamp()}")
