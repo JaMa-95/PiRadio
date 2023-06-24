@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     radioThread = Thread(target=radio.run)
     collectorThread = Thread(target=collector.run)
-    shutdownThread = Thread(shutdownPin.run)
+    shutdownThread = Thread(target=shutdownPin.run)
     ledThread = Thread(target=ledStrip.run)
 
     shutdownThread.start()
