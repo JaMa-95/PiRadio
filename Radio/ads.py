@@ -30,6 +30,7 @@ class AdsSingle:
     def __init__(self, pin):
         i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
         # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
+        # TODO: make check for i2c device not found ValueError
         self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
         self.RATE = 860
 
@@ -109,7 +110,7 @@ class AdsSingle:
         for i in range(num_values):
             values.append(self.chan.value)
 
-        # delete min man values
+        #  delete min man values
         for _ in range(10):
             for _ in range(int(num_values/10)):
                 values.remove(max(values))

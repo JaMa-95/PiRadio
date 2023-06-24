@@ -68,7 +68,13 @@ class AdsSingle:
         return mean(values)
 
 if __name__ == "__main__":
-    adsO = AdsSingle(3)
+    adsO = AdsSingle(0)
+    ads1 = AdsSingle(1)
+    ads2 = AdsSingle(2)
+    ads3 = AdsSingle(3)
     while True:
         adsO.get_value_smoothed()
+        ads1.get_value_smoothed()
+        ads2.get_value_smoothed()
+        ads3.get_value_smoothed()
         time.sleep(1)
