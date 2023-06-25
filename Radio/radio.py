@@ -357,7 +357,7 @@ class Radio:
 
     def set_treble(self, treble):
         print(f"value: {treble}")
-        treble = int(-(treble - self.treble_max) / (self.treble_max - self.treble_min) * 40) - 20
+        treble = int((treble - self.treble_max) / (self.treble_max - self.treble_min) * 40) - 20
         print(f"treble: {treble}")
         if treble < 0:
             treble = 0
