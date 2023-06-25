@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 from db.db import Database
 
 
+# BUG: This makes i2c non working
 class ShutdownGpio:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)

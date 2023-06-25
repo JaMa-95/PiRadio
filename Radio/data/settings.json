@@ -1,7 +1,7 @@
 {
   "volume": {
     "min": 0,
-    "max": 26400,
+    "max": 23500,
     "on": true,
     "pin": 3
   },
