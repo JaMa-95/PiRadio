@@ -21,7 +21,6 @@ class AudioPlayer(Subscriber):
 
     def update(self):
         content = self.publisher.get_content()
-        print(f"content: {content}")
         if type(content) == RadioFrequency:
             self.play(content)
         elif content == "stop":
@@ -47,7 +46,6 @@ class AudioPlayer(Subscriber):
         self.player.play()
 
     def set_volume(self, volume):
-        print(f"set volume {volume}")
         if self.player:
             self.player.audio_set_volume(volume)
         self.volume = volume
