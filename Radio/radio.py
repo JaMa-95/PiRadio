@@ -134,6 +134,8 @@ class Radio:
         return self.__content
 
     def publish(self, data):
+        
+        print(f"publish: {data}")
         self.add_content(data)
         self.update_subscribers()
 
@@ -375,7 +377,6 @@ class Radio:
         self.send_bass(bass)
 
     def send_volume(self, volume):
-        print(f"pub colume: {volume}")
         if self.speakers.play_radio:
             self.publish(volume)
         if self.mqtt:
