@@ -356,9 +356,7 @@ class Radio:
         self.send_volume(volume)
 
     def set_treble(self, treble):
-        print(f"value: {treble}")
         treble = -(int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20)
-        print(f"treble: {treble}")
         if treble < -20:
             treble = -20
         elif treble > 20:
@@ -367,9 +365,9 @@ class Radio:
         self.send_treble(treble)
 
     def set_bass(self, bass):
-        # print(f"value: {bass}")
+        print(f"value: {bass}")
         bass = int(-(bass - self.bass_min) / (self.bass_min - self.bass_max) * 40) - 20
-        # print(f"bass: {bass}")
+        print(f"bass: {bass}")
         if bass < 0:
             bass = 0
         elif bass > 100:
