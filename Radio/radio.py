@@ -344,12 +344,11 @@ class Radio:
         # print(f"VOLUME A: {volume}")
         print(f"value: {volume}")
         volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
-        print(f"VOLUME: {volume}")
-        # volume = int(0.00606 * volume - 63.63)
         if volume < 0:
             volume = 0
         elif volume > 100:
             volume = 100
+        print(f"VOLUME: {volume}")
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
