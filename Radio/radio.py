@@ -78,6 +78,7 @@ class Radio:
         self.ledStrip = LedStrip()
         self.db = Database()
 
+        self.volume_old = 0
         self.volume_min = 0
         self.volume_max = 0
         self.volume_on = False
@@ -345,12 +346,16 @@ class Radio:
     def set_volume(self, volume):
         # print(f"VOLUME A: {volume}")
         print(f"value: {volume}")
-        volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
+        if 1250 < volume < 1350:
+            # somehow after 24000 poti switches to 1250 till 1350
+            volume = self.volume_old
+        else:
+            volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
         if volume < 0:
             volume = 0
         elif volume > 100:
             volume = 100
-        print(f"VOLUME: {volume}")
+        self.volume_old = volume
         self.db.replace_volume(volume)
         self.send_volume(volume)
 
