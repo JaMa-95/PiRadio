@@ -135,8 +135,6 @@ class Radio:
         return self.__content
 
     def publish(self, data):
-
-        print(f"publish: {data}")
         self.add_content(data)
         self.update_subscribers()
 
@@ -344,8 +342,6 @@ class Radio:
                 return None, None
 
     def set_volume(self, volume):
-        # print(f"VOLUME A: {volume}")
-        print(f"value: {volume}")
         if 1250 < volume < 1400:
             # somehow after 24000 poti switches to 1250 till 1350
             volume = self.volume_old
@@ -361,7 +357,7 @@ class Radio:
 
     def set_treble(self, treble):
         # print(f"value: {treble}")
-        treble = int(-(treble - self.treble_max) / (self.treble_max - self.treble_min) * 100)
+        treble = int(-(treble - self.treble_max) / (self.treble_max - self.treble_min) * 40) - 20
         # print(f"treble: {treble}")
         if treble < 0:
             treble = 0
@@ -372,7 +368,7 @@ class Radio:
 
     def set_bass(self, bass):
         # print(f"value: {bass}")
-        bass = int(-(bass - self.bass_min) / (self.bass_min - self.bass_max) * 100)
+        bass = int(-(bass - self.bass_min) / (self.bass_min - self.bass_max) * 40) - 20
         # print(f"bass: {bass}")
         if bass < 0:
             bass = 0

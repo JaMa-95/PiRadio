@@ -29,9 +29,9 @@ class AudioPlayer(Subscriber):
             if "volume" in content:
                 self.set_volume(int(content.strip("volume:")))
             elif "bass" in content:
-                pass
+                self.set_bass(int(content.strip("bass:")))
             elif "treble" in content:
-                pass
+                self.set_treble(int(content.strip("treble:")))
         else:
             print("ERROR")
 
@@ -51,7 +51,6 @@ class AudioPlayer(Subscriber):
         self.player.play()
 
     def set_volume(self, volume):
-        print(f"set volume: {volume}")
         if self.player:
             self.player.audio_set_volume(volume)
         self.volume = volume
