@@ -357,12 +357,12 @@ class Radio:
 
     def set_treble(self, treble):
         print(f"value: {treble}")
-        treble = int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20
+        treble = -int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20
         print(f"treble: {treble}")
         if treble < 0:
             treble = 0
-        elif treble > 100:
-            treble = 100
+        elif treble > 20:
+            treble = 20
         self.db.replace_treble(treble)
         self.send_treble(treble)
 
