@@ -27,7 +27,7 @@ class AudioPlayer(Subscriber):
             self.stop()
         elif isinstance(content, str):
             if "volume" in content:
-                self.set_volume(content)
+                self.set_volume(int(content.strip("volume:")))
             elif "bass" in content:
                 pass
             elif "treble" in content:

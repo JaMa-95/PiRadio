@@ -378,21 +378,21 @@ class Radio:
 
     def send_volume(self, volume):
         if self.speakers.play_radio:
-            self.publish(f"volume: {volume}")
+            self.publish(f"volume:{volume}")
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_volume(volume)
 
     def send_bass(self, bass):
         if self.speakers.play_radio:
-            self.publish(f"bass: {bass}")
+            self.publish(f"bass:{bass}")
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_volume(bass)
 
     def send_treble(self, treble):
         if self.speakers.play_radio:
-            self.publish(f"treble: {treble}")
+            self.publish(f"treble:{treble}")
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_treble(treble)
