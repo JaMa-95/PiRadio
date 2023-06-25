@@ -346,7 +346,7 @@ class Radio:
     def set_volume(self, volume):
         # print(f"VOLUME A: {volume}")
         print(f"value: {volume}")
-        if 1250 < volume < 1350:
+        if 1250 < volume < 1400:
             # somehow after 24000 poti switches to 1250 till 1350
             volume = self.volume_old
         else:
