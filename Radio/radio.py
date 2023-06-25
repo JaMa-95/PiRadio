@@ -134,7 +134,7 @@ class Radio:
         return self.__content
 
     def publish(self, data):
-        
+
         print(f"publish: {data}")
         self.add_content(data)
         self.update_subscribers()
@@ -378,32 +378,24 @@ class Radio:
 
     def send_volume(self, volume):
         if self.speakers.play_radio:
-            self.publish(volume)
+            self.publish(f"volume: {volume}")
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_volume(volume)
 
-    def send_bass(self, volume):
+    def send_bass(self, bass):
         if self.speakers.play_radio:
-            self.publish(volume)
+            self.publish(f"bass: {bass}")
         if self.mqtt:
             if self.speakers.play_central:
-                self.broker.publish_volume(volume)
+                self.broker.publish_volume(bass)
 
     def send_treble(self, treble):
         if self.speakers.play_radio:
-            self.publish(treble)
+            self.publish(f"treble: {treble}")
         if self.mqtt:
             if self.speakers.play_central:
                 self.broker.publish_treble(treble)
-
-    def send_bass(self, bass):
-        self.bass_old = bass
-        if self.speakers.play_radio:
-            self.publish(bass)
-        if self.mqtt:
-            if self.speakers.play_central:
-                self.broker.publish_bass(bass)
 
     def get_frequency_change(self):
         changed_hardware = []

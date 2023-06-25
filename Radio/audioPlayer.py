@@ -25,8 +25,13 @@ class AudioPlayer(Subscriber):
             self.play(content)
         elif content == "stop":
             self.stop()
-        elif type(content) == int:
-            self.set_volume(content)
+        elif isinstance(content, str):
+            if "volume" in content:
+                self.set_volume(content)
+            elif "bass" in content:
+                pass
+            elif "treble" in content:
+                pass
         else:
             print("ERROR")
 
