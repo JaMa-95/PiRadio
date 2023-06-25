@@ -56,6 +56,7 @@ class AudioPlayer(Subscriber):
         self.volume = volume
 
     def set_bass(self, bass):
+        print(f"set bass: {bass}")
         self.equalizer.set_amp_at_index(bass, 0)  # 60 Hz
         self.equalizer.set_amp_at_index(bass / 2, 1)  # 170 Hz
         self.equalizer.set_amp_at_index(bass / 3, 2)  # 310 Hz
