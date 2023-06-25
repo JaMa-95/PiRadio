@@ -134,6 +134,7 @@ class Radio:
         return self.__content
 
     def publish(self, data):
+        print(f"data: {data}")
         self.add_content(data)
         self.update_subscribers()
 
