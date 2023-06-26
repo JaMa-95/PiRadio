@@ -28,7 +28,7 @@ GPIO.setup(17, GPIO.OUT)
 GPIO.setup(27, GPIO.OUT)
 GPIO.setup(22, GPIO.OUT)
 GPIO.setup(9, GPIO.OUT)
-GPIO.setup(3, GPIO.OUT)
+#GPIO.setup(3, GPIO.OUT)
 try:
     while True:
         if (GPIO.input(23) == GPIO.HIGH):
@@ -61,8 +61,8 @@ try:
             print("Pin 17 is pressed")
         #if (GPIO.input(3) == GPIO.LOW):
         #    print("Pin 3 is LOOOOW")
-        if (GPIO.input(3) == GPIO.HIGH):
-            print("Pin 3 is pressed")
+        #if (GPIO.input(3) == GPIO.HIGH):
+        #    print("Pin 3 is pressed")
         time.sleep(0.01)
 
 except KeyboardInterrupt:
