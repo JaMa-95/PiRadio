@@ -93,24 +93,26 @@ class Radio:
         self.pin_volume = None
         self.pin_bass = None
         self.pin_treble = None
+
+        self.settings: dict = None
         self.load_settings()
 
     def load_settings(self):
         with open('data/settings.json') as f:
-            settings = json.load(f)
-        self.volume_min = settings["volume"]["min"]
-        self.volume_max = settings["volume"]["max"]
-        self.volume_on = settings["volume"]["on"]
-        self.pin_volume = settings["volume"]["pin"]
-        self.bass_min = settings["bass"]["min"]
-        self.bass_max = settings["bass"]["max"]
-        self.bass_on = settings["bass"]["on"]
-        self.pin_bass = settings["bass"]["pin"]
-        self.treble_min = settings["treble"]["min"]
-        self.treble_max = settings["treble"]["max"]
-        self.treble_on = settings["treble"]["on"]
-        self.pin_treble = settings["treble"]["pin"]
-        self.pin_frequencies = settings["frequencies"]["pin"]
+            self.settings = json.load(f)
+        self.volume_min = self.settings["volume"]["min"]
+        self.volume_max = self.settings["volume"]["max"]
+        self.volume_on = self.settings["volume"]["on"]
+        self.pin_volume = self.settings["volume"]["pin"]
+        self.bass_min = self.settings["bass"]["min"]
+        self.bass_max = self.settings["bass"]["max"]
+        self.bass_on = self.settings["bass"]["on"]
+        self.pin_bass = self.settings["bass"]["pin"]
+        self.treble_min = self.settings["treble"]["min"]
+        self.treble_max = self.settings["treble"]["max"]
+        self.treble_on = self.settings["treble"]["on"]
+        self.pin_treble = self.settings["treble"]["pin"]
+        self.pin_frequencies = self.settings["frequencies"]["pin"]
 
     ####################################
 
@@ -223,16 +225,20 @@ class Radio:
             print(f"radio lock changed: {self.radio_lock}")
 
     def check_radio_on_off(self):
-        if self.radio_buttons.button_on_off.is_click() and not self.db.get_web_control_value():
-            self.on = not self.on
-            if self.on:
-                self.turn_on_radio()
-            else:
-                self.turn_off_radio()
-        elif self.db.get_web_control_value() and self.db.get_button_on_off():
+        if self.settings["buttons"]["on_off"]["active"]:
+            if self.radio_buttons.button_on_off.is_click() and not self.db.get_web_control_value():
+                self.on = not self.on
+                if self.on:
+                    self.turn_on_radio()
+                else:
+                    self.turn_off_radio()
+            elif self.db.get_web_control_value() and self.db.get_button_on_off():
+                self.on = True
+            elif self.db.get_web_control_value() and not self.db.get_button_on_off():
+                self.on = False
+        else:
             self.on = True
-        elif self.db.get_web_control_value() and not self.db.get_button_on_off():
-            self.on = False
+            self.turn_on_radio(debug=False)
 
     def check_change_speakers(self):
         if self.radio_buttons.button_on_off.double_click():
@@ -264,18 +270,21 @@ class Radio:
         print("Turn ON")
         GPIO.output(4, True)
 
-    def turn_on_radio(self):
+    def turn_on_radio(self, debug: bool = True):
         self.ledStrip.radio_off = False
-        print("Turning on Radio")
+        if debug:
+            print("Turning on Radio")
         radio_frequency, encoder_value = self.get_button_frequency()
         if radio_frequency and self.on:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
-            print("stream: ", stream)
+            if debug:
+                print("stream: ", stream)
             if stream:
                 if self.current_stream.radio_url != stream.radio_url:
                     self.start_stream(stream)
         else:
-            print("No button pressed. Playing nothing")
+            if debug:
+                print("No button pressed. Playing nothing")
 
     def turn_off_radio(self):
         self.ledStrip.radio_off = True
