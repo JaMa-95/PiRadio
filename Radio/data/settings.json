@@ -32,5 +32,9 @@
     "shutdown": {
       "pin": 3
     }
+  },
+  "frequency": {
+    "min": 0,
+    "max": 14500
   }
 }

@@ -40,17 +40,20 @@ class RadioFrequency:
 class Frequencies:
     def __init__(self):
         self.frequencies = []
+        self.min_frequency: int = 0
+        self.max_frequency: int = 0
+        self.load_settings()
 
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
-        frequency_width = int((max_value_kurz_mittel_lang - min_value) / number_frequencies)
+        frequency_width = int((self.max_frequency - self.min_frequency) / number_frequencies)
         for i in range(number_frequencies):
             if i == 0:
-                self.frequencies[i].maximum = max_value_kurz_mittel_lang
+                self.frequencies[i].maximum = self.min_frequency
             else:
                 self.frequencies[i].maximum = self.frequencies[i - 1].minimum
             if i == 0:
-                self.frequencies[i].minimum = min_value
+                self.frequencies[i].minimum = self.min_frequency
 
             self.frequencies[i].minimum = self.frequencies[i].maximum - frequency_width
 
@@ -65,6 +68,12 @@ class Frequencies:
             self.frequencies.append(
                 freq
             )
+            
+    def load_settings(self):
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        self.min_frequency = settings["frequency"]["min"]
+        self.max_frequency = settings["frequency"]["max"]
 
     @staticmethod
     def get_project_root() -> Path:
