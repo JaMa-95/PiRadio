@@ -49,13 +49,11 @@ class Frequencies:
         frequency_width = int((self.max_frequency - self.min_frequency) / number_frequencies)
         for i in range(number_frequencies):
             if i == 0:
-                self.frequencies[i].maximum = self.min_frequency
-            else:
-                self.frequencies[i].maximum = self.frequencies[i - 1].minimum
-            if i == 0:
                 self.frequencies[i].minimum = self.min_frequency
+            else:
+                self.frequencies[i].minimum = self.frequencies[i - 1].maximum + 1
 
-            self.frequencies[i].minimum = self.frequencies[i].maximum - frequency_width
+            self.frequencies[i].maximum = self.frequencies[i].minimum + frequency_width
 
     def load_from_file(self, path: Path = None):
         if not path:
