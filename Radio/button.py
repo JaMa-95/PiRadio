@@ -34,9 +34,9 @@ class ButtonRaspi:
     def load_from_settings(self):
         with open('data/settings.json') as f:
             settings = json.load(f)
-        self.pin = settings["button"][self.name]["pin"]
-        self.reversed = settings["button"][self.name]["reversed"]
-        self.active = settings["button"][self.name]["active"]
+        self.pin = settings["buttons"][self.name]["pin"]
+        self.reversed = settings["buttons"][self.name]["reversed"]
+        self.active = settings["buttons"][self.name]["active"]
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
