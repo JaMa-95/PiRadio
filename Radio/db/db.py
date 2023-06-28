@@ -27,6 +27,7 @@ class Database(Singleton):
         self.lock = threading.Lock()
 
         self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
+                           "buttonTa"
                            "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "bass", "treble", "stream",
                            "ads_pin_0", "ads_pin_1", "ads_pin_2", "ads_pin_3", "shutdown"]
 
@@ -56,6 +57,7 @@ class Database(Singleton):
         self.insert_button_kurz(0)
         self.insert_button_on_off(0)
         self.insert_button_spr_mus(0)
+        self.insert_button_ta(0)
         self.insert_ads_pin_value(0, 0)
         self.insert_ads_pin_value(0, 1)
         self.insert_ads_pin_value(0, 2)
@@ -95,6 +97,11 @@ class Database(Singleton):
     def replace_button_on_off(self, value: int):
         with self.lock:
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonOnOff'")
+            self.con.commit()
+
+    def replace_button_ta(self, value: int):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonTa'")
             self.con.commit()
 
     def replace_button_lang(self, value: int):
@@ -182,6 +189,11 @@ class Database(Singleton):
     def insert_button_on_off(self, value: int):
         with self.lock:
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonOnOff", value))
+            self.con.commit()
+
+    def insert_button_ta(self, value: int):
+        with self.lock:
+            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonTa", value))
             self.con.commit()
 
     def insert_button_lang(self, value: int):
@@ -291,6 +303,12 @@ class Database(Singleton):
     def get_button_on_off(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
+            value = res.fetchall()
+            return value[0][1]
+
+    def get_button_ta(self):
+        with self.lock:
+            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonTa'")
             value = res.fetchall()
             return value[0][1]
 

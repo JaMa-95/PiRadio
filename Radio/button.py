@@ -88,12 +88,13 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi(23, True)
+    button_on_off: ButtonRaspi = ButtonRaspi(0, True)
     button_lang: ButtonRaspi = ButtonRaspi(24)
     button_mittel: ButtonRaspi = ButtonRaspi(25)
     button_kurz: ButtonRaspi = ButtonRaspi(9)
     button_ukw: ButtonRaspi = ButtonRaspi(7)
     button_spr: ButtonRaspi = ButtonRaspi(8)
+    button_ta: ButtonRaspi = ButtonRaspi(23, True)
 
     db = Database()
 
@@ -105,6 +106,7 @@ class RadioButtonsRaspi:
         self.db.replace_button_mittel(self.button_mittel.state)
         self.db.replace_button_lang(self.button_lang.state)
         self.db.replace_button_on_off(self.button_on_off.state)
+        self.db.replace_button_ta(self.button_ta.state)
 
     def set_value(self):
         self.button_on_off.set_value()
@@ -113,6 +115,7 @@ class RadioButtonsRaspi:
         self.button_kurz.set_value()
         self.button_ukw.set_value()
         self.button_spr.set_value()
+        self.button_ta.set_value()
         return True
 
     def get_pressed_button(self):
@@ -134,3 +137,6 @@ class RadioButtonsRaspi:
             state = self.button_spr.state
             if state:
                 return "buttonSprMus"
+            state = self.button_ta.state
+            if state:
+                return "buttonTa"

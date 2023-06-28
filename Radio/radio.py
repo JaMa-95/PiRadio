@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
 from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
-    SprFrequencies
+    SprFrequencies, TaFrequencies
 from button import RadioButtonsRaspi
 from db.db import Database
 from raspberry import Raspberry
@@ -64,9 +64,11 @@ class Radio:
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                                 "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
+                                "buttonTa": None,
                                 "posUKW": None, "treble": None, "bass": None}
         self.old_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                             "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
+                            "buttonTa": None,
                             "posUKW": None, "treble": None, "bass": None}
         self.currentCommandString = None
         self.broker: MqttBroker = None
@@ -190,6 +192,8 @@ class Radio:
             changed_hardware.append("buttonKurz")
         if self.current_command["buttonUKW"] != self.db.get_button_ukw():
             changed_hardware.append("buttonUKW")
+        if self.current_command["buttonTa"] != self.db.get_button_ukw():
+            changed_hardware.append("buttonTa")
         if self.current_command["buttonSprMus"] != self.db.get_button_spr_mus():
             changed_hardware.append("buttonSprMus")
         if self.current_command["volume"] != self.db.get_volume():
@@ -207,6 +211,7 @@ class Radio:
         self.current_command["buttonKurz"] = self.db.get_button_kurz()
         self.current_command["buttonUKW"] = self.db.get_button_ukw()
         self.current_command["buttonSprMus"] = self.db.get_button_spr_mus()
+        self.current_command["buttonTa"] = self.db.get_button_ta()
         self.current_command["volume"] = self.db.get_poti_value_web()
         self.current_command["bass"] = self.db.get_bass_value_web()
         self.current_command["treble"] = self.db.get_treble_value_web()
@@ -333,6 +338,8 @@ class Radio:
                 return KurzFrequencies(), self.current_command["posLangKurzMittel"]
             elif self.radio_buttons.button_ukw.state:
                 return UKWFrequencies(), self.current_command["posLangKurzMittel"] # self.current_command["posUKW"]
+            elif self.radio_buttons.button_ta.state:
+                return TaFrequencies(), self.current_command["posLangKurzMittel"]
             # elif self.radio_buttons.button_spr.state:
             #     return SprFrequencies(), self.current_command["posUKW"]
             else:
@@ -345,6 +352,8 @@ class Radio:
                 return MittelFrequencies(), self.current_command["posLangKurzMittel"]
             elif self.db.get_button_kurz():
                 return KurzFrequencies(), self.current_command["posLangKurzMittel"]
+            elif self.db.get_button_ta():
+                return TaFrequencies(), self.current_command["posLangKurzMittel"]
             elif self.db.get_button_ukw():
                 return UKWFrequencies(), self.current_command["posUKW"]
             elif self.db.get_button_spr_mus():

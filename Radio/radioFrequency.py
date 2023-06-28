@@ -132,6 +132,17 @@ class SprFrequencies(Frequencies):
         self.init_min_max()
 
 
+class TaFrequencies(Frequencies):
+    # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
+    def __init__(self):
+        self.frequencies = []
+        self.min_frequency: int = 0
+        self.max_frequency: int = 0
+        self.load_settings()
+        self.load_from_file(self.get_project_root() / "Radio/data/freq_ta.json")
+        self.init_min_max()
+
+
 if __name__ == "__main__":
     kurz = KurzFrequencies()
     lang = LangFrequencies()
