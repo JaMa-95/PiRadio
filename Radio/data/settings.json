@@ -29,12 +29,20 @@
     "OnOff": {
       "pin": 0,
       "reversed": true,
-      "active": false
+      "active": false,
+      "is_frequency_lock": false,
+      "is_on_off": true,
+      "frequency": {
+        "pos": null,
+        "musicList": null
+      }
     },
     "Lang": {
       "pin": 24,
       "reversed": false,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
@@ -44,6 +52,8 @@
       "pin": 25,
       "reversed": false,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
@@ -53,6 +63,8 @@
       "pin": 9,
       "reversed": false,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_kurz.json"
@@ -62,6 +74,8 @@
       "pin": 7,
       "reversed": false,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ukw.json"
@@ -71,6 +85,8 @@
       "pin": 8,
       "reversed": false,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_spr.json"
@@ -80,6 +96,8 @@
       "pin": 23,
       "reversed": true,
       "active": true,
+      "is_frequency_lock": false,
+      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ta.json"

@@ -182,36 +182,14 @@ class Radio:
 
     def get_command_changed(self):
         changed_hardware = []
-        if self.current_command["buttonOnOff"] != self.db.get_button_on_off():
-            changed_hardware.append("buttonOnOff")
-        if self.current_command["buttonLang"] != self.db.get_button_lang():
-            changed_hardware.append("buttonLang")
-        if self.current_command["buttonMittel"] != self.db.get_button_mittel():
-            changed_hardware.append("buttonMittel")
-        if self.current_command["buttonKurz"] != self.db.get_button_kurz():
-            changed_hardware.append("buttonKurz")
-        if self.current_command["buttonUKW"] != self.db.get_button_ukw():
-            changed_hardware.append("buttonUKW")
-        if self.current_command["buttonTa"] != self.db.get_button_ukw():
-            changed_hardware.append("buttonTa")
-        if self.current_command["buttonSprMus"] != self.db.get_button_spr_mus():
-            changed_hardware.append("buttonSprMus")
-        if self.current_command["volume"] != self.db.get_volume():
-            changed_hardware.append("volume")
-        if self.current_command["posLangKurzMittel"] != self.db.get_pos_lang_mittel_kurz():
-            changed_hardware.append("posLangKurzMittel")
-        if self.current_command["posUKW"] != self.db.get_pos_ukw():
-            changed_hardware.append("posUKW")
+        for button in self.radio_buttons.buttons:
+            if self.current_command[f"button{button.name}"] != self.db.get_button(f"button{button.name}"):
+                changed_hardware.append(f"button{button.name}")
         return changed_hardware
 
     def get_command_from_db(self):
-        self.current_command["buttonOnOff"] = self.db.get_button_on_off()
-        self.current_command["buttonLang"] = self.db.get_button_lang()
-        self.current_command["buttonMittel"] = self.db.get_button_mittel()
-        self.current_command["buttonKurz"] = self.db.get_button_kurz()
-        self.current_command["buttonUKW"] = self.db.get_button_ukw()
-        self.current_command["buttonSprMus"] = self.db.get_button_spr_mus()
-        self.current_command["buttonTa"] = self.db.get_button_ta()
+        for button in self.radio_buttons.buttons:
+            self.current_command[f"button{button.name}"] = self.db.get_button(f"button{button.name}")
         self.current_command["volume"] = self.db.get_poti_value_web()
         self.current_command["bass"] = self.db.get_bass_value_web()
         self.current_command["treble"] = self.db.get_treble_value_web()
@@ -225,13 +203,14 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_lock(self):
-        if self.radio_buttons.button_spr.is_click():
-            self.radio_lock = not self.radio_lock
-            print(f"radio lock changed: {self.radio_lock}")
+        for button in self.radio_buttons.frequency_lock_buttons:
+            if button.is_click():
+                self.radio_lock = not self.radio_lock
+                print(f"radio lock changed: {self.radio_lock}")
 
     def check_radio_on_off(self):
-        if self.settings["buttons"]["on_off"]["active"]:
-            if self.radio_buttons.button_on_off.is_click() and not self.db.get_web_control_value():
+        if self.radio_buttons.on_off_button.active:
+            if self.radio_buttons.on_off_button.is_click() and not self.db.get_web_control_value():
                 self.on = not self.on
                 if self.on:
                     self.turn_on_radio()
@@ -242,6 +221,7 @@ class Radio:
             elif self.db.get_web_control_value() and not self.db.get_button_on_off():
                 self.on = False
         else:
+            # TODO:Optimize so its not executed every round
             self.on = True
             self.turn_on_radio(debug=False)
 

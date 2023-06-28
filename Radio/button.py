@@ -16,6 +16,8 @@ class ButtonRaspi:
         self.reversed: bool = False
         self.frequency_pos: str = ""
         self.frequency_list: Frequencies = None
+        self.is_frequency_lock: bool = False
+        self.is_on_off_button: bool = False
 
         self.value: int = 99
         self.value_old: int = 0
@@ -44,6 +46,8 @@ class ButtonRaspi:
         self.active = settings["buttons"][self.name]["active"]
         self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
         self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
+        self.is_on_off_button = settings["buttons"][self.name]["on_off"]
+        self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
@@ -117,28 +121,22 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi("OnOff")
-    button_lang: ButtonRaspi = ButtonRaspi("Lang")
-    button_mittel: ButtonRaspi = ButtonRaspi("Mittel")
-    button_kurz: ButtonRaspi = ButtonRaspi("Kurz")
-    button_ukw: ButtonRaspi = ButtonRaspi("UKW")
-    button_spr: ButtonRaspi = ButtonRaspi("SPR")
-    button_ta: ButtonRaspi = ButtonRaspi("Ta")
-
+    on_off_button: ButtonRaspi = None
+    frequency_lock_buttons: List[ButtonRaspi] = None
     buttons: List[ButtonRaspi] = None
 
     db = Database()
 
     def __post_init__(self):
-        self.buttons: list = [
-            self.button_on_off,
-            self.button_lang,
-            self.button_mittel,
-            self.button_kurz,
-            self.button_ukw,
-            self.button_spr,
-            self.button_ta
-        ]
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        for name, button_settings in settings["buttons"].items():
+            if button_settings["is_on_off"]:
+                self.on_off_button = ButtonRaspi(name)
+            elif button_settings["is_frequency_lock"]:
+                self.frequency_lock_buttons.append(ButtonRaspi(name))
+            else:
+                self.buttons.append(ButtonRaspi(name))
 
     def set_values_to_db(self):
         self.set_value()

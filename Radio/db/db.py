@@ -305,6 +305,12 @@ class Database(Singleton):
             value = res.fetchall()
             return value[0][1]
 
+    def get_button(self, name: str):
+        with self.lock:
+            res = self.cur.execute(f"SELECT * FROM radio WHERE name='{name}'")
+            value = res.fetchall()
+            return value[0][1]
+
     def get_button_on_off(self):
         with self.lock:
             res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
