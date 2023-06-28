@@ -1,24 +1,24 @@
 import datetime
+import json
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
 from db.db import Database
 
 
 class ButtonRaspi:
-    def __init__(self, button_number: int = 0, reversed_: bool = False, long_click_threshold: int = 50):
-        # BCM-Nummerierung verwenden
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(button_number, GPIO.OUT)
-        self.button_number = button_number
+    def __init__(self, name: str = ""):
+        self.name: str = name
+        self.pin: int = 0
+        self.active: bool = True
+        self.reversed: bool = False
+
         self.value: int = 99
         self.value_old: int = 0
         self.value_olds = []
         self.value_old_index = 0
         self.indexer = 0
 
-        self.reversed = reversed_
-
-        self.long_threshold: int = long_click_threshold
+        self.long_threshold: int = 50
 
         self.last_click: list = [None, None]
         self.last_click_index: int = 0
@@ -28,11 +28,33 @@ class ButtonRaspi:
 
         self.state = False
 
+        self.load_from_settings()
+        self.setup_pin()
+
+    def load_from_settings(self):
+        with open('data/settings.json') as f:
+            settings = json.load(f)
+        self.pin = settings["button"][self.name]["pin"]
+        self.reversed = settings["button"][self.name]["reversed"]
+        self.active = settings["button"][self.name]["active"]
+
+    def setup_pin(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.OUT)
+
+    def set_pin(self, pin: int):
+        GPIO.setup(self.pin, GPIO.IN)
+        GPIO.setup(pin, GPIO.OUT)
+        self.pin = pin
+
+    def set_reversed(self, reversed_: bool = False):
+        self.reversed = reversed_
+
     def is_click(self):
         # TODO: check if indexer needed
         if not self.on_off_wait and self.indexer > 5:
             self.on_off_wait = True
-            self.state = GPIO.input(self.button_number)
+            self.state = GPIO.input(self.pin)
             self.set_is_clicked()
             return True
         return False
@@ -62,7 +84,7 @@ class ButtonRaspi:
         """
         :return: True if changed
         """
-        self.state = GPIO.input(self.button_number)
+        self.state = GPIO.input(self.pin)
         if self.reversed:
             self.state = not self.state
         self.value_olds.append(self.state)
@@ -88,15 +110,28 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi(0, True)
-    button_lang: ButtonRaspi = ButtonRaspi(24)
-    button_mittel: ButtonRaspi = ButtonRaspi(25)
-    button_kurz: ButtonRaspi = ButtonRaspi(9)
-    button_ukw: ButtonRaspi = ButtonRaspi(7)
-    button_spr: ButtonRaspi = ButtonRaspi(8)
-    button_ta: ButtonRaspi = ButtonRaspi(23, True)
+    button_on_off: ButtonRaspi = ButtonRaspi("on_off")
+    button_lang: ButtonRaspi = ButtonRaspi("lang")
+    button_mittel: ButtonRaspi = ButtonRaspi("mittel")
+    button_kurz: ButtonRaspi = ButtonRaspi("kurz")
+    button_ukw: ButtonRaspi = ButtonRaspi("ukw")
+    button_spr: ButtonRaspi = ButtonRaspi("spr")
+    button_ta: ButtonRaspi = ButtonRaspi("ta")
+
+    buttons: list = None
 
     db = Database()
+
+    def __post_init__(self):
+        self.buttons: list = [
+            self.button_on_off,
+            self.button_lang,
+            self.button_mittel,
+            self.button_kurz,
+            self.button_ukw,
+            self.button_spr,
+            self.button_ta
+        ]
 
     def set_values_to_db(self):
         self.set_value()
@@ -109,13 +144,8 @@ class RadioButtonsRaspi:
         self.db.replace_button_ta(self.button_ta.state)
 
     def set_value(self):
-        self.button_on_off.set_value()
-        self.button_lang.set_value()
-        self.button_mittel.set_value()
-        self.button_kurz.set_value()
-        self.button_ukw.set_value()
-        self.button_spr.set_value()
-        self.button_ta.set_value()
+        for button in self.buttons:
+            button.set_value()
         return True
 
     def get_pressed_button(self):

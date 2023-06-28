@@ -29,6 +29,36 @@
       "reversed": true,
       "active": false
     },
+    "lang": {
+      "pin": 24,
+      "reversed": false,
+      "active": true
+    },
+    "mittel": {
+      "pin": 25,
+      "reversed": false,
+      "active": true
+    },
+    "kurz": {
+      "pin": 9,
+      "reversed": false,
+      "active": true
+    },
+    "ukw": {
+      "pin": 7,
+      "reversed": false,
+      "active": true
+    },
+    "spr": {
+      "pin": 8,
+      "reversed": false,
+      "active": true
+    },
+    "ta": {
+      "pin": 23,
+      "reversed": true,
+      "active": true
+    },
     "shutdown": {
       "pin": 3
     }
