@@ -64,7 +64,7 @@ class ButtonRaspi:
         """
         self.state = GPIO.input(self.button_number)
         if self.reversed:
-            self.state != self.state
+            self.state = not self.state
         self.value_olds.append(self.state)
         self.value_old = self.value
         self.value = self.state
