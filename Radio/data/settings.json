@@ -6,10 +6,12 @@
     "pin": 3
   },
   "frequencies": {
-    "min": 610,
-    "max": 17150,
-    "on": true,
-    "pin": 1
+    "posLangKurzMittel": {
+      "min": 610,
+      "max": 17150,
+      "on": true,
+      "pin": 1
+    }
   },
   "bass": {
     "min": 0,
@@ -24,40 +26,64 @@
     "pin": 2
   },
   "buttons": {
-    "on_off": {
+    "OnOff": {
       "pin": 0,
       "reversed": true,
       "active": false
     },
-    "lang": {
+    "Lang": {
       "pin": 24,
       "reversed": false,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_mittel.json"
+      }
     },
-    "mittel": {
+    "Mittel": {
       "pin": 25,
       "reversed": false,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_mittel.json"
+      }
     },
-    "kurz": {
+    "Kurz": {
       "pin": 9,
       "reversed": false,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_kurz.json"
+      }
     },
-    "ukw": {
+    "UKW": {
       "pin": 7,
       "reversed": false,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ukw.json"
+      }
     },
-    "spr": {
+    "SPR": {
       "pin": 8,
       "reversed": false,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_spr.json"
+      }
     },
-    "ta": {
+    "Ta": {
       "pin": 23,
       "reversed": true,
-      "active": true
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ta.json"
+      }
     },
     "shutdown": {
       "pin": 3

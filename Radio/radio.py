@@ -330,37 +330,15 @@ class Radio:
     def get_button_frequency(self):
         # TODO: do i need change button change, when here button state is retrieved again
         if not self.db.get_web_control_value():
-            if self.radio_buttons.button_lang.state:
-                return LangFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.radio_buttons.button_mittel.state:
-                return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.radio_buttons.button_kurz.state:
-                return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.radio_buttons.button_ukw.state:
-                return UKWFrequencies(), self.current_command["posLangKurzMittel"] # self.current_command["posUKW"]
-            elif self.radio_buttons.button_ta.state:
-                return TaFrequencies(), self.current_command["posLangKurzMittel"]
-            # elif self.radio_buttons.button_spr.state:
-            #     return SprFrequencies(), self.current_command["posUKW"]
-            else:
-                # print("using NONE")
-                return None, None
+            for button in self.radio_buttons.buttons:
+                if button.state:
+                    return button.frequency_list, self.current_command[button.frequency_pos]
+            return None, None
         else:
-            if self.db.get_button_lang():
-                return LangFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.db.get_button_mittel():
-                return MittelFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.db.get_button_kurz():
-                return KurzFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.db.get_button_ta():
-                return TaFrequencies(), self.current_command["posLangKurzMittel"]
-            elif self.db.get_button_ukw():
-                return UKWFrequencies(), self.current_command["posUKW"]
-            elif self.db.get_button_spr_mus():
-                return SprFrequencies(), self.current_command["posUKW"]
-            else:
-                # print("using NONE")
-                return None, None
+            for button in self.radio_buttons.buttons:
+                if button.state:
+                    return button.frequency_list, self.current_command[button.frequency_pos]
+            return None, None
 
     def set_volume(self, volume):
         if 1250 < volume < 1400:
@@ -445,57 +423,14 @@ class Radio:
     def get_changed_buttons(self):
         self.radio_buttons.set_value()
         changed_hardware = []
-        state = self.radio_buttons.button_on_off.state
-        if self.current_command["buttonOnOff"] != state:
-            self.ledData.on_button_on = state
-            self.ledData.off_button_on = not state
-            print(f"BUTTON ON OFF CHANGED {state}")
-            self.current_command["buttonOnOff"] = state
-            changed_hardware.append("buttonOnOff")
-        state = self.radio_buttons.button_lang.state
-        if self.current_command["buttonLang"] != state:
-            self.ledData.on_button_lang = state
-            self.ledData.off_button_lang = not state
-            print(f"BUTTON LANG CHANGED: {state}")
-            self.current_command["buttonLang"] = state
-            changed_hardware.append("buttonLang")
-        state = self.radio_buttons.button_mittel.state
-        if self.current_command["buttonMittel"] != state:
-            self.ledData.on_button_mittel = state
-            self.ledData.off_button_mittel = not state
-            print(f"BUTTON MITTEL CHANGED: {state}")
-            self.current_command["buttonMittel"] = state
-            changed_hardware.append("buttonMittel")
-        state = self.radio_buttons.button_kurz.state
-        if self.current_command["buttonKurz"] != state:
-            self.ledData.on_button_kurz = state
-            self.ledData.off_button_kurz = not state
-            print(f"BUTTON KURZ CHANGED: {state}")
-            self.current_command["buttonKurz"] = state
-            changed_hardware.append("buttonKurz")
-        state = self.radio_buttons.button_ukw.state
-        if self.current_command["buttonUKW"] != state:
-            self.ledData.on_button_ukw = state
-            self.ledData.off_button_ukw = not state
-            print(f"BUTTON UKW CHANGED: {state}")
-            self.current_command["buttonUKW"] = state
-            changed_hardware.append("buttonUKW")
-
-        state = self.radio_buttons.button_spr.state
-        if self.current_command["buttonSprMus"] != state:
-            self.ledData.on_button_spr = state
-            self.ledData.off_button_spr = not state
-            print(f"BUTTON SPR CHANGED: {state}")
-            self.current_command["buttonSprMus"] = state
-            changed_hardware.append("buttonSprMus")
-        state = self.radio_buttons.button_ta.state
-        if self.current_command["buttonUKW"] != state:
-            # TODO: led
-            self.ledData.on_button_ukw = state
-            self.ledData.off_button_ukw = not state
-            print(f"BUTTON TA CHANGED: {state}")
-            self.current_command["buttonTa"] = state
-            changed_hardware.append("buttonUKW")
+        for button in self.radio_buttons.buttons:
+            if self.current_command[f"button{button.name}"] != button.state:
+                # TODO: Fix led data
+                # self.ledData.on_button_on = button.state
+                # self.ledData.off_button_on = not button.state
+                print(f"BUTTON {button.name} CHANGED: {button.state}")
+                self.current_command[f"button{button.name}"] = button.state
+                changed_hardware.append(f"button{button.name}")
         return changed_hardware
 
     def process_hardware_value_change(self):

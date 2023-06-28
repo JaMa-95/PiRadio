@@ -38,11 +38,13 @@ class RadioFrequency:
 
 
 class Frequencies:
-    def __init__(self):
+    def __init__(self, file_name):
         self.frequencies = []
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
+        self.load_from_file(self.get_project_root() / f"Radio/data/{file_name}")
+        self.init_min_max()
 
     def init_min_max(self):
         number_frequencies = len(self.frequencies)

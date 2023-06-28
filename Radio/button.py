@@ -1,8 +1,11 @@
 import datetime
 import json
 from dataclasses import dataclass
+from typing import List
 import RPi.GPIO as GPIO
+
 from db.db import Database
+from radioFrequency import Frequencies
 
 
 class ButtonRaspi:
@@ -11,6 +14,8 @@ class ButtonRaspi:
         self.pin: int = 0
         self.active: bool = True
         self.reversed: bool = False
+        self.frequency_pos: str = ""
+        self.frequency_list: Frequencies = None
 
         self.value: int = 99
         self.value_old: int = 0
@@ -37,6 +42,8 @@ class ButtonRaspi:
         self.pin = settings["buttons"][self.name]["pin"]
         self.reversed = settings["buttons"][self.name]["reversed"]
         self.active = settings["buttons"][self.name]["active"]
+        self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
+        self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
@@ -110,15 +117,15 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    button_on_off: ButtonRaspi = ButtonRaspi("on_off")
-    button_lang: ButtonRaspi = ButtonRaspi("lang")
-    button_mittel: ButtonRaspi = ButtonRaspi("mittel")
-    button_kurz: ButtonRaspi = ButtonRaspi("kurz")
-    button_ukw: ButtonRaspi = ButtonRaspi("ukw")
-    button_spr: ButtonRaspi = ButtonRaspi("spr")
-    button_ta: ButtonRaspi = ButtonRaspi("ta")
+    button_on_off: ButtonRaspi = ButtonRaspi("OnOff")
+    button_lang: ButtonRaspi = ButtonRaspi("Lang")
+    button_mittel: ButtonRaspi = ButtonRaspi("Mittel")
+    button_kurz: ButtonRaspi = ButtonRaspi("Kurz")
+    button_ukw: ButtonRaspi = ButtonRaspi("UKW")
+    button_spr: ButtonRaspi = ButtonRaspi("SPR")
+    button_ta: ButtonRaspi = ButtonRaspi("Ta")
 
-    buttons: list = None
+    buttons: List[ButtonRaspi] = None
 
     db = Database()
 
@@ -135,13 +142,9 @@ class RadioButtonsRaspi:
 
     def set_values_to_db(self):
         self.set_value()
-        self.db.replace_button_ukw(self.button_ukw.state)
-        self.db.replace_button_spr_mus(self.button_spr.state)
-        self.db.replace_button_kurz(self.button_kurz.state)
-        self.db.replace_button_mittel(self.button_mittel.state)
-        self.db.replace_button_lang(self.button_lang.state)
-        self.db.replace_button_on_off(self.button_on_off.state)
-        self.db.replace_button_ta(self.button_ta.state)
+        for button in self.buttons:
+            self.db.replace_button(name=button.name,
+                                   value=button.state)
 
     def set_value(self):
         for button in self.buttons:
@@ -150,23 +153,7 @@ class RadioButtonsRaspi:
 
     def get_pressed_button(self):
         self.set_value()
-        state_on = self.button_on_off.state
-        if state_on:
-            state = self.button_lang.state
-            if state:
-                return "buttonLang"
-            state = self.button_mittel.state
-            if state:
-                return "buttonMittel"
-            state = self.button_kurz.state
-            if state:
-                return "buttonKurz"
-            state = self.button_ukw.state
-            if state:
-                return "buttonUKW"
-            state = self.button_spr.state
-            if state:
-                return "buttonSprMus"
-            state = self.button_ta.state
-            if state:
-                return "buttonTa"
+        if self.button_on_off.state:
+            for button in self.buttons:
+                if button.state:
+                    return f"button{button.name}"

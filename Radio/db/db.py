@@ -94,6 +94,11 @@ class Database(Singleton):
             self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "stream"))
             self.con.commit()
 
+    def replace_button(self, name: str, value: int):
+        with self.lock:
+            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='{name}'")
+            self.con.commit()
+
     def replace_button_on_off(self, value: int):
         with self.lock:
             self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonOnOff'")
