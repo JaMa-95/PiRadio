@@ -44,6 +44,7 @@ sudo apt update
 sudo apt upgrade
 sudo apt install python3-pip
 sudo apt install pulseaudio   # for vlc
+sudo apt install pulseaudio-module-bluetooth 
 
 sudo pip install adafruit-circuitpython-ads1x15
 sudo pip install paho-mqtt
