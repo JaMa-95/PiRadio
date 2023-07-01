@@ -5,6 +5,7 @@ from time import sleep
 from Radio.ads1115.ads import AdsObject
 from Radio.gpio.button import RadioButtonsRaspi
 from Radio.db.db import Database
+from Radio.util.util import get_project_root
 
 
 class Collector:
@@ -20,7 +21,7 @@ class Collector:
         self.db = Database()
 
     def load_settings(self):
-        with open('data/settings.json') as f:
+        with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
         # TODO: Loop over frequencies
         self.pin_volume = settings["volume"]["pin"]

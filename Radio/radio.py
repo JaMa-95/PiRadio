@@ -10,6 +10,7 @@ from Radio.db.db import Database
 from Radio.raspberry import Raspberry
 from Radio.mqtt.mqttBroker import MqttBroker
 from Radio.led.ledStrip import LedStrip, LedData
+from Radio.util.util import get_project_root
 
 
 # TODO: Add web control
@@ -101,7 +102,7 @@ class Radio:
         self.load_settings()
 
     def load_settings(self):
-        with open('data/settings.json') as f:
+        with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
         self.volume_min = self.settings["volume"]["min"]
         self.volume_max = self.settings["volume"]["max"]

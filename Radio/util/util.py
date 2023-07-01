@@ -2,6 +2,7 @@
 # Observer Pattern in publisher and subscriber model.
 # ---------------------------------------------------
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 
 class Publisher:
@@ -48,3 +49,7 @@ class Singleton(object):
             cls._instance = super(Singleton, cls).__new__(cls)
             # Put any initialization here.
         return cls._instance
+
+
+def get_project_root() -> Path:
+    return Path(__file__).parent.parent
