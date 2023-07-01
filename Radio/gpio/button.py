@@ -42,7 +42,8 @@ class ButtonRaspi:
         self.setup_pin()
 
     def load_from_settings(self):
-        with open('../data/settings.json') as f:
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
             settings = json.load(f)
         self.pin = settings["buttons"][self.name]["pin"]
         self.reversed = settings["buttons"][self.name]["reversed"]
