@@ -232,7 +232,7 @@ class Radio:
             self.turn_on_radio(debug=False)
 
     def check_change_speakers(self):
-        if self.radio_buttons.button_on_off.double_click():
+        if self.radio_buttons.on_off_button.double_click():
             self.speakers.change_once()
             if not self.speakers.play_radio:
                 self.publish("stop")
