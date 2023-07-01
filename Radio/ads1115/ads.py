@@ -1,13 +1,13 @@
 import time
 
-import adafruit_ads1x15.ads1115 as ADS
 import board
 import busio
-from adafruit_ads1x15.analog_in import AnalogIn
-
-from db.db import Database
 from statistics import mean
+from adafruit_ads1x15.analog_in import AnalogIn
+import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.ads1x15 import Mode
+
+from Radio.db.db import Database
 
 
 class AdsObject:

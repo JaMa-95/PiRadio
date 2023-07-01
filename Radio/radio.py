@@ -4,13 +4,12 @@ import time
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
-from radioFrequency import RadioFrequency, KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, \
-    SprFrequencies, TaFrequencies
-from button import RadioButtonsRaspi
-from db.db import Database
-from raspberry import Raspberry
-from mqtt.mqttBroker import MqttBroker
-from led.ledStrip import LedStrip, LedData
+from Radio.radioFrequency import RadioFrequency
+from Radio.gpio.button import RadioButtonsRaspi
+from Radio.db.db import Database
+from Radio.raspberry import Raspberry
+from Radio.mqtt.mqttBroker import MqttBroker
+from Radio.led.ledStrip import LedStrip, LedData
 
 
 # TODO: Add web control
@@ -51,6 +50,8 @@ class Radio:
         self.raspberry = Raspberry()
         self.playing = False
         self.on = False
+
+        self.cycle_time: float = 0.0
 
         self.amplifier_switch_pin = 4
         GPIO.setmode(GPIO.BCM)
@@ -116,6 +117,8 @@ class Radio:
         self.pin_treble = self.settings["treble"]["pin"]
         self.pin_frequencies = self.settings["frequencies"]["pin"]
 
+        self.cycle_time = self.settings["cycle_time"]
+
     ####################################
 
     # PUB METHODS
@@ -156,6 +159,7 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
+            start = time.time()
             if not self.db.get_web_control_value():
                 self.check_radio_on_off()
                 self.check_shutdown_raspi()
@@ -166,7 +170,7 @@ class Radio:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
                     if changed_hardware:
-                        self.process_hardware_change(changed_hardware)
+                        self.process_hardware_value_change()
             else:
                 print("web control")
                 self.check_radio_on_off()
@@ -178,7 +182,8 @@ class Radio:
                         self.send_volume(self.current_command["volume"])
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
-            time.sleep(1)
+            end = time.time()
+            time.sleep(self.cycle_time - end - start)
 
     def get_command_changed(self):
         changed_hardware = []
@@ -220,8 +225,7 @@ class Radio:
                 self.on = True
             elif self.db.get_web_control_value() and not self.db.get_button_on_off():
                 self.on = False
-        else:
-            # TODO:Optimize so its not executed every round
+        elif not self.on:
             self.on = True
             self.turn_on_radio(debug=False)
 
@@ -233,17 +237,6 @@ class Radio:
             if self.mqtt:
                 if not self.speakers.play_central:
                     self.broker.publish_start_stop("0")
-
-    def process_hardware_change(self, changed_hardware_list):
-        # TODO: only set volume. rest is handled by process hardware value change
-        # mehtod can be deleted and set volume and change hardware
-        for changed_hardware in changed_hardware_list:
-            if changed_hardware in ["posLangKurzMittel", "posUKW"]:
-                pass
-                # print("------------------------------------")
-                # print(f"encoder changed {self.current_command['posLangKurzMittel']}, ")
-                #      f"{self.current_command['posUKW']}")
-            self.process_hardware_value_change()
 
     @staticmethod
     def turn_off_amplifier():

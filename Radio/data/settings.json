@@ -1,4 +1,5 @@
 {
+  "cycle_time": 0.1,
   "volume": {
     "min": 0,
     "max": 23500,
@@ -26,6 +27,7 @@
     "pin": 2
   },
   "buttons": {
+    "click_time": 0.5,
     "OnOff": {
       "pin": 0,
       "reversed": true,
@@ -35,7 +37,8 @@
       "frequency": {
         "pos": null,
         "musicList": null
-      }
+      },
+      "led": 0
     },
     "Lang": {
       "pin": 24,
@@ -46,7 +49,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
-      }
+      },
+      "led": 2
     },
     "Mittel": {
       "pin": 25,
@@ -57,7 +61,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
-      }
+      },
+      "led": 3
     },
     "Kurz": {
       "pin": 9,
@@ -68,7 +73,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_kurz.json"
-      }
+      },
+      "led": 4
     },
     "UKW": {
       "pin": 7,
@@ -79,7 +85,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ukw.json"
-      }
+      },
+      "led": 5
     },
     "SPR": {
       "pin": 8,
@@ -90,7 +97,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_spr.json"
-      }
+      },
+      "led": 6
     },
     "Ta": {
       "pin": 23,
@@ -101,7 +109,8 @@
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ta.json"
-      }
+      },
+      "led": 1
     },
     "shutdown": {
       "pin": 3

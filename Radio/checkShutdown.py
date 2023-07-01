@@ -2,7 +2,7 @@ from json import load
 from time import sleep
 import RPi.GPIO as GPIO
 
-from db.db import Database
+from Radio.db.db import Database
 
 
 # BUG: This makes i2c non working

@@ -1,6 +1,6 @@
-from db.db import Database
-from flask_cors import CORS
+from Radio.db.db import Database
 
+from flask_cors import CORS
 from flask import Flask, render_template, request, jsonify
 from turbo_flask import Turbo
 

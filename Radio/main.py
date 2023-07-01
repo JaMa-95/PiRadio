@@ -1,14 +1,16 @@
 from threading import Thread
 
-from radio import Radio
-from audioPlayer import AudioPlayer
-from app import app
-from db.db import Database
-from collector import Collector
-from led.ledStrip import LedStrip
-from checkShutdown import ShutdownGpio
+from Radio.radio import Radio
+from Radio.audioPlayer import AudioPlayer
+from Radio.app import app
+from Radio.db.db import Database
+from Radio.collector import Collector
+from Radio.led.ledStrip import LedStrip
+import RPi.GPIO as GPIO
+# from checkShutdown import ShutdownGpio
 
 if __name__ == "__main__":
+    GPIO.cleanup()
     db = Database()
     db.create()
     db.init()

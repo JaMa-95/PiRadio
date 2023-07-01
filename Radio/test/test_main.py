@@ -1,9 +1,10 @@
 import time
 import unittest
 from threading import Thread
-from radioFrequency import RadioFrequency
-from audioPlayer import AudioPlayer
-from radio import Radio, USBReader
+
+from Radio.radioFrequency import RadioFrequency
+from Radio.audioPlayer import AudioPlayer
+from Radio.radio import Radio, USBReader
 
 
 class SimpleTest(unittest.TestCase):

@@ -1,7 +1,7 @@
 from time import sleep
+# from rpi_ws281x import PixelStrip, Color
 
-from .singleton import Singleton
-from rpi_ws281x import PixelStrip, Color
+from Radio.util.singleton import Singleton
 
 
 @Singleton
@@ -158,6 +158,11 @@ class LedData:
     def set_off_button_spr(self):
         self.off_button_spr = False
         self.off_button_spr = True
+
+    def button_change(self, name: str, state: bool):
+        # TODO: give every button its led data. Then loop over button and just turn on off led. Do this for all objects
+        # which trigger led change
+        pass
 
     def set_clear(self):
         self.all_on = False

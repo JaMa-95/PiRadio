@@ -1,9 +1,10 @@
 import time
 import unittest
 import multiprocessing
-from audioPlayer import AudioPlayer
-from radioFrequency import RadioFrequency
-from radio import Radio
+
+from Radio.audioPlayer import AudioPlayer
+from Radio.radioFrequency import RadioFrequency
+from Radio.radio import Radio
 
 class SimpleTest(unittest.TestCase):
     def test_player(self):

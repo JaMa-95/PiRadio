@@ -2,8 +2,9 @@ import time
 from playsound import playsound
 import vlc
 import unittest
-from radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
-from radio import USBReader
+
+from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
+from Radio.radio import USBReader
 
 
 class TestFrequencies(unittest.TestCase):

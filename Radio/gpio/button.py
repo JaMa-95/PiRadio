@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from typing import List
 import RPi.GPIO as GPIO
 
-from db.db import Database
-from radioFrequency import Frequencies
+from Radio.db.db import Database
+from Radio.radioFrequency import Frequencies
 
 
 class ButtonRaspi:
@@ -18,6 +18,8 @@ class ButtonRaspi:
         self.frequency_list: Frequencies = None
         self.is_frequency_lock: bool = False
         self.is_on_off_button: bool = False
+
+        self.cycle_time: float = 0.0
 
         self.value: int = 99
         self.value_old: int = 0
@@ -39,7 +41,7 @@ class ButtonRaspi:
         self.setup_pin()
 
     def load_from_settings(self):
-        with open('data/settings.json') as f:
+        with open('../data/settings.json') as f:
             settings = json.load(f)
         self.pin = settings["buttons"][self.name]["pin"]
         self.reversed = settings["buttons"][self.name]["reversed"]
@@ -62,7 +64,7 @@ class ButtonRaspi:
         self.reversed = reversed_
 
     def is_click(self):
-        # TODO: check if indexer needed
+        # TODO: measure is click with time
         if not self.on_off_wait and self.indexer > 5:
             self.on_off_wait = True
             self.state = GPIO.input(self.pin)
@@ -128,7 +130,7 @@ class RadioButtonsRaspi:
     db = Database()
 
     def __post_init__(self):
-        with open('data/settings.json') as f:
+        with open('../data/settings.json') as f:
             settings = json.load(f)
         for name, button_settings in settings["buttons"].items():
             if button_settings["is_on_off"]:

@@ -4,6 +4,7 @@
 import json
 from abc import ABC, abstractmethod
 
+
 class Publisher:
     def __init__(self):
         self.__subscribers = []
@@ -28,6 +29,7 @@ class Publisher:
     def get_content(self):
         return ("Content:" + self.__content)
 
+
 # -------------------------------------
 # Subscriber base class
 # -------------------------------------
@@ -36,6 +38,7 @@ class Subscriber(ABC):
     @abstractmethod
     def update(self):
         pass
+
 
 # --------------------
 # Subscriber 1
@@ -48,6 +51,7 @@ class SiteSubscriber(Subscriber):
     def update(self):
         print(type(self).__name__, self.publisher.get_content())
 
+
 # --------------------
 # Subscriber 2
 # --------------------
@@ -58,6 +62,7 @@ class IntranetSubscriber(Subscriber):
 
     def update(self):
         print(type(self).__name__, self.publisher.get_content())
+
 
 # --------------------
 # Subscriber 3
@@ -88,7 +93,7 @@ class RadioMockup:
         self.load_settings()
 
     def load_settings(self):
-        with open('data/settings.json') as f:
+        with open('../data/settings.json') as f:
             settings = json.load(f)
         self.volume_min = settings["volume"]["min"]
         self.volume_max = settings["volume"]["max"]

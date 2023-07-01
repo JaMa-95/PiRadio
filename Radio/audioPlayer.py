@@ -1,7 +1,8 @@
 import time
 import vlc
-from radioFrequency import RadioFrequency
-from util import Subscriber
+
+from Radio.radioFrequency import RadioFrequency
+from Radio.util.util import Subscriber
 
 
 class AudioPlayer(Subscriber):
