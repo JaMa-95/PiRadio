@@ -21,6 +21,7 @@ class Collector:
         self.db = Database()
 
     def load_settings(self):
+        print(f"PATH: {get_project_root() / 'data/settings.json'}")
         with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
         # TODO: Loop over frequencies
