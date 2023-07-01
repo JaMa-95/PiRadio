@@ -27,7 +27,10 @@
     "pin": 2
   },
   "button_general": {
-    "click_time": 0.5
+    "click_time": 0.5,
+    "shutdown": {
+      "pin": 3
+    }
   },
   "buttons": {
     "OnOff": {
@@ -113,9 +116,6 @@
         "musicList": "freq_ta.json"
       },
       "led": 1
-    },
-    "shutdown": {
-      "pin": 3
     }
   },
   "frequency": {
