@@ -1,11 +1,11 @@
 from threading import Thread
 
-from .radio import Radio
-from .audioPlayer import AudioPlayer
-from .app import app
-from .db.db import Database
-from .collector import Collector
-from .led.ledStrip import LedStrip
+from radio import Radio
+from audioPlayer import AudioPlayer
+from app import app
+from db.db import Database
+from collector import Collector
+from led.ledStrip import LedStrip
 import RPi.GPIO as GPIO
 # from checkShutdown import ShutdownGpio
 
