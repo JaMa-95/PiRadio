@@ -184,8 +184,12 @@ class Radio:
                         self.send_volume(self.current_command["volume"])
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
-            end = time.time()
-            time.sleep(self.cycle_time - end - start)
+            sleep_time = self.cycle_time - time.time() - start
+            if sleep_time <= 0:
+                time.sleep(0.001)
+            else:
+                time.sleep(sleep_time)
+
 
     def get_command_changed(self):
         changed_hardware = []
