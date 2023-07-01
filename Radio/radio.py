@@ -232,7 +232,7 @@ class Radio:
                 self.on = True
             elif self.db.get_web_control_value() and not self.db.get_button_on_off():
                 self.on = False
-        elif not self.on:
+        else:
             self.on = True
             self.turn_on_radio(debug=False)
 
