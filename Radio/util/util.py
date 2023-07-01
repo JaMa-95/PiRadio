@@ -52,4 +52,5 @@ class Singleton(object):
 
 
 def get_project_root() -> Path:
+    print(f"path: {Path(__file__)}")
     return Path(__file__).parent.parent
