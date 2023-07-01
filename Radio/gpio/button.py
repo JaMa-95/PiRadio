@@ -45,15 +45,16 @@ class ButtonRaspi:
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        self.pin = settings["buttons"][self.name]["pin"]
-        self.reversed = settings["buttons"][self.name]["reversed"]
-        self.active = settings["buttons"][self.name]["active"]
-        self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
-        print(f'...: {settings["buttons"][self.name]}')
-        print(f'path file: {settings["buttons"][self.name]["frequency"]["musicList"]}')
-        self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
-        self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
-        self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
+        if settings["buttons"][self.name]["active":]
+            self.pin = settings["buttons"][self.name]["pin"]
+            self.reversed = settings["buttons"][self.name]["reversed"]
+            self.active = settings["buttons"][self.name]["active"]
+            self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
+            print(f'...: {settings["buttons"][self.name]}')
+            print(f'path file: {settings["buttons"][self.name]["frequency"]["musicList"]}')
+            self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
+            self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
+            self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
