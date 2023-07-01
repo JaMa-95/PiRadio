@@ -50,7 +50,7 @@ class ButtonRaspi:
         self.active = settings["buttons"][self.name]["active"]
         self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
         # self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
-        self.is_on_off_button = settings["buttons"][self.name]["on_off"]
+        self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
         self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
