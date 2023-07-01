@@ -93,7 +93,7 @@
       },
       "led": 5
     },
-    "SPR": {
+    "SprMus": {
       "pin": 8,
       "reversed": false,
       "active": true,
