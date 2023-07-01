@@ -1,6 +1,3 @@
-import random
-import threading
-import time
 from db.db import Database
 from flask_cors import CORS
 
