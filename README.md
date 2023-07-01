@@ -1,5 +1,11 @@
 # Radio
+Using python and vlc player to stream music from online radios. Using the IO-Pins and potentiometers to change switch between radio streams.
+Additionally add led strip to highlight the current used settings.
 
+Use the webapp to change to settings or control the radio.
+
+# Known Issues
+Raspbian OS Lite not working because of VLC player. 
 
 https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/raspberry-pi-usage
 https://raspberrypi.stackexchange.com/questions/639/how-to-get-pulseaudio-running
@@ -40,6 +46,8 @@ https://www.instructables.com/Smooth-Potentiometer-Input/
 https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
 
 # DEPENDENCIES
+Not working with raspbian lite because of VLC installation. Solution to this are welcome because screen is not needed.
+
 sudo apt update
 sudo apt upgrade
 sudo apt install python3-pip
