@@ -5,7 +5,11 @@ Additionally add led strip to highlight the current used settings.
 Use the webapp to change to settings or control the radio.
 
 # Known Issues
-Raspbian OS Lite not working because of VLC player. 
+- Raspbian OS Lite not working because of VLC player. 
+-  make Software run as a service. Not working because sound is playing with user rights
+
+  
+# helpful links
 
 https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/raspberry-pi-usage
 https://raspberrypi.stackexchange.com/questions/639/how-to-get-pulseaudio-running
