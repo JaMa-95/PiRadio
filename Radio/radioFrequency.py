@@ -45,7 +45,7 @@ class Frequencies:
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(f"/data/{file_name}")
+        self.load_from_file(f"data/{file_name}")
         self.init_min_max()
 
     def init_min_max(self):
@@ -61,7 +61,7 @@ class Frequencies:
 
     def load_from_file(self, path: str = None):
         if not path:
-            path = "/data/freq_kurz.json"
+            path = 'data/freq_kurz.json'
         path = get_project_root() / path
         with open(path.resolve()) as file_handler:
             frequency_data = json.load(file_handler)
