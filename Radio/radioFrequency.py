@@ -60,10 +60,9 @@ class Frequencies:
             self.frequencies[i].maximum = self.frequencies[i].minimum + frequency_width
 
     def load_from_file(self, path: Path = None):
+        print(f"asdasd: {path}")
         if not path:
             path = get_project_root() / "/data/freq_kurz.json"
-            print(f"path: {path}")
-
         with open(path.resolve()) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
