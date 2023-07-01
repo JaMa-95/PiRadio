@@ -4,7 +4,7 @@ import time
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
-from .radioFrequency import RadioFrequency
+from Radio.radioFrequency import RadioFrequency
 from .gpio.button import RadioButtonsRaspi
 from .db.db import Database
 from .raspberry import Raspberry
