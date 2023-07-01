@@ -26,8 +26,10 @@
     "on": true,
     "pin": 2
   },
+  "button_general": {
+    "click_time": 0.5
+  },
   "buttons": {
-    "click_time": 0.5,
     "OnOff": {
       "pin": 0,
       "reversed": true,
