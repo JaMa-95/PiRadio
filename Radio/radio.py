@@ -5,11 +5,11 @@ from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
 from Radio.radioFrequency import RadioFrequency
-from .gpio.button import RadioButtonsRaspi
-from .db.db import Database
-from .raspberry import Raspberry
-from .mqtt.mqttBroker import MqttBroker
-from .led.ledStrip import LedStrip, LedData
+from Radio.gpio.button import RadioButtonsRaspi
+from Radio.db.db import Database
+from Radio.raspberry import Raspberry
+from Radio.mqtt.mqttBroker import MqttBroker
+from Radio.led.ledStrip import LedStrip, LedData
 
 
 # TODO: Add web control
