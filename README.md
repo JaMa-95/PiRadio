@@ -55,17 +55,15 @@ https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-f
 - sudo apt upgrade
 - sudo apt install python3-pip
 - sudo apt install pulseaudio   # for vlc
-- sudo apt install pulseaudio-module-bluetooth 
 
 - sudo pip install adafruit-circuitpython-ads1x15
 - sudo pip install paho-mqtt
-- sudo pip install adafruit-circuitpython-ads1x15
 - sudo pip install python-vlc
 
 
 Depence on led strip
 - sudo pip install rpi-ws281x
-##deprecated
+## deprecated
 - sudo pip install Flask-Cors
 - sudo pip install Turbo-Flask
 
