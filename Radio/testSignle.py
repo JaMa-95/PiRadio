@@ -1,6 +1,6 @@
 import time
 import vlc
-from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
+# from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
 
 url = "https://streams.radiomast.io/8846a94e-9874-4692-a1a0-ec7aadbe2771"
 instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
