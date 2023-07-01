@@ -21,8 +21,8 @@ class Collector:
         self.db = Database()
 
     def load_settings(self):
-        print(f"PATH: {get_project_root() / 'data/settings.json'}")
-        with open(get_project_root() / 'data/settings.json') as f:
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
             settings = json.load(f)
         # TODO: Loop over frequencies
         self.pin_volume = settings["volume"]["pin"]
