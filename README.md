@@ -50,25 +50,24 @@ https://www.instructables.com/Smooth-Potentiometer-Input/
 https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
 
 # DEPENDENCIES
-Not working with raspbian lite because of VLC installation. Solution to this are welcome because screen is not needed.
 
-sudo apt update
-sudo apt upgrade
-sudo apt install python3-pip
-sudo apt install pulseaudio   # for vlc
-sudo apt install pulseaudio-module-bluetooth 
+- sudo apt update
+- sudo apt upgrade
+- sudo apt install python3-pip
+- sudo apt install pulseaudio   # for vlc
+- sudo apt install pulseaudio-module-bluetooth 
 
-sudo pip install adafruit-circuitpython-ads1x15
-sudo pip install paho-mqtt
-sudo pip install adafruit-circuitpython-ads1x15
-sudo pip install python-vlc
+- sudo pip install adafruit-circuitpython-ads1x15
+- sudo pip install paho-mqtt
+- sudo pip install adafruit-circuitpython-ads1x15
+- sudo pip install python-vlc
 
 
 Depence on led strip
-sudo pip install rpi-ws281x
+- sudo pip install rpi-ws281x
 ##deprecated
-sudo pip install Flask-Cors
-sudo pip install Turbo-Flask
+- sudo pip install Flask-Cors
+- sudo pip install Turbo-Flask
 
 # radioStart.sh
 
