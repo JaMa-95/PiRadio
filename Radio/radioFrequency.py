@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from pathlib import Path
 import json
 
+from Radio.util.util import get_project_root
+
 min_value = 606
 max_value_kurz_mittel_lang = 17150
 max_value_ukw = 21100
@@ -70,7 +72,8 @@ class Frequencies:
             )
 
     def load_settings(self):
-        with open('data/settings.json') as f:
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
             settings = json.load(f)
         self.min_frequency = settings["frequency"]["min"]
         self.max_frequency = settings["frequency"]["max"]

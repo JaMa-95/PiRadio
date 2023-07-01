@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 
 from Radio.db.db import Database
 from Radio.radioFrequency import Frequencies
-
+from Radio.util.util import get_project_root
 
 class ButtonRaspi:
     def __init__(self, name: str = ""):
@@ -130,7 +130,8 @@ class RadioButtonsRaspi:
     db = Database()
 
     def __post_init__(self):
-        with open('../data/settings.json') as f:
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
             settings = json.load(f)
         for name, button_settings in settings["buttons"].items():
             if button_settings["is_on_off"]:
