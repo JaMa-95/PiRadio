@@ -62,7 +62,7 @@ class Frequencies:
     def load_from_file(self, path: Path = None):
         if not path:
             path = get_project_root() / "/data/freq_kurz.json"
-        with open(path) as file_handler:
+        with open(path.resolve()) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
             freq = RadioFrequency()
