@@ -45,7 +45,7 @@ class Frequencies:
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / f"Radio/data/{file_name}")
+        self.load_from_file(get_project_root() / f"/data/{file_name}")
         self.init_min_max()
 
     def init_min_max(self):
@@ -61,7 +61,7 @@ class Frequencies:
 
     def load_from_file(self, path: Path = None):
         if not path:
-            path = self.get_project_root() / "Radio/data/freq_kurz.json"
+            path = get_project_root() / "/data/freq_kurz.json"
         with open(path) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
@@ -78,10 +78,6 @@ class Frequencies:
         self.min_frequency = settings["frequency"]["min"]
         self.max_frequency = settings["frequency"]["max"]
 
-    @staticmethod
-    def get_project_root() -> Path:
-        return Path(__file__).parent.parent
-
 
 class KurzFrequencies(Frequencies):
     # NOT WORKING: Berum, stockholm,Falun
@@ -90,7 +86,7 @@ class KurzFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_kurz.json")
+        self.load_from_file(get_project_root() / "/data/freq_kurz.json")
         self.init_min_max()
 
 
@@ -101,7 +97,7 @@ class LangFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_lang.json")
+        self.load_from_file(get_project_root() / "/data/freq_lang.json")
         self.init_min_max()
 
 
@@ -112,7 +108,7 @@ class MittelFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_mittel.json")
+        self.load_from_file(get_project_root() / "/data/freq_mittel.json")
         self.init_min_max()
 
 
@@ -122,7 +118,7 @@ class UKWFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_ukw.json")
+        self.load_from_file(get_project_root() / "/data/freq_ukw.json")
         self.init_min_max()
 
 
@@ -133,7 +129,7 @@ class SprFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_spr.json")
+        self.load_from_file(get_project_root() / "/data/freq_spr.json")
         self.init_min_max()
 
 
@@ -144,7 +140,7 @@ class TaFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(self.get_project_root() / "Radio/data/freq_ta.json")
+        self.load_from_file(get_project_root() / "/data/freq_ta.json")
         self.init_min_max()
 
 
