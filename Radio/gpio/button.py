@@ -138,6 +138,7 @@ class RadioButtonsRaspi:
         if self.buttons is None:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
+            print(f"settings: {button_settings}")
             if button_settings["is_on_off"]:
                 self.on_off_button = ButtonRaspi(name)
             elif button_settings["is_frequency_lock"]:
