@@ -311,9 +311,7 @@ class Radio:
         # TODO: do i need change button change, when here button state is retrieved again
         if not self.db.get_web_control_value():
             for button in self.radio_buttons.buttons:
-                print(f"button state {button.name}: {button.state}")
                 if button.state:
-                    print(f"pos: {button.frequency_pos}")
                     return button.frequency_list, self.current_command[button.frequency_pos]
             return None, None
         else:

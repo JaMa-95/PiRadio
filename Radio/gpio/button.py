@@ -13,7 +13,7 @@ class ButtonRaspi:
     def __init__(self, name: str = ""):
         self.name: str = name
         self.pin: int = 0
-        self.active: bool = True
+        self.active: bool = False
         self.reversed: bool = False
         self.frequency_pos: str = ""
         self.frequency_list: Frequencies = None
