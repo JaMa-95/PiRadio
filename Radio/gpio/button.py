@@ -135,6 +135,8 @@ class RadioButtonsRaspi:
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
+        if self.buttons is None:
+            self.buttons = []
         for name, button_settings in settings["buttons"].items():
             if button_settings["is_on_off"]:
                 self.on_off_button = ButtonRaspi(name)
