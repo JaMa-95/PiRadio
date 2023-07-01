@@ -49,7 +49,7 @@ class ButtonRaspi:
         self.reversed = settings["buttons"][self.name]["reversed"]
         self.active = settings["buttons"][self.name]["active"]
         self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
-        print(f'...: {settings["buttons"]}')
+        print(f'...: {settings["buttons"][self.name]}')
         print(f'path file: {settings["buttons"][self.name]["frequency"]["musicList"]}')
         self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
         self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
