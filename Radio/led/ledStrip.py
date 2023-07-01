@@ -1,5 +1,5 @@
 from time import sleep
-# from rpi_ws281x import PixelStrip, Color
+from rpi_ws281x import PixelStrip, Color
 
 from Radio.util.singleton import Singleton
 
