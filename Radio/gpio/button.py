@@ -45,7 +45,7 @@ class ButtonRaspi:
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        if settings["buttons"][self.name]["active":]
+        if settings["buttons"][self.name]["active"]:
             self.pin = settings["buttons"][self.name]["pin"]
             self.reversed = settings["buttons"][self.name]["reversed"]
             self.active = settings["buttons"][self.name]["active"]
