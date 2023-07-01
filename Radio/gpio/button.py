@@ -136,8 +136,6 @@ class RadioButtonsRaspi:
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
         for name, button_settings in settings["buttons"].items():
-            print(f"name: {name}")
-            print(f"settings: {button_settings}")
             if button_settings["is_on_off"]:
                 self.on_off_button = ButtonRaspi(name)
             elif button_settings["is_frequency_lock"]:

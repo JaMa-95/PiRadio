@@ -63,6 +63,7 @@ class Frequencies:
         if not path:
             path = get_project_root() / "/data/freq_kurz.json"
             print(f"path: {path}")
+            
         with open(path.resolve()) as file_handler:
             frequency_data = json.load(file_handler)
         for data in frequency_data:
