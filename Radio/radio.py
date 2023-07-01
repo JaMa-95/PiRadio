@@ -190,7 +190,6 @@ class Radio:
             else:
                 time.sleep(sleep_time)
 
-
     def get_command_changed(self):
         changed_hardware = []
         for button in self.radio_buttons.buttons:
@@ -232,7 +231,7 @@ class Radio:
                 self.on = True
             elif self.db.get_web_control_value() and not self.db.get_button_on_off():
                 self.on = False
-        else:
+        elif not self.on:
             self.on = True
             self.turn_on_radio(debug=False)
 
