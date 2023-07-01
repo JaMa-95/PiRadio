@@ -116,7 +116,8 @@ class Radio:
         self.treble_max = self.settings["treble"]["max"]
         self.treble_on = self.settings["treble"]["on"]
         self.pin_treble = self.settings["treble"]["pin"]
-        self.pin_frequencies = self.settings["frequencies"]["pin"]
+        # TODO: mutliple frequencies waht now?
+        self.pin_frequencies = self.settings["frequencies"]["posLangKurzMittel"]["pin"]
 
         self.cycle_time = self.settings["cycle_time"]
 
