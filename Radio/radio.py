@@ -210,10 +210,11 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_lock(self):
-        for button in self.radio_buttons.frequency_lock_buttons:
-            if button.is_click():
-                self.radio_lock = not self.radio_lock
-                print(f"radio lock changed: {self.radio_lock}")
+        if self.radio_buttons.frequency_lock_buttons:
+            for button in self.radio_buttons.frequency_lock_buttons:
+                if button.is_click():
+                    self.radio_lock = not self.radio_lock
+                    print(f"radio lock changed: {self.radio_lock}")
 
     def check_radio_on_off(self):
         if self.radio_buttons.on_off_button.active:
