@@ -74,7 +74,7 @@ class Radio:
         if mqtt:
             self.connect_mqtt()
         self.ledData = LedData.instance()
-        self.ledStrip = LedStrip()
+        # self.ledStrip = LedStrip()
         self.db = Database()
 
         self.volume_old = 0
@@ -203,7 +203,7 @@ class Radio:
 
     def check_shutdown_raspi(self):
         if self.db.get_shutdown():
-            self.ledStrip.raspi_off = True
+            # self.ledStrip.raspi_off = True
             time.sleep(4)
             self.raspberry.turn_raspi_off()
 
@@ -250,7 +250,7 @@ class Radio:
         GPIO.output(4, True)
 
     def turn_on_radio(self, debug: bool = True):
-        self.ledStrip.radio_off = False
+        # self.ledStrip.radio_off = False
         if debug:
             print("Turning on Radio")
         radio_frequency, encoder_value = self.get_button_frequency()
@@ -266,8 +266,8 @@ class Radio:
                 print("No button pressed. Playing nothing")
 
     def turn_off_radio(self):
-        self.ledStrip.radio_off = True
-        self.ledStrip.off_button_on = False
+        # self.ledStrip.radio_off = True
+        # self.ledStrip.off_button_on = False
         print("Turning off radio")
         if self.speakers.play_radio:
             self.publish("stop")
