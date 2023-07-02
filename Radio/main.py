@@ -12,36 +12,30 @@ from audioPlayer import AudioPlayer
 from app import app
 from db.db import Database
 from collector import Collector
-from led.ledStrip import LedStrip
+# from led.ledStrip import LedStrip
 import RPi.GPIO as GPIO
 
 # from checkShutdown import ShutdownGpio
 
 if __name__ == "__main__":
+    GPIO.cleanup()
     db = Database()
     db.create()
     db.init()
     collector = Collector()
 
     # shutdownPin = ShutdownGpio()
-    print("A")
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
-    print("B")
     audioPlayer = AudioPlayer(radio)
-    print("C")
-    ledStrip = LedStrip()
+    # ledStrip = LedStrip()
 
     radioThread = Thread(target=radio.run)
     collectorThread = Thread(target=collector.run)
     # shutdownThread = Thread(target=shutdownPin.run)
-    ledThread = Thread(target=ledStrip.run)
+    # ledThread = Thread(target=ledStrip.run)
 
     # shutdownThread.start()
-    print("A")
     radioThread.start()
-    print("B")
     collectorThread.start()
-    print("C")
-    ledThread.start()
-    print("D")
+    # ledThread.start()
     app.run(port=5555, host='0.0.0.0')
