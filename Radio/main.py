@@ -34,7 +34,11 @@ if __name__ == "__main__":
     ledThread = Thread(target=ledStrip.run)
 
     # shutdownThread.start()
+    print("A")
     radioThread.start()
+    print("B")
     collectorThread.start()
+    print("C")
     ledThread.start()
+    print("D")
     app.run(port=5555, host='0.0.0.0')
