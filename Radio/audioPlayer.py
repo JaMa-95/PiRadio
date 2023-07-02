@@ -38,6 +38,7 @@ class AudioPlayer(Subscriber):
 
     def play(self, stream: RadioFrequency):
         self.player.stop()
+        print(f"stream url: {stream.radio_url}")
         media = self.instance.media_new(stream.radio_url)
         media.get_mrl()
         self.player.audio_set_volume(self.volume)
