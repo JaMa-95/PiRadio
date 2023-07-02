@@ -24,8 +24,11 @@ if __name__ == "__main__":
     collector = Collector()
 
     # shutdownPin = ShutdownGpio()
+    print("A")
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
+    print("B")
     audioPlayer = AudioPlayer(radio)
+    print("C")
     ledStrip = LedStrip()
 
     radioThread = Thread(target=radio.run)
