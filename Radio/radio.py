@@ -45,12 +45,10 @@ class Speakers:
 class Radio:
     def __init__(self, mqtt: bool, play_central: bool, play_radio_speaker: bool) -> None:
         # init pub
+        print("INIT")
         self.__subscribers = []
         self.__content = None
-        print(f"INIT")
         self.raspberry = Raspberry()
-        time.sleep(5)
-        print("INIT 2")
         self.playing = False
         self.on = False
 
@@ -65,7 +63,8 @@ class Radio:
 
         self.radio_buttons = RadioButtonsRaspi()
         self.radio_lock: bool = False
-
+        time.sleep(5)
+        print("INIT 4")
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         # TODO: create this from settings
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -82,6 +81,8 @@ class Radio:
         self.ledData = LedData.instance()
         self.ledStrip = LedStrip()
         self.db = Database()
+        time.sleep(5)
+        print("INIT 5")
 
         self.volume_old = 0
         self.volume_min = 0
@@ -102,7 +103,7 @@ class Radio:
         self.settings: dict = None
         self.load_settings()
         time.sleep(5)
-        print("INIT 4")
+        print("INIT 6")
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
