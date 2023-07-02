@@ -67,14 +67,13 @@ class Radio:
         self.radio_lock: bool = False
 
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
+        # TODO: create this from settings
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                                 "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
-                                "buttonTa": None,
-                                "posUKW": None, "treble": None, "bass": None}
+                                "buttonTa": None, "posUKW": None, "treble": None, "bass": None}
         self.old_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                             "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
-                            "buttonTa": None,
-                            "posUKW": None, "treble": None, "bass": None}
+                            "buttonTa": None, "posUKW": None, "treble": None, "bass": None}
         self.currentCommandString = None
         self.broker: MqttBroker = None
         self.mqtt = mqtt
@@ -102,6 +101,8 @@ class Radio:
 
         self.settings: dict = None
         self.load_settings()
+        time.sleep(5)
+        print("INIT 4")
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
