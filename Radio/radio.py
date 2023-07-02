@@ -180,9 +180,8 @@ class Radio:
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
             sleep_time = self.cycle_time - (time.time() - start)
-            print(f"sleep time: {sleep_time}")
             if sleep_time <= 0:
-                print(f"A: {self.cycle_time} : {time.time() - start}")
+                # needs at least some cycle time for other processes
                 time.sleep(0.00001)
             else:
                 time.sleep(sleep_time)
