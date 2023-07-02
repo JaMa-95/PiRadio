@@ -179,7 +179,7 @@ class Radio:
                         self.send_volume(self.current_command["volume"])
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
-            sleep_time = self.cycle_time - time.time() - start
+            sleep_time = self.cycle_time - (time.time() - start)
             print(f"sleep time: {sleep_time}")
             if sleep_time <= 0:
                 print(f"A: {self.cycle_time} : {time.time() - start}")
