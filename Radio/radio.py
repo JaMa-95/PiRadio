@@ -9,7 +9,7 @@ from Radio.gpio.button import RadioButtonsRaspi
 from Radio.db.db import Database
 from Radio.raspberry import Raspberry
 from Radio.mqtt.mqttBroker import MqttBroker
-from Radio.led.ledStrip import LedStrip, LedData
+# from Radio.led.ledStrip import LedStrip, LedData
 from Radio.util.util import get_project_root
 
 
@@ -73,7 +73,7 @@ class Radio:
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
-        self.ledData = LedData.instance()
+        # self.ledData = LedData.instance()
         # self.ledStrip = LedStrip()
         self.db = Database()
 
@@ -151,8 +151,8 @@ class Radio:
 
     def run(self):
         self.db.replace_web_control_value(False)
-        self.ledData.fade = True
-        self.ledData.all_on = True
+        # self.ledData.fade = True
+        # self.ledData.all_on = True
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
