@@ -45,7 +45,6 @@ class Speakers:
 class Radio:
     def __init__(self, mqtt: bool, play_central: bool, play_radio_speaker: bool) -> None:
         # init pub
-        print("INIT")
         self.__subscribers = []
         self.__content = None
         self.raspberry = Raspberry()
@@ -57,8 +56,6 @@ class Radio:
         self.amplifier_switch_pin = 4
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
-        time.sleep(5)
-        print("INIT 3")
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         self.radio_buttons = RadioButtonsRaspi()
@@ -73,16 +70,22 @@ class Radio:
         self.old_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                             "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
                             "buttonTa": None, "posUKW": None, "treble": None, "bass": None}
+        time.sleep(5)
+        print("INIT 5")
         self.currentCommandString = None
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
         self.ledData = LedData.instance()
+        time.sleep(5)
+        print("INIT 6")
         self.ledStrip = LedStrip()
+        time.sleep(5)
+        print("INIT 7")
         self.db = Database()
         time.sleep(5)
-        print("INIT 5")
+        print("INIT 8")
 
         self.volume_old = 0
         self.volume_min = 0
@@ -102,8 +105,6 @@ class Radio:
 
         self.settings: dict = None
         self.load_settings()
-        time.sleep(5)
-        print("INIT 6")
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
