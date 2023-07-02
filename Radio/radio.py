@@ -57,7 +57,8 @@ class Radio:
         self.amplifier_switch_pin = 4
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
-
+        time.sleep(5)
+        print("INIT 2")
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         self.radio_buttons = RadioButtonsRaspi()
@@ -77,7 +78,8 @@ class Radio:
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
-
+        print("INIT 3")
+        time.sleep(5)
         self.ledData = LedData.instance()
         self.ledStrip = LedStrip()
         self.db = Database()
@@ -161,25 +163,19 @@ class Radio:
         self.ledData.all_on = True
         print("start checking commands")
         self.turn_off_amplifier()
-        print("pre run")
-        time.sleep(5)
         while True:
             start = time.time()
             if not self.db.get_web_control_value():
-                print("checking")
                 self.check_radio_on_off()
                 self.check_shutdown_raspi()
                 self.check_change_speakers()
                 self.check_radio_lock()
                 self.check_poti_change()
-                time.sleep(5)
                 if not self.radio_lock:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
                     if changed_hardware:
                         self.process_hardware_value_change()
-                    print("processing")
-                    time.sleep(5)
             else:
                 print("web control")
                 self.check_radio_on_off()
