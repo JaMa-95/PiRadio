@@ -49,6 +49,8 @@ class Radio:
         self.__content = None
         print(f"INIT")
         self.raspberry = Raspberry()
+        time.sleep(5)
+        print("INIT 2")
         self.playing = False
         self.on = False
 
@@ -58,7 +60,7 @@ class Radio:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
         time.sleep(5)
-        print("INIT 2")
+        print("INIT 3")
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         self.radio_buttons = RadioButtonsRaspi()
@@ -78,8 +80,6 @@ class Radio:
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
-        print("INIT 3")
-        time.sleep(5)
         self.ledData = LedData.instance()
         self.ledStrip = LedStrip()
         self.db = Database()
@@ -102,7 +102,6 @@ class Radio:
 
         self.settings: dict = None
         self.load_settings()
-        time.sleep(5)
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
