@@ -1,6 +1,5 @@
 import sys
 import os
-import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -12,7 +11,7 @@ from audioPlayer import AudioPlayer
 from app import app
 from db.db import Database
 from collector import Collector
-from led.ledStrip import LedStrip
+# from led.ledStrip import LedStrip
 import RPi.GPIO as GPIO
 
 # from checkShutdown import ShutdownGpio
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     # shutdownPin = ShutdownGpio()
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
     audioPlayer = AudioPlayer(radio)
-    ledStrip = LedStrip()
+    # ledStrip = LedStrip()
 
     radioThread = Thread(target=radio.run)
     collectorThread = Thread(target=collector.run)
