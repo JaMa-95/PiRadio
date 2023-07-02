@@ -182,11 +182,7 @@ class LedData:
 # TODO: intitial set buttons after first fade
 class LedStrip:
     def __init__(self):
-        print("init")
-
         self.ledData = LedData.instance()
-        time.sleep(5)
-        print("init 2")
         # LED strip configuration:
         led_count = int(18 / 3)  # Number of LED pixels.
         # led_pin = 12  # GPIO pin connected to the pixels (18 uses PWM!).
@@ -198,15 +194,9 @@ class LedStrip:
         led_channel = 1  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
         self.strip = PixelStrip(led_count, led_pin, led_freq_hz, led_dma, led_invert, led_brightness, led_channel)
-        time.sleep(5)
-        print("init 3")
 
-        self.strip.begin()
-        time.sleep(5)
-        print("init 4")
+        # self.strip.begin()
         self.clear()
-        time.sleep(5)
-        print("init 5")
 
     def run(self):
         while True:
