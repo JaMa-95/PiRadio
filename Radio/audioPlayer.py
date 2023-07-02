@@ -13,7 +13,7 @@ class AudioPlayer(Subscriber):
         self.noise = 30
         self.volume = 50
 
-        # self.equalizer = vlc.AudioEqualizer()
+        self.equalizer = vlc.AudioEqualizer()
         self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player = self.instance.media_player_new()
 
