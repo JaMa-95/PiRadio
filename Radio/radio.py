@@ -181,7 +181,7 @@ class Radio:
                     self.old_command = self.current_command
             sleep_time = self.cycle_time - time.time() - start
             if sleep_time <= 0:
-                print(f"A: {self.cycle_time}")
+                print(f"A: {self.cycle_time} : {time.time() - start}")
                 time.sleep(0.00001)
             else:
                 time.sleep(sleep_time)
