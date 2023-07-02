@@ -181,9 +181,10 @@ class Radio:
                     self.old_command = self.current_command
             sleep_time = self.cycle_time - time.time() - start
             if sleep_time <= 0:
-                time.sleep(1)
+                print("A")
+                time.sleep(0.00001)
             else:
-                time.sleep(1)
+                time.sleep(sleep_time)
 
     def get_command_changed(self):
         changed_hardware = []
