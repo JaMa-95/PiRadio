@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -17,10 +18,10 @@ import RPi.GPIO as GPIO
 # from checkShutdown import ShutdownGpio
 
 if __name__ == "__main__":
-    GPIO.cleanup()
     db = Database()
     db.create()
     db.init()
+    print(f"start it")
     collector = Collector()
 
     # shutdownPin = ShutdownGpio()
@@ -35,8 +36,15 @@ if __name__ == "__main__":
     ledThread = Thread(target=ledStrip.run)
 
     # shutdownThread.start()
+    time.sleep(5)
+    print("radio")
     radioThread.start()
+    time.sleep(5)
+    print("collector")
     collectorThread.start()
+    time.sleep(5)
+    print("led")
     ledThread.start()
-
+    time.sleep(5)
+    print("app")
     app.run(port=5555, host='0.0.0.0')
