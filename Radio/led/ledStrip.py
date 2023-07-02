@@ -195,7 +195,7 @@ class LedStrip:
 
         self.strip = PixelStrip(led_count, led_pin, led_freq_hz, led_dma, led_invert, led_brightness, led_channel)
 
-        # self.strip.begin()
+        self.strip.begin()
         self.clear()
 
     def run(self):
