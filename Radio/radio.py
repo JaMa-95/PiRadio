@@ -60,8 +60,6 @@ class Radio:
 
         self.radio_buttons = RadioButtonsRaspi()
         self.radio_lock: bool = False
-        time.sleep(5)
-        print("INIT 4")
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         # TODO: create this from settings
         self.current_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
@@ -70,22 +68,14 @@ class Radio:
         self.old_command = {"buttonOnOff": None, "buttonLang": None, "buttonMittel": None, "buttonKurz": None,
                             "buttonUKW": None, "buttonSprMus": None, "volume": None, "posLangKurzMittel": None,
                             "buttonTa": None, "posUKW": None, "treble": None, "bass": None}
-        time.sleep(5)
-        print("INIT 5")
         self.currentCommandString = None
         self.broker: MqttBroker = None
         self.mqtt = mqtt
         if mqtt:
             self.connect_mqtt()
         self.ledData = LedData.instance()
-        time.sleep(5)
-        print("INIT 6")
         self.ledStrip = LedStrip()
-        time.sleep(5)
-        print("INIT 7")
         self.db = Database()
-        time.sleep(5)
-        print("INIT 8")
 
         self.volume_old = 0
         self.volume_min = 0
