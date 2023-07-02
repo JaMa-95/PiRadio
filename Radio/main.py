@@ -18,16 +18,23 @@ import RPi.GPIO as GPIO
 # from checkShutdown import ShutdownGpio
 
 if __name__ == "__main__":
+    print(f"db  it")
     db = Database()
     db.create()
     db.init()
-    print(f"start it")
+    time.sleep(5)
+    print(f"collector it")
     collector = Collector()
 
     # shutdownPin = ShutdownGpio()
-
+    time.sleep(5)
+    print("radio class")
     radio = Radio(mqtt=False, play_central=True, play_radio_speaker=True)
+    time.sleep(5)
+    print("audio class")
     audioPlayer = AudioPlayer(radio)
+    time.sleep(5)
+    print("led class")
     ledStrip = LedStrip()
 
     radioThread = Thread(target=radio.run)
