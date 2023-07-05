@@ -94,7 +94,7 @@
       "led": 5
     },
     "SprMus": {
-      "pin": 8,
+      "pin": 19,
       "reversed": false,
       "active": true,
       "is_frequency_lock": false,
