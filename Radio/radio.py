@@ -2,6 +2,7 @@ import datetime
 import json
 import time
 from dataclasses import dataclass
+from math import exp
 import RPi.GPIO as GPIO
 
 from Radio.radioFrequency import RadioFrequency
@@ -321,7 +322,8 @@ class Radio:
             # somehow after 24000 poti switches to 1250 till 1350
             volume = self.volume_old
         else:
-            volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
+            # volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
+            volume = int(2.53677 * exp(0.0988 * volume))
         if volume < 0:
             volume = 0
         elif volume > 100:

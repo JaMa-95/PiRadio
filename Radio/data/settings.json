@@ -3,6 +3,7 @@
   "volume": {
     "min": 0,
     "max": 25000,
+    "formel": true,
     "on": true,
     "pin": 3
   },
