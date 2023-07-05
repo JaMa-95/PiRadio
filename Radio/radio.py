@@ -329,7 +329,6 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
-        time.sleep(1)
         self.volume_old = volume
         self.db.replace_volume(volume)
         self.send_volume(volume)
