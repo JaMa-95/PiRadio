@@ -67,6 +67,7 @@ class AudioPlayer(Subscriber):
 
     def set_treble(self, treble):
         print(f"treble: {treble}")
+        treble = 0
         self.equalizer.set_amp_at_index(treble / 4, 4)  # 1 kHz
         self.equalizer.set_amp_at_index(treble / 3, 5)  # 3 kHz
         self.equalizer.set_amp_at_index(treble / 2, 6)  # 6 kHz
