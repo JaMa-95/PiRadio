@@ -41,10 +41,11 @@ class AudioPlayer(Subscriber):
         print(f"stream url: {stream.radio_url}")
         media = self.instance.media_new(stream.radio_url)
         media.get_mrl()
-        self.player.audio_set_volume(self.volume)
+        self.player.audio_set_volume(30)
         self.player.set_media(media)
         self.player.play()
         time.sleep(20)
+
     def stop(self):
         self.player.stop()
 
