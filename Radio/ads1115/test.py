@@ -25,4 +25,4 @@ while True:
         print(mean(values))
         print(max(values) - min(values))
         print("---------------")
-    time.sleep(2)
+        time.sleep(2)
