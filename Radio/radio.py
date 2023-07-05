@@ -325,7 +325,7 @@ class Radio:
             volume = 0
         else:
             # volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
-            volume = int(15.845 * pow(volume, 0.176))
+            volume = int(16.282 * pow(volume, 0.170))
         if volume < 0:
             volume = 0
         elif volume > 100:
