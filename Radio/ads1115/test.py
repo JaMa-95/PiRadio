@@ -18,8 +18,9 @@ while True:
     values = []
     for index, device in enumerate([chan, chan1, chan2, chan3]):
         print(f"PIN: {index}")
-        for i in range(50):
+        for i in range(10):
             values.append(chan3.value)
+            time.sleep(0.1)
         print(max(values))
         print(min(values))
         print(mean(values))
