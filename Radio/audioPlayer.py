@@ -44,7 +44,7 @@ class AudioPlayer(Subscriber):
         self.player.audio_set_volume(self.volume)
         self.player.set_media(media)
         self.player.play()
-
+        time.sleep(20)
     def stop(self):
         self.player.stop()
 
