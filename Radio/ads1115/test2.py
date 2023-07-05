@@ -19,11 +19,11 @@ pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
 while True:
     values = []
     for i in range(20):
-        values.append(chan.value)
+        values.append(chan1.value)
         time.sleep(0.1)
     print(f"max: {max(values)}")
     print(f"min: {min(values)}")
     print(f"mean: {mean(values)}")
     print(f"range: {max(values) - min(values)}")
     print("---------------")
-    time.sleep(1)
+    time.sleep(0.2)
