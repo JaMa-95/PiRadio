@@ -14,11 +14,15 @@ GPIO.cleanup()
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(23, GPIO.OUT)
+
 GPIO.setup(24, GPIO.OUT)
-GPIO.setup(25, GPIO.OUT)
-GPIO.setup(9, GPIO.OUT)
+
+GPIO.setup(6, GPIO.OUT)
+
 GPIO.setup(20, GPIO.OUT)
+
 GPIO.setup(21, GPIO.OUT)
+
 GPIO.setup(26, GPIO.OUT)
 
 try:
@@ -27,10 +31,8 @@ try:
             print("Pin 23 button is pressed")
         if (GPIO.input(24) == GPIO.HIGH):
             print("Pin 24 button is pressed")
-        if (GPIO.input(25) == GPIO.HIGH):
-            print("Pin 25 button is pressed")
-        if (GPIO.input(9) == GPIO.HIGH):
-            print("Pin 9 button is pressed")
+        if (GPIO.input(6) == GPIO.HIGH):
+            print("Pin 6 button is pressed")
         if (GPIO.input(20) == GPIO.HIGH):
             print("Pin 20 button is pressed")
         if (GPIO.input(21) == GPIO.HIGH):
