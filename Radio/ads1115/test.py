@@ -14,12 +14,15 @@ chan1 = AnalogIn(ads, ADS.P1)  # Create single-ended input on channel 0
 chan2 = AnalogIn(ads, ADS.P2)  # Create single-ended input on channel 0
 chan3 = AnalogIn(ads, ADS.P3)  # Create single-ended input on channel 0
 
+pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
+
 while True:
     values = []
-    for index, device in enumerate([chan, chan1, chan2, chan3]):
-        print(f"PIN: {index}")
+    for pin in pins:
+        print(f"PIN: {pin}")
+        chan = AnalogIn(ads, pin)
         for i in range(20):
-            values.append(chan3.value)
+            values.append(chan.value)
             time.sleep(0.1)
         print(f"max: {max(values)}")
         print(f"min: {min(values)}")
