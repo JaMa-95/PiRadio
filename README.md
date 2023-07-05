@@ -33,7 +33,7 @@ https://embeddedcomputing.com/technology/open-source/development-kits/raspberry-
 https://dordnung.de/raspberrypi-ledstrip/ws2812
 
 # AUDIO
-sudo adduser root pulse-accesss
+sudo adduser root pulse-access
 
 To run pythons script and pulseAudio with root access. Root access is needed by ws2811 led strip. Pulse Audio is by default not usable from root
 
