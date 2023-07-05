@@ -16,13 +16,13 @@ chan3 = AnalogIn(ads, ADS.P3)  # Create single-ended input on channel 0
 
 while True:
     values = []
-    values = []
-    for i in range(50):
-        values.append(chan3.value)
-    print(max(values))
-    print(min(values))
-    print(mean(values))
-    print(max(values) - min(values))
-    print("---------------")
-
-    time.sleep(1)
+    for index, device in enumerate([chan, chan1, chan2, chan3]):
+        print(f"PIN: {index}")
+        for i in range(50):
+            values.append(chan3.value)
+        print(max(values))
+        print(min(values))
+        print(mean(values))
+        print(max(values) - min(values))
+        print("---------------")
+    time.sleep(2)
