@@ -17,7 +17,7 @@ GPIO.setup(23, GPIO.OUT)
 
 GPIO.setup(24, GPIO.OUT)
 
-GPIO.setup(6, GPIO.OUT)
+GPIO.setup(19, GPIO.OUT)
 
 GPIO.setup(20, GPIO.OUT)
 
@@ -31,8 +31,8 @@ try:
             print("Pin 23 button is pressed")
         if (GPIO.input(24) == GPIO.HIGH):
             print("Pin 24 button is pressed")
-        if (GPIO.input(6) == GPIO.HIGH):
-            print("Pin 6 button is pressed")
+        if (GPIO.input(19) == GPIO.HIGH):
+            print("Pin 19 button is pressed")
         if (GPIO.input(20) == GPIO.HIGH):
             print("Pin 20 button is pressed")
         if (GPIO.input(21) == GPIO.HIGH):
