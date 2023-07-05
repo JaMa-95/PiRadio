@@ -317,7 +317,6 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
-        print(f"volume start: {volume}")
         if 1000 < volume < 2100:
             # somehow after 24000 poti switches to 1250 till 1350
             volume = self.volume_old
@@ -330,7 +329,6 @@ class Radio:
             volume = 0
         elif volume > 100:
             volume = 100
-        print(f"volume: {volume}")
         time.sleep(1)
         self.volume_old = volume
         self.db.replace_volume(volume)
