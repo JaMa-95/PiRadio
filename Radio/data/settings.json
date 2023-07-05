@@ -2,7 +2,7 @@
   "cycle_time": 0.1,
   "volume": {
     "min": 0,
-    "max": 23500,
+    "max": 25000,
     "on": true,
     "pin": 3
   },
