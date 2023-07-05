@@ -307,6 +307,7 @@ class Radio:
         if not self.db.get_web_control_value():
             for button in self.radio_buttons.buttons:
                 if button.state:
+                    print(f"state: {button.name}")
                     return button.frequency_list, self.current_command[button.frequency_pos]
             return None, None
         else:
