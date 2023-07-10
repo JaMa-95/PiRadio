@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
 GPIO.setmode(GPIO.BCM)            # choose BCM or BOARD
-
+GPIO.cleanup()
 GPIO.setup(17, GPIO.OUT) # set a port/pin as an output
 GPIO.output(17, False)       # set port/pin value to 1/GPIO.HIGH/True
 
@@ -26,5 +26,4 @@ GPIO.output(26, False)
 GPIO.setup(20, GPIO.OUT) # set a port/pin as an output
 GPIO.output(20, False)       # set port/pin value to 1/GPIO.HIGH/True
 
-GPIO.cleanup()
 print(False)

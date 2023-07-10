@@ -3,7 +3,7 @@ import time
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
 GPIO.setmode(GPIO.BCM)            # choose BCM or BOARD
-
+GPIO.cleanup()
 GPIO.setup(26, GPIO.OUT) # set a port/pin as an output
 GPIO.output(26, GPIO.HIGH)       # set port/pin value to 1/GPIO.HIGH/True
 
@@ -23,5 +23,5 @@ GPIO.output(13, 1)
 GPIO.setup(19, GPIO.OUT)
 GPIO.output(19, True)
 
-GPIO.cleanup()
+
 print(True)
