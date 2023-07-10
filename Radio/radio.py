@@ -244,12 +244,12 @@ class Radio:
     @staticmethod
     def turn_off_amplifier():
         print("TURN OFF")
-        GPIO.output(4, False)
+        GPIO.output(13, False)
 
     @staticmethod
     def turn_on_amplifier():
         print("Turn ON")
-        GPIO.output(4, True)
+        GPIO.output(13, True)
 
     def turn_on_radio(self, debug: bool = True):
         # self.ledStrip.radio_off = False
