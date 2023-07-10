@@ -54,7 +54,7 @@ class Radio:
 
         self.cycle_time: float = 0.0
 
-        self.amplifier_switch_pin = 4
+        self.amplifier_switch_pin = 13
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
         self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
@@ -241,15 +241,13 @@ class Radio:
                 if not self.speakers.play_central:
                     self.broker.publish_start_stop("0")
 
-    @staticmethod
-    def turn_off_amplifier():
+    def turn_off_amplifier(self):
         print("TURN OFF")
-        GPIO.output(13, False)
+        GPIO.output(self.amplifier_switch_pin, False)
 
-    @staticmethod
-    def turn_on_amplifier():
+    def turn_on_amplifier(self):
         print("Turn ON")
-        GPIO.output(13, True)
+        GPIO.output(self.amplifier_switch_pin, True)
 
     def turn_on_radio(self, debug: bool = True):
         # self.ledStrip.radio_off = False
