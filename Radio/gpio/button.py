@@ -10,15 +10,17 @@ from Radio.util.util import get_project_root
 
 
 class ButtonRaspi:
-    def __init__(self, name: str = ""):
+    def __init__(self, name: str = "", is_on_off: bool = False, is_frequency_lock: bool = False,
+                 is_change_speaker: str = False):
         self.name: str = name
         self.pin: int = 0
         self.active: bool = False
         self.reversed: bool = False
         self.frequency_pos: str = ""
         self.frequency_list: Frequencies = None
-        self.is_frequency_lock: bool = False
-        self.is_on_off_button: bool = False
+        self.is_frequency_lock: bool = is_frequency_lock
+        self.is_on_off_button: bool = is_on_off
+        self.is_change_speaker: bool = is_change_speaker
 
         self.cycle_time: float = 0.0
 
@@ -51,8 +53,8 @@ class ButtonRaspi:
             self.active = settings["buttons"][self.name]["active"]
             self.frequency_pos = settings["buttons"][self.name]["frequency"]["pos"]
             self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
-            self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
-            self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
+            # self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
+            # self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
@@ -142,11 +144,11 @@ class RadioButtonsRaspi:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
             if "is_on_off" in button_settings:
-                self.on_off_button = ButtonRaspi(name)
+                self.on_off_button = ButtonRaspi(name, is_on_off=True)
             elif "is_frequency_lock" in button_settings:
-                self.frequency_lock_buttons = ButtonRaspi(name)
+                self.frequency_lock_buttons = ButtonRaspi(name, is_frequency_lock=True)
             elif "is_change_speaker" in button_settings:
-                self.change_speaker_button = ButtonRaspi(name)
+                self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True)
             else:
                 self.buttons.append(ButtonRaspi(name))
 
