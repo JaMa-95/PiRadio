@@ -40,8 +40,9 @@ class ButtonRaspi:
 
         self.state = False
 
-        self.load_from_settings()
-        self.setup_pin()
+        if self.name:
+            self.load_from_settings()
+            self.setup_pin()
 
     def load_from_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
