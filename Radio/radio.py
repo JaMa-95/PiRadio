@@ -56,7 +56,6 @@ class Radio:
 
         self.amplifier_switch_pin: int = 0
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
         self.speakers: Speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
         self.radio_buttons: RadioButtonsRaspi = RadioButtonsRaspi()
@@ -117,6 +116,7 @@ class Radio:
 
         self.cycle_time = self.settings["cycle_time"]
         self.amplifier_switch_pin = self.settings["amplifier_pin"]
+        GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
 
     ####################################
 
