@@ -1,6 +1,5 @@
 import json
-from time import sleep
-
+from time import sleep, time
 
 from Radio.ads1115.ads import AdsObject
 from Radio.gpio.button import RadioButtonsRaspi
@@ -33,6 +32,10 @@ class Collector:
     def run(self):
         while True:
             if not self.db.get_web_control_value():
+                start = time()
                 self.buttons.set_values_to_db()
+                print(f"END BUTTONS: {time() - start}")
+                start = time()
                 self.ads.set_to_db()
+                print(f"END ADS: {time() - start}")
             sleep(0.0001)
