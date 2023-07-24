@@ -158,18 +158,35 @@ class Radio:
         print("start checking commands")
         self.turn_off_amplifier()
         while True:
+            print("START")
             start = time.time()
             if not self.db.get_web_control_value():
                 self.check_radio_on_off()
+                print(time.time() - start)
+                start = time.time()
                 self.check_shutdown_raspi()
+                print(time.time() - start)
+                start = time.time()
                 self.check_change_speakers()
+                print(time.time() - start)
+                start = time.time()
                 self.check_radio_lock()
+                print(time.time() - start)
+                start = time.time()
                 self.check_poti_change()
+                print(time.time() - start)
+                start = time.time()
                 if not self.radio_lock:
                     changed_hardware = self.get_changed_buttons()
+                    print(time.time() - start)
+                    start = time.time()
                     changed_hardware.extend(self.get_frequency_change())
+                    print(time.time() - start)
+                    start = time.time()
                     if changed_hardware:
                         self.process_hardware_value_change()
+                    print(time.time() - start)
+                    start = time.time()
             else:
                 print("web control")
                 self.check_radio_on_off()
@@ -186,7 +203,9 @@ class Radio:
                 # needs at least some cycle time for other processes
                 time.sleep(0.00001)
             else:
+                print(f"sleep time {sleep_time}")
                 time.sleep(sleep_time)
+            print("FINISHED")
 
     def get_command_changed(self):
         changed_hardware = []
