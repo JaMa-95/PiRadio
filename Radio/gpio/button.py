@@ -11,7 +11,7 @@ from Radio.util.util import get_project_root
 
 class ButtonRaspi:
     def __init__(self, name: str = "", is_on_off: bool = False, is_frequency_lock: bool = False,
-                 is_change_speaker: str = False):
+                 is_change_speaker: bool = False):
         self.name: str = name
         self.pin: int = 0
         self.active: bool = False
@@ -128,10 +128,10 @@ class ButtonRaspi:
 
 @dataclass
 class RadioButtonsRaspi:
-    on_off_button: ButtonRaspi = None
-    change_speaker_button: ButtonRaspi = None
-    radio_lock_button: ButtonRaspi = None
-    frequency_lock_button: ButtonRaspi = None
+    on_off_button: ButtonRaspi = ButtonRaspi()
+    change_speaker_button: ButtonRaspi = ButtonRaspi()
+    radio_lock_button: ButtonRaspi = ButtonRaspi()
+    frequency_lock_button: ButtonRaspi = ButtonRaspi()
     buttons: List[ButtonRaspi] = None
 
     db = Database()
