@@ -317,7 +317,7 @@ class Radio:
 
     def set_volume(self, volume):
         if 1000 < volume < 2100:
-            # somehow after 24000 poti switches to 1250 till 1350
+            # somehow after 24000 poti switches to 1250 - 1350
             volume = self.volume_old
         elif volume <= 0:
             volume = 0
