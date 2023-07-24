@@ -400,19 +400,19 @@ class Radio:
 
     def check_poti_change(self):
         if self.volume_on:
-            value = self.db.get_ads_pin_value(self.pin_volume)
+            value = 9 #self.db.get_ads_pin_value(self.pin_volume)
             if value != self.old_command["volume"]:
                 self.current_command["volume"] = value
                 self.set_volume(value)
 
         if self.bass_on:
-            value = self.db.get_ads_pin_value(self.pin_bass)
+            value = 10 #self.db.get_ads_pin_value(self.pin_bass)
             if value != self.old_command["bass"]:
                 self.current_command["bass"] = value
                 self.set_bass(value)
 
         if self.treble_on:
-            value = self.db.get_ads_pin_value(self.pin_treble)
+            value = 11 #self.db.get_ads_pin_value(self.pin_treble)
             if value != self.old_command["treble"]:
                 self.current_command["treble"] = value
                 self.set_treble(value)
