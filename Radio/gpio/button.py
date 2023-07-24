@@ -127,7 +127,9 @@ class ButtonRaspi:
 @dataclass
 class RadioButtonsRaspi:
     on_off_button: ButtonRaspi = None
-    frequency_lock_buttons: List[ButtonRaspi] = None
+    change_speaker_button: ButtonRaspi = None
+    radio_lock_button: ButtonRaspi = None
+    frequency_lock_button: ButtonRaspi = None
     buttons: List[ButtonRaspi] = None
 
     db = Database()
@@ -139,10 +141,12 @@ class RadioButtonsRaspi:
         if self.buttons is None:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
-            if button_settings["is_on_off"]:
+            if "is_on_off" in button_settings:
                 self.on_off_button = ButtonRaspi(name)
-            elif button_settings["is_frequency_lock"]:
-                self.frequency_lock_buttons.append(ButtonRaspi(name))
+            elif "is_frequency_lock" in button_settings:
+                self.frequency_lock_buttons = ButtonRaspi(name)
+            elif "is_change_speaker" in button_settings:
+                self.change_speaker_button = ButtonRaspi(name)
             else:
                 self.buttons.append(ButtonRaspi(name))
 

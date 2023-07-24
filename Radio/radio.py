@@ -20,7 +20,7 @@ class Speakers:
     play_radio: bool = True
     play_central: bool = False
 
-    _change_wait: bool = datetime.datetime.now()
+    _change_wait: datetime = datetime.datetime.now()
 
     def change(self, play_central: bool, play_radio: bool):
         self.play_radio = play_radio
@@ -48,18 +48,18 @@ class Radio:
         # init pub
         self.__subscribers = []
         self.__content = None
-        self.raspberry = Raspberry()
-        self.playing = False
-        self.on = False
+        self.raspberry: Raspberry = Raspberry()
+        self.playing: bool = False
+        self.on: bool = False
 
         self.cycle_time: float = 0.0
 
-        self.amplifier_switch_pin = 13
+        self.amplifier_switch_pin: int = 0
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
-        self.speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
+        self.speakers: Speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
-        self.radio_buttons = RadioButtonsRaspi()
+        self.radio_buttons: RadioButtonsRaspi = RadioButtonsRaspi()
         self.radio_lock: bool = False
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         # TODO: create this from settings
@@ -71,30 +71,30 @@ class Radio:
                             "buttonTa": None, "posUKW": None, "treble": None, "bass": None}
         self.currentCommandString = None
         self.broker: MqttBroker = None
-        self.mqtt = mqtt
+        self.mqtt: bool = mqtt
         if mqtt:
             self.connect_mqtt()
         # self.ledData = LedData.instance()
         # self.ledStrip = LedStrip()
-        self.db = Database()
+        self.db: Database = Database()
 
-        self.volume_old = 0
-        self.volume_min = 0
-        self.volume_max = 0
-        self.volume_on = False
-        self.bass_min = 0
-        self.bass_max = 0
-        self.bass_on = False
-        self.treble_min = 0
-        self.treble_max = 0
-        self.treble_on = False
+        self.volume_old: int = 0
+        self.volume_min: int = 0
+        self.volume_max: int = 0
+        self.volume_on: bool = False
+        self.bass_min: int = 0
+        self.bass_max: int = 0
+        self.bass_on: bool = False
+        self.treble_min: int = 0
+        self.treble_max: int = 0
+        self.treble_on: bool = False
 
-        self.pin_frequencies = None
-        self.pin_volume = None
-        self.pin_bass = None
-        self.pin_treble = None
+        self.pin_frequencies: int = 0
+        self.pin_volume: int = 0
+        self.pin_bass: int = 0
+        self.pin_treble: int = 0
 
-        self.settings: dict = None
+        self.settings: dict = {}
         self.load_settings()
 
     def load_settings(self):
@@ -116,6 +116,7 @@ class Radio:
         self.pin_frequencies = self.settings["frequencies"]["posLangKurzMittel"]["pin"]
 
         self.cycle_time = self.settings["cycle_time"]
+        self.amplifier_switch_pin = self.settings["amplifier_pin"]
 
     ####################################
 
@@ -210,11 +211,10 @@ class Radio:
             self.raspberry.turn_raspi_off()
 
     def check_radio_lock(self):
-        if self.radio_buttons.frequency_lock_buttons:
-            for button in self.radio_buttons.frequency_lock_buttons:
-                if button.is_click():
-                    self.radio_lock = not self.radio_lock
-                    print(f"radio lock changed: {self.radio_lock}")
+        if self.radio_buttons.frequency_lock_button.active:
+            if self.radio_buttons.frequency_lock_button.is_click():
+                self.radio_lock = not self.radio_lock
+                print(f"radio lock changed: {self.radio_lock}")
 
     def check_radio_on_off(self):
         if self.radio_buttons.on_off_button.active:
@@ -233,13 +233,14 @@ class Radio:
             self.turn_on_radio(debug=False)
 
     def check_change_speakers(self):
-        if self.radio_buttons.on_off_button.double_click():
-            self.speakers.change_once()
-            if not self.speakers.play_radio:
-                self.publish("stop")
-            if self.mqtt:
-                if not self.speakers.play_central:
-                    self.broker.publish_start_stop("0")
+        if self.radio_buttons.change_speaker_button.active:
+            if self.radio_buttons.on_off_button.double_click():
+                self.speakers.change_once()
+                if not self.speakers.play_radio:
+                    self.publish("stop")
+                if self.mqtt:
+                    if not self.speakers.play_central:
+                        self.broker.publish_start_stop("0")
 
     def turn_off_amplifier(self):
         print("TURN OFF")

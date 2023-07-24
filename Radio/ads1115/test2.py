@@ -19,7 +19,7 @@ pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
 while True:
     values = []
     for i in range(20):
-        values.append(chan1.value)
+        values.append(chan2.value)
         time.sleep(0.1)
     print(f"max: {max(values)}")
     print(f"min: {min(values)}")

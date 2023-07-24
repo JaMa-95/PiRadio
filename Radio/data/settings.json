@@ -1,5 +1,7 @@
 {
   "cycle_time": 0.1,
+  "amplifier_pin": 13,
+  "mqtt": false,
   "volume": {
     "min": 0,
     "max": 25000,
@@ -9,7 +11,7 @@
   },
   "frequencies": {
     "posLangKurzMittel": {
-      "min": 610,
+      "min": 0,
       "max": 17150,
       "on": true,
       "pin": 1
@@ -38,8 +40,18 @@
       "pin": 0,
       "reversed": true,
       "active": false,
-      "is_frequency_lock": false,
       "is_on_off": true,
+      "frequency": {
+        "pos": null,
+        "musicList": null
+      },
+      "led": 0
+    },
+    "changeSpeaker": {
+      "pin": 0,
+      "reversed": true,
+      "active": false,
+      "is_change_speaker": true,
       "frequency": {
         "pos": null,
         "musicList": null
@@ -50,8 +62,6 @@
       "pin": 24,
       "reversed": false,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
@@ -62,8 +72,6 @@
       "pin": 26,
       "reversed": false,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
@@ -74,8 +82,6 @@
       "pin": 21,
       "reversed": false,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_kurz.json"
@@ -86,8 +92,6 @@
       "pin": 20,
       "reversed": false,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ukw.json"
@@ -98,8 +102,6 @@
       "pin": 19,
       "reversed": false,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_spr.json"
@@ -110,8 +112,6 @@
       "pin": 23,
       "reversed": true,
       "active": true,
-      "is_frequency_lock": false,
-      "is_on_off": false,
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ta.json"
