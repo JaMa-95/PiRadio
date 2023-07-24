@@ -97,7 +97,7 @@ class AdsSingle:
 
     def get_value_smoothed_by_pin(self, pin):
         values = []
-        num_values = 700
+        num_values = 300
         if pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
         elif pin == 2:
