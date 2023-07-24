@@ -186,9 +186,7 @@ class Radio:
                 # needs at least some cycle time for other processes
                 time.sleep(0.00001)
             else:
-                print(f"sleep time {sleep_time}")
                 time.sleep(sleep_time)
-            print("FINISHED")
 
     def get_command_changed(self):
         changed_hardware = []
