@@ -53,12 +53,12 @@ class AudioPlayer(Subscriber):
         self.player.play()
 
     def set_volume(self, volume):
+        print(f"volume: {volume}")
         if self.player:
             self.player.audio_set_volume(volume)
         self.volume = volume
 
     def set_bass(self, bass):
-        print(f"bass: {bass}")
         self.equalizer.set_amp_at_index(bass, 0)  # 60 Hz
         self.equalizer.set_amp_at_index(bass / 2, 1)  # 170 Hz
         self.equalizer.set_amp_at_index(bass / 3, 2)  # 310 Hz
@@ -66,7 +66,6 @@ class AudioPlayer(Subscriber):
         self.player.set_equalizer(self.equalizer)
 
     def set_treble(self, treble):
-        print(f"treble: {treble}")
         treble = 0
         self.equalizer.set_amp_at_index(treble / 4, 4)  # 1 kHz
         self.equalizer.set_amp_at_index(treble / 3, 5)  # 3 kHz
