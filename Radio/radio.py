@@ -332,7 +332,6 @@ class Radio:
         self.send_volume(volume)
 
     def set_treble(self, treble):
-        print(f"TREBLE: {treble}")
         treble = -(int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20)
         if treble < -20:
             treble = -20
