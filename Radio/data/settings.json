@@ -3,8 +3,8 @@
   "amplifier_pin": 13,
   "mqtt": false,
   "volume": {
-    "min": 400,
-    "max": 29600,
+    "min": 0,
+    "max": 30000,
     "formel": true,
     "on": true,
     "pin": 3
@@ -18,14 +18,14 @@
     }
   },
   "bass": {
-    "min": 160,
-    "max": 29500,
+    "min": 0,
+    "max": 30000,
     "on": true,
     "pin": 0
   },
   "treble": {
     "min": 13750,
-    "max": 29500,
+    "max": 30000,
     "on": true,
     "pin": 2
   },

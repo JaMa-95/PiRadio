@@ -316,7 +316,6 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
-        print(f"VOLUME: {volume}")
         if 1000 < volume < 2100:
             # somehow after 24000 poti switches to 1250 - 1350
             volume = self.volume_old
@@ -333,6 +332,7 @@ class Radio:
         self.send_volume(volume)
 
     def set_treble(self, treble):
+        print(f"TREBLE: {treble}")
         treble = -(int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20)
         if treble < -20:
             treble = -20
