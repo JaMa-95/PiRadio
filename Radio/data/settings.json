@@ -117,6 +117,46 @@
         "musicList": "freq_ta.json"
       },
       "led": 1
+    },
+    "Bass": {
+      "pin": 22,
+      "reversed": true,
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ta.json"
+      },
+      "led": 99
+    },
+    "Jazz": {
+      "pin": 4,
+      "reversed": false,
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ta.json"
+      },
+      "led": 99
+    },
+    "Language": {
+      "pin": 17,
+      "reversed": true,
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ta.json"
+      },
+      "led": 99
+    },
+    "Solo": {
+      "pin": 27,
+      "reversed": true,
+      "active": true,
+      "frequency": {
+        "pos": "posLangKurzMittel",
+        "musicList": "freq_ta.json"
+      },
+      "led": 99
     }
   },
   "frequency": {
