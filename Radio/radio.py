@@ -401,13 +401,16 @@ class Radio:
         self.radio_buttons.set_value()
         changed_hardware = []
         for button in self.radio_buttons.buttons:
-            if self.current_command[f"button{button.name}"] != button.state:
-                # TODO: Fix led data
-                # self.ledData.on_button_on = button.state
-                # self.ledData.off_button_on = not button.state
-                print(f"BUTTON {button.name} CHANGED: {button.state}")
-                self.current_command[f"button{button.name}"] = button.state
-                changed_hardware.append(f"button{button.name}")
+            try:
+                if self.current_command[f"button{button.name}"] != button.state:
+                    # TODO: Fix led data
+                    # self.ledData.on_button_on = button.state
+                    # self.ledData.off_button_on = not button.state
+                    print(f"BUTTON {button.name} CHANGED: {button.state}")
+                    self.current_command[f"button{button.name}"] = button.state
+                    changed_hardware.append(f"button{button.name}")
+            except KeyError:
+                pass
         return changed_hardware
 
     def process_hardware_value_change(self):
