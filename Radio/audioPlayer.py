@@ -55,6 +55,7 @@ class AudioPlayer(Subscriber):
     def set_volume(self, volume):
         if self.player:
             self.player.audio_set_volume(volume)
+        print(f"VOLUME {volume}")
         self.volume = volume
 
     def set_bass(self, bass):
