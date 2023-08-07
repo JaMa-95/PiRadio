@@ -96,8 +96,6 @@ class ButtonRaspi:
         self.last_click[1] = None
 
     def long_click(self):
-        if self.name == "OnOff":
-            print(f"indexer: {self.indexer}")
         if self.indexer > self.long_threshold:
             return True
         return False
