@@ -206,6 +206,7 @@ class Radio:
 
     def check_shutdown_raspi(self):
         if self.radio_buttons.on_off_button.active:
+            print(self.radio_buttons.on_off_button.long_click())
             if self.radio_buttons.on_off_button.long_click():
                 print(f"on off has changed: {self.radio_buttons.on_off_button.state}")
                 time.sleep(4)

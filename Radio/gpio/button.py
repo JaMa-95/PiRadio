@@ -28,7 +28,7 @@ class ButtonRaspi:
         self.value_old: int = 0
         self.value_olds = []
         self.value_old_index = 0
-        self.indexer = 0
+        self.indexer = 5
 
         self.long_threshold: int = 50
 
