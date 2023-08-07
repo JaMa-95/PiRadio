@@ -37,7 +37,7 @@
   },
   "buttons": {
     "OnOff": {
-      "pin": 0,
+      "pin": 22,
       "reversed": true,
       "active": false,
       "is_on_off": true,
@@ -117,16 +117,6 @@
         "musicList": "freq_ta.json"
       },
       "led": 1
-    },
-    "Bass": {
-      "pin": 22,
-      "reversed": true,
-      "active": true,
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
-      },
-      "led": 99
     },
     "Jazz": {
       "pin": 4,
