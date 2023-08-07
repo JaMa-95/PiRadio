@@ -56,8 +56,6 @@ try:
             print("Pin 27 button is pressed")
         if (GPIO.input(22) == GPIO.HIGH):
             print("Pin 22 button is pressed")
-        if (GPIO.input(6) == GPIO.HIGH):
-            print("Pin 6 button is pressed")
         time.sleep(0.01)
 
 except KeyboardInterrupt:
