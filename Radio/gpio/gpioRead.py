@@ -33,7 +33,7 @@ GPIO.setup(27, GPIO.OUT)
 
 GPIO.setup(22, GPIO.OUT)
 
-GPIO.setup(6, GPIO.IN)
+GPIO.setup(6, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 try:
     while True:
