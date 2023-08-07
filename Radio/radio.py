@@ -205,10 +205,11 @@ class Radio:
         self.current_command["posUKW"] = self.db.get_pos_ukw()
 
     def check_shutdown_raspi(self):
-        if self.db.get_shutdown():
-            # self.ledStrip.raspi_off = True
-            time.sleep(4)
-            self.raspberry.turn_raspi_off()
+        if self.radio_buttons.on_off_button.active:
+            if self.radio_buttons.on_off_button.long_click():
+                print(f"on off has changed: {self.radio_buttons.on_off_button.state}")
+                time.sleep(4)
+                self.raspberry.turn_raspi_off()
 
     def check_radio_lock(self):
         if self.radio_buttons.frequency_lock_button.active:

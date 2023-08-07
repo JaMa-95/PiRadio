@@ -161,10 +161,17 @@ class RadioButtonsRaspi:
                 print(button.state)
             self.db.replace_button(name=button.name,
                                    value=button.state)
+        self.db.replace_shutdown(self.change_speaker_button.state)
 
     def set_value(self):
         for button in self.buttons:
             button.set_value()
+        if self.frequency_lock_buttons.active:
+            self.frequency_lock_buttons.set_value()
+        if self.change_speaker_button.active:
+            self.change_speaker_button.set_value()
+        if self.on_off_button.active:
+            self.on_off_button.set_value()
         return True
 
     def get_pressed_button(self):
