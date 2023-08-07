@@ -39,7 +39,7 @@
     "OnOff": {
       "pin": 22,
       "reversed": true,
-      "active": false,
+      "active": true,
       "is_on_off": true,
       "frequency": {
         "pos": null,
