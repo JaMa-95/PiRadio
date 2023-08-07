@@ -31,9 +31,7 @@ GPIO.setup(17, GPIO.OUT)
 
 GPIO.setup(27, GPIO.OUT)
 
-GPIO.setup(22, GPIO.OUT)
-
-GPIO.setup(6, GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(22, GPIO.OUT, pull_up_down=GPIO.PUD_UP)
 
 try:
     while True:
