@@ -145,7 +145,6 @@ class RadioButtonsRaspi:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
             if "is_on_off" in button_settings:
-                print("ADD ON OFF " + name)
                 self.on_off_button = ButtonRaspi(name, is_on_off=True)
             elif "is_frequency_lock" in button_settings:
                 self.frequency_lock_buttons = ButtonRaspi(name, is_frequency_lock=True)
