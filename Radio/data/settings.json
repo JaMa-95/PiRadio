@@ -4,7 +4,7 @@
   "mqtt": false,
   "volume": {
     "min": 0,
-    "max": 2500,
+    "max": 30000,
     "formel": true,
     "on": true,
     "pin": 3
