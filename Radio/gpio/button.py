@@ -147,7 +147,7 @@ class RadioButtonsRaspi:
             if "is_on_off" in button_settings:
                 self.on_off_button = ButtonRaspi(name, is_on_off=True)
             elif "is_frequency_lock" in button_settings:
-                self.frequency_lock_buttons = ButtonRaspi(name, is_frequency_lock=True)
+                self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True)
             elif "is_change_speaker" in button_settings:
                 self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True)
             else:
@@ -165,8 +165,8 @@ class RadioButtonsRaspi:
     def set_value(self):
         for button in self.buttons:
             button.set_value()
-        if self.frequency_lock_buttons.active:
-            self.frequency_lock_buttons.set_value()
+        if self.frequency_lock_button.active:
+            self.frequency_lock_button.set_value()
         if self.change_speaker_button.active:
             self.change_speaker_button.set_value()
         if self.on_off_button.active:
