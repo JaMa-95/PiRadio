@@ -157,6 +157,8 @@ class RadioButtonsRaspi:
     def set_values_to_db(self):
         self.set_value()
         for button in self.buttons:
+            if button.name == "OnOff":
+                print(button.state)
             self.db.replace_button(name=button.name,
                                    value=button.state)
 
