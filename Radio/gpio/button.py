@@ -146,6 +146,7 @@ class RadioButtonsRaspi:
     db = Database()
 
     def __post_init__(self):
+        print("POTS INIT")
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
