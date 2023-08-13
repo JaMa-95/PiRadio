@@ -49,7 +49,7 @@
     },
     "OnOffRaspi": {
       "pin": 22,
-      "reversed": true,
+      "reversed": false,
       "active": true,
       "is_on_off_raspi": true,
       "frequency": {
