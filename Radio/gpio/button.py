@@ -63,6 +63,7 @@ class ButtonRaspi:
         GPIO.setmode(GPIO.BCM)
         # TODO: give PUD up mode
         if self.is_on_off_raspi:
+            print(f"raspi init: {self.pin}")
             GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         else:
             GPIO.setup(self.pin, GPIO.OUT)
