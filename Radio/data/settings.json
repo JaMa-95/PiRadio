@@ -51,7 +51,7 @@
       "pin": 22,
       "reversed": false,
       "active": true,
-      "is_on_off": true,
+      "is_on_off_raspi": true,
       "frequency": {
         "pos": null,
         "musicList": null
