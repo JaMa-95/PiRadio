@@ -215,6 +215,7 @@ class Radio:
         if self.radio_buttons.on_off_raspi_button.active:
             print(f"raspi: {self.radio_buttons.on_off_raspi_button.long_click()}")
             print(self.radio_buttons.on_off_raspi_button.is_click())
+            print(self.radio_buttons.on_off_raspi_button.is_clicked)
             if self.radio_buttons.on_off_button.long_click():
                 print(f"on off has changed: {self.radio_buttons.on_off_button.state}")
                 time.sleep(4)
