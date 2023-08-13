@@ -14,7 +14,7 @@ class Collector:
         self.pin_treble = None
         self.pin_frequencies = None
         self.load_settings()
-        self.buttons: RadioButtonsRaspi = RadioButtonsRaspi.instance()
+        self.buttons: RadioButtonsRaspi = RadioButtonsRaspi().instance()
         self.ads = AdsObject(pin_frequency=self.pin_frequencies, pin_bass=self.pin_bass, pin_treble=self.pin_treble,
                              pin_volume=self.pin_volume)
         self.db = Database()
