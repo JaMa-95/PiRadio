@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO
 from Radio.db.db import Database
 from Radio.radioFrequency import Frequencies
 from Radio.util.util import get_project_root
-from Radio.util.singleton import SingletonInstance
+from Radio.util.singleton import Singleton
 
 
 class ButtonRaspi:
@@ -136,7 +136,7 @@ class ButtonRaspi:
 
 
 @dataclass
-class RadioButtonsRaspi(SingletonInstance):
+class RadioButtonsRaspi(Singleton):
     on_off_button: ButtonRaspi = ButtonRaspi()
     on_off_raspi_button: ButtonRaspi = ButtonRaspi()
     change_speaker_button: ButtonRaspi = ButtonRaspi()

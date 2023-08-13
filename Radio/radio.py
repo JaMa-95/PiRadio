@@ -58,7 +58,7 @@ class Radio:
         GPIO.setmode(GPIO.BCM)
         self.speakers: Speakers = Speakers(play_radio=play_radio_speaker, play_central=play_central)
 
-        self.radio_buttons: RadioButtonsRaspi = RadioButtonsRaspi().instance()
+        self.radio_buttons: RadioButtonsRaspi = RadioButtonsRaspi()
         self.radio_lock: bool = False
         self.current_stream: RadioFrequency = RadioFrequency("", 0, 0, "", "")
         # TODO: create this from settings
