@@ -151,7 +151,7 @@ class RadioButtonsRaspi:
         if self.buttons is None:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
-            if "is_on_off_radio" in button_settings:
+            if "is_on_off" in button_settings:
                 self.on_off_button = ButtonRaspi(name, is_on_off=True)
             elif "is_on_off_raspi" in button_settings:
                 self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True)
