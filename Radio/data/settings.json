@@ -36,7 +36,18 @@
     }
   },
   "buttons": {
-    "OnOff": {
+    "OnOffMusic": {
+      "pin": 0,
+      "reversed": false,
+      "active": false,
+      "is_on_off": true,
+      "frequency": {
+        "pos": null,
+        "musicList": null
+      },
+      "led": 0
+    },
+    "OnOffRaspi": {
       "pin": 22,
       "reversed": false,
       "active": true,
