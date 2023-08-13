@@ -218,6 +218,7 @@ class Radio:
                 print(f"radio lock changed: {self.radio_lock}")
 
     def check_radio_on_off(self):
+        print(f"radio butt: {self.radio_buttons.on_off_button.active}")
         if self.radio_buttons.on_off_button.active:
             if self.radio_buttons.on_off_button.is_click() and not self.db.get_web_control_value():
                 self.on = not self.on
