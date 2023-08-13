@@ -1,7 +1,7 @@
 import threading
 
 
-class Singleton:
+class SingletonInstance:
     """
     A non-thread-safe helper class to ease implementing singletons.
     This should be used as a decorator -- not a metaclass -- to the
@@ -40,7 +40,7 @@ class Singleton:
         return isinstance(inst, self._decorated)
 
 
-class Singleton2:
+class Singleton:
     _instance = None
     _lock = threading.Lock()
 
@@ -53,12 +53,3 @@ class Singleton2:
                 if not cls._instance:
                     cls._instance = super(Singleton, cls).__new__(cls)
         return cls._instance
-
-
-class Singleton(type):
-    def __init__(self, name, bases, mmbs):
-        super(Singleton, self).__init__()
-        self._instance = super(Singleton, self).__call__()
-
-    def __call__(self, *args, **kw):
-        return self._instance
