@@ -54,10 +54,10 @@ class Singleton2:
                     cls._instance = super(Singleton, cls).__new__(cls)
         return cls._instance
 
-    
+
 class Singleton(type):
-    def __init__(self, name, bases, mmbs):
-        super(Singleton, self).__init__(name, bases, mmbs)
+    def __init__(self):
+        super(Singleton, self).__init__()
         self._instance = super(Singleton, self).__call__()
 
     def __call__(self, *args, **kw):
