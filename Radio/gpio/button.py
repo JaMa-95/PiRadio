@@ -166,7 +166,6 @@ class RadioButtonsRaspi(Singleton):
                 self.buttons.append(ButtonRaspi(name))
 
     def set_values_to_db(self):
-        print(self)
         self.set_value()
         for button in self.buttons:
             if button.name == "OnOff":
