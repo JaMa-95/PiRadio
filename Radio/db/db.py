@@ -7,6 +7,7 @@ from Radio.util.singleton import Singleton
 class Database(Singleton):
 
     def __init__(self):
+        print(f"INIT")
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()
