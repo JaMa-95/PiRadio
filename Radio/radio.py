@@ -320,6 +320,7 @@ class Radio:
         else:
             for button in self.radio_buttons.buttons:
                 if button.state:
+                    print(f"BUTTON {button.name}")
                     return button.frequency_list, self.current_command[button.frequency_pos]
             return None, None
 
@@ -425,7 +426,6 @@ class Radio:
         radio_frequency, encoder_value = self.get_button_frequency()
         # print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
         if not radio_frequency:
-            print(f"STOP")
             if self.playing:
                 if self.speakers.play_radio:
                     self.publish("stop")
