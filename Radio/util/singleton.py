@@ -56,7 +56,7 @@ class Singleton2:
 
 
 class Singleton(type):
-    def __init__(self):
+    def __init__(self, name, bases, mmbs):
         super(Singleton, self).__init__()
         self._instance = super(Singleton, self).__call__()
 

@@ -4,7 +4,7 @@ import threading
 from Radio.util.singleton import Singleton
 
 
-class Database(Singleton):
+class Database(metaclass=Singleton):
 
     def __init__(self):
         self.con = sqlite3.connect("radio.db",
