@@ -169,7 +169,6 @@ class Radio:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
                     if changed_hardware:
-                        print(f"CHANGED HARDWARE: {changed_hardware}")
                         self.process_hardware_value_change()
             else:
                 print("web control")
@@ -426,6 +425,7 @@ class Radio:
         radio_frequency, encoder_value = self.get_button_frequency()
         # print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
         if not radio_frequency:
+            print(f"STOP")
             if self.playing:
                 if self.speakers.play_radio:
                     self.publish("stop")
