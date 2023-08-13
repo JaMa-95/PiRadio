@@ -204,8 +204,15 @@ class Radio:
         self.current_command["posLangKurzMittel"] = self.db.get_pos_lang_mittel_kurz()
         self.current_command["posUKW"] = self.db.get_pos_ukw()
 
-    def check_shutdown_raspi(self):
+    def check_shutdown_raspi_deprecated(self):
         if self.radio_buttons.on_off_button.active:
+            if self.radio_buttons.on_off_button.long_click():
+                print(f"on off has changed: {self.radio_buttons.on_off_button.state}")
+                time.sleep(4)
+                self.raspberry.turn_raspi_off()
+
+    def check_shutdown_raspi(self):
+        if self.radio_buttons.on_off_raspi_button.active:
             if self.radio_buttons.on_off_button.long_click():
                 print(f"on off has changed: {self.radio_buttons.on_off_button.state}")
                 time.sleep(4)

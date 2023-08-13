@@ -11,7 +11,7 @@ from Radio.util.util import get_project_root
 
 class ButtonRaspi:
     def __init__(self, name: str = "", is_on_off: bool = False, is_frequency_lock: bool = False,
-                 is_change_speaker: bool = False):
+                 is_change_speaker: bool = False, is_on_off_raspi: bool = True):
         self.name: str = name
         self.pin: int = 0
         self.active: bool = False
@@ -21,6 +21,7 @@ class ButtonRaspi:
         self.is_frequency_lock: bool = is_frequency_lock
         self.is_on_off_button: bool = is_on_off
         self.is_change_speaker: bool = is_change_speaker
+        self.is_on_off_raspi: bool = is_on_off_raspi
 
         self.cycle_time: float = 0.0
 
@@ -134,6 +135,7 @@ class ButtonRaspi:
 @dataclass
 class RadioButtonsRaspi:
     on_off_button: ButtonRaspi = ButtonRaspi()
+    on_off_raspi_button: ButtonRaspi = ButtonRaspi()
     change_speaker_button: ButtonRaspi = ButtonRaspi()
     radio_lock_button: ButtonRaspi = ButtonRaspi()
     frequency_lock_button: ButtonRaspi = ButtonRaspi()
@@ -148,8 +150,10 @@ class RadioButtonsRaspi:
         if self.buttons is None:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
-            if "is_on_off" in button_settings:
+            if "is_on_off_radio" in button_settings:
                 self.on_off_button = ButtonRaspi(name, is_on_off=True)
+            elif "is_on_off_raspi" in button_settings:
+                self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True)
             elif "is_frequency_lock" in button_settings:
                 self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True)
             elif "is_change_speaker" in button_settings:
