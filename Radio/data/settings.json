@@ -151,7 +151,7 @@
     },
     "Solo": {
       "pin": 27,
-      "reversed": true,
+      "reversed": false,
       "active": true,
       "frequency": {
         "pos": "posLangKurzMittel",
