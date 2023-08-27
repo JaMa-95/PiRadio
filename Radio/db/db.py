@@ -36,6 +36,7 @@ class Database(Singleton):
                 )
 
     def init(self):
+        self.pins = {0: 0, 1: 0, 2: 0, 3: 0}
         self.insert_volume(0)
         self.insert_stream("INITIALIZING")
         self.insert_pos_lang_mittel_kurz(0)
@@ -70,6 +71,8 @@ class Database(Singleton):
 
     def replace_ads_pin_value(self, value: float, pin: int):
         with self.lock:
+            self.pins[pin] = value
+            return
             self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, f"ads_pin_{pin}"))
             self.con.commit()
 
@@ -167,6 +170,8 @@ class Database(Singleton):
 
     def insert_ads_pin_value(self, value: float, pin: int):
         with self.lock:
+            self.pins[pin] = value
+            return
             self.cur.execute("REPLACE INTO radio VALUES(?, ?)", (f"ads_pin_{pin}", value))
             self.con.commit()
 
@@ -278,6 +283,7 @@ class Database(Singleton):
 
     def get_ads_pin_value(self, pin: int):
         with self.lock:
+            return self.pins[pin]
             res = self.cur.execute(f"SELECT * FROM radio WHERE name='ads_pin_{pin}'")
             value = res.fetchall()
             return value[0][1]
