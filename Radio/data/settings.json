@@ -12,7 +12,7 @@
   "frequencies": {
     "posLangKurzMittel": {
       "min": 0,
-      "max": 17150,
+      "max": 12600,
       "on": true,
       "pin": 1
     }
