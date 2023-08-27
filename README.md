@@ -16,6 +16,7 @@ https://raspberrypi.stackexchange.com/questions/639/how-to-get-pulseaudio-runnin
 https://pimylifeup.com/raspberry-pi-vlc/
 
 # autostart
+
 ## this is working
  /etc/profile 
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login
