@@ -140,7 +140,6 @@ class RadioButtonsRaspi(Singleton):
     def __init__(self):
         if self._Singleton__initialized:
             return
-        print("INIT RADIO BUTTON")
         self.on_off_button: ButtonRaspi = ButtonRaspi()
         self.on_off_raspi_button: ButtonRaspi = ButtonRaspi()
         self.change_speaker_button: ButtonRaspi = ButtonRaspi()
