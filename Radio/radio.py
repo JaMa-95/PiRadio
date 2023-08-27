@@ -161,20 +161,10 @@ class Radio:
             start = time.time()
             if not self.db.get_web_control_value():
                 self.check_radio_on_off()
-                end = time.time()
-                print(f"1: {end - start}")
                 self.check_shutdown_raspi()
-                end2 = time.time()
-                print(f"2: {end2 - end}")
                 self.check_change_speakers()
-                end3 = time.time()
-                print(f"3: {end3 - end2}")
                 self.check_radio_lock()
-                end4 = time.time()
-                print(f"4: {end4 - end3}")
                 self.check_poti_change()
-                end5 = time.time()
-                print(f"5: {end5 - end4}")
                 if not self.radio_lock:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
@@ -400,22 +390,33 @@ class Radio:
 
     def check_poti_change(self):
         if self.volume_on:
+            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_volume)
             if value != self.old_command["volume"]:
                 self.current_command["volume"] = value
                 self.set_volume(value)
+            end = time.time()
+            print(f"volume: {end -start}")
 
         if self.bass_on:
+            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_bass)
             if value != self.old_command["bass"]:
                 self.current_command["bass"] = value
                 self.set_bass(value)
 
+            end = time.time()
+            print(f"bass: {end - start}")
+
         if self.treble_on:
+            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_treble)
             if value != self.old_command["treble"]:
                 self.current_command["treble"] = value
                 self.set_treble(value)
+
+            end = time.time()
+            print(f"treble: {end -start}")
 
     def get_changed_buttons(self):
         self.radio_buttons.set_value()
