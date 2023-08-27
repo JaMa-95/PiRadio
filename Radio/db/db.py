@@ -15,6 +15,7 @@ class Database(Singleton):
 
         self.lock = threading.Lock()
 
+        self.pins = {0: 0, 1: 0, 2: 0, 3: 0}
         self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
                            "buttonTa"
                            "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "bass", "treble", "stream",
@@ -36,7 +37,6 @@ class Database(Singleton):
                 )
 
     def init(self):
-        self.pins = {0: 0, 1: 0, 2: 0, 3: 0}
         self.insert_volume(0)
         self.insert_stream("INITIALIZING")
         self.insert_pos_lang_mittel_kurz(0)
