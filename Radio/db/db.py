@@ -9,34 +9,61 @@ class Database(Singleton):
         if self._Singleton__initialized:
             return
         self._Singleton__initialized = True
-        self.con = sqlite3.connect("radio.db",
-                                   check_same_thread=False)
-        self.cur = self.con.cursor()
 
         self.lock = threading.Lock()
+        self.web_control_value: bool = False
+        self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
+        self.volume: int = 0
+        self.stream: str = "INITIALIZING"
+        self.pos_lang_mittel_kurz: int = 0
+        self.pos_ukw: int = 0
+        self.button_ukw: int = 0
+        self.button_lang: int = 0
+        self.button_mittel: int = 0
+        self.button_kurz: int = 0
+        self.button_on_off: int = 0
+        self.button_spr_mus: int = 0
+        self.button_ta: int = 0
+        self.radio_name: str = ""
+        self.web_control_value: bool = False
+        self.poti_value_web: int = 0
+        self.shutdown: bool = False
+        self.bass: int = 0
+        self.treble: int = 0
+        self._initialize()
 
-        self.pins = {0: 0, 1: 0, 2: 0, 3: 0}
-        self.all_values = ["buttonOnOff", "buttonLang", "buttonMittel", "buttonKurz", "buttonUKW", "buttonSprMus",
-                           "buttonTa"
-                           "posLangMittelKurz", "posLangMittelKurz", "posUKW", "volume", "bass", "treble", "stream",
-                           "ads_pin_0", "ads_pin_1", "ads_pin_2", "ads_pin_3", "shutdown"]
+    def _initialize(self):
+        self.web_control_value: bool = False
+        self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
+        self.volume: int = 0
+        self.stream: str = "INITIALIZING"
+        self.pos_lang_mittel_kurz: int = 0
+        self.pos_ukw: int = 0
+        self.button_ukw: int = 0
+        self.button_lang: int = 0
+        self.button_mittel: int = 0
+        self.button_kurz: int = 0
+        self.button_on_off: int = 0
+        self.button_spr_mus: int = 0
+        self.button_ta: int = 0
+        self.radio_name: str = ""
+        self.web_control_value: bool = False
+        self.poti_value_web: int = 0
+        self.shutdown: bool = False
+        self.bass: int = 0
+        self.treble: int = 0
+        self.treble_web: int = 0
+        self.bass_web: int = 0
+        self.volume_web: int = 0
 
     def create(self):
-        with self.lock:
-            try:
-                self.cur.execute(f"CREATE TABLE radio(name, value)")
-                self.cur.execute("CREATE UNIQUE INDEX idx ON contacts (name);")
-            except sqlite3.OperationalError:
-                pass
+        return
 
     def clear(self):
-        with self.lock:
-            for value in self.all_values:
-                self.cur.execute(
-                    f'DELETE from {value}  sqlite_master order by time desc limit 1);'
-                )
+        self._initialize()
 
     def init(self):
+        return
         self.insert_volume(0)
         self.insert_stream("INITIALIZING")
         self.insert_pos_lang_mittel_kurz(0)
@@ -57,392 +84,317 @@ class Database(Singleton):
         self.insert_poti_value_web(0)
         self.insert_shutdown(False)
 
-    def table_exists(self, table_name: str):
-        with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='{table_name}'")
-            return res.fetchone() is not None
-
     ###################################################################################
 
     def replace_web_control_value(self, value: bool):
         with self.lock:
-            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "web_control"))
-            self.con.commit()
+            self.web_control_value = value
 
     def replace_ads_pin_value(self, value: float, pin: int):
         with self.lock:
             self.pins[pin] = value
-            return
-            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, f"ads_pin_{pin}"))
-            self.con.commit()
 
     def replace_radio_name(self, value: str):
         with self.lock:
-            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "radio_name"))
-            self.con.commit()
+            self.radio_name = value
 
     def replace_stream(self, value: str):
         with self.lock:
-            self.cur.execute("""UPDATE radio SET value = ? WHERE name=?""", (value, "stream"))
-            self.con.commit()
+            self.stream = value
 
     def replace_button(self, name: str, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='{name}'")
-            self.con.commit()
+            if name == "buttonOnOff":
+                self.button_on_off = value
+            elif name == "buttonTa":
+                self.button_ta = value
+            elif name == "buttonLang":
+                self.button_lang = value
+            elif name == "buttonMittel":
+                self.button_mittel = value
+            elif name == "buttonKurz":
+                self.button_kurz = value
+            elif name == "buttonUKW":
+                self.button_ukw = value
+            elif name == "buttonSprMus":
+                self.button_spr_mus = value
 
     def replace_button_on_off(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonOnOff'")
-            self.con.commit()
+            self.button_on_off = value
 
     def replace_button_ta(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonTa'")
-            self.con.commit()
+            self.button_ta = value
 
     def replace_button_lang(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonLang'")
-            self.con.commit()
+            self.button_lang = value
 
     def replace_button_mittel(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonMittel'")
-            self.con.commit()
+            self.button_mittel = value
 
     def replace_button_kurz(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonKurz'")
-            self.con.commit()
+            self.button_kurz = value
 
     def replace_button_ukw(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonUKW'")
-            self.con.commit()
+            self.button_ukw = value
 
     def replace_button_spr_mus(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='buttonSprMus'")
-            self.con.commit()
+            self.button_spr_mus = value
 
     def replace_volume(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='volume'")
-            self.con.commit()
+            self.volume = value
 
     def replace_bass(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='bass'")
-            self.con.commit()
+            self.bass = value
 
     def replace_treble(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='treble'")
-            self.con.commit()
+            self.treble = value
 
     def replace_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='posLangMittelKurz'")
-            self.con.commit()
+            self.pos_lang_mittel_kurz = value
 
     def replace_pos_ukw(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='posUKW'")
-            self.con.commit()
+            self.pos_ukw = value
 
     def replace_poti_value_web(self, value: int):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='poti_value_web'")
-            self.con.commit()
+            self.poti_value_web = value
 
     def replace_shutdown(self, value: bool):
         with self.lock:
-            self.cur.execute(f"UPDATE radio SET value = {value} WHERE name='shutdown'")
-            self.con.commit()
+            self.shutdown = value
 
     #########################################################################################
 
     def insert_web_control_value(self, value: bool):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("web_control", value))
-            self.con.commit()
+            self.web_control_value = value
 
     def insert_ads_pin_value(self, value: float, pin: int):
         with self.lock:
             self.pins[pin] = value
-            return
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", (f"ads_pin_{pin}", value))
-            self.con.commit()
 
     def insert_radio_name(self, value: str):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("radio_name", value))
-            self.con.commit()
+            self.radio_name = value
 
     def insert_stream(self, value: str):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("stream", value))
-            self.con.commit()
+            self.stream = value
 
     def insert_button_on_off(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonOnOff", value))
-            self.con.commit()
+            self.button_on_off = value
 
     def insert_button_ta(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonTa", value))
-            self.con.commit()
+            self.button_ta = value
 
     def insert_button_lang(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonLang", value))
-            self.con.commit()
+            self.button_lang = value
 
     def insert_button_mittel(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonMittel", value))
-            self.con.commit()
+            self.button_mittel = value
 
     def insert_button_kurz(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonKurz", value))
-            self.con.commit()
+            self.button_kurz = value
 
     def insert_button_ukw(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonUKW", value))
-            self.con.commit()
+            self.button_ukw = value
 
     def insert_button_spr_mus(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("buttonSprMus", value))
-            self.con.commit()
+            self.button_spr_mus = value
 
     def insert_volume(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("volume", value))
-            self.con.commit()
+            self.volume = value
 
     def insert_bass(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("bass", value))
-            self.con.commit()
+            self.bass = value
 
     def insert_treble(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("treble", value))
-            self.con.commit()
+            self.treble = value
 
     def insert_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("posLangMittelKurz", value))
-            self.con.commit()
+            self.pos_lang_mittel_kurz = value
 
     def insert_pos_ukw(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("posUKW", value))
-            self.con.commit()
+            self.pos_ukw = value
 
     def insert_poti_value_web(self, value: int):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("poti_value_web", value))
-            self.con.commit()
+            self.poti_value_web = value
 
     def insert_shutdown(self, value: bool):
         with self.lock:
-            self.cur.execute("REPLACE INTO radio VALUES(?, ?)", ("shutdown", value))
-            self.con.commit()
+            self.shutdown = value
 
     #######################################################################
 
     def get_volume_value_web(self):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='volume_web'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.volume_web
 
     def get_bass_value_web(self):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='bass_web'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.bass_web
 
     def get_treble_value_web(self):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='treble_web'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.treble_web
 
     def get_web_control_value(self):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='web_control'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.web_control_value
 
     def get_ads_pin_value(self, pin: int):
         with self.lock:
             return self.pins[pin]
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='ads_pin_{pin}'")
-            value = res.fetchall()
-            return value[0][1]
 
     def get_radio_name(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='radio_name'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.radio_name
 
     def get_stream(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='stream'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.stream
 
     def get_button(self, name: str):
         with self.lock:
-            res = self.cur.execute(f"SELECT * FROM radio WHERE name='{name}'")
-            value = res.fetchall()
-            return value[0][1]
+            if name == "buttonOnOff":
+                return self.button_on_off
+            elif name == "buttonTa":
+                return self.button_ta
+            elif name == "buttonLang":
+                return self.button_lang
+            elif name == "buttonMittel":
+                return self.button_mittel
+            elif name == "buttonKurz":
+                return self.button_kurz
+            elif name == "buttonUKW":
+                return self.button_ukw
+            elif name == "buttonSprMus":
+                return self.button_spr_mus
 
     def get_button_on_off(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_on_off
 
     def get_button_ta(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonTa'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_ta
 
     def get_button_on_off_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonOnOff'")
-            value = res.fetchall()
-            if value[0][1] == 1:
+            if self.button_on_off == 1:
                 return "On"
-            elif value[0][1] == 0:
+            elif self.button_on_off == 0:
                 return "Off"
             return "Error"
 
     def get_button_lang(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_lang
 
     def get_button_lang_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonLang'")
-            value = res.fetchall()
-            if value[0][1] > 50:
+            if self.button_lang == 1:
                 return "Off"
-            elif value[0][1] == 0:
+            elif self.button_lang == 0:
                 return "Error"
             return "On"
 
     def get_button_mittel(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonMittel'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_mittel
 
     def get_button_mittel_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonMittel'")
-            value = res.fetchall()
-            if value[0][1] > 50:
+            if self.button_mittel == 1:
                 return "Off"
-            elif value[0][1] == 0:
+            elif self.button_mittel == 0:
                 return "Error"
             return "On"
 
     def get_button_kurz(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonKurz'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_kurz
 
     def get_button_kurz_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonKurz'")
-            value = res.fetchall()
-            if value[0][1] > 50:
+            if self.button_kurz == 1:
                 return "Off"
-            elif value[0][1] == 0:
+            elif self.button_kurz == 0:
                 return "Error"
             return "On"
 
     def get_button_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonUKW'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_ukw
 
     def get_button_ukw_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonUKW'")
-            value = res.fetchall()
-            if value[0][1] > 50:
+            if self.button_ukw == 1:
                 return "Off"
-            elif value[0][1] == 0:
+            elif self.button_ukw == 0:
                 return "Error"
             return "On"
 
     def get_button_spr_mus(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.button_spr_mus
 
     def get_button_spr_mus_web(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='buttonSprMus'")
-            value = res.fetchall()
-            if value[0][1] > 50:
+            if self.button_spr_mus == 1:
                 return "Off"
-            elif value[0][1] == 0:
+            elif self.button_spr_mus == 0:
                 return "Error"
             return "On"
 
     def get_volume(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='volume'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.volume
 
     def get_treble(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='treble'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.treble
 
     def get_bass(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='bass'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.bass
 
     def get_pos_lang_mittel_kurz(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='posLangMittelKurz'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.pos_lang_mittel_kurz
 
     def get_pos_ukw(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='posUKW'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.pos_ukw
 
     def get_shutdown(self):
         with self.lock:
-            res = self.cur.execute("SELECT * FROM radio WHERE name='shutdown'")
-            value = res.fetchall()
-            return value[0][1]
+            return self.shutdown
 
 
 if __name__ == "__main__":
