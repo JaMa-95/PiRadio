@@ -5,8 +5,11 @@ from Radio.util.singleton import Singleton
 
 
 class Database(Singleton):
-
     def __init__(self):
+        if self._Singleton__initialized:
+            return
+        self._Singleton__initialized = True
+        print("init")
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()
@@ -435,3 +438,10 @@ class Database(Singleton):
             res = self.cur.execute("SELECT * FROM radio WHERE name='shutdown'")
             value = res.fetchall()
             return value[0][1]
+
+
+if __name__ == "__main__":
+    a = Database()
+    b = Database()
+    if a == b:
+        print("YES")

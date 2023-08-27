@@ -135,18 +135,22 @@ class ButtonRaspi:
         self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
 
 
-@dataclass
 class RadioButtonsRaspi(Singleton):
-    on_off_button: ButtonRaspi = ButtonRaspi()
-    on_off_raspi_button: ButtonRaspi = ButtonRaspi()
-    change_speaker_button: ButtonRaspi = ButtonRaspi()
-    radio_lock_button: ButtonRaspi = ButtonRaspi()
-    frequency_lock_button: ButtonRaspi = ButtonRaspi()
-    buttons: List[ButtonRaspi] = None
 
-    db = Database()
+    def __init__(self):
+        if self._Singleton__initialized:
+            return
+        self.on_off_button: ButtonRaspi = ButtonRaspi()
+        self.on_off_raspi_button: ButtonRaspi = ButtonRaspi()
+        self.change_speaker_button: ButtonRaspi = ButtonRaspi()
+        self.radio_lock_button: ButtonRaspi = ButtonRaspi()
+        self.frequency_lock_button: ButtonRaspi = ButtonRaspi()
+        self.buttons: List[ButtonRaspi] = None
 
-    def __post_init__(self):
+        self.db = Database()
+        self._init_settings()
+
+    def _init_settings(self):
         print("POTS INIT")
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:

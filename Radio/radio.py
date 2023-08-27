@@ -169,7 +169,7 @@ class Radio:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
                     if changed_hardware:
-                        print(f"HARDWARE CHANGED {changed_hardware}")
+                        # TODO: always change hardware cause of poti
                         self.process_hardware_value_change()
             else:
                 print("web control")

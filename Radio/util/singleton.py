@@ -52,4 +52,5 @@ class Singleton:
                 # instance is still nonexistent.
                 if not cls._instance:
                     cls._instance = super(Singleton, cls).__new__(cls)
+                    cls._instance.__initialized = False
         return cls._instance
