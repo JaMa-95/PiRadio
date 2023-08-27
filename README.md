@@ -18,7 +18,9 @@ https://pimylifeup.com/raspberry-pi-vlc/
 # autostart
 
 ## this is working
- /etc/profile 
+ /etc/profile.d/radioStart.sh
+
+ 
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login
 https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
 
