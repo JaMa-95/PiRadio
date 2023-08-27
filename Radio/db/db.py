@@ -9,7 +9,7 @@ class Database(Singleton):
         if self._Singleton__initialized:
             return
         self._Singleton__initialized = True
-        print("init")
+        print("init db")
         self.con = sqlite3.connect("radio.db",
                                    check_same_thread=False)
         self.cur = self.con.cursor()

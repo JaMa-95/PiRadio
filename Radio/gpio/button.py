@@ -140,6 +140,7 @@ class RadioButtonsRaspi(Singleton):
     def __init__(self):
         if self._Singleton__initialized:
             return
+        print("INIT RADIO BUTTON")
         self.on_off_button: ButtonRaspi = ButtonRaspi()
         self.on_off_raspi_button: ButtonRaspi = ButtonRaspi()
         self.change_speaker_button: ButtonRaspi = ButtonRaspi()
@@ -151,7 +152,6 @@ class RadioButtonsRaspi(Singleton):
         self._init_settings()
 
     def _init_settings(self):
-        print("POTS INIT")
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
