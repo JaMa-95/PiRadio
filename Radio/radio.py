@@ -171,7 +171,7 @@ class Radio:
                 print(f"3: {end3 - end2}")
                 self.check_radio_lock()
                 end4 = time.time()
-                print(f"4: {end4 - end3 -}")
+                print(f"4: {end4 - end3}")
                 self.check_poti_change()
                 end5 = time.time()
                 print(f"5: {end5 - end4}")
