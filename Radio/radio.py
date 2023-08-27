@@ -392,31 +392,25 @@ class Radio:
         if self.volume_on:
             start = time.time()
             value = self.db.get_ads_pin_value(self.pin_volume)
+            end = time.time()
+            print(f"volume: {end - start}")
             if value != self.old_command["volume"]:
                 self.current_command["volume"] = value
                 self.set_volume(value)
-            end = time.time()
-            print(f"volume: {end -start}")
+            end2 = time.time()
+            print(f"volume 2: {end2 - end}")
 
         if self.bass_on:
-            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_bass)
             if value != self.old_command["bass"]:
                 self.current_command["bass"] = value
                 self.set_bass(value)
 
-            end = time.time()
-            print(f"bass: {end - start}")
-
         if self.treble_on:
-            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_treble)
             if value != self.old_command["treble"]:
                 self.current_command["treble"] = value
                 self.set_treble(value)
-
-            end = time.time()
-            print(f"treble: {end -start}")
 
     def get_changed_buttons(self):
         self.radio_buttons.set_value()
