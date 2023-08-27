@@ -171,12 +171,12 @@ class Radio:
                     changed_hardware = self.get_changed_buttons()
                     changed_hardware.extend(self.get_frequency_change())
                     end2 = time.time()
-                    print(f"1: {end2 - end}")
+                    print(f"2: {end2 - end}")
                     if changed_hardware:
                         # TODO: always change hardware cause of poti
                         self.process_hardware_value_change()
                         end3 = time.time()
-                        print(f"1: {end3 - end2}")
+                        print(f"3: {end3 - end2}")
             else:
                 print("web control")
                 self.check_radio_on_off()
