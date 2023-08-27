@@ -87,7 +87,7 @@ class KurzFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_kurz.json")
+        self.load_from_file("data/freq_kurz.json")
         self.init_min_max()
 
 
@@ -98,7 +98,7 @@ class LangFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_lang.json")
+        self.load_from_file("data/freq_lang.json")
         self.init_min_max()
 
 
@@ -109,7 +109,7 @@ class MittelFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_mittel.json")
+        self.load_from_file("data/freq_mittel.json")
         self.init_min_max()
 
 
@@ -119,7 +119,7 @@ class UKWFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_ukw.json")
+        self.load_from_file("data/freq_ukw.json")
         self.init_min_max()
 
 
@@ -130,7 +130,7 @@ class SprFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_spr.json")
+        self.load_from_file("data/freq_spr.json")
         self.init_min_max()
 
 
@@ -141,7 +141,7 @@ class TaFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(get_project_root() / "/data/freq_ta.json")
+        self.load_from_file("data/freq_ta.json")
         self.init_min_max()
 
 
@@ -150,4 +150,5 @@ if __name__ == "__main__":
     lang = LangFrequencies()
     mittel = MittelFrequencies()
     ukw = UKWFrequencies()
+    ta = TaFrequencies()
     print()
