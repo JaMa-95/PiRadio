@@ -390,15 +390,10 @@ class Radio:
 
     def check_poti_change(self):
         if self.volume_on:
-            start = time.time()
             value = self.db.get_ads_pin_value(self.pin_volume)
-            end = time.time()
-            print(f"volume: {end - start}")
             if value != self.old_command["volume"]:
                 self.current_command["volume"] = value
                 self.set_volume(value)
-            end2 = time.time()
-            print(f"volume 2: {end2 - end}")
 
         if self.bass_on:
             value = self.db.get_ads_pin_value(self.pin_bass)
