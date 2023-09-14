@@ -17,7 +17,7 @@ GPIO.setup(23, GPIO.OUT)
 
 GPIO.setup(24, GPIO.OUT)
 
-GPIO.setup(19, GPIO.OUT)
+GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 GPIO.setup(20, GPIO.OUT)
 

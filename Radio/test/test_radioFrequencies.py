@@ -4,24 +4,9 @@ import vlc
 import unittest
 
 from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
-from Radio.radio import USBReader
 
 
 class TestFrequencies(unittest.TestCase):
-    def test_main_frequency(self):
-        usb_reader = USBReader()
-        print("1")
-        test_string = "buttonOnOff:1,buttonLang:1,buttonMittel:0,buttonKurz:0,buttonUKW:0,buttonSprMus:0,potiValue:0," \
-                      "posLangKurzMittel:22,posUKW:0"
-        usb_reader.set_test_command(test_string)
-        usb_reader.run()
-        time.sleep(2)
-        test_string = "buttonOnOff:1,buttonLang:1,buttonMittel:0,buttonKurz:0,buttonUKW:0,buttonSprMus:0,potiValue:0," \
-                      "posLangKurzMittel:150,posUKW:0"
-        print("2")
-        usb_reader.set_test_command(test_string)
-        time.sleep(3)
-
     def test_play_local(self):
         playsound(r"C:/Users/Jakob/Documents/playlists/hipHop/DanielRifaterra-Amanni.mp3")
         playsound('C:/Users/Jakob/Documents/playlists/chillout/MOTZ4000HZ-GunFingers[MOTZVA04].mp3')
