@@ -1,0 +1,33 @@
+.rowA{
+    display:flex; flex-direction:row;
+}
+.rowB{
+    width: 90%;
+    overflow: hidden;
+}
+
+.button, .potentiometer {
+    width: fit-content;
+    float:left; /* add this */
+    margin-left: 15px;
+}
+
+h1 {
+    display: inline-block;
+    top: -5px;
+    position: relative;
+}
+
+.add {
+
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    filter: invert(71%) sepia(12%) saturate(1427%) hue-rotate(42deg) brightness(90%) contrast(92%);
+}
+
+.add:hover {
+    width: 35px;
+    height: 35px;
+    filter: invert(53%) sepia(5%) saturate(6114%) hue-rotate(46deg) brightness(85%) contrast(71%);
+}

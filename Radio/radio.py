@@ -2,7 +2,6 @@ import datetime
 import json
 import time
 from dataclasses import dataclass
-from math import pow
 import RPi.GPIO as GPIO
 
 from Radio.radioFrequency import RadioFrequency

@@ -1,102 +1,99 @@
-from Radio.db.db import Database
+import json
+from pathlib import Path
 
-from flask_cors import CORS
-from flask import Flask, render_template, request, jsonify
-from turbo_flask import Turbo
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from fastapi.responses import Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Body
+import uvicorn
+from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies
+from Radio.util.util import get_project_root
 
-app = Flask(__name__)
-turbo = Turbo(app)
-CORS(app)
+# from Radio.gpio.button import RadioButtonsRaspi
 
-db = Database()
-
-
-@app.route("/")
-def home():
-    db.create()
-    db.insert_volume(10)
-    db.insert_stream("abc")
-    db.insert_pos_lang_mittel_kurz(21)
-    db.insert_pos_ukw(55)
-    db.insert_button_ukw(22)
-    db.insert_button_lang(100)
-    db.insert_button_mittel(99)
-    db.insert_button_kurz(98)
-    db.insert_button_on_off(97)
-    db.insert_button_spr_mus(96)
-    return render_template("index.html",
-                           volume=db.get_volume(),
-                           stream=db.get_stream(),
-                           button_on_off=db.get_button_on_off_web(),
-                           button_lang=db.get_button_lang_web(),
-                           button_mittel=db.get_button_mittel_web(),
-                           button_kurz=db.get_button_kurz_web(),
-                           button_ukw=db.get_button_ukw_web(),
-                           button_spr=db.get_button_spr_mus_web(),
-                           pos_lang_mittel_kurz=db.get_pos_lang_mittel_kurz(),
-                           pos_ukw_spr=db.get_pos_ukw())
+app = FastAPI()
 
 
-@app.route("/<name>")
-def user(name):
-    return f"Hello {name}!"
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 
 
-@app.route('/data')
-def get_data():
-    return {
-        "volume": db.get_volume(),
-        "stream": db.get_stream(),
-        "button_on_off": db.get_button_on_off_web(),
-        "button_lang": db.get_button_lang_web(),
-        "button_mittel": db.get_button_mittel_web(),
-        "button_kurz": db.get_button_kurz_web(),
-        "button_ukw": db.get_button_ukw_web(),
-        "button_spr": db.get_button_spr_mus_web(),
-        "pos_lang_mittel_kurz": db.get_pos_lang_mittel_kurz(),
-        "pos_ukw_spr": db.get_pos_ukw(),
-        "radio_name": db.get_radio_name()
-    }
-
-
-@app.route('/web_control', methods=['GET', 'POST'])
-def switch_web_control():
-    state = request.form["state"]
-    db.replace_web_control_value(state)
-    return jsonify({'result': 'OK'})
-
-
-@app.route('/button_clicked/<name>/<state>', methods=['GET', 'POST'])
-def button_clicked(name, state):
-    # state = request.form["state"]
-    if "on" in name:
-        db.replace_button_on_off(state)
-    elif "lang" in name:
-        db.replace_button_lang(state)
-    elif "mittel" in name:
-        db.replace_button_mittel(state)
-    elif "kurz" in name:
-        db.replace_button_kurz(state)
-    elif "ukw" in name:
-        db.replace_button_ukw(state)
-    elif "spr" in name:
-        db.replace_button_spr_mus(state)
+@app.get("/frequencies/{name}")
+async def frequencies(name):
+    if name == "Lang":
+        return LangFrequencies().frequencies
+    elif name == "Mittel":
+        return MittelFrequencies().frequencies
+    elif name == "Kurz":
+        return KurzFrequencies().frequencies
+    elif name == "UKW":
+        return UKWFrequencies().frequencies
     else:
-        return f"Button name invalid: {name}", 400
-    return jsonify({'result': 'OK'})
+        return {}
 
 
-@app.route('/pos_lang_kurz_mittel/<value>', methods=['GET', 'POST'])
-def pos_changed(value):
-    db.replace_pos_lang_mittel_kurz(value)
-    return jsonify({'result': 'OK'})
+def frequency_dict_to_list(frequency_dict: dict):
+    list_data = []
+    for frequency in frequency_dict:
+        if "radio_url_re" in frequency:
+            list_data.append([
+                frequency["name"], frequency["minimum"], frequency["maximum"],
+                frequency["radio_name"], frequency["radio_url"], frequency["radio_url_re"]]
+            )
+        else:
+            list_data.append([
+                frequency["name"], frequency["minimum"], frequency["maximum"],
+                frequency["radio_name"], frequency["radio_url"], ""]
+            )
+    return list_data
 
 
-@app.route('/volume/<value>', methods=['GET', 'POST'])
-def volume_changed(value):
-    db.replace_volume(value)
-    return jsonify({'result': 'OK'})
+@app.post("/frequencies")
+async def save_frequencies(frequencies_data: list = Body(), response: Response = 200):
+    name = frequencies_data[0]
+    frequencies_data.pop(0)
+    frequencies_data = frequency_dict_to_list(frequencies_data)
+    try:
+        frequency = LangFrequencies()
+        frequency.load_frequencies(frequencies_data)
+    except Exception as error:
+        print(error)
+        response.status_code = 404
+        return "Wrong data"
+    save_in_file(file_path=get_project_root() / f'data/freq_{name.lower()}.json', data=frequency.to_list())
+    response.status_code = 200
+    return True
+
+
+def save_in_file(file_path: Path, data):
+    with open(file_path.resolve(), "w") as file_handler:
+        json.dump(data, file_handler, indent=4)
+
+
+@app.get("/json/")
+async def json_re():
+    data = [
+        {
+            "id": 1,
+            "name": "abc",
+            "username": "Bret",
+            "email": "mail@mail.biz",
+        }
+    ]
+    return data
 
 
 if __name__ == "__main__":
-    app.run(port=5000, host='0.0.0.0')
+    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    uvicorn.run(app, host="127.0.0.1", port=8000)

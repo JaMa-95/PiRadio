@@ -17,6 +17,7 @@ class RadioFrequency:
     sweet_spot: int = 0
     radio_name: str = ""
     radio_url: str = ""
+    radio_url_re: str = ""
 
     def __init__(self, name: str = "", minimum: int = 0, maximum: int = 0, radio_name: str = "", radio_url: str = "",
                  radio_name_re: str = "", radio_url_re: str = ""):
@@ -30,13 +31,24 @@ class RadioFrequency:
 
     def from_list(self, data: list):
         self.name = data[0]
-        self.minimum = data[1]
-        self.maximum = data[2]
+        self.minimum = int(data[1])
+        self.maximum = int(data[2])
         self.sweet_spot = int((self.maximum - self.minimum) / 2)
         self.radio_name = data[3]
         self.radio_url = data[4]
         if len(data) > 5:
             self.radio_url_re = data[5]
+
+    def to_list(self) -> list:
+        return [
+            self.name,
+            self.minimum,
+            self.maximum,
+            self.sweet_spot,
+            self.radio_name,
+            self.radio_url,
+            self.radio_url_re
+        ]
 
 
 class Frequencies:
@@ -47,6 +59,7 @@ class Frequencies:
         self.load_settings()
         self.load_from_file(f"data/{file_name}")
         self.init_min_max()
+        self.name: str = ""
 
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
@@ -63,14 +76,18 @@ class Frequencies:
         if not path:
             path = 'data/freq_kurz.json'
         path = get_project_root() / path
-        with open(path.resolve()) as file_handler:
+        with open(path.resolve(), encoding='utf-8') as file_handler:
             frequency_data = json.load(file_handler)
+        self.load_frequencies(frequency_data)
+
+    def load_frequencies(self, frequency_data):
         for data in frequency_data:
-            freq = RadioFrequency()
-            freq.from_list(data)
-            self.frequencies.append(
-                freq
-            )
+            if isinstance(data, list):
+                freq = RadioFrequency()
+                freq.from_list(data)
+                self.frequencies.append(freq)
+            else:
+                print(f"Loading from list with wrong data: {data}")
 
     def load_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -78,6 +95,12 @@ class Frequencies:
             settings = json.load(f)
         self.min_frequency = settings["frequency"]["min"]
         self.max_frequency = settings["frequency"]["max"]
+
+    def to_list(self) -> list:
+        data = []
+        for frequency in self.frequencies:
+            data.append(frequency.to_list())
+        return data
 
 
 class KurzFrequencies(Frequencies):
