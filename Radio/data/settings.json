@@ -129,16 +129,6 @@
       },
       "led": 1
     },
-    "Jazz": {
-      "pin": 4,
-      "reversed": false,
-      "active": true,
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
-      },
-      "led": 99
-    },
     "Language": {
       "pin": 17,
       "reversed": true,

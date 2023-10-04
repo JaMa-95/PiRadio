@@ -1,15 +1,31 @@
 import React from "react";
-import { useState, useEffect, createRef, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Frequencies.css';
 import AddLogo from './images/add.svg';
 import SubtractLogo from './images/subtract.svg';
 
 export const Frequencies = (props) => {
-  const frequ = ["Lang", "Mittel", "Kurz"];
+  const [frequencyNames, setFrequencyNames] = useState([]);
   const [allFrequencies, setAllFrequencies] = useState({});
   const [frequencyList, setFrequencyList] = useState(null);
-  const [currentButton, setCurrentButton] = useState(frequ[0]);
+  const [currentButton, setCurrentButton] = useState("");
   const elementsRef = useRef([]);
+
+  const fetchFrequencyNames= () => {
+      return fetch('http://127.0.0.1:8000/frequencyNames/', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        },
+    })
+      .then((res) => res.json())
+      .then((d) => 
+      {
+        setFrequencyNames(d);
+        setCurrentButton(d[0]);
+        fetchFrequencyList(d[0]);
+      })
+  };
 
   const fetchFrequencyList= (name) => {
     setCurrentButton(name);
@@ -23,28 +39,31 @@ export const Frequencies = (props) => {
       .then((res) => res.json())
       .then((d) => 
       {
-        setFrequencyList(addIndexesToFrequencies(d));
-        allFrequencies["name"] = addIndexesToFrequencies(d);
+        
+        let frequenciesIndexes = addIndexesToFrequencies(d);
+        setFrequencyList(frequenciesIndexes);
+        allFrequencies["name"] = frequenciesIndexes;
         setAllFrequencies(allFrequencies);
       })
   };
 
   function addIndexesToFrequencies(frequencies) {
-    let frequenciesIndexes = [];
-    for (let index; index <= frequencies.length; index++)
+    if (frequencies === null) {
+      return null;
+    }
+    for (let i = 0; i < frequencies.length; i++)
     {
-        frequenciesIndexes.push({"index": index, "data": frequencies[index]});
+      frequencies[i]["id"] = i;
     };
-    return frequenciesIndexes;
+    return frequencies;
   };
 
   function deleteIndexesFromFrequencies(frequenciesIndexes) {
-    let frequencies = [];
-    for (let index; index <= frequenciesIndexes.length; index++)
+    for (let i; i < frequenciesIndexes.length; i++)
     {
-      frequencies.push(frequenciesIndexes[index]["data"]);
+      delete frequenciesIndexes[i].id;
     }
-    return frequencies;
+    return frequenciesIndexes;
   };
 
   const postFrequencyList = () => {
@@ -56,32 +75,52 @@ export const Frequencies = (props) => {
         },
         body: JSON.stringify([currentButton, ...deleteIndexesFromFrequencies(frequencyList)]),
     })
-      .then((res) => res.json())
-      .then((d) => 
-      {
-        // TODO: pop up success or fail check if status 200 or 404
+      .then((response) => {
+        var popup = document.getElementById("myPopup");
+        if (response.status === 200)
+        {
+          popup.innerHTML = "success";
+          popup.style.color = "green";
+        } else {
+          popup.innerHTML = "failed";
+          popup.style.color = "red";
+        }
+        popup.classList.replace("hide", "show");
+        setTimeout(function(){
+          popup.classList.replace("show", "hide");
+          }, 5000);
       })
+      .then((d) => {})
   }; 
 
   useEffect(() => {
-    fetchFrequencyList(currentButton);
+    fetchFrequencyNames();
+    if (currentButton != "")
+    {
+      fetchFrequencyList(currentButton);
+    }
   }, []);
 
-  const setFrequencies = (index, frequency) => {
+  const setFrequencies = (id, frequency) => {
     let frequencyListNew = [...frequencyList];
-    frequencyListNew[index] = frequency;
+    for (let i = 0; i < frequencyListNew.length; i++) {
+      if (frequencyListNew[i].id === id) {
+        frequencyListNew[i] = frequency;
+        break;
+      }
+    }
     setFrequencyList(frequencyListNew);
   };
 
   const addFrequency = () => {
     let frequencyListNew = [...frequencyList];
-    frequencyListNew.push({
-      "index": frequencyListNew[frequencyListNew.length - 1]["index"] + 1, 
-      "data": [
-        {"name": "", "minimum": 0, "maximum": 1,
-          "radio_name": "", "radio_url": "", "radio_url_re": ""}
-      ]
-    })
+    let index = frequencyListNew[frequencyListNew.length - 1]["index"] + 1;
+    let element = {
+      "index": index,
+          "name": "", "minimum": 0, "maximum": 1,
+          "radio_name": "", "radio_url": "", "radio_url_re": ""
+    }
+    frequencyListNew.push(element);
     setFrequencyList(frequencyListNew);
     waitForElm(elementsRef.current[frequencyList.length]);
     setTimeout(function(){
@@ -95,18 +134,11 @@ export const Frequencies = (props) => {
       const element = elementsRef.current[frequencyList.length];
       element.style.borderWidth = "thin";
       element.style.borderColor = "black";
- }, 5000);
+    }, 5000);
   }
 
-  const deleteFrequency = (index) => {
-    let frequencyListNew = [...frequencyList];
-    for (let i; i <= frequencyListNew.length; i++) {
-      if (frequencyListNew[i]["index"] === index)
-      {
-        frequencyListNew.splice(i, 1);  
-      }
-    }
-    setFrequencyList(frequencyListNew);
+  const deleteFrequency = (id) => {
+    setFrequencyList(prev => prev.filter((el) => el.id !== id)); 
   }
 
   function waitForElm(selector) {
@@ -114,46 +146,53 @@ export const Frequencies = (props) => {
         if (document.querySelector(selector)) {
             return resolve(document.querySelector(selector));
         }
-
         const observer = new MutationObserver(mutations => {
             if (document.querySelector(selector)) {
                 observer.disconnect();
                 resolve(document.querySelector(selector));
             }
         });
-
         observer.observe(document.body, {
             childList: true,
             subtree: true
         });
     });
-}
+  }
 
-  
   return (
     <div>
       <div className="buttonsFrequencies">
-        <Buttons names={frequ} function={fetchFrequencyList} setButton={setCurrentButton}/>
+        <Buttons names={frequencyNames} fetchFrequencies={fetchFrequencyList} setButton={setCurrentButton}/>
       </div>
-      <div>
-        <img src={AddLogo} alt="Add a frequency" onClick={addFrequency}/>
-      </div>
-      <div>
-        <button type="button" onClick={postFrequencyList}>Save Frequencies</button>
+      <div className="loader">
+          <img src={AddLogo} alt="Add a frequency" onClick={addFrequency} className="addLogo"/>
+          <button type="button" onClick={postFrequencyList}>Save Frequencies</button>
+        <div class="popup">
+            <span class="popuptext" id="myPopup">Popup text...</span>
+          </div>
       </div>
       <div>
           {frequencyList != null &&
-              frequencyList.map(function(item, index){
-              return ( <div className="buttonFrequency" key={index}>
-                   <Frequency name={item["name"]} radioName={item["radio_name"]} minimum={item["minimum"]} maximum={item["maximum"]}
-                      url={item["radio_url"]} url_re={item["radio_url_re"]} index={index} setFrequency={setFrequencies}
-                      elementsRef={elementsRef} delete={deleteFrequency}/>
+              frequencyList.map((item, index) => {
+              return (<div key={item["id"]}>
+                   <Frequency 
+                      name={item["name"]} 
+                      radioName={item["radio_name"]} 
+                      minimum={item["minimum"]}
+                      maximum={item["maximum"]} 
+                      url={item["radio_url"]} 
+                      url_re={item["radio_url_re"]} 
+                      id={item["id"]} 
+                      setFrequency={setFrequencies}
+                      elementsRef={elementsRef} 
+                      delete={deleteFrequency}
+                      index={index}/>
                 </div>);
             }
           )};
       </div>
       <div>
-        <img src={AddLogo} alt="Add a frequency" onClick={addFrequency}/>
+        <img src={AddLogo} alt="Add a frequency" onClick={addFrequency} className="addLogo"/>
       </div>
       <div>
         <button type="button" onClick={postFrequencyList}>Save Frequencies</button>
@@ -163,29 +202,6 @@ export const Frequencies = (props) => {
 };
 
 // <FrequenciesList frequencyList={frequencyList} setFrequencyList={setFrequencyList}/>
-
-function FrequenciesList(props) {
-  const getFrequencies = (index, frequency) => {
-    let frequencyList = props.frequencyList;
-    frequencyList[index] = frequency;
-    props.setFrequencyList(frequencyList);
-  };
-  if (props.frequencyList == null)
-  {
-    return (
-        <div>
-          Rendering
-        </div>
-    );
-  }
-  return props.frequencyList.map((item, index) => (
-    <div className="buttonFrequency" key={index}>
-        <Frequency name={item["name"]} radioName={item["radioName"]} minimum={item["minimum"]} maximum={item["maximum"]}
-        url={item["radio_url"]} url_re={item["radio_url_re"]} index={index} setFrequency={getFrequencies} />
-    </div>
-  ));
-};
-
 function Frequency(props) {
   const [name, setName] = useState(props.name);
   const [radioName, setRadioName] = useState(props.radioName);
@@ -193,37 +209,38 @@ function Frequency(props) {
   const [maximum, setMaximum] = useState(props.maximum);
   const [url, setUrl] = useState(props.url);
   const [urlRe, setUrlRe] = useState(props.url_re);
-  const dataUpdate = () => {
-    props.setFrequency(props.index, {"name": name, "minimum": minimum, "maximum": maximum,
-    "radio_name": radioName, "radio_url": url, "radio_url_re": urlRe});
+  
+  const dataUpdate = (nameNew, minimumNew, maximumNew, radioNameNew, urlNew, urlReNew) => {
+    props.setFrequency(props.id, {"name": nameNew, "minimum": minimumNew, "maximum": maximumNew,
+    "radio_name": radioNameNew, "radio_url": urlNew, "radio_url_re": urlReNew});
   };
 
   const updateName = (value) => {
     setName(value);
-    dataUpdate();
+    dataUpdate(value, minimum, maximum, radioName, url, urlRe);
   };
   const updateRadioName = (value) => {
     setRadioName(value);
-    dataUpdate();
+    dataUpdate(name, minimum, maximum, value, url, urlRe);
   };
   const updateMinimum = (value) => {
     setMinimum(value);
-    dataUpdate();
+    dataUpdate(name, value, maximum, radioName, url, urlRe);
   };
   const updateMaximum = (value) => {
     setMaximum(value);
-    dataUpdate();
+    dataUpdate(name, minimum, value, radioName, url, urlRe);
   };
   const updateUrl = (value) => {
     setUrl(value);
-    dataUpdate();
+    dataUpdate(name, minimum, maximum, radioName, value, urlRe);
   };
   const updateUrlRe = (value) => {
     setUrlRe(value);
-    dataUpdate();
+    dataUpdate(name, minimum, maximum, radioName, url, value);
   };
   return (
-    <div class="Frequency" key={props.index} ref={el => props.elementsRef.current[props.index] = el}>
+    <div className="frequency" id={props.id} key={props.index} ref={el => props.elementsRef.current[props.index] = el}>
       <div className="container">
           <label for="name" className="data">Name: </label>
           <input type="text" id="name" name="name" onChange={e =>updateName(e.target.value)} value={name}/>
@@ -250,24 +267,36 @@ function Frequency(props) {
           <input type="text" id="url_re" name="url_re" onChange={e =>updateUrlRe(e.target.value)} value={urlRe}/>
       </div>
       <div className="container">
-        <img src={SubtractLogo} alt="Add a frequency" onClick={()=>props.delete(name, radioName)}/>        
+        <img src={SubtractLogo} alt="Add a frequency" onClick={()=>props.delete(props.id)} className="subtractLogo"/>        
       </div>
     </div>
   );
 };
 
 function Buttons(props) {
+  const [selectedButton, setSelectedButton] = useState(0);
   return props.names.map((item, index) => (
-    <div>
-      <Button item={item} function={props.function} index={index}/>
+    <div className="buttons">
+      <Button item={item} fetchFrequencies={props.fetchFrequencies} index={index} selected={selectedButton === index}
+        buttonClicked={setSelectedButton}/>
     </div>
   ));
 };
 
 function Button(props) {
+  const buttonClick = () => {
+    props.fetchFrequencies(props.item);
+    props.buttonClicked(props.index);
+  };
   return (
-    <div className="buttonFrequency" key={props.index}>
-        <button type="button" onClick={()=> props.function(props.item)}>{props.item}</button>
+    <div  key={props.index}>
+        <button 
+            className={props.selected ? 'buttonFrequencyActive' : 'buttonFrequencyInactive'}
+            type="button" 
+            onClick={buttonClick} 
+            active={props.selected}>
+                  {props.item}
+        </button>
     </div>
   );
 };

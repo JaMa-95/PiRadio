@@ -44,7 +44,6 @@ class RadioFrequency:
             self.name,
             self.minimum,
             self.maximum,
-            self.sweet_spot,
             self.radio_name,
             self.radio_url,
             self.radio_url_re
@@ -52,13 +51,14 @@ class RadioFrequency:
 
 
 class Frequencies:
-    def __init__(self, file_name):
+    def __init__(self, file_name: str = None):
         self.frequencies = []
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file(f"data/{file_name}")
-        self.init_min_max()
+        if file_name:
+            self.load_from_file(f"data/{file_name}")
+            self.init_min_max()
         self.name: str = ""
 
     def init_min_max(self):

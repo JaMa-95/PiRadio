@@ -1,24 +1,178 @@
 [
-  ["Rock", 0, 100, "Rock Antenne", "http://stream.rockantenne.de/rockantenne/stream/mp3?aw_0_1st.playerid=com"],
-  ["Indie", 0, 100, "Delta Radio Indie", "http://streams.deltaradio.de/delta-indie/mp3-192"],
-  ["Oldies", 0, 100, "Stereo Oldies Radio", "http://mediajukebox.dyndns.org:88/broadwave.mp3"],
-  ["Jazz", 0, 100, "Jazz Cafe", "http://radio.wanderingsheep.tv:8059/jazzcafe320"],
-  ["Reggaeton", 0, 100, "NRJ Reggaeton", "https://scdn.nrjaudio.fm/adwz1/fr/31023/mp3_128.mp3?origineradio"],
-  ["Cumbia", 0, 100, "Estrella 100 cumbia sonidera", "https://usa5.fastcast4u.com/proxy/onztbbyh?mp=/1"],
-  ["HipHop", 0, 100, "HipHop Station", "http://streaming.radio.co/s97881c7e0/listen"],
-  ["HipHop Oldies", 0, 100, "Old School that Jams", "http://computronpc.net:8000/949"],
-  ["90s", 0, 100, "90s Hits", "http://stream.zeno.fm/etd6kax1xv8uv"],
-  ["90er", 0, 100, "http://addrad.io/4459c2f", "http://addrad.io/4459c2f"],
-  ["eurodance", 0, 100, "Eurodance 90", "http://eurodance90stream.ddns.net/"],
-  ["Techno", 0, 100, "Techno FM", "http://stream.techno.fm/radio320.mp3"],
-  ["Techno", 0, 100, "Digital Impulse", "http://orion.shoutca.st:8938/stream"],
-  ["Techno", 0, 100, "TECHNO STYLE Radio", "http://212.108.220.119:1039/stream.mp3"],
-  ["Electro Swing", 0, 100, "Electro Swing Revolution Radio", "http://stream-23.zeno.fm/gdtbdqwzrf9uv?zs=ZpZ8h41ISO6eVCeo2JJ3uQ"],
-  ["Trance", 0, 100, "Digital Impulse - Trance Resident Paradise", "http://orion.shoutca.st:8922/stream"],
-  ["House", 0, 100, "0nlineradio HOUSE", "https://stream.0nlineradio.com/house?ref"],
-  ["Hardstyle", 0, 100, "NRJ Hardstyle", "https://scdn.nrjaudio.fm/adwz1/fr/56708/mp3_128.mp3?origineradio"],
-  ["Drum and Base", 0, 100, "Vanilla Drum and Bass", "http://vanilladnb.co.ua:8000/stream"],
-  ["Schlager", 0, 100, "0nlineradio Schlager Evergreens", "https://stream.0nlineradio.com/schlager-evergreens?ref"],
-  ["Blasmusik", 0, 100, "Alles Blasmusik", "http://stream.bayerwaldradio.com/allesblasmusik"],
-  ["Klassik", 0, 100, "0nlineradio Klassik", "https://stream.0nlineradio.com/klassik?ref"]
+    [
+        "Rock",
+        5000,
+        5345,
+        "Rock Antenne",
+        "http://stream.rockantenne.de/rockantenne/stream/mp3?aw_0_1st.playerid=com",
+        ""
+    ],
+    [
+        "Indie",
+        5346,
+        5691,
+        "Delta Radio Indie",
+        "http://streams.deltaradio.de/delta-indie/mp3-192",
+        ""
+    ],
+    [
+        "Oldies",
+        5692,
+        6037,
+        "Stereo Oldies Radio",
+        "http://mediajukebox.dyndns.org:88/broadwave.mp3",
+        ""
+    ],
+    [
+        "Jazz",
+        6038,
+        6383,
+        "Jazz Cafe",
+        "http://radio.wanderingsheep.tv:8059/jazzcafe320",
+        ""
+    ],
+    [
+        "Reggaeton",
+        6384,
+        6729,
+        "NRJ Reggaeton",
+        "https://scdn.nrjaudio.fm/adwz1/fr/31023/mp3_128.mp3?origineradio",
+        ""
+    ],
+    [
+        "Cumbia",
+        6730,
+        7075,
+        "Estrella 100 cumbia sonidera",
+        "https://usa5.fastcast4u.com/proxy/onztbbyh?mp=/1",
+        ""
+    ],
+    [
+        "HipHop",
+        7076,
+        7421,
+        "HipHop Station",
+        "http://streaming.radio.co/s97881c7e0/listen",
+        ""
+    ],
+    [
+        "HipHop Oldies",
+        7422,
+        7767,
+        "Old School that Jams",
+        "http://computronpc.net:8000/949",
+        ""
+    ],
+    [
+        "90s",
+        7768,
+        8113,
+        "90s Hits",
+        "http://stream.zeno.fm/etd6kax1xv8uv",
+        ""
+    ],
+    [
+        "90er",
+        8114,
+        8459,
+        "http://addrad.io/4459c2f",
+        "http://addrad.io/4459c2f",
+        ""
+    ],
+    [
+        "eurodance",
+        8460,
+        8805,
+        "Eurodance 90",
+        "http://eurodance90stream.ddns.net/",
+        ""
+    ],
+    [
+        "Techno",
+        8806,
+        9151,
+        "Techno FM",
+        "http://stream.techno.fm/radio320.mp3",
+        ""
+    ],
+    [
+        "Techno",
+        9152,
+        9497,
+        "Digital Impulse",
+        "http://orion.shoutca.st:8938/stream",
+        ""
+    ],
+    [
+        "Techno",
+        9498,
+        9843,
+        "TECHNO STYLE Radio",
+        "http://212.108.220.119:1039/stream.mp3",
+        ""
+    ],
+    [
+        "Electro Swing",
+        9844,
+        10189,
+        "Electro Swing Revolution Radio",
+        "http://stream-23.zeno.fm/gdtbdqwzrf9uv?zs=ZpZ8h41ISO6eVCeo2JJ3uQ",
+        ""
+    ],
+    [
+        "Trance",
+        10190,
+        10535,
+        "Digital Impulse - Trance Resident Paradise",
+        "http://orion.shoutca.st:8922/stream",
+        ""
+    ],
+    [
+        "House",
+        10536,
+        10881,
+        "0nlineradio HOUSE",
+        "https://stream.0nlineradio.com/house?ref",
+        ""
+    ],
+    [
+        "Hardstyle",
+        10882,
+        11227,
+        "NRJ Hardstyle",
+        "https://scdn.nrjaudio.fm/adwz1/fr/56708/mp3_128.mp3?origineradio",
+        ""
+    ],
+    [
+        "Drum and Base",
+        11228,
+        11573,
+        "Vanilla Drum and Bass",
+        "http://vanilladnb.co.ua:8000/stream",
+        ""
+    ],
+    [
+        "Schlager",
+        11574,
+        11919,
+        "0nlineradio Schlager Evergreens",
+        "https://stream.0nlineradio.com/schlager-evergreens?ref",
+        ""
+    ],
+    [
+        "Blasmusik",
+        11920,
+        12265,
+        "Alles Blasmusik",
+        "http://stream.bayerwaldradio.com/allesblasmusik",
+        ""
+    ],
+    [
+        "Klassik",
+        12266,
+        12611,
+        "0nlineradio Klassik",
+        "https://stream.0nlineradio.com/klassik?ref",
+        ""
+    ]
 ]
