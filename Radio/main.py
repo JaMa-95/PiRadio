@@ -41,4 +41,4 @@ if __name__ == "__main__":
     radioThread.start()
     collectorThread.start()
     # ledThread.start()
-    app.run(port=5555, host='0.0.0.0')
+    # app.run(port=5555, host='0.0.0.0')
