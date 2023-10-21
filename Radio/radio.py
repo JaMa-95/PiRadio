@@ -44,10 +44,6 @@ class Speakers:
 
 class Radio:
     def __init__(self, mqtt: bool, play_central: bool, play_radio_speaker: bool) -> None:
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.output(6, True)
-        GPIO.setup(5, GPIO.OUT)
-        GPIO.output(5, True)
         # init pub
         self.__subscribers = []
         self.__content = None
