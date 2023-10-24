@@ -63,6 +63,7 @@ class AdsSingle:
 
     def set_to_db_smoothed_by_pin(self, pin):
         value = self.get_value_smoothed_by_pin(pin)
+        print(f"pin: {pin}, value: {value}")
         self.db.replace_ads_pin_value(value, pin)
 
     def get_value(self):
