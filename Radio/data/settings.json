@@ -7,14 +7,14 @@
     "max": 30000,
     "formel": true,
     "on": true,
-    "pin": 3
+    "pin": 2
   },
   "frequencies": {
     "posLangKurzMittel": {
       "min": 0,
       "max": 12600,
       "on": true,
-      "pin": 1
+      "pin": 3
     }
   },
   "bass": {
