@@ -7,7 +7,7 @@
     "max": 30000,
     "formel": true,
     "on": true,
-    "pin": 2
+    "pin": 1
   },
   "frequencies": {
     "posLangKurzMittel": {
@@ -21,7 +21,7 @@
     "min": 0,
     "max": 30000,
     "on": true,
-    "pin": 0
+    "pin": 2
   },
   "treble": {
     "min": 24100,
