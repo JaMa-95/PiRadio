@@ -325,13 +325,13 @@ class Radio:
             return None, None
 
     def set_volume(self, volume):
-        if 1000 < volume < 2100:
-            # somehow after 24000 poti switches to 1250 - 1350
-            volume = self.volume_old
-        elif volume <= 0:
-            volume = 0
-        else:
-            volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
+        # if 1000 < volume < 2100:
+        #     # somehow after 24000 poti switches to 1250 - 1350
+        #    volume = self.volume_old
+        #elif volume <= 0:
+        #    volume = 0
+        #else:
+        volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
         if volume < 0:
             volume = 0
         elif volume > 100:
@@ -425,7 +425,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
+        # print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
         if not radio_frequency:
             if self.playing:
                 if self.speakers.play_radio:
