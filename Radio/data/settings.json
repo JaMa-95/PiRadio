@@ -3,7 +3,7 @@
   "amplifier_pin": 13,
   "mqtt": false,
   "volume": {
-    "min": 0,
+    "min": -4000,
     "max": 30000,
     "formel": true,
     "on": true,
