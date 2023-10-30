@@ -89,6 +89,19 @@ def save_in_file(file_path: Path, data):
         json.dump(data, file_handler, indent=4)
 
 
+def run():
+    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
 if __name__ == "__main__":
     origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
 

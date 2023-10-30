@@ -8,7 +8,7 @@ from threading import Thread
 
 from radio import Radio
 from audioPlayer import AudioPlayer
-from app import app
+from app import run as app_run
 from db.db import Database
 from collector import Collector
 # from led.ledStrip import LedStrip
@@ -41,4 +41,6 @@ if __name__ == "__main__":
     radioThread.start()
     collectorThread.start()
     # ledThread.start()
-    # app.run(port=5555, host='0.0.0.0')
+
+    app_run()
+
