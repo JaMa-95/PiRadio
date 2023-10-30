@@ -103,6 +103,7 @@ class AdsSingle:
         values = []
         if high_precision:
             num_values = 800
+            time_start = time.time()
         else:
             num_values = 100
         if pin == 1:
@@ -124,6 +125,9 @@ class AdsSingle:
                 values.remove(min(values))
             else:
                 break
+        if high_precision:
+            time_end = time.time()
+            print(f"DURATION: {time_end - time_start}")
         return mean(values)
 
 
