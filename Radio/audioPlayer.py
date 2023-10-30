@@ -1,7 +1,7 @@
 import time
 import vlc
 
-from Radio.radioFrequency import RadioFrequency
+from Radio.radioFrequency import RadioFrequency, Frequencies
 from Radio.util.util import Subscriber
 
 
@@ -63,6 +63,7 @@ class AudioPlayer(Subscriber):
         self.equalizer.set_amp_at_index(bass / 3, 2)  # 310 Hz
         self.equalizer.set_amp_at_index(bass / 4, 3)  # 600 Hz
         self.player.set_equalizer(self.equalizer)
+        print(f"BASS: {bass}")
 
     def set_treble(self, treble):
         treble = 0
@@ -77,6 +78,46 @@ class AudioPlayer(Subscriber):
 
     def play_radio_anouncement(self):
         pass
+
+    @staticmethod
+    def test_radio_frequencies(frequencies: Frequencies):
+        result = {"working": [], "broken": []}
+        for frequency in frequencies.frequencies:
+            url = frequency.radio_url
+            instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+            player = instance.media_player_new()
+            media = instance.media_new(url)
+            media.get_mrl()
+            player.set_media(media)
+            player.audio_set_volume(0)
+            player.play()
+            for _ in range(5):
+                is_playing = player.is_playing()
+                if is_playing:
+                    break
+            if is_playing:
+                result["working"].append(frequency)
+            else:
+                result["broken"].append(frequency)
+            player.stop()
+        return result
+
+    @staticmethod
+    def test_radio_frequency(frequency: RadioFrequency):
+        url = frequency.radio_url
+        instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+        player = instance.media_player_new()
+        media = instance.media_new(url)
+        media.get_mrl()
+        player.set_media(media)
+        player.audio_set_volume(0)
+        player.play()
+        for _ in range(5):
+            is_playing = player.is_playing()
+            if is_playing:
+                break
+        player.stop()
+        return is_playing
 
 
 if __name__ == "__main__":
