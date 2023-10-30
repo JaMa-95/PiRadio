@@ -117,9 +117,11 @@ export const Frequencies = (props) => {
     let index = frequencyListNew[frequencyListNew.length - 1]["index"] + 1;
     let element = {
       "index": index,
-          "name": "", "minimum": 0, "maximum": 1,
-          "radio_name": "", "radio_url": "", "radio_url_re": ""
-    }
+      "name": "", "minimum": 0, "maximum": 1,
+      "radio_name": "", "radio_name_re": "", 
+      "radio_url": "", "radio_url_re": "",
+      "re_active": false
+    };
     frequencyListNew.push(element);
     setFrequencyList(frequencyListNew);
     waitForElm(elementsRef.current[frequencyList.length]);
@@ -139,7 +141,7 @@ export const Frequencies = (props) => {
 
   const deleteFrequency = (id) => {
     setFrequencyList(prev => prev.filter((el) => el.id !== id)); 
-  }
+  };
 
   function waitForElm(selector) {
     return new Promise(resolve => {
@@ -157,7 +159,23 @@ export const Frequencies = (props) => {
             subtree: true
         });
     });
-  }
+  };
+
+  const testFrequencyList = () => {
+    return fetch('http://127.0.0.1:8000/frequencies/test', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([currentButton, ...deleteIndexesFromFrequencies(frequencyList)]),
+  })
+    .then((response) => {
+    })
+    .then((result) => {
+      window.alert(JSON.stringify(result))
+    })
+};
 
   return (
     <div>
@@ -167,9 +185,10 @@ export const Frequencies = (props) => {
       <div className="loader">
           <img src={AddLogo} alt="Add a frequency" onClick={addFrequency} className="addLogo"/>
           <button type="button" onClick={postFrequencyList}>Save Frequencies</button>
-        <div class="popup">
-            <span class="popuptext" id="myPopup">Popup text...</span>
+          <div className="popup">
+            <span className="popuptext" id="myPopup">Popup text...</span>
           </div>
+          <button type="button" onClick={testFrequencyList}>Test frequencies</button>
       </div>
       <div>
           {frequencyList != null &&
@@ -178,10 +197,12 @@ export const Frequencies = (props) => {
                    <Frequency 
                       name={item["name"]} 
                       radioName={item["radio_name"]} 
+                      radioNameRe={item["radio_name_re"]} 
                       minimum={item["minimum"]}
                       maximum={item["maximum"]} 
                       url={item["radio_url"]} 
                       url_re={item["radio_url_re"]} 
+                      re_active={item["re_active"]}
                       id={item["id"]} 
                       setFrequency={setFrequencies}
                       elementsRef={elementsRef} 
@@ -205,69 +226,132 @@ export const Frequencies = (props) => {
 function Frequency(props) {
   const [name, setName] = useState(props.name);
   const [radioName, setRadioName] = useState(props.radioName);
+  const [radioNameRe, setRadioNameRe] = useState(props.radioNameRe);
   const [minimum, setMinimum] = useState(props.minimum);
   const [maximum, setMaximum] = useState(props.maximum);
   const [url, setUrl] = useState(props.url);
   const [urlRe, setUrlRe] = useState(props.url_re);
+  const [reActive, setReActive] = useState(props.re_active);
+  const [urlState, setUrlState] = useState("black");
+  const [urlStateRe, setUrlStateRe] = useState(true);
+
+  const testURL = () => {
+      let testURL;
+      if (reActive || reActive != 0) {
+        testURL = urlRe;
+      } else {
+        testURL = url;
+      }
+      window.alert(url);
+      return fetch('http://127.0.0.1:8000/frequency/test/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"url": testURL}),
+    })
+      .then((res) => res.json())
+      .then((testResult) => 
+      {
+        if (reActive || reActive != 0) {
+          if (testResult) {
+            setUrlStateRe("green");
+          } else {
+            setUrlStateRe("red");
+          }
+        } else {
+          if (testResult) {
+            setUrlState("green");
+          } else {
+            setUrlState("red");
+          }
+        }
+      })
+  };
   
-  const dataUpdate = (nameNew, minimumNew, maximumNew, radioNameNew, urlNew, urlReNew) => {
+  const dataUpdate = (nameNew, minimumNew, maximumNew, radioNameNew, radioNameReNew, urlNew, 
+                        urlReNew, reActiveNew) => {
     props.setFrequency(props.id, {"name": nameNew, "minimum": minimumNew, "maximum": maximumNew,
-    "radio_name": radioNameNew, "radio_url": urlNew, "radio_url_re": urlReNew});
+    "radio_name": radioNameNew, "radio_name_re": radioNameReNew, "radio_url": urlNew, 
+    "radio_url_re": urlReNew, "re_active": reActiveNew});
   };
 
   const updateName = (value) => {
     setName(value);
-    dataUpdate(value, minimum, maximum, radioName, url, urlRe);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
   const updateRadioName = (value) => {
     setRadioName(value);
-    dataUpdate(name, minimum, maximum, value, url, urlRe);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+  };
+  const updateRadioNameRe = (value) => {
+    setRadioNameRe(value);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
   const updateMinimum = (value) => {
     setMinimum(value);
-    dataUpdate(name, value, maximum, radioName, url, urlRe);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
   const updateMaximum = (value) => {
     setMaximum(value);
-    dataUpdate(name, minimum, value, radioName, url, urlRe);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
   const updateUrl = (value) => {
     setUrl(value);
-    dataUpdate(name, minimum, maximum, radioName, value, urlRe);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
   const updateUrlRe = (value) => {
     setUrlRe(value);
-    dataUpdate(name, minimum, maximum, radioName, url, value);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
   };
+  const updateReActive = (value) => {
+    setReActive(value);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+  };
+  
   return (
     <div className="frequency" id={props.id} key={props.index} ref={el => props.elementsRef.current[props.index] = el}>
       <div className="container">
-          <label for="name" className="data">Name: </label>
+          <label htmlFor="name" className="data">Name: </label>
           <input type="text" id="name" name="name" onChange={e =>updateName(e.target.value)} value={name}/>
       </div>
       <div className="container">
-          <label for="radioName" className="data">Radio station name: </label>
+          <label htmlFor="radioName" className="data">Radio station name: </label>
           <input type="text" id="radioName" name="radioName" onChange={e =>updateRadioName(e.target.value)} 
             value={radioName}/>
       </div>
       <div className="container">
-          <label for="startValue" className="data">Poti start value: </label>
+          <label htmlFor="startValue" className="data">Poti start value: </label>
           <input type="text" id="startValue" name="startValue" onChange={e =>updateMinimum(e.target.value)} value={minimum}/>
       </div>
       <div className="container">
-          <label for="endValue" className="data">Poti end value: </label>
+          <label htmlFor="endValue" className="data">Poti end value: </label>
           <input type="text" id="endValue" name="endValue" onChange={e =>updateMaximum(e.target.value)} value={maximum}/>
       </div>
       <div className="container">
-          <label for="url" className="data">Radio URL: </label>
-          <input type="text" id="url" name="url" onChange={e =>updateUrl(e.target.value)} value={url}/>
+          <label htmlFor="url" className="data">Radio URL: </label>
+          <input type="text" id="url" name="url" onChange={e =>updateUrl(e.target.value)} value={url}
+            style={{color: urlState}}/>
       </div>
       <div className="container">
-          <label for="url_re" className="data">Radio URL Spare: </label>
-          <input type="text" id="url_re" name="url_re" onChange={e =>updateUrlRe(e.target.value)} value={urlRe}/>
+          <label htmlFor="radio_name_re" className="data">Radio name spare: </label>
+          <input type="text" id="radio_name_re" name="radio_name_re" onChange={e =>updateRadioNameRe(e.target.value)} value={urlRe}/>
+      </div>
+      <div className="container">
+          <label htmlFor="url_re" className="data">Radio URL spare: </label>
+          <input type="text" id="url_re" name="url_re" onChange={e =>updateUrlRe(e.target.value)} 
+          value={urlRe} style={{color: urlStateRe}}/>
       </div>
       <div className="container">
         <img src={SubtractLogo} alt="Add a frequency" onClick={()=>props.delete(props.id)} className="subtractLogo"/>        
+      </div>
+      <div className="container">
+        <label htmlFor="re_active" className="data">Spare radio active: </label>
+        <input type="checkbox" id="re_active" name="re_active" onChange={e =>updateReActive(e.target.value)} value={reActive}/>        
+      </div>
+      <div className="container">
+        <button type="button" onClick={testURL}>Test URL</button>
       </div>
     </div>
   );

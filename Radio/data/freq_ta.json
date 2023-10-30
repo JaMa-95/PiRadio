@@ -1,24 +1,172 @@
 [
-    ["Relaxed", 0, 100, "1000Slots to relax", "http://hyades.shoutca.st:8714/stream"],
-    ["Classic relax", 0, 100, "YourClassical Relax",
-                   "https://relax.stream.publicradio.org/relax.mp3?srcid"],
-    ["Chillout", 0, 100, "Relax Zone", "https://stream.radiojar.com/whwyhz188a0uv"],
-    ["Chillout", 0, 100, "0nlineradio CHILLOUT", "https://stream.0nlineradio.com/chillout?ref"],
-    ["Code", 0, 100, "Techno FM", "http://stream.techno.fm/radio320.mp3"],
-    ["Focus", 0, 100, "Music Lake - Relaxation", "http://nap.casthost.net:8626/stream"],
-    ["Ambient", 0, 100, "Ambient Sound", "http://orion.shoutca.st:8994/stream"],
-    ["Rainy Day", 0, 100, "Sleepless Rain", "http://stream.willstare.com:8850"],
-    ["Nature", 0, 100, "Epic Lounge - Nature Sounds",
-                   "https://stream.epic-lounge.com/nature-sounds?ref"],
-    ["Depressed", 0, 100, "Ambient Sound", "http://orion.shoutca.st:8994/stream"],
-    ["Good vibes", 0, 100, "Ambient Sound", "http://orion.shoutca.st:8994/stream"],
-    ["Happy", 0, 100, "Happy Hits 00", "https://streams.happyhits.co.uk/00s"],
-    ["Party", 0, 100, "Ambient Sound", "http://orion.shoutca.st:8994/stream"],
-    ["Cafe", 0, 100, "Epic Lounge - Coffee Bar Lounge",
-                   "https://stream.epic-lounge.com/coffee-bar-lounge?ref"],
-    ["Romantisch", 0, 100, "EPIC CLASSICAL - Classical Romance",
-                   "https://stream.epic-classical.com/classical-romance?ref"],
-    ["Dark night", 0, 100, "Techno FM", "http://stream.techno.fm/radio320.mp3"],
-    ["Christmas Loung", 0, 100, "Epic Lounge - Christmas Lounge",
-                   "https://stream.epic-lounge.com/christmas-lounge?ref"]
+    [
+        "Relaxed",
+        5000,
+        5447,
+        "1000Slots to relax",
+        "http://hyades.shoutca.st:8714/stream",
+        "",
+        "",
+        0
+    ],
+    [
+        "Classic relax",
+        5448,
+        5895,
+        "YourClassical Relax",
+        "https://relax.stream.publicradio.org/relax.mp3?srcid",
+        "",
+        "",
+        0
+    ],
+    [
+        "Chillout",
+        5896,
+        6343,
+        "Relax Zone",
+        "https://stream.radiojar.com/whwyhz188a0uv",
+        "",
+      "",
+        0
+    ],
+    [
+        "Chillout",
+        6344,
+        6791,
+        "0nlineradio CHILLOUT",
+        "https://stream.0nlineradio.com/chillout?ref",
+        "",
+      "",
+        0
+    ],
+    [
+        "Code",
+        6792,
+        7239,
+        "Techno FM",
+        "http://stream.techno.fm/radio320.mp3",
+        "",
+      "",
+        0
+    ],
+    [
+        "Focus",
+        7240,
+        7687,
+        "Music Lake - Relaxation",
+        "http://nap.casthost.net:8626/stream",
+        "",
+      "",
+        0
+    ],
+    [
+        "Ambient",
+        7688,
+        8135,
+        "Ambient Sound",
+        "http://orion.shoutca.st:8994/stream",
+        "",
+      "",
+        0
+    ],
+    [
+        "Rainy Day",
+        8136,
+        8583,
+        "Sleepless Rain",
+        "http://stream.willstare.com:8850",
+        "",
+      "",
+        0
+    ],
+    [
+        "Nature",
+        8584,
+        9031,
+        "Epic Lounge - Nature Sounds",
+        "https://stream.epic-lounge.com/nature-sounds?ref",
+        "",
+      "",
+        0
+    ],
+    [
+        "Depressed",
+        9032,
+        9479,
+        "Ambient Sound",
+        "http://orion.shoutca.st:8994/stream",
+        "",
+      "",
+        0
+    ],
+    [
+        "Good vibes",
+        9480,
+        9927,
+        "Ambient Sound",
+        "http://orion.shoutca.st:8994/stream",
+        "",
+      "",
+        0
+    ],
+    [
+        "Happy",
+        9928,
+        10375,
+        "Happy Hits 00",
+        "https://streams.happyhits.co.uk/00s",
+        "",
+      "",
+        0
+    ],
+    [
+        "Party",
+        10376,
+        10823,
+        "Ambient Sound",
+        "http://orion.shoutca.st:8994/stream",
+        "",
+      "",
+        0
+    ],
+    [
+        "Cafe",
+        10824,
+        11271,
+        "Epic Lounge - Coffee Bar Lounge",
+        "https://stream.epic-lounge.com/coffee-bar-lounge?ref",
+        "",
+      "",
+        0
+    ],
+    [
+        "Romantisch",
+        11272,
+        11719,
+        "EPIC CLASSICAL - Classical Romance",
+        "https://stream.epic-classical.com/classical-romance?ref",
+        "",
+      "",
+        0
+    ],
+    [
+        "Dark night",
+        11720,
+        12167,
+        "Techno FM",
+        "http://stream.techno.fm/radio320.mp3",
+        "",
+      "",
+        0
+    ],
+    [
+        "Christmas Lounge",
+        12168,
+        12615,
+        "Epic Lounge - Christmas Lounge",
+        "https://stream.epic-lounge.com/christmas-lounge?ref",
+        "",
+      "",
+        0
+    ]
 ]

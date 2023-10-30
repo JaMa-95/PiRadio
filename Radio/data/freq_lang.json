@@ -5,7 +5,9 @@
         5422,
         "Bohemia Berlin",
         "http://streams.fluxfm.de/berlinboheme/mp3-320/streams.fluxfm.de/",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "Oldies",
@@ -13,7 +15,9 @@
         5845,
         "Golden Grooves Radio",
         "http://eu4.fastcast4u.com/proxy/carolanr2?mp=/1",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "20-50s",
@@ -21,7 +25,9 @@
         6268,
         "Cheap Music Popular",
         "http://s2.voscast.com:11688/live",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "50s",
@@ -29,7 +35,9 @@
         6691,
         "Onlineradio 50s",
         "https://stream.0nlineradio.com/50s?ref",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "60s",
@@ -37,7 +45,9 @@
         7114,
         "Radio 60s",
         "http://streams.fluxfm.de/60er/mp3-320/streams.fluxfm.de/",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "70s",
@@ -45,7 +55,9 @@
         7537,
         "That 70s Channel",
         "http://streaming.live365.com/b68000_128mp3",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "70s",
@@ -53,7 +65,9 @@
         7960,
         "That 70s Station",
         "https://radio.wanderingsheep.net:8060/70s",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "80s",
@@ -61,7 +75,9 @@
         8383,
         "80s80s Radio",
         "http://streams.80s80s.de/web/mp3-192/play.m3u",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "80s",
@@ -69,7 +85,9 @@
         8806,
         "80s80s Rock",
         "https://streams.80s80s.de/rock/mp3-192/",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "80s",
@@ -77,7 +95,9 @@
         9229,
         "80s80s NDW",
         "http://streams.80s80s.de/ndw/mp3-192/play.m3u",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "90s",
@@ -85,7 +105,9 @@
         9652,
         "90s HITS",
         "http://stream.zeno.fm/etd6kax1xv8uv",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "90s",
@@ -93,7 +115,10 @@
         10075,
         "Eurodance 90 - Dance Anos 90",
         "http://stream.zeno.fm/pdgmg8eu8k0uv",
-        ""
+        "",
+        "",
+        0
+
     ],
     [
         "2000s",
@@ -101,7 +126,9 @@
         10498,
         "Pop 90s 2000",
         "http://stream.zenolive.com/vy8sr3fwr0quv",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "2000s",
@@ -109,7 +136,9 @@
         10921,
         "Radio Generation 2000s",
         "http://138.197.117.73:8000/airtime_128",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "2000s",
@@ -117,7 +146,9 @@
         11344,
         "Radio 2000s",
         "https://stream.radio2000.it/",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "2010s",
@@ -125,7 +156,9 @@
         11767,
         "rs2 - 2010er",
         "https://stream.rs2.de/rs2-2010er/mp3-192/?ref",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "2010s",
@@ -133,7 +166,9 @@
         12190,
         "FFH DIE 2010ER",
         "https://streams.ffh.de/ffhchannels/mp3/playerid:RTFFH/hq2010er.mp3",
-        ""
+        "",
+        "",
+        0
     ],
     [
         "Top 40",
@@ -141,6 +176,8 @@
         12613,
         "FM Top 40",
         "http://www.1.fm/tunestream/top40/listen.pls",
-        ""
+        "",
+        "",
+        0
     ]
 ]

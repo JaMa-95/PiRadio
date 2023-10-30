@@ -8,7 +8,7 @@ from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body
 import uvicorn
-from Radio.radioFrequency import Frequencies
+from Radio.radioFrequency import Frequencies, RadioFrequency
 from Radio.util.util import get_project_root
 
 app = FastAPI()
@@ -28,16 +28,11 @@ async def frequencies(name):
 def frequency_dict_to_list(frequency_dict: dict):
     list_data = []
     for frequency in frequency_dict:
-        if "radio_url_re" in frequency:
-            list_data.append([
-                frequency["name"], frequency["minimum"], frequency["maximum"],
-                frequency["radio_name"], frequency["radio_url"], frequency["radio_url_re"]]
-            )
-        else:
-            list_data.append([
-                frequency["name"], frequency["minimum"], frequency["maximum"],
-                frequency["radio_name"], frequency["radio_url"], ""]
-            )
+        list_data.append([
+            frequency["name"], frequency["minimum"], frequency["maximum"],
+            frequency["radio_name"], frequency["radio_url"], frequency["radio_name_re"],
+            frequency["radio_url_re"], frequency["re_active"]]
+        )
     return list_data
 
 
@@ -82,6 +77,35 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
     save_in_file(file_path=get_project_root() / f'data/freq_{name.lower()}.json', data=frequency.to_list())
     response.status_code = 200
     return True
+
+
+@app.post("/frequencies/test")
+async def test_frequencies(frequencies_data: list = Body(), response: Response = 200):
+    name = frequencies_data[0]
+    frequencies_data.pop(0)
+    frequencies_data = frequency_dict_to_list(frequencies_data)
+    print("START TEST")
+    try:
+        frequency = Frequencies()
+        frequency.load_frequencies(frequencies_data)
+        result = frequency.test_radio_frequencies()
+    except Exception as error:
+        print(error)
+        response.status_code = 404
+        return "Wrong data"
+    print("result:")
+    print(result)
+    response.status_code = 200
+    return result
+
+@app.post("/frequency/test/")
+async def test_frequencies(url: dict):
+    frequency = RadioFrequency()
+    frequency.radio_url = url["url"]
+    if frequency.test_radio_frequency() == 1:
+        return True
+    else:
+        return False
 
 
 def save_in_file(file_path: Path, data):
