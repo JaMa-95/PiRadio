@@ -117,7 +117,10 @@ class AdsSingle:
 
         for i in range(num_values):
             values.append(self.chan.value)
-
+        if high_precision:
+            time_end = time.time()
+            print(f"DURATION 1: {time_end - time_start}")
+            time_start = time.time()
         #  delete min man values
         for _ in range(10):
             for _ in range(int(num_values/10)):
@@ -127,7 +130,7 @@ class AdsSingle:
                 break
         if high_precision:
             time_end = time.time()
-            print(f"DURATION: {time_end - time_start}")
+            print(f"DURATION 2: {time_end - time_start}")
         return mean(values)
 
 
