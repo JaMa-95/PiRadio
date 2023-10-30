@@ -23,7 +23,10 @@ class AdsObject:
 
     def set_to_db(self):
         for pin in self.pins:
-            self.ads.set_to_db_smoothed_by_pin(pin)
+            if pin == self.pin_frequency:
+                self.ads.set_to_db_smoothed_by_pin(pin, True)
+            else:
+                self.ads.set_to_db_smoothed_by_pin(pin, True)
 
 
 class AdsSingle:
@@ -61,8 +64,8 @@ class AdsSingle:
         value = self.get_value_smoothed()
         self.db.replace_ads_pin_value(value, self.pin)
 
-    def set_to_db_smoothed_by_pin(self, pin):
-        value = self.get_value_smoothed_by_pin(pin)
+    def set_to_db_smoothed_by_pin(self, pin: int, high_precision: bool = False):
+        value = self.get_value_smoothed_by_pin(pin, high_precision)
         # print(f"pin: {pin}, value: {value}")
         self.db.replace_ads_pin_value(value, pin)
 
@@ -96,9 +99,12 @@ class AdsSingle:
             print("---------------")
         return mean(values)
 
-    def get_value_smoothed_by_pin(self, pin):
+    def get_value_smoothed_by_pin(self, pin: int, high_precision: bool):
         values = []
-        num_values = 100
+        if high_precision:
+            num_values = 800
+        else:
+            num_values = 100
         if pin == 1:
             self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
         elif pin == 2:
