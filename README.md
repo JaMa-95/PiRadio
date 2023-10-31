@@ -64,6 +64,9 @@ https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-f
 - sudo pip install paho-mqtt
 - sudo pip install python-vlc
 
+- sudo apt install npm
+- npm install react-bootstrap bootstrap
+
 
 Depence on led strip
 - sudo pip install rpi-ws281x
