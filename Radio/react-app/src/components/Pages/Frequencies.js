@@ -101,7 +101,7 @@ export const Frequencies = (props) => {
     }
   }, []);
 
-  const setFrequencies = (id, frequency) => {
+  const setFrequency = (id, frequency) => {
     let frequencyListNew = [...frequencyList];
     for (let i = 0; i < frequencyListNew.length; i++) {
       if (frequencyListNew[i].id === id) {
@@ -161,21 +161,54 @@ export const Frequencies = (props) => {
     });
   };
 
-  const testFrequencyList = () => {
-    return fetch('http://127.0.0.1:8000/frequencies/test', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify([currentButton, ...deleteIndexesFromFrequencies(frequencyList)]),
-  })
-    .then((response) => {
-    })
-    .then((result) => {
-      window.alert(JSON.stringify(result))
-    })
-};
+  const testFrequencyList = async () => {
+    for (const item of frequencyList) {
+      try {
+        item.attention = true; // Set attention to true before fetching
+        // Update the state to trigger re-render
+        setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
+          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
+          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
+          "url_state_re": item.url_state_re, "attention": item.attention});
+
+        const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({"url": item.radio_url, "url_re": item.radio_url_re}),
+        });
+        const testResult = await response.json();
+        // window.alert(JSON.stringify(testResult))
+        if (testResult[0]) {
+          item.url_state = "green";
+          item.re_active = false;
+        } else if (testResult[0] == false) {
+          item.url_state = "red";
+          item.re_active = true;
+        } else {
+          item.url_state = "black";
+        }
+
+        if (testResult[1] == true) {
+          item.url_state_re = "green";
+        } else if (testResult[1] == false) {
+          item.url_state_re = "red";
+        } else {
+          item.url_state_re = "black";
+        }
+
+        item.attention = false; // Set attention to false after fetching
+        setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
+          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
+          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
+          "url_state_re": item.url_state_re, "attention": item.attention});// Update the state to trigger re-render
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -203,8 +236,11 @@ export const Frequencies = (props) => {
                       url={item["radio_url"]} 
                       url_re={item["radio_url_re"]} 
                       re_active={item["re_active"]}
+                      url_state={item["url_state"]} 
+                      url_state_re={item["url_state_re"]}
+                      attention={item["attention"]}
                       id={item["id"]} 
-                      setFrequency={setFrequencies}
+                      setFrequency={setFrequency}
                       elementsRef={elementsRef} 
                       delete={deleteFrequency}
                       index={index}/>
@@ -232,86 +268,102 @@ function Frequency(props) {
   const [url, setUrl] = useState(props.url);
   const [urlRe, setUrlRe] = useState(props.url_re);
   const [reActive, setReActive] = useState(props.re_active);
-  const [urlState, setUrlState] = useState("black");
-  const [urlStateRe, setUrlStateRe] = useState(true);
+  const [urlState, setUrlState] = useState(props.url_state);
+  const [urlStateRe, setUrlStateRe] = useState(props.url_state_re);
+  const [attention, setAttention] = useState(props.attention);
 
-  const testURL = () => {
-      let testURL;
-      if (reActive || reActive != 0) {
-        testURL = urlRe;
-      } else {
-        testURL = url;
-      }
-      window.alert(url);
-      return fetch('http://127.0.0.1:8000/frequency/test/', {
+  const testURL = async () => {
+    setAttention(true);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'charset':'utf-8'
         },
-        body: JSON.stringify({"url": testURL}),
-    })
-      .then((res) => res.json())
-      .then((testResult) => 
-      {
-        if (reActive || reActive != 0) {
-          if (testResult) {
-            setUrlStateRe("green");
-          } else {
-            setUrlStateRe("red");
-          }
-        } else {
-          if (testResult) {
-            setUrlState("green");
-          } else {
-            setUrlState("red");
-          }
-        }
-      })
+        body: JSON.stringify({"url": url, "url_re": urlRe}),
+      });
+      const testResult = await response.json();
+      window.alert(JSON.stringify(testResult))
+      if (testResult[0]) {
+        setReActive(false);
+        setUrlState("green");
+      } else if (testResult[0] === false) {
+        setReActive(true);
+        setUrlState("red");
+      } else {
+        setUrlState("black");
+      }
+
+      if (testResult[1] === true) {
+        setUrlStateRe("green");
+      } else if (testResult[1] === false) {
+        setUrlStateRe("red");
+      } else {
+        setUrlStateRe("black");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAttention(false);
+    }
   };
   
   const dataUpdate = (nameNew, minimumNew, maximumNew, radioNameNew, radioNameReNew, urlNew, 
-                        urlReNew, reActiveNew) => {
+                        urlReNew, reActiveNew, urlStateNew, urlStateReNew) => {
     props.setFrequency(props.id, {"name": nameNew, "minimum": minimumNew, "maximum": maximumNew,
     "radio_name": radioNameNew, "radio_name_re": radioNameReNew, "radio_url": urlNew, 
-    "radio_url_re": urlReNew, "re_active": reActiveNew});
+    "radio_url_re": urlReNew, "re_active": reActiveNew, "url_state": urlStateNew,
+    "url_state_re": urlStateReNew, "attention": attention});
   };
 
   const updateName = (value) => {
     setName(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(value, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateRadioName = (value) => {
     setRadioName(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, maximum, value, radioNameRe, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateRadioNameRe = (value) => {
     setRadioNameRe(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, maximum, radioName, value, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateMinimum = (value) => {
     setMinimum(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, value, maximum, radioName, radioNameRe, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateMaximum = (value) => {
     setMaximum(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, value, radioName, radioNameRe, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateUrl = (value) => {
     setUrl(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive, urlState, urlStateRe);
   };
   const updateUrlRe = (value) => {
     setUrlRe(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, value, reActive, urlState, urlStateRe);
   };
   const updateReActive = (value) => {
     setReActive(value);
-    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, value, urlState, urlStateRe);
   };
   
+  const updateUrlState = (value) => {
+    setUrlState(value);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive, value, urlStateRe);
+  };
+  
+  const updateUrlStateRe = (value) => {
+    setUrlStateRe(value);
+    dataUpdate(name, minimum, maximum, radioName, radioNameRe, url, urlRe, reActive, urlState, value);
+  };
+  
+  
   return (
-    <div className="frequency" id={props.id} key={props.index} ref={el => props.elementsRef.current[props.index] = el}>
+    <div className={attention ? "frequency attention" : "frequency"} id={props.id} key={props.index} ref={el => props.elementsRef.current[props.index] = el}>
       <div className="container">
           <label htmlFor="name" className="data">Name: </label>
           <input type="text" id="name" name="name" onChange={e =>updateName(e.target.value)} value={name}/>
@@ -336,7 +388,7 @@ function Frequency(props) {
       </div>
       <div className="container">
           <label htmlFor="radio_name_re" className="data">Radio name spare: </label>
-          <input type="text" id="radio_name_re" name="radio_name_re" onChange={e =>updateRadioNameRe(e.target.value)} value={urlRe}/>
+          <input type="text" id="radio_name_re" name="radio_name_re" onChange={e =>updateRadioNameRe(e.target.value)} value={radioNameRe}/>
       </div>
       <div className="container">
           <label htmlFor="url_re" className="data">Radio URL spare: </label>
@@ -348,7 +400,8 @@ function Frequency(props) {
       </div>
       <div className="container">
         <label htmlFor="re_active" className="data">Spare radio active: </label>
-        <input type="checkbox" id="re_active" name="re_active" onChange={e =>updateReActive(e.target.value)} value={reActive}/>        
+        <input type="checkbox" id="re_active" name="re_active" onChange={e =>updateReActive(e.target.checked)} 
+          checked={reActive}/>        
       </div>
       <div className="container">
         <button type="button" onClick={testURL}>Test URL</button>

@@ -57,14 +57,17 @@ class RadioFrequency:
             self.minimum,
             self.maximum,
             self.radio_name,
-            self.radio_name_re,
             self.radio_url,
+            self.radio_name_re,
             self.radio_url_re,
             self.re_active
         ]
 
-    def test_radio_frequency(self):
-        url = self.radio_url
+    def test_radio_frequency(self, test_re: bool = False):
+        if test_re:
+            url = self.radio_url_re
+        else:
+            url = self.radio_url
         instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         player = instance.media_player_new()
         media = instance.media_new(url)

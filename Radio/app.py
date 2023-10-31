@@ -1,13 +1,17 @@
 import json
+import time
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
+from typing import Generator
 
 from fastapi import FastAPI
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import Body
+from fastapi import Body, status, HTTPException
 import uvicorn
+from starlette.responses import StreamingResponse
+
 from Radio.radioFrequency import Frequencies, RadioFrequency
 from Radio.util.util import get_project_root
 
@@ -79,12 +83,13 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
     return True
 
 
-@app.post("/frequencies/test")
+@app.post("/frequencies/test2")
 async def test_frequencies(frequencies_data: list = Body(), response: Response = 200):
     name = frequencies_data[0]
     frequencies_data.pop(0)
     frequencies_data = frequency_dict_to_list(frequencies_data)
     print("START TEST")
+    start = time.time()
     try:
         frequency = Frequencies()
         frequency.load_frequencies(frequencies_data)
@@ -93,10 +98,35 @@ async def test_frequencies(frequencies_data: list = Body(), response: Response =
         print(error)
         response.status_code = 404
         return "Wrong data"
+    end = time.time()
+    print(f"duration: {end - start}")
     print("result:")
     print(result)
     response.status_code = 200
     return result
+
+@app.post("/frequencies/test")
+async def get_image_file(frequencies_data: list = Body(), response: Response = 200):
+    name = frequencies_data[0]
+    frequencies_data.pop(0)
+    frequencies_data = frequency_dict_to_list(frequencies_data)
+    frequencies_obj = Frequencies()
+    frequencies_obj.load_frequencies(frequencies_data)
+    print("START TEST")
+    try:
+        return StreamingResponse(
+            content=test_all_frequencies(frequencies_obj),
+            media_type='application/json'
+        )
+    except Exception as error:
+        raise HTTPException(detail=error.__str__(), status_code=status.HTTP_404_NOT_FOUND)
+
+
+def test_all_frequencies(frequencies_obj: Frequencies) -> Generator:
+    for frequency in frequencies_obj.frequencies:
+        yield json.dumps([frequency.radio_url, frequency.test_radio_frequency(),
+               frequency.radio_url_re, frequency.test_radio_frequency(test_re=True)])
+
 
 @app.post("/frequency/test/")
 async def test_frequencies(url: dict):
@@ -108,8 +138,32 @@ async def test_frequencies(url: dict):
         return False
 
 
+@app.post("/frequency/testWithRe/")
+async def test_frequencies(url: dict):
+    frequency = RadioFrequency()
+    frequency.radio_url = url["url"]
+    frequency.radio_url_re = url["url_re"]
+    if url["url"]:
+        if frequency.test_radio_frequency() == 1:
+            url_state = True
+        else:
+            url_state = False
+    else:
+        url_state = None
+    if url["url_re"]:
+        if frequency.test_radio_frequency(True) == 1:
+            url_state_re = True
+        else:
+            url_state_re = False
+    else:
+        url_state_re = None
+    return url_state, url_state_re
+
+
 def save_in_file(file_path: Path, data):
-    with open(file_path.resolve(), "w") as file_handler:
+    for item in data:
+        print(item)
+    with open(file_path.resolve(), "w", encoding='utf-8',   ) as file_handler:
         json.dump(data, file_handler, indent=4)
 
 

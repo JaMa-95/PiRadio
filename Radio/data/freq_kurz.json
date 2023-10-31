@@ -7,7 +7,7 @@
         "http://ostseewelle--di--nacs-ais-lgc--07--cdn.cast.addradio.de/ostseewelle/nord/mp3/high?_art=dj0yJmlwPTM3LjQuMjMyLjIwNyZpZD1pY3NjeGwtazZhc2VscGdiJnQ9MTY2MjI4NTkwMSZzPTc4NjZmMjljIzM0MWIzMWQ1YTdhNmE4MWYwOTc4MzA3ZGIwYTI3NjQ2",
         "",
         "",
-        0
+        true
     ],
     [
         "Berum",
@@ -17,17 +17,17 @@
         "http://stream.laut.fm/wattwerker",
         "",
         "",
-        0
+        true
     ],
     [
-        "München",
+        "M\u00fcnchen",
         5424,
         5635,
-        "Energy München",
+        "Energy M\u00fcnchen",
         "http://nrj.de/muenchen",
         "",
         "",
-        0
+        true
     ],
     [
         "Monte Ceneri",
@@ -37,7 +37,7 @@
         "https://icecast.gruppocdt.ch/radio3i-256.mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "Freies Berlin",
@@ -47,7 +47,7 @@
         "https://ais-edge37-live365-dal02.cdnstream.com/a51326",
         "",
         "",
-        0
+        true
     ],
     [
         "Stuttgart",
@@ -57,7 +57,7 @@
         "http://nrj.de/stuttgart",
         "",
         "",
-        0
+        true
     ],
     [
         "Frankfurt",
@@ -67,17 +67,17 @@
         "http://addrad.io/4454thr",
         "",
         "",
-        0
+        false
     ],
     [
-        "Brüssel",
+        "Br\u00fcssel",
         6484,
         6695,
         "",
         "http://icecast-servers.vrtcdn.be/stubru_hiphophooray-high.mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "Rias Berlin",
@@ -87,17 +87,17 @@
         "http://fluxfm.streamabc.net/flx-salonflux-mp3-320-6048100?sABC=631329q8%230%23q09r7p7p61o73o2sp36o15o9p26q6329%23fgernzf.syhksz.qr&aw_0_1st.playerid=streams.fluxfm.de&amsparams=playerid:streams.fluxfm.de;skey:1662200280",
         "",
         "",
-        0
+        true
     ],
     [
-        "Östersund",
+        "\u00d6stersund",
         6908,
         7119,
         "Radio Svensk",
         "http://tx-bauerse.sharp-stream.com/http_live.php?i=svenskpop_se_mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "Athen",
@@ -107,7 +107,7 @@
         "http://stream.radiojar.com/e206r95qsp8uv",
         "",
         "",
-        0
+        true
     ],
     [
         "Hilversum",
@@ -117,7 +117,7 @@
         "http://213.202.241.199:8024/stream",
         "",
         "",
-        0
+        true
     ],
     [
         "Sottens",
@@ -127,27 +127,27 @@
         "http://stream.back2noize.com:8000/Back2Noize",
         "",
         "",
-        0
+        true
     ],
     [
         "Stockholm",
         7756,
         7967,
-        "Stockholm Nörradio",
+        "Stockholm N\u00f6rradio",
         "http://live.narradio.se:8030/;stream.mp3",
         "Galaxy FM Sweden",
         "",
-        0
+        true
     ],
     [
-        "München",
+        "M\u00fcnchen",
         7968,
         8179,
-        "Radio Gong München",
+        "Radio Gong M\u00fcnchen",
         "http://addrad.io/44558s5",
         "",
         "",
-        0
+        true
     ],
     [
         "SWF",
@@ -157,7 +157,7 @@
         "https://stream.regenbogen2.de/rheinneckar/mp3-128",
         "",
         "",
-        0
+        true
     ],
     [
         "Paris",
@@ -167,7 +167,7 @@
         "http://radio2.pro-fhi.net:9111/stream",
         "",
         "",
-        0
+        true
     ],
     [
         "Mailand",
@@ -177,17 +177,17 @@
         "http://streaming.centralemilano.com/m3u",
         "",
         "",
-        0
+        true
     ],
     [
-        "Brüssel",
+        "Br\u00fcssel",
         8816,
         9027,
         "stubru hiphophooray high",
         "http://icecast-servers.vrtcdn.be/stubru_hiphophooray-high.mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "Hamburg",
@@ -197,17 +197,17 @@
         "http://streaming.tidenet.de:8000/tide-192.mp3",
         "",
         "",
-        0
+        true
     ],
     [
-        "Göteborg",
+        "G\u00f6teborg",
         9240,
         9451,
         "",
         "http://184.154.43.106:8243/stream",
         "",
         "",
-        0
+        true
     ],
     [
         "Rias Berlin",
@@ -217,7 +217,7 @@
         "http://streams.fluxfm.de/berlinboheme/mp3-320/streams.fluxfm.de/",
         "",
         "",
-        0
+        true
     ],
     [
         "Hilversum",
@@ -227,47 +227,47 @@
         "http://stream.zenolive.com/cfpp8xvs6neuv",
         "",
         "",
-        0
+        true
     ],
     [
-        "Südwestfunk",
+        "S\u00fcdwestfunk",
         9876,
         10087,
         "Das Ding",
         "https://liveradio.swr.de/tn8jep3/dasding/",
         "",
         "",
-        0
+        true
     ],
     [
-        "Straßburg",
+        "Stra\u00dfburg",
         10088,
         10299,
         "Radio Judaica Strasbourg",
         "http://radiojudaicastrasbourg.ice.infomaniak.ch/radiojudaicastrasbourg-128.mp3",
         "",
         "",
-        0
+        true
     ],
     [
-        "Süddeutscher Rundfunk",
+        "S\u00fcddeutscher Rundfunk",
         10300,
         10511,
         "SWR1",
         "https://liveradio.swr.de/sw282p3/swr1bw/",
         "",
         "",
-        0
+        true
     ],
     [
-        "Hörby",
+        "H\u00f6rby",
         10512,
         10723,
-        "Malmö",
+        "Malm\u00f6",
         "http://n0b.radiojar.com:80/bbhah441b6quv",
         "",
         "",
-        0
+        false
     ],
     [
         "Falun",
@@ -277,7 +277,7 @@
         "https://sverigesradio.se/topsy/direkt/223-hi.mp3",
         "",
         "",
-        0
+        false
     ],
     [
         "Bremen",
@@ -287,7 +287,7 @@
         "http://icecast.radiobremen.de/rb/bremennext/live/mp3/128/stream.mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "SV Rel",
@@ -297,17 +297,17 @@
         "https://streams.radio.co/sebb274c66/listen",
         "",
         "",
-        0
+        true
     ],
     [
-        "Saarbrücken",
+        "Saarbr\u00fccken",
         11360,
         11571,
         "",
         "https://addrad.io/4454wbr",
         "",
         "",
-        0
+        false
     ],
     [
         "Luxemburg",
@@ -317,7 +317,7 @@
         "https://www.radioking.com/play/rfm-luxembourg/137599",
         "",
         "",
-        0
+        true
     ],
     [
         "SV Rel",
@@ -327,17 +327,17 @@
         "http://samuel.i-radio.co:8000/djradio",
         "",
         "",
-        0
+        true
     ],
     [
-        "Südwestfunk",
+        "S\u00fcdwestfunk",
         11996,
         12207,
         "Bogota",
         "http://162.213.121.189:8050/live",
         "",
         "",
-        0
+        true
     ],
     [
         "WDR",
@@ -347,7 +347,7 @@
         "https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3",
         "",
         "",
-        0
+        true
     ],
     [
         "Bayern",
@@ -357,6 +357,6 @@
         "http://stream.antenne.de/antenne/stream/mp3?aw_0_1st.playerid=com",
         "",
         "",
-        0
+        true
     ]
 ]
