@@ -67,7 +67,7 @@ class RadioFrequency:
         if test_re:
             url = self.radio_url_re
         else:
-            url = self.radio_url
+                url = self.radio_url
         instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         player = instance.media_player_new()
         media = instance.media_new(url)

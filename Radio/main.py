@@ -42,5 +42,6 @@ if __name__ == "__main__":
     collectorThread.start()
     # ledThread.start()
 
+    # start the web app
     app_run()
 
