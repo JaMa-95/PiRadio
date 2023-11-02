@@ -102,7 +102,7 @@ class AdsSingle:
     def get_value_smoothed_by_pin(self, pin: int, high_precision: bool):
         values = []
         if high_precision:
-            num_values = 800
+            num_values = 500
             # time_start = time.time()
         else:
             num_values = 100
