@@ -10,16 +10,8 @@ export const Frequencies = (props) => {
   const [frequencyList, setFrequencyList] = useState(null);
   const [currentButton, setCurrentButton] = useState("");
   const [frequenciesTestRunning, setFrequenciesTestRunning] = useState(false);
+  const [stopTest, setStopTest] = useState(false);
   const elementsRef = useRef([]);
-
-  const buttonChanged = (value) => {
-    if (frequenciesTestRunning) {
-      setFrequenciesTestRunning(false);
-      setCurrentButton(value);
-    } else {
-      setCurrentButton(value);
-    }
-  }
 
   const fetchFrequencyNames= () => {
       return fetch('http://127.0.0.1:8000/frequencyNames/', {
@@ -104,7 +96,9 @@ export const Frequencies = (props) => {
   }; 
 
   useEffect(() => {
+    // setFrequenciesTestRunning(false);
     fetchFrequencyNames();
+    setCurrentButton(frequencyNames[0]);
     if (currentButton != "")
     {
       fetchFrequencyList(currentButton);
@@ -171,14 +165,40 @@ export const Frequencies = (props) => {
     });
   };
 
-  const testFrequencyList = async () => {
-    setFrequenciesTestRunning(true);
+  function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
+  }
+
+  const startTestFrequencyList = () => {
+    if (frequenciesTestRunning) {
+      window.alert("STOP TEST")
+      setStopTest(true);
+    } else {
+      setFrequenciesTestRunning(true);
+      testFrequencyList();
+    }
+  }
+
+  const testFrequencyList = async () => { 
     let index = 0;
     for (const item of frequencyList) {
       try {
         // Stop the fetching
-        if (!frequenciesTestRunning && index != 0) {
-          break;
+        window.alert("Stop test: " + stopTest)
+        if (stopTest) {
+          window.alert("BREAK: " + frequenciesTestRunning + " " + index);
+          setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
+          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
+          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
+          "url_state_re": item.url_state_re, "attention": false});
+          stopTest(false);
+          setFrequenciesTestRunning(false);
+          return;
         }
         index++;
         
@@ -188,7 +208,7 @@ export const Frequencies = (props) => {
           "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
           "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
           "url_state_re": item.url_state_re, "attention": item.attention});
-
+        
         const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe/', {
           method: 'POST',
           headers: {
@@ -230,24 +250,28 @@ export const Frequencies = (props) => {
         console.error('Error:', error);
       }
     }
-    setFrequency(frequencyList[0].id, 
-      {"name": frequencyList[0].name, 
-        "minimum": frequencyList[0].minimum, 
-        "maximum": frequencyList[0].maximum,
-        "radio_name": frequencyList[0].radio_name, 
-        "radio_name_re": frequencyList[0].radio_name_re, 
-        "radio_url": frequencyList[0].radio_url, 
-        "radio_url_re": frequencyList[0].radio_url_re, 
-        "re_active": frequencyList[0].re_active, 
-        "url_state": frequencyList[0].url_state,
-        "url_state_re": frequencyList[0].url_state_re, 
+    window.alert("FINISHED")
+    setFrequenciesTestRunning(false);
+    if (index >= frequencyList.length) {index--};
+    setFrequency(frequencyList[index].id, 
+      {"name": frequencyList[index].name, 
+        "minimum": frequencyList[index].minimum, 
+        "maximum": frequencyList[index].maximum,
+        "radio_name": frequencyList[index].radio_name, 
+        "radio_name_re": frequencyList[index].radio_name_re, 
+        "radio_url": frequencyList[index].radio_url, 
+        "radio_url_re": frequencyList[index].radio_url_re, 
+        "re_active": frequencyList[index].re_active, 
+        "url_state": frequencyList[index].url_state,
+        "url_state_re": frequencyList[index].url_state_re, 
         "attention": false});
-  };
+  }
 
   return (
     <div>
       <div className="buttonsFrequencies">
-        <Buttons names={frequencyNames} fetchFrequencies={fetchFrequencyList} setButton={buttonChanged}/>
+        <Buttons names={frequencyNames} fetchFrequencies={fetchFrequencyList} setButton={setCurrentButton} 
+          testRunning={frequenciesTestRunning} setStopTest={setStopTest}/>
       </div>
       <div className="loader">
           <img src={AddLogo} alt="Add a frequency" onClick={addFrequency} className="addLogo"/>
@@ -255,7 +279,7 @@ export const Frequencies = (props) => {
           <div className="popup">
             <span className="popuptext" id="myPopup">Popup text...</span>
           </div>
-          <button type="button" onClick={testFrequencyList}>Test frequencies</button>
+          <button type="button" onClick={startTestFrequencyList}>{frequenciesTestRunning ? 'Stop Test Frequency' : 'Start Test Frequency'}</button>
       </div>
       <div>
           {frequencyList != null &&
@@ -337,11 +361,9 @@ function Frequency(props) {
       } else {
         setUrlStateRe("black");
       }
-      window.alert(urlRe);
       if (testResult[0] === false && !urlRe) {
         setReActive(false);
       } 
-
       setAttention(false);
     } catch (error) {
       window.alert("ERROR")
@@ -458,16 +480,23 @@ function Buttons(props) {
   return props.names.map((item, index) => (
     <div className="buttons">
       <Button item={item} fetchFrequencies={props.fetchFrequencies} index={index} 
-        selected={selectedButton === index} buttonClicked={setSelectedButton} setButton={props.setButton}/>
+        selected={selectedButton === index} buttonClicked={setSelectedButton} setButton={props.setButton}
+        testRunning={props.testRunning} setStopTest={props.setStopTest}/>
     </div>
   ));
 };
 
 function Button(props) {
   const buttonClick = () => {
-    props.fetchFrequencies(props.item);
-    props.buttonClicked(props.index);
-    props.setButton(props.item);
+    if (!props.testRunning) {
+      props.setButton(props.item, props.index);
+      props.fetchFrequencies(props.item);
+      props.buttonClicked(props.index);
+      
+    } else {
+      window.alert("TEST RUNNING");
+      props.setStopTest(true);
+    }
   };
   return (
     <div  key={props.index}>
