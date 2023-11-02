@@ -21,7 +21,7 @@ pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
 
 while True:
     values = []
-    num_values = 800
+    num_values = 100
 
     start = time.time()
     for i in range(num_values):
