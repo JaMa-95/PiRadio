@@ -51,6 +51,7 @@ class AudioPlayer(Subscriber):
         else:
             radio_url = self.stream
         if radio_url == "INITIALIZING":
+            print("STILL INIT")
             return
         self.player.stop()
         print(f"stream url: {radio_url}")
