@@ -294,6 +294,9 @@ class Radio:
             self.publish(stream)
         self.db.replace_stream(stream.radio_url)
         self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
+        self.db.replace_stream_re(stream.radio_url_re)
+        self.db.replace_radio_name_re(stream.name + "; " + stream.radio_name_re)
+        self.db.replace_re_active(stream.re_active)
         self.current_stream = stream
         self.playing = True
         if self.mqtt:
@@ -302,7 +305,7 @@ class Radio:
                 self.broker.publish_stream(stream.radio_url)
 
     @staticmethod
-    def get_frequency_stream(button_frequencies, encoder_value):
+    def get_frequency_stream(button_frequencies, encoder_value) -> RadioFrequency:
         for radio_frequency in button_frequencies.frequencies:
             try:
                 if radio_frequency.minimum <= encoder_value < radio_frequency.maximum:
@@ -443,6 +446,9 @@ class Radio:
                     if radio_frequency:
                         print(f"Playing playlist: {stream}")
                         self.db.replace_stream(stream.radio_url)
+                        self.db.replace_stream_re(stream.radio_url_re)
+                        self.db.replace_radio_name_re(stream.name + "; " + stream.radio_name_re)
+                        self.db.replace_re_active(stream.re_active)
                         self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
                         self.turn_on_amplifier()
                         if self.speakers.play_radio:

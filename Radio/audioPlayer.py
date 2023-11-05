@@ -3,6 +3,7 @@ import vlc
 
 from Radio.radioFrequency import RadioFrequency
 from Radio.util.util import Subscriber
+from db.db import Database
 
 
 class AudioPlayer(Subscriber):
@@ -17,13 +18,21 @@ class AudioPlayer(Subscriber):
         self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player = self.instance.media_player_new()
 
+        self.database = Database()
+        self.stream: RadioFrequency = None
+        self.stream_re: RadioFrequency = None
+        self.re_active: bool = False
+
         self.set_treble(0)
         self.set_bass(0)
 
     def update(self):
         content = self.publisher.get_content()
         if type(content) == RadioFrequency:
-            self.play(content)
+            self.stream = self.database.get_stream()
+            self.stream_re = self.database.get_stream_re()
+            self.re_active = self.database.get_re_active()
+            self.play()
         elif content == "stop":
             self.stop()
         elif isinstance(content, str):
@@ -36,7 +45,11 @@ class AudioPlayer(Subscriber):
         else:
             print("ERROR")
 
-    def play(self, stream: RadioFrequency):
+    def play(self):
+        if self.re_active:
+            stream = self.stream_re
+        else:
+            stream = self.stream
         self.player.stop()
         print(f"stream url: {stream.radio_url}")
         media = self.instance.media_new(stream.radio_url)
@@ -44,6 +57,23 @@ class AudioPlayer(Subscriber):
         self.player.audio_set_volume(self.volume)
         self.player.set_media(media)
         self.player.play()
+
+        for _ in range(5):
+            is_playing = self.player.is_playing()
+            if is_playing:
+                print("Stream not working. Changing to re")
+                if self.re_active:
+                    stream = self.stream
+                else:
+                    stream = self.stream_re
+                media = self.instance.media_new(stream.radio_url)
+                media.get_mrl()
+                self.player.audio_set_volume(self.volume)
+                self.player.set_media(media)
+                self.player.play()
+                break
+            else:
+                time.sleep(1)
 
     def stop(self):
         self.player.stop()

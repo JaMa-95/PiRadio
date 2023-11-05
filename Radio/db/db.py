@@ -36,6 +36,7 @@ class Database(Singleton):
         self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
         self.volume: int = 0
         self.stream: str = "INITIALIZING"
+        self.stream_re: str = "INITIALIZING"
         self.pos_lang_mittel_kurz: int = 0
         self.pos_ukw: int = 0
         self.button_ukw: int = 0
@@ -46,6 +47,7 @@ class Database(Singleton):
         self.button_spr_mus: int = 0
         self.button_ta: int = 0
         self.radio_name: str = ""
+        self.radio_name_re: str = ""
         self.web_control_value: bool = False
         self.poti_value_web: int = 0
         self.shutdown: bool = False
@@ -54,6 +56,7 @@ class Database(Singleton):
         self.treble_web: int = 0
         self.bass_web: int = 0
         self.volume_web: int = 0
+        self.re_active: bool = False
 
     def create(self):
         return
@@ -82,6 +85,9 @@ class Database(Singleton):
         self.insert_web_control_value(False)
         self.insert_poti_value_web(0)
         self.insert_shutdown(False)
+        self.insert_re_active(False)
+        self.insert_radio_name_re("---")
+        self.insert_stream_re("INITIALIZING")
 
     ###################################################################################
 
@@ -100,6 +106,18 @@ class Database(Singleton):
     def replace_stream(self, value: str):
         with self.lock:
             self.stream = value
+
+    def replace_stream_re(self, value: str):
+        with self.lock:
+            self.stream_re = value
+
+    def replace_radio_name_re(self, value: str):
+        with self.lock:
+            self.radio_name_re = value
+
+    def replace_re_active(self, value: bool):
+        with self.lock:
+            self.re_active = value
 
     def replace_button(self, name: str, value: int):
         with self.lock:
@@ -192,6 +210,18 @@ class Database(Singleton):
         with self.lock:
             self.stream = value
 
+    def insert_radio_name_re(self, value: str):
+        with self.lock:
+            self.radio_name_re = value
+
+    def insert_stream_re(self, value: str):
+        with self.lock:
+            self.stream_re = value
+
+    def insert_re_active(self, value: bool):
+        with self.lock:
+            self.re_active = value
+
     def insert_button_on_off(self, value: int):
         with self.lock:
             self.button_on_off = value
@@ -277,6 +307,18 @@ class Database(Singleton):
     def get_stream(self):
         with self.lock:
             return self.stream
+
+    def get_radio_name_re(self):
+        with self.lock:
+            return self.radio_name_re
+
+    def get_stream_re(self):
+        with self.lock:
+            return self.stream_re
+
+    def get_re_active(self):
+        with self.lock:
+            return self.re_active
 
     def get_button(self, name: str):
         with self.lock:
