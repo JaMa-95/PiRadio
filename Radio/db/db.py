@@ -14,6 +14,7 @@ class Database(Singleton):
         self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
         self.volume: int = 0
         self.stream: str = "INITIALIZING"
+        self.stream_re: str = "INITIALIZING"
         self.pos_lang_mittel_kurz: int = 0
         self.pos_ukw: int = 0
         self.button_ukw: int = 0
@@ -24,11 +25,13 @@ class Database(Singleton):
         self.button_spr_mus: int = 0
         self.button_ta: int = 0
         self.radio_name: str = ""
+        self.radio_name_re: str = ""
         self.web_control_value: bool = False
         self.poti_value_web: int = 0
         self.shutdown: bool = False
         self.bass: int = 0
         self.treble: int = 0
+        self.re_active: bool = False
         self._initialize()
 
     def _initialize(self):
