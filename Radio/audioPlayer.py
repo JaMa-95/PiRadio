@@ -58,6 +58,7 @@ class AudioPlayer(Subscriber):
         self.player.set_media(media)
         self.player.play()
 
+        """
         for _ in range(5):
             is_playing = self.player.is_playing()
             if is_playing:
@@ -74,6 +75,7 @@ class AudioPlayer(Subscriber):
         self.player.audio_set_volume(self.volume)
         self.player.set_media(media)
         self.player.play()
+        """
 
     def stop(self):
         self.player.stop()
