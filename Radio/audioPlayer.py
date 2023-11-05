@@ -47,12 +47,12 @@ class AudioPlayer(Subscriber):
 
     def play(self):
         if self.re_active:
-            stream = self.stream_re
+            radio_url = self.stream_re
         else:
-            stream = self.stream
+            radio_url = self.stream
         self.player.stop()
-        print(f"stream url: {stream.radio_url}")
-        media = self.instance.media_new(stream.radio_url)
+        print(f"stream url: {radio_url}")
+        media = self.instance.media_new(radio_url)
         media.get_mrl()
         self.player.audio_set_volume(self.volume)
         self.player.set_media(media)
@@ -63,10 +63,10 @@ class AudioPlayer(Subscriber):
             if is_playing:
                 print("Stream not working. Changing to re")
                 if self.re_active:
-                    stream = self.stream
+                    radio_url = self.stream
                 else:
-                    stream = self.stream_re
-                media = self.instance.media_new(stream.radio_url)
+                    radio_url = self.stream_re
+                media = self.instance.media_new(radio_url)
                 media.get_mrl()
                 self.player.audio_set_volume(self.volume)
                 self.player.set_media(media)
