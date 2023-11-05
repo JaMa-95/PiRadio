@@ -32,6 +32,7 @@ class AudioPlayer(Subscriber):
             self.stream = self.database.get_stream()
             self.stream_re = self.database.get_stream_re()
             self.re_active = self.database.get_re_active()
+            print(f"STREAM: {self.stream}")
             self.play()
         elif content == "stop":
             self.stop()
