@@ -221,6 +221,7 @@ class Radio:
 
     def check_radio_lock(self):
         if self.radio_buttons.frequency_lock_button.active:
+            print(f"HELLO: {self.radio_buttons.frequency_lock_button.is_click()}")
             if self.radio_buttons.frequency_lock_button.is_click():
                 self.radio_lock = not self.radio_lock
                 print(f"radio lock changed: {self.radio_lock}")
