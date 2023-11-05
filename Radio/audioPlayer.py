@@ -29,9 +29,10 @@ class AudioPlayer(Subscriber):
     def update(self):
         content = self.publisher.get_content()
         if type(content) == RadioFrequency:
-            self.stream = self.database.get_stream()
-            self.stream_re = self.database.get_stream_re()
-            self.re_active = self.database.get_re_active()
+            # TODO: database always returns default values
+            # self.stream = self.database.get_stream()
+            # self.stream_re = self.database.get_stream_re()
+            # self.re_active = self.database.get_re_active()
             print(f"STREAM: {self.stream}, {self.stream_re}")
             self.play(content)
         elif content == "stop":
@@ -52,10 +53,9 @@ class AudioPlayer(Subscriber):
         else:
             radio_url = stream.radio_url
         if radio_url == "INITIALIZING":
-            print("STILL INIT")
             return
         self.player.stop()
-        print(f"stream url: {radio_url}")
+        # print(f"stream url: {radio_url}")
         media = self.instance.media_new(radio_url)
         media.get_mrl()
         self.player.audio_set_volume(self.volume)

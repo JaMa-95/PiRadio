@@ -182,7 +182,7 @@ class Radio:
                     self.process_hardware_value_change()
                     self.old_command = self.current_command
             sleep_time = self.cycle_time - (time.time() - start)
-            time.sleep(1)
+            # time.sleep(1)
             if sleep_time <= 0:
                 # needs at least some cycle time for other processes
                 time.sleep(0.00001)
@@ -428,7 +428,7 @@ class Radio:
 
     def process_hardware_value_change(self):
         radio_frequency, encoder_value = self.get_button_frequency()
-        print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
+        # print(f"radio_frequency {radio_frequency} and {self.on} : encoder value: {encoder_value}")
         if not radio_frequency:
             if self.playing:
                 if self.speakers.play_radio:
@@ -444,14 +444,13 @@ class Radio:
                             self.publish("stop")
                         self.playing = False
                     if radio_frequency:
-                        print(f"Playing playlist: {stream}")
+                        # print(f"Playing playlist: {stream}")
                         self.db.replace_stream(stream.radio_url)
                         self.db.replace_stream_re(stream.radio_url_re)
                         self.db.replace_radio_name_re(stream.name + "; " + stream.radio_name_re)
                         self.db.replace_re_active(stream.re_active)
                         self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
                         self.turn_on_amplifier()
-                        print("ENDE")
                         if self.speakers.play_radio:
                             self.publish(stream)
                         self.playing = True
