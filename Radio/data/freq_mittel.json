@@ -65,9 +65,9 @@
         7421,
         "HipHop Station",
         "http://streaming.radio.co/s97881c7e0/listen",
-        "",
-        "",
-        0
+        "bigFM US RAP & HIP-HOP",
+        "https://stream.bigfm.de/ushiphop/mp3-128",
+        true
     ],
     [
         "HipHop Oldies",
@@ -75,9 +75,9 @@
         7767,
         "Old School that Jams",
         "http://computronpc.net:8000/949",
-        "",
-        "",
-        0
+        "80s80s Hip Hop",
+        "https://streams.80s80s.de/hiphop/mp3-192/",
+        true
     ],
     [
         "90s",
@@ -93,11 +93,11 @@
         "90er",
         8114,
         8459,
-        "http://addrad.io/4459c2f",
-        "http://addrad.io/4459c2f",
+        "Eurodance 90 - Dance Anos 90",
+        "http://stream.zeno.fm/pdgmg8eu8k0uv",
         "",
         "",
-        0
+        true
     ],
     [
         "eurodance",
@@ -123,10 +123,11 @@
         "Techno",
         9152,
         9497,
-        "Digital Impulse",
-        "http://orion.shoutca.st:8938/stream",
-        "","",
-        0
+        "TECHNO STYLE Radio",
+        "http://212.108.220.119:1039/stream.mp3",
+        "Deeredradio",
+        "https://webcast.deeredradio.com:8410/stream",
+        true
     ],
     [
         "Techno",
@@ -134,9 +135,9 @@
         9843,
         "TECHNO STYLE Radio",
         "http://212.108.220.119:1039/stream.mp3",
-        "",
-        "",
-        0
+        "Techno Lovers",
+        "https://stream.technolovers.fm/techno?ref",
+        true
     ],
     [
         "Electro Swing",
@@ -154,9 +155,9 @@
         10535,
         "Digital Impulse - Trance Resident Paradise",
         "http://orion.shoutca.st:8922/stream",
-        "",
-        "",
-        0
+        "Trance Athena",
+        "http://cast.streams.ovh:8008/stream",
+        true
     ],
     [
         "House",

@@ -2,171 +2,161 @@
     [
         "Relaxed",
         5000,
-        5447,
+        5475,
         "1000Slots to relax",
         "http://hyades.shoutca.st:8714/stream",
-        "",
-        "",
-        0
-    ],
-    [
-        "Classic relax",
-        5448,
-        5895,
         "YourClassical Relax",
         "https://relax.stream.publicradio.org/relax.mp3?srcid",
-        "",
-        "",
-        0
+        true
     ],
     [
         "Chillout",
-        5896,
-        6343,
+        5476,
+        5951,
         "Relax Zone",
         "https://stream.radiojar.com/whwyhz188a0uv",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Chillout",
-        6344,
-        6791,
+        5952,
+        6427,
         "0nlineradio CHILLOUT",
         "https://stream.0nlineradio.com/chillout?ref",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Code",
-        6792,
-        7239,
+        6428,
+        6903,
         "Techno FM",
         "http://stream.techno.fm/radio320.mp3",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Focus",
-        7240,
-        7687,
+        6904,
+        7379,
         "Music Lake - Relaxation",
         "http://nap.casthost.net:8626/stream",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Ambient",
-        7688,
-        8135,
+        7380,
+        7855,
         "Ambient Sound",
         "http://orion.shoutca.st:8994/stream",
-        "",
-      "",
-        0
+        "a.m. ambient",
+        "http://radio.stereoscenic.com/ama-h",
+        true
     ],
     [
         "Rainy Day",
-        8136,
-        8583,
+        7856,
+        8331,
         "Sleepless Rain",
         "http://stream.willstare.com:8850",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Nature",
-        8584,
-        9031,
+        8332,
+        8807,
         "Epic Lounge - Nature Sounds",
         "https://stream.epic-lounge.com/nature-sounds?ref",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Depressed",
-        9032,
-        9479,
+        8808,
+        9283,
         "Ambient Sound",
         "http://orion.shoutca.st:8994/stream",
-        "",
-      "",
-        0
+        "181.FM Mellow Gold",
+        "http://listen.181fm.com/181-mellow_128k.mp3?noPreRoll=true",
+        true
     ],
     [
         "Good vibes",
-        9480,
-        9927,
+        9284,
+        9759,
         "Ambient Sound",
         "http://orion.shoutca.st:8994/stream",
-        "",
-      "",
-        0
+        "Good Vibes Radio",
+        "http://usa2.fastcast4u.com:4210/",
+        true
     ],
     [
         "Happy",
-        9928,
-        10375,
+        9760,
+        10235,
         "Happy Hits 00",
         "https://streams.happyhits.co.uk/00s",
-        "",
-      "",
-        0
+        "ANTENNE BAYERN: Happy Hits",
+        "https://stream.antenne.de/happy-hits/stream/mp3?aw_0_1st.playerid=com",
+        true
     ],
     [
         "Party",
-        10376,
-        10823,
-        "Ambient Sound",
-        "http://orion.shoutca.st:8994/stream",
+        10236,
+        10711,
+        "Radio Party Groove",
+        "http://stream12.top-ix.org/partygroove",
         "",
-      "",
-        0
+        "",
+        false
     ],
     [
         "Cafe",
-        10824,
-        11271,
+        10712,
+        11187,
         "Epic Lounge - Coffee Bar Lounge",
         "https://stream.epic-lounge.com/coffee-bar-lounge?ref",
         "",
-      "",
+        "",
         0
     ],
     [
         "Romantisch",
-        11272,
-        11719,
+        11188,
+        11663,
         "EPIC CLASSICAL - Classical Romance",
         "https://stream.epic-classical.com/classical-romance?ref",
         "",
-      "",
+        "",
         0
     ],
     [
         "Dark night",
-        11720,
-        12167,
+        11664,
+        12139,
         "Techno FM",
         "http://stream.techno.fm/radio320.mp3",
         "",
-      "",
+        "",
         0
     ],
     [
         "Christmas Lounge",
-        12168,
+        12140,
         12615,
         "Epic Lounge - Christmas Lounge",
         "https://stream.epic-lounge.com/christmas-lounge?ref",
         "",
-      "",
+        "",
         0
     ]
 ]

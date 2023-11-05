@@ -2,47 +2,37 @@
     [
         "Espana",
         5000,
-        5304,
+        5361,
         "LA MEGA ESPANA",
         "https://server6.hostradios.com/8048/stream",
-        "",
-        "",
-        0
-    ],
-    [
-        "Espana",
-        5305,
-        5609,
-        "FM Malaga Espama",
-        "https://eu1.lhdserver.es:9035/stream",
-        "",
-        "",
-        0
+        "COPE M\u00e1s Madrid",
+        "https://flucast-b04-01.flumotion.com/cope/net1.mp3",
+        true
     ],
     [
         "Latinamerika",
-        5610,
-        5914,
+        5362,
+        5723,
         "LATIN MIX MASTERS REGGAETON RADIO",
         "https://lmmradiocast.com/radio/8010/radio.mp3?1590197168",
-        "",
-        "",
-        0
+        "Latin Groove",
+        "http://146.71.118.220:35025/autodj",
+        true
     ],
     [
         "Latinamerika",
-        5915,
-        6219,
+        5724,
+        6085,
         "LATIN MIX MASTERS RADIO",
         "https://lmmradiocast.com/radio/8000/radio.mp3?1587013766",
-        "",
-        "",
-        0
+        "Latin Station",
+        "https://eu8.fastcast4u.com/proxy/latinstation?mp=/1",
+        true
     ],
     [
         "Cumbia",
-        6220,
-        6524,
+        6086,
+        6447,
         "Cumbias De Coleccin",
         "http://stream.zenolive.com/2eq3h623km5tv",
         "",
@@ -51,8 +41,8 @@
     ],
     [
         "Cumbia Ecuador",
-        6525,
-        6829,
+        6448,
+        6809,
         "Ecuador Cumbia",
         "http://us9.maindigitalstream.com:7109/stream",
         "",
@@ -61,18 +51,18 @@
     ],
     [
         "Amerika",
-        6830,
-        7134,
+        6810,
+        7171,
         "Radio England",
         "https://streaming02.zfast.co.uk/proxy/england?mp=/stream",
-        "",
-        "",
-        0
+        "Star FM RADIO",
+        "https://stream.starfm.de/blues/mp3-192",
+        true
     ],
     [
         "England",
-        7135,
-        7439,
+        7172,
+        7533,
         "Gaydio London",
         "https://listen-gaydio.sharp-stream.com/472_gaydio_london_320_mp3",
         "",
@@ -81,8 +71,8 @@
     ],
     [
         "England",
-        7440,
-        7744,
+        7534,
+        7895,
         "London Music Radio",
         "https://radiobossrelay.radioca.st/stream",
         "",
@@ -91,28 +81,18 @@
     ],
     [
         "Australia",
-        7745,
-        8049,
+        7896,
+        8257,
         "LoveWorld Radio Australia",
         "http://stream.radio.co/s0a970f188/listen",
-        "",
-        "",
-        0
-    ],
-    [
-        "Australia",
-        8050,
-        8354,
         "THEAUSSIEWORD Radio Australia",
         "http://jenny.torontocast.com:8108/stream",
-        "",
-        "",
-        0
+        false
     ],
     [
         "Frankreich",
-        8355,
-        8659,
+        8258,
+        8619,
         "France Bleu Normandie",
         "http://direct.francebleu.fr/live/fbbassenormandie-midfi.mp3?ID=76zqey582k",
         "",
@@ -121,8 +101,8 @@
     ],
     [
         "Frankreich",
-        8660,
-        8964,
+        8620,
+        8981,
         "NRJ MADE IN FRANCE",
         "https://scdn.nrjaudio.fm/adwz1/fr/31217/mp3_128.mp3?origineradio",
         "",
@@ -131,8 +111,8 @@
     ],
     [
         "Netherlands",
-        8965,
-        9269,
+        8982,
+        9343,
         "KissFM Netherlands",
         "http://stream.kiss-fm.nl:9500/",
         "",
@@ -141,58 +121,38 @@
     ],
     [
         "Netherlands",
-        9270,
-        9574,
+        9344,
+        9705,
         "Top40 Radio Netherlands",
         "http://s37.myradiostream.com:11662/",
-        "",
-        "",
-        0
-    ],
-    [
-        "Netherlands",
-        9575,
-        9879,
         "Hardstyle radio NL",
         "http://84.104.35.69:8014/hardstyle",
-        "",
-        "",
-        0
+        false
     ],
     [
         "Italien",
-        9880,
-        10184,
+        9706,
+        10067,
         "Radio Rouge Italy",
         "http://sc10.streamingpulse.tv:8020/",
-        "",
-        "",
-        0
-    ],
-    [
-        "Italien",
-        10185,
-        10489,
         "ITALY RVRmusic",
         "http://radio.streemlion.com:2760/",
-        "",
-        "",
-        0
+        true
     ],
     [
         "japan",
-        10490,
-        10794,
+        10068,
+        10429,
         "OnlyHit Japan",
         "https://j.onlyhit.us/play",
-        "",
-        "",
-        0
+        "HOTMIXRADIO JAPAN",
+        "http://streaming.hotmixradio.fr/hotmix-japan-en-mp3",
+        true
     ],
     [
         "Korea",
-        10795,
-        11099,
+        10430,
+        10791,
         "1000Slots to relax",
         "http://hyades.shoutca.st:8714/stream",
         "",
@@ -201,8 +161,8 @@
     ],
     [
         "Polen",
-        11100,
-        11404,
+        10792,
+        11153,
         "PR R Poland East",
         "http://c7.radioboss.fm:8261/stream",
         "",
@@ -210,28 +170,9 @@
         0
     ],
     [
-        "Ukraine",
-        11405,
-        11709,
-        "Radio Free Ukraine",
-        "http://stream.zenolive.com/vn4r1hp339duv",
-        "",
-        "",
-        0
-    ],
-    [
-        "Ukraine",
-        11710,
-        12014,
-        "Classic Radio Ukraine",
-        "https://online.classicradio.com.ua/ClassicRadio",
-        "","",
-        0
-    ],
-    [
         "South Afrika",
-        12015,
-        12319,
+        11878,
+        12239,
         "Coastal Radio SA",
         "http://ifastekpanel.com:1640/stream",
         "",
@@ -240,8 +181,8 @@
     ],
     [
         "Africa",
-        12320,
-        12624,
+        12240,
+        12601,
         "UbuntuFM Radio Africa",
         "http://stream.zenolive.com/ez10yx9e9neuv",
         "",

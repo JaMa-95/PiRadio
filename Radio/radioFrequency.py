@@ -131,7 +131,7 @@ class Frequencies:
 
     def load_from_file(self, path: str = None):
         if not path:
-            path = 'data/freq_kurz.json'
+            path = 'data/freq_kurz_2.json'
         path = get_project_root() / path
         with open(path.resolve(), encoding='utf-8') as file_handler:
             frequency_data = json.load(file_handler)
@@ -167,7 +167,7 @@ class KurzFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file("data/freq_kurz.json")
+        self.load_from_file("data/freq_kurz_2.json")
         self.init_min_max()
 
 
@@ -210,7 +210,7 @@ class SprFrequencies(Frequencies):
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
-        self.load_from_file("data/freq_spr.json")
+        self.load_from_file("data/freq_kurz_1.json")
         self.init_min_max()
 
 

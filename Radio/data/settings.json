@@ -75,7 +75,7 @@
       "active": true,
       "frequency": {
         "pos": "posLangKurzMittel",
-        "musicList": "freq_mittel.json"
+        "musicList": "freq_lang.json"
       },
       "led": 2
     },
@@ -89,13 +89,13 @@
       },
       "led": 3
     },
-    "Kurz": {
+    "Kurz_2": {
       "pin": 21,
       "reversed": false,
       "active": true,
       "frequency": {
         "pos": "posLangKurzMittel",
-        "musicList": "freq_kurz.json"
+        "musicList": "freq_kurz_2.json"
       },
       "led": 4
     },
@@ -109,13 +109,13 @@
       },
       "led": 5
     },
-    "SprMus": {
+    "Kurz_1": {
       "pin": 19,
       "reversed": false,
       "active": true,
       "frequency": {
         "pos": "posLangKurzMittel",
-        "musicList": "freq_spr.json"
+        "musicList": "freq_kurz_1.json"
       },
       "led": 6
     },
@@ -139,19 +139,20 @@
       },
       "led": 99
     },
-    "Solo": {
-      "pin": 27,
+    "Jazz": {
+      "pin": 4,
       "reversed": false,
       "active": true,
+      "is_on_off": true,
       "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
+        "pos": null,
+        "musicList": null
       },
-      "led": 99
+      "led": 0
     }
   },
   "frequency": {
-    "min": 5000,
-    "max": 12600
+    "min": 4000,
+    "max": 28000
   }
 }

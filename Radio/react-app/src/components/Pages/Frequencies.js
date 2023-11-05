@@ -204,7 +204,7 @@ export const Frequencies = (props) => {
     for (const item of frequencyList) {
       try {
         // Stop the fetching
-        window.alert("Stop test: " + refStop.current)
+        // window.alert("Stop test: " + refStop.current)
 
         if (refStop.current) {
           refStop.current = (false);

@@ -47,7 +47,6 @@ try:
             print("Pin 21 button is pressed")
         if (GPIO.input(26) == GPIO.HIGH):
             print("Pin 26 button is pressed")
-
         if (GPIO.input(4) == GPIO.HIGH):
             print("Pin 4 button is pressed")
         if (GPIO.input(17) == GPIO.HIGH):
