@@ -212,6 +212,7 @@ class Database(Singleton):
     def insert_stream(self, value: str):
         with self.lock:
             self.stream = value
+            print(f"STREAM NEW: {self.stream}")
 
     def insert_radio_name_re(self, value: str):
         with self.lock:
