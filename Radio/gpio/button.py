@@ -58,7 +58,7 @@ class ButtonRaspi:
             if settings["buttons"][self.name]["frequency"]["musicList"]:
                 self.frequency_list = Frequencies(settings["buttons"][self.name]["frequency"]["musicList"])
             # self.is_on_off_button = settings["buttons"][self.name]["is_on_off"]
-            if settings["buttons"][self.name]["is_frequency_lock"]:
+            if "is_frequency_lock" in settings["buttons"][self.name]:
                 self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
