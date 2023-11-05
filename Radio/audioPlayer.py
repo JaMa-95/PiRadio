@@ -50,6 +50,8 @@ class AudioPlayer(Subscriber):
             radio_url = self.stream_re
         else:
             radio_url = self.stream
+        if radio_url == "INITIALIZING":
+            return
         self.player.stop()
         print(f"stream url: {radio_url}")
         media = self.instance.media_new(radio_url)
