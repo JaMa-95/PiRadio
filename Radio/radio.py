@@ -433,7 +433,6 @@ class Radio:
                 self.playing = False
         elif radio_frequency and self.on:
             stream = self.get_frequency_stream(radio_frequency, encoder_value)
-            print(f"PLAY STREMA: {stream}")
             if stream:
                 if self.current_stream.radio_url != stream.radio_url:
                     print("Changing stream")

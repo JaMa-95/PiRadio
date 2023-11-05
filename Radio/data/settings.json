@@ -143,7 +143,7 @@
       "pin": 4,
       "reversed": false,
       "active": true,
-      "is_on_off": true,
+      "is_frequency_lock": true,
       "frequency": {
         "pos": null,
         "musicList": null
