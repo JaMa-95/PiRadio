@@ -33,7 +33,7 @@ class AudioPlayer(Subscriber):
             self.stream_re = self.database.get_stream_re()
             self.re_active = self.database.get_re_active()
             print(f"STREAM: {self.stream}, {self.stream_re}")
-            self.play()
+            self.play(content)
         elif content == "stop":
             self.stop()
         elif isinstance(content, str):
@@ -46,11 +46,11 @@ class AudioPlayer(Subscriber):
         else:
             print("ERROR")
 
-    def play(self):
-        if self.re_active:
-            radio_url = self.stream_re
+    def play(self, stream: RadioFrequency):
+        if stream.re_active:
+            radio_url = stream.radio_url_re
         else:
-            radio_url = self.stream
+            radio_url = stream.radio_url
         if radio_url == "INITIALIZING":
             print("STILL INIT")
             return

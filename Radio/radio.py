@@ -451,6 +451,7 @@ class Radio:
                         self.db.replace_re_active(stream.re_active)
                         self.db.replace_radio_name(stream.name + "; " + stream.radio_name)
                         self.turn_on_amplifier()
+                        print("ENDE")
                         if self.speakers.play_radio:
                             self.publish(stream)
                         self.playing = True
