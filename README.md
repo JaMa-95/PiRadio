@@ -63,6 +63,7 @@ https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-f
 - sudo pip install adafruit-circuitpython-ads1x15
 - sudo pip install paho-mqtt
 - sudo pip install python-vlc
+- sudo pip install fastapi
 
 - sudo apt install npm
 - npm install react-bootstrap bootstrap
