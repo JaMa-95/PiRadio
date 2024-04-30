@@ -18,35 +18,6 @@ from Radio.util.singleton import Singleton
 from Radio.sensorMsg import ButtonsData, ButtonState
 
 
-class ButtonAnalyzer:
-    def __init__(self):
-        self.values: list = []
-        self.short_threshold: int = 5
-        self.long_threshold: int = 20
-
-    def _is_click(self, threshold: int):
-        # TODO: measure is click with time
-        counter = 0
-        for value in self.values:
-            if value is True:
-                counter += 1
-                if counter > threshold:
-                    return True
-            else:
-                return False
-        return False
-
-    def is_short_click(self):
-        return self._is_click(self.short_threshold)
-
-    def is_long_click(self):
-        return self._is_click(self.long_threshold)
-
-    def double_click(self):
-        # TODO
-        raise NotImplemented
-
-
 class ButtonRaspi:
     def __init__(self, name: str = "", is_on_off: bool = False, is_frequency_lock: bool = False,
                  is_change_speaker: bool = False, is_on_off_raspi: bool = False, mock: bool = False):

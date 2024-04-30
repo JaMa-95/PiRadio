@@ -38,6 +38,17 @@ class ButtonsData:
                 return True
         return False
 
+    def update_value(self, pin, value_new: ButtonState) -> bool:
+        for idx, value in enumerate(self.data):
+            if value.pin == pin:
+                self.data[idx] = value_new
+                return True
+        return False
+
+    def get_value(self, pin) -> ButtonState:
+        for idx, value in enumerate(self.data):
+            if value.pin == pin:
+                return value
 
 class AnalogValue:
     def __init__(self, pin: int, value: int):
@@ -53,11 +64,11 @@ class AnalogData:
         is_empty = not self.data
         return not is_empty
 
-    def get_data(self):
+    def get_data(self) -> List[AnalogValue]:
         return self.data
 
-    def set_data(self, data):
-        self.data = data
+    def set_data(self, list_of_analog_value: List[AnalogValue]):
+        self.data = list_of_analog_value
 
     def add_value(self, value: AnalogValue):
         self.data.append(value)

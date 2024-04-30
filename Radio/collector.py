@@ -1,10 +1,8 @@
 from time import sleep
 from Radio.db.db import Database
-from Radio.util.RadioExceptions import SystemNotSupported
 from Radio.gpio.button import RadioButtonsRaspi
 from Radio.util.DataTransmitter import DataTransmitter
 from Radio.sensorMsg import SensorMsg
-from Radio.util.util import is_raspberry
 
 from Radio.ads1115.ads import AdsObject
 
@@ -28,9 +26,6 @@ class Collector:
                 sensor_msg.analog_data.set_data(analog_data)
                 self.data_transmitter.send(sensor_msg)
             sleep(0.0001)
-
-
-
 
 
 if __name__ == "__main__":

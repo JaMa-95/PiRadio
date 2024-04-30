@@ -11,3 +11,6 @@ class DataTransmitter:
     def receive(self):
         data = self.parent_conn.recv()
         return data
+
+    def has_data(self):
+        return self.parent_conn.poll()
