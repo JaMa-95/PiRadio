@@ -1,5 +1,5 @@
 import time
-
+import json
 import board
 import busio
 from statistics import mean
@@ -8,18 +8,31 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.ads1x15 import Mode
 
 from Radio.db.db import Database
+from Radio.util.util import get_project_root
 
 
 class AdsObject:
     # TODO: Refactor
-    def __init__(self, pin_frequency: int, pin_volume: int, pin_bass: int, pin_treble: int):
-        self.pin_frequency = pin_frequency
-        self.pin_volume = pin_volume
-        self.pin_bass = pin_bass
-        self.pin_treble = pin_treble
-        self.pins = [pin_frequency, pin_volume, pin_bass, pin_treble]
+    def __init__(self):
+        self.pin_volume: int = -1
+        self.pin_bass: int = -1
+        self.pin_treble: int = -1
+        # TODO: multiple frequencies
+        self.pin_frequency: int = -1
+        self._load_settings()
+        self.pins = [self.pin_frequency, self.pin_volume, self.pin_bass, self.pin_treble]
 
         self.ads = AdsSingle(None)
+
+    def _load_settings(self):
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
+            settings = json.load(f)
+        # TODO: Loop over frequencies
+        self.pin_volume = settings["volume"]["pin"]
+        self.pin_bass = settings["bass"]["pin"]
+        self.pin_treble = settings["treble"]["pin"]
+        self.pin_frequency = settings["frequencies"]["posLangKurzMittel"]["pin"]
 
     def set_to_db(self):
         for pin in self.pins:
@@ -27,6 +40,12 @@ class AdsObject:
                 self.ads.set_to_db_smoothed_by_pin(pin, True)
             else:
                 self.ads.set_to_db_smoothed_by_pin(pin, True)
+
+    def get(self):
+        values = {}
+        for pin in self.pins:
+            values[pin] = self.ads.get_value_smoothed_by_pin(pin, True)
+        return values
 
 
 class AdsSingle:
@@ -91,7 +110,7 @@ class AdsSingle:
 
         # delete min man values
         for _ in range(10):
-            for _ in range(int(num_values/10)):
+            for _ in range(int(num_values / 10)):
                 values.remove(max(values))
                 values.remove(min(values))
             else:
@@ -124,7 +143,7 @@ class AdsSingle:
 
         #  delete min man values
         for _ in range(10):
-            for _ in range(int(num_values/10)):
+            for _ in range(int(num_values / 10)):
                 values.remove(max(values))
                 values.remove(min(values))
             else:

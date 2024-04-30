@@ -411,7 +411,7 @@ class Radio:
                 self.set_treble(value)
 
     def get_changed_buttons(self):
-        self.radio_buttons.set_value()
+        self.radio_buttons.set_values()
         changed_hardware = []
         for button in self.radio_buttons.buttons:
             try:

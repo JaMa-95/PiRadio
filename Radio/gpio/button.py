@@ -1,13 +1,48 @@
 import datetime
 import json
-from dataclasses import dataclass
+from collections import deque
 from typing import List
-import RPi.GPIO as GPIO
+from Radio.util.util import is_raspberry
+
+if is_raspberry():
+    is_raspberry = True
+    import RPi.GPIO as GPIO
+else:
+    is_raspberry = False
 
 from Radio.db.db import Database
 from Radio.radioFrequency import Frequencies
 from Radio.util.util import get_project_root
 from Radio.util.singleton import Singleton
+
+
+class ButtonAnalyzer:
+    def __init__(self):
+        self.values: list = []
+        self.short_threshold: int = 5
+        self.long_threshold: int = 20
+
+    def _is_click(self, threshold: int):
+        # TODO: measure is click with time
+        counter = 0
+        for value in self.values:
+            if value is True:
+                counter += 1
+                if counter > threshold:
+                    return True
+            else:
+                return False
+        return False
+
+    def is_short_click(self):
+        return self._is_click(self.short_threshold)
+
+    def is_long_click(self):
+        return self._is_click(self.long_threshold)
+
+    def double_click(self):
+        # TODO
+        raise NotImplemented
 
 
 class ButtonRaspi:
@@ -24,23 +59,11 @@ class ButtonRaspi:
         self.is_change_speaker: bool = is_change_speaker
         self.is_on_off_raspi: bool = is_on_off_raspi
 
-        self.cycle_time: float = 0.0
-
-        self.value: int = 99
-        self.value_old: int = 0
-        self.value_olds = []
-        self.value_old_index = 0
-        self.indexer = 0
-
-        self.long_threshold: int = 5
-
-        self.last_click: list = [None, None]
-        self.last_click_index: int = 0
-
-        self.is_clicked: bool = False
-        self.on_off_wait: bool = False
-
         self.state = False
+
+        self.max_values: int = 10
+        # shows last x states
+        self.states = deque([False] * self.max_values)
 
         if self.name:
             self.load_from_settings()
@@ -78,35 +101,12 @@ class ButtonRaspi:
     def set_reversed(self, reversed_: bool = False):
         self.reversed = reversed_
 
-    def is_click(self):
-        # TODO: measure is click with time
-        if not self.on_off_wait and self.indexer > 5:
-            self.on_off_wait = True
-            self.state = GPIO.input(self.pin)
-            self.set_is_clicked()
-            return True
-        return False
-
-    def double_click(self):
-        if self.last_click[0] and self.last_click[1]:
-            time_delta_a = self.last_click[0] - self.last_click[1]
-            time_delta_b = self.last_click[1] - self.last_click[0]
-            if time_delta_a.seconds < 2 or time_delta_b.seconds < 2:
-                self.reset_double_click()
-                return True
-        return False
-
-    def reset_double_click(self):
-        self.last_click[0] = None
-        self.last_click[1] = None
-
-    def long_click(self):
-        if self.indexer > self.long_threshold:
-            return True
-        return False
-
     def get_value(self):
         return self.value
+
+    def _put_state_to_list(self, value):
+        self.states.rotate(1)
+        self.states[0] = value
 
     def set_value(self):
         """
@@ -115,32 +115,15 @@ class ButtonRaspi:
         self.state = GPIO.input(self.pin)
         if self.reversed:
             self.state = not self.state
-        self.value_olds.append(self.state)
-        self.value_old = self.value
-        self.value = self.state
-        if self.state:
-            self.is_clicked = True
-            self.indexer += 1
-            return True
-        else:
-            self.on_off_wait = False
-            self.is_clicked = False
-            self.indexer = 0
-            return True
-
-    def get_last_clicked_index(self):
-        self.last_click_index = (self.last_click_index + 1) % 2
-        return self.last_click_index
-
-    def set_is_clicked(self):
-        self.last_click[self.get_last_clicked_index()] = datetime.datetime.now()
+        self._put_state_to_list(self.state)
 
 
 class RadioButtonsRaspi(Singleton):
 
-    def __init__(self):
+    def __init__(self, mock: bool = False):
         if self._Singleton__initialized:
             return
+        self.mock: bool = mock
         self.on_off_button: ButtonRaspi = ButtonRaspi()
         self.on_off_raspi_button: ButtonRaspi = ButtonRaspi()
         self.change_speaker_button: ButtonRaspi = ButtonRaspi()
@@ -152,6 +135,8 @@ class RadioButtonsRaspi(Singleton):
         self._init_settings()
 
     def _init_settings(self):
+        if self.mock:
+            return
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
@@ -170,7 +155,7 @@ class RadioButtonsRaspi(Singleton):
                 self.buttons.append(ButtonRaspi(name))
 
     def set_values_to_db(self):
-        self.set_value()
+        self.set_values()
         for button in self.buttons:
             if button.name == "OnOff":
                 print(button.state)
@@ -178,7 +163,7 @@ class RadioButtonsRaspi(Singleton):
                                    value=button.state)
         self.db.replace_shutdown(self.change_speaker_button.state)
 
-    def set_value(self):
+    def set_values(self):
         for button in self.buttons:
             button.set_value()
         if self.frequency_lock_button.active:
@@ -191,9 +176,20 @@ class RadioButtonsRaspi(Singleton):
             self.on_off_raspi_button.set_value()
         return True
 
-    def get_pressed_button(self):
-        self.set_value()
-        if self.button_on_off.state:
-            for button in self.buttons:
-                if button.state:
-                    return f"button{button.name}"
+    def get_values(self):
+        self.set_values()
+        buttons: dict = {}
+        for button in self.buttons:
+            buttons[button.name] = [button.state, button.states]
+        if self.frequency_lock_button.active:
+            buttons[self.frequency_lock_button.name] = [self.frequency_lock_button.state,
+                                                        self.frequency_lock_button.states]
+        if self.change_speaker_button.active:
+            buttons[self.change_speaker_button.name] = [self.change_speaker_button.state,
+                                                        self.change_speaker_button.states]
+        if self.on_off_button.active:
+            buttons[self.on_off_button.name] = [self.on_off_button.state,
+                                                self.on_off_button.states]
+        if self.on_off_raspi_button.active:
+            buttons[self.on_off_raspi_button.name] = [self.on_off_raspi_button.state,
+                                                      self.on_off_raspi_button.states]
