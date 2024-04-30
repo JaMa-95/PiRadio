@@ -1,7 +1,8 @@
-import datetime
 import json
 from collections import deque
 from typing import List
+
+from Radio.util.RadioExceptions import SystemNotSupported
 from Radio.util.util import is_raspberry
 
 if is_raspberry():
@@ -14,6 +15,7 @@ from Radio.db.db import Database
 from Radio.radioFrequency import Frequencies
 from Radio.util.util import get_project_root
 from Radio.util.singleton import Singleton
+from Radio.sensorMsg import ButtonsData, ButtonState
 
 
 class ButtonAnalyzer:
@@ -47,7 +49,7 @@ class ButtonAnalyzer:
 
 class ButtonRaspi:
     def __init__(self, name: str = "", is_on_off: bool = False, is_frequency_lock: bool = False,
-                 is_change_speaker: bool = False, is_on_off_raspi: bool = False):
+                 is_change_speaker: bool = False, is_on_off_raspi: bool = False, mock: bool = False):
         self.name: str = name
         self.pin: int = 0
         self.active: bool = False
@@ -58,6 +60,7 @@ class ButtonRaspi:
         self.is_on_off_button: bool = is_on_off
         self.is_change_speaker: bool = is_change_speaker
         self.is_on_off_raspi: bool = is_on_off_raspi
+        self.mock: bool = mock
 
         self.state = False
 
@@ -85,13 +88,16 @@ class ButtonRaspi:
                 self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
-        GPIO.setmode(GPIO.BCM)
-        # TODO: give PUD up mode
-        if self.is_on_off_raspi:
-            print(f"raspi init: {self.pin}")
-            GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        else:
-            GPIO.setup(self.pin, GPIO.OUT)
+        if not is_raspberry and not self.mock:
+            raise SystemNotSupported("Not a raspberry pi or unsupported version")
+        if not self.mock:
+            GPIO.setmode(GPIO.BCM)
+            # TODO: give PUD up mode
+            if self.is_on_off_raspi:
+                print(f"raspi init: {self.pin}")
+                GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            else:
+                GPIO.setup(self.pin, GPIO.OUT)
 
     def set_pin(self, pin: int):
         GPIO.setup(self.pin, GPIO.IN)
@@ -112,10 +118,14 @@ class ButtonRaspi:
         """
         :return: True if changed
         """
-        self.state = GPIO.input(self.pin)
-        if self.reversed:
+        if not self.mock:
+            self.state = GPIO.input(self.pin)
+            if self.reversed:
+                self.state = not self.state
+            self._put_state_to_list(self.state)
+        else:
             self.state = not self.state
-        self._put_state_to_list(self.state)
+            self._put_state_to_list(self.state)
 
 
 class RadioButtonsRaspi(Singleton):
@@ -123,20 +133,18 @@ class RadioButtonsRaspi(Singleton):
     def __init__(self, mock: bool = False):
         if self._Singleton__initialized:
             return
-        self.mock: bool = mock
-        self.on_off_button: ButtonRaspi = ButtonRaspi()
-        self.on_off_raspi_button: ButtonRaspi = ButtonRaspi()
-        self.change_speaker_button: ButtonRaspi = ButtonRaspi()
-        self.radio_lock_button: ButtonRaspi = ButtonRaspi()
-        self.frequency_lock_button: ButtonRaspi = ButtonRaspi()
+        self.mock = mock
+        self.on_off_button: ButtonRaspi = ButtonRaspi(mock=mock)
+        self.on_off_raspi_button: ButtonRaspi = ButtonRaspi(mock=mock)
+        self.change_speaker_button: ButtonRaspi = ButtonRaspi(mock=mock)
+        self.radio_lock_button: ButtonRaspi = ButtonRaspi(mock=mock)
+        self.frequency_lock_button: ButtonRaspi = ButtonRaspi(mock=mock)
         self.buttons: List[ButtonRaspi] = None
 
         self.db = Database()
         self._init_settings()
 
     def _init_settings(self):
-        if self.mock:
-            return
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
@@ -144,15 +152,15 @@ class RadioButtonsRaspi(Singleton):
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
             if "is_on_off" in button_settings:
-                self.on_off_button = ButtonRaspi(name, is_on_off=True)
+                self.on_off_button = ButtonRaspi(name, is_on_off=True, mock=self.mock)
             elif "is_on_off_raspi" in button_settings:
-                self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True)
+                self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True, mock=self.mock)
             elif "is_frequency_lock" in button_settings:
-                self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True)
+                self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True, mock=self.mock)
             elif "is_change_speaker" in button_settings:
-                self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True)
+                self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True, mock=self.mock)
             else:
-                self.buttons.append(ButtonRaspi(name))
+                self.buttons.append(ButtonRaspi(name, mock=self.mock))
 
     def set_values_to_db(self):
         self.set_values()
@@ -176,20 +184,25 @@ class RadioButtonsRaspi(Singleton):
             self.on_off_raspi_button.set_value()
         return True
 
-    def get_values(self):
+    def get_values(self) -> ButtonsData:
         self.set_values()
-        buttons: dict = {}
+        data = ButtonsData()
         for button in self.buttons:
-            buttons[button.name] = [button.state, button.states]
+            data.add_value(ButtonState(button.pin, button.state, button.states))
         if self.frequency_lock_button.active:
-            buttons[self.frequency_lock_button.name] = [self.frequency_lock_button.state,
-                                                        self.frequency_lock_button.states]
+            data.add_value(ButtonState(self.frequency_lock_button.pin,
+                                       self.frequency_lock_button.state,
+                                       self.frequency_lock_button.states))
         if self.change_speaker_button.active:
-            buttons[self.change_speaker_button.name] = [self.change_speaker_button.state,
-                                                        self.change_speaker_button.states]
+            data.add_value(ButtonState(self.change_speaker_button.pin,
+                                       self.change_speaker_button.state,
+                                       self.change_speaker_button.states))
         if self.on_off_button.active:
-            buttons[self.on_off_button.name] = [self.on_off_button.state,
-                                                self.on_off_button.states]
+            data.add_value(ButtonState(self.on_off_button.pin,
+                                       self.on_off_button.state,
+                                       self.on_off_button.states))
         if self.on_off_raspi_button.active:
-            buttons[self.on_off_raspi_button.name] = [self.on_off_raspi_button.state,
-                                                      self.on_off_raspi_button.states]
+            data.add_value(ButtonState(self.on_off_raspi_button.pin,
+                                       self.on_off_raspi_button.state,
+                                       self.on_off_raspi_button.states))
+        return data

@@ -7,7 +7,6 @@ class DataTransmitter:
 
     def send(self, data):
         self.child_conn.send(data)
-        self.child_conn.close()
 
     def receive(self):
         data = self.parent_conn.recv()

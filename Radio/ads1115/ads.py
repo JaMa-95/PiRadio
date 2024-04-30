@@ -1,19 +1,26 @@
 import time
 import json
-import board
-import busio
 from statistics import mean
-from adafruit_ads1x15.analog_in import AnalogIn
-import adafruit_ads1x15.ads1115 as ADS
-from adafruit_ads1x15.ads1x15 import Mode
+from random import randint
+from Radio.util.util import is_raspberry
+if is_raspberry():
+    is_raspberry = True
+    import board
+    import busio
+    from adafruit_ads1x15.analog_in import AnalogIn
+    import adafruit_ads1x15.ads1115 as ADS
+    from adafruit_ads1x15.ads1x15 import Mode
+else:
+    is_raspberry = False
 
 from Radio.db.db import Database
+from Radio.sensorMsg import AnalogData, AnalogValue
 from Radio.util.util import get_project_root
 
 
 class AdsObject:
     # TODO: Refactor
-    def __init__(self):
+    def __init__(self, mock: bool = False):
         self.pin_volume: int = -1
         self.pin_bass: int = -1
         self.pin_treble: int = -1
@@ -22,7 +29,7 @@ class AdsObject:
         self._load_settings()
         self.pins = [self.pin_frequency, self.pin_volume, self.pin_bass, self.pin_treble]
 
-        self.ads = AdsSingle(None)
+        self.ads = AdsSingle(None, mock=mock)
 
     def _load_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -42,34 +49,37 @@ class AdsObject:
                 self.ads.set_to_db_smoothed_by_pin(pin, True)
 
     def get(self):
-        values = {}
+        data = AnalogData()
         for pin in self.pins:
-            values[pin] = self.ads.get_value_smoothed_by_pin(pin, True)
-        return values
+            data.add_value(AnalogValue(pin, self.ads.get_value_smoothed_by_pin(pin, True)))
+        return data
 
 
 class AdsSingle:
-    def __init__(self, pin):
-        i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
-        # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
-        # TODO: make check for i2c device not found ValueError
-        self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
-        self.RATE = 860
-
+    def __init__(self, pin, mock: bool = False):
         self.pin = pin
         self.db = Database()
 
-        if self.pin == 1:
-            self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
-        elif self.pin == 2:
-            self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
-        elif self.pin == 3:
-            self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
-        else:
-            self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
+        self.RATE = 860
 
-        self.ads.mode = Mode.CONTINUOUS
-        self.ads.data_rate = self.RATE
+        self.mock = mock
+        if not self.mock:
+            i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
+            # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
+            # TODO: make check for i2c device not found ValueError
+            self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
+
+            if self.pin == 1:
+                self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
+            elif self.pin == 2:
+                self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
+            elif self.pin == 3:
+                self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
+            else:
+                self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
+
+            self.ads.mode = Mode.CONTINUOUS
+            self.ads.data_rate = self.RATE
 
     def set_to_db(self):
         value = self.get_value()
@@ -123,6 +133,8 @@ class AdsSingle:
         return mean(values)
 
     def get_value_smoothed_by_pin(self, pin: int, high_precision: bool):
+        if self.mock:
+            return randint(0, 5000)
         values = []
         if high_precision:
             num_values = 500
