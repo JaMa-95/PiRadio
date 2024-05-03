@@ -1,5 +1,6 @@
 import threading
 
+from Radio.dataProcessor import ButtonProcessData
 from Radio.util.singleton import Singleton
 
 
@@ -60,6 +61,8 @@ class Database(Singleton):
         self.bass_web: int = 0
         self.volume_web: int = 0
         self.re_active: bool = False
+
+        self.frequencies: dict = {}
 
     def create(self):
         return
@@ -182,6 +185,9 @@ class Database(Singleton):
     def replace_pos_lang_mittel_kurz(self, value: int):
         with self.lock:
             self.pos_lang_mittel_kurz = value
+
+    def replace_frequency(self, name: str, value: int):
+        self.frequencies[name] = value
 
     def replace_pos_ukw(self, value: int):
         with self.lock:
@@ -340,6 +346,9 @@ class Database(Singleton):
                 return self.button_ukw
             elif name == "buttonSprMus":
                 return self.button_spr_mus
+
+    def get_button_data(self, name: str) -> ButtonProcessData:
+        raise NotImplemented
 
     def get_button_on_off(self):
         with self.lock:

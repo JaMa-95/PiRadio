@@ -50,32 +50,33 @@ class ButtonsData:
             if value.pin == pin:
                 return value
 
+
 class AnalogValue:
     def __init__(self, pin: int, value: int):
-        self.pin = pin
-        self.value = value
-
+        self.pin: int = pin
+        self.value: int = value
+        
 
 class AnalogData:
     def __init__(self):
-        self.data: List[AnalogValue] = []
+        self.sensor_data: List[AnalogValue] = []
 
     def is_empty(self):
-        is_empty = not self.data
-        return not is_empty
+        is_empty_sensor = not self.sensor_data
+        return not is_empty_sensor
 
-    def get_data(self) -> List[AnalogValue]:
-        return self.data
+    def get_data_sensor(self) -> List[AnalogValue]:
+        return self.sensor_data
 
     def set_data(self, list_of_analog_value: List[AnalogValue]):
-        self.data = list_of_analog_value
+        self.sensor_data = list_of_analog_value
 
     def add_value(self, value: AnalogValue):
-        self.data.append(value)
+        self.sensor_data.append(value)
 
     def delete_value(self, pin) -> bool:
-        for value in self.data:
+        for value in self.sensor_data:
             if value.pin == pin:
-                self.data.remove(value)
+                self.sensor_data.remove(value)
                 return True
         return False

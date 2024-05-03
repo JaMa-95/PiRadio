@@ -1,11 +1,13 @@
 import json
 import time
+from typing import List, Any
 
-from Radio.RadioAction import RadioAction, ButtonClickStates
+from Radio.RadioAction import RadioAction, ButtonClickStates, Restrictions
 from Radio.db.db import Database
 from Radio.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState
 from Radio.util.DataTransmitter import DataTransmitter
-from Radio.util.util import get_project_root
+from Radio.util.util import get_project_root, Singleton
+from Radio.radioFrequency import Frequencies, RadioFrequency
 
 
 class DataProcessor:
@@ -15,7 +17,8 @@ class DataProcessor:
         self.button_processor: ButtonProcessor = ButtonProcessor()
         self.analog_processor: AnalogProcessor = AnalogProcessor(self.publish)
 
-        self.current_data: SensorMsg = SensorMsg()
+        self.sensor_msg_old: SensorMsg = SensorMsg()
+        self.active_actions: Restrictions = Restrictions()
 
         self.__subscribers = []
         self.__content = None
@@ -39,6 +42,7 @@ class DataProcessor:
         # self.amplifier_switch_pin = self.settings["amplifier_pin"]
         # GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
 
+    # implement this as reference class
     def detach(self):
         self.__subscribers.pop()
 
@@ -63,44 +67,65 @@ class DataProcessor:
         while True:
             # TODO: wait instead of endless loop
             if self.data_transmitter.has_data():
-                data: SensorMsg = self.data_transmitter.receive()
-                self.process_buttons(data.buttons_data)
-                self.process_analogs(data.analog_data)
+                sensor_msg_current: SensorMsg = self.data_transmitter.receive()
+                sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
+                                                                 sensor_msg_old=self.sensor_msg_old)
+                self.process_analogs(sensor_msg_current.analog_data, self.active_actions)
+                self.process_buttons(sensor_msg_current.buttons_data)
+                self.sensor_msg_old = sensor_msg_current
             else:
                 time.sleep(self.cycle_time)
 
     def process_buttons(self, buttons_data: ButtonsData):
-        self.current_data.buttons_data = buttons_data
         self.button_processor.process(buttons_data)
 
-    def process_analogs(self, analog_data: AnalogData):
+    def process_analogs(self, analog_data: AnalogData, active_actions: Restrictions):
         if analog_data.is_empty():
             return None
-        if self.current_data.analog_data.get_data() == analog_data:
+        if self.sensor_msg_old.analog_data.get_data_sensor() == analog_data:
             return None
-        self.current_data.analog_data = analog_data
-        self.analog_processor.process(analog_data)
+        self.analog_processor.process(analog_data, active_actions)
 
 
 class ButtonProcessData:
-    def __init__(self, pin):
+    def __init__(self, pin: int, apply_state: ButtonClickStates, frequency_list: Frequencies):
         self.pin = pin
         self.data: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
         self.short_threshold: int = 2
         self.long_threshold: int = 10
-        self.button_happening: RadioAction = RadioAction()
+        self.button_happening: RadioAction = RadioAction(apply_state)
+        self.frequency_list: Frequencies = frequency_list
 
-    def process_data(self):
+    def process_data(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg):
         if self.data.state:
-            self.button_happening.execute(ButtonClickStates.BUTTON_STATE_ON)
+            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_ON,
+                                                    sensor_msg_current,
+                                                    sensor_msg_old)
         else:
-            self.button_happening.execute(ButtonClickStates.BUTTON_STATE_OFF)
+            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_OFF,
+                                                    sensor_msg_current,
+                                                    sensor_msg_old)
         if self.is_short_click():
-            self.button_happening.execute(ButtonClickStates.BUTTON_STATE_SHORT_CLICK)
+            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_SHORT_CLICK,
+                                                    sensor_msg_current,
+                                                    sensor_msg_old)
         elif self.is_long_click():
-            self.button_happening.execute(ButtonClickStates.BUTTON_STATE_LONG_CLICK)
+            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_LONG_CLICK,
+                                                    sensor_msg_current,
+                                                    sensor_msg_old)
         elif self.is_double_click():
-            self.button_happening.execute(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK)
+            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK,
+                                                    sensor_msg_current,
+                                                    sensor_msg_old)
+
+    def get_frequency_stream(self, encoder_value) -> str | None:
+        for radio_frequency in self.frequency_list.frequencies:
+            try:
+                if radio_frequency.minimum <= encoder_value < radio_frequency.maximum:
+                    return radio_frequency
+            except TypeError:
+                return None
+        return None
 
     def _is_click(self, threshold: int):
         # TODO: measure is click with time
@@ -125,9 +150,18 @@ class ButtonProcessData:
         raise NotImplemented
 
 
+class AnalogProcessData:
+    def __init__(self, pin: int, name: str, is_frequency: bool, frequencies: Frequencies):
+        self.name: str = name
+        self.pin: int = pin
+        self.is_frequency: bool = is_frequency
+        self.frequency_list: Frequencies = frequencies
+        self.data: AnalogData = AnalogData()
+
+
 class ButtonProcessor:
     def __init__(self):
-        self.buttons: dict = {}
+        self.buttons: list = []
         self._load_settings()
 
     def _load_settings(self):
@@ -137,7 +171,9 @@ class ButtonProcessor:
 
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
-                self.buttons[name] = ButtonProcessData(button_settings["pin"])
+                self.buttons[name] = ButtonProcessData(button_settings["pin"],
+                                                       button_settings["apply_state"],
+                                                       Frequencies(settings["buttons"][name]["frequency"]["musicList"]))
 
     def process(self, buttons_data: ButtonsData):
         for button in buttons_data.get_data():
@@ -147,31 +183,27 @@ class ButtonProcessor:
         pass
 
 
+class AnalogItem:
+    def __init__(self, name: str, pin: int, min_: int = 0, max_: int = 0, is_volume: bool = False,
+                 is_frequency: bool = False):
+        self.pin: int = pin
+        self.name: str = name
+        self.min: int = min_
+        self.max: int = max_
+        self.is_volume: bool = is_volume
+        self.is_frequency: bool = is_frequency
+        self.value: int = 0
+        self.frequency_list: Frequencies = Frequencies()
+        self.button: str = ""
+
+
 class AnalogProcessor:
     def __init__(self, publish_function):
         self.publish_function = publish_function
 
         self.db: Database = Database()
 
-        self.volume_old: int = 0
-        self.volume_min: int = 0
-        self.volume_max: int = 0
-        self.volume_on: bool = False
-
-        self.bass_min: int = 0
-        self.bass_max: int = 0
-        self.bass_on: bool = False
-        self.bass_old: int = 0
-
-        self.treble_min: int = 0
-        self.treble_max: int = 0
-        self.treble_on: bool = False
-        self.treble_old: int = 0
-
-        self.pin_frequencies: int = 0
-        self.pin_volume: int = 0
-        self.pin_bass: int = 0
-        self.pin_treble: int = 0
+        self.analog_items: List[AnalogItem] = []
 
         self.settings = {}
         self.load_settings()
@@ -179,63 +211,99 @@ class AnalogProcessor:
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
-        self.volume_min = self.settings["volume"]["min"]
-        self.volume_max = self.settings["volume"]["max"]
-        self.volume_on = self.settings["volume"]["on"]
-        self.pin_volume = self.settings["volume"]["pin"]
-        self.bass_min = self.settings["bass"]["min"]
-        self.bass_max = self.settings["bass"]["max"]
-        self.bass_on = self.settings["bass"]["on"]
-        self.pin_bass = self.settings["bass"]["pin"]
-        self.treble_min = self.settings["treble"]["min"]
-        self.treble_max = self.settings["treble"]["max"]
-        self.treble_on = self.settings["treble"]["on"]
-        self.pin_treble = self.settings["treble"]["pin"]
-        # TODO: mutliple frequencies waht now?
-        self.pin_frequencies = self.settings["frequencies"]["posLangKurzMittel"]["pin"]
+        # TODO: make class out of this
+        for name, item in self.settings["analog"]:
+            if name == "frequencies":
+                for name_frequency, item_frequency in item.items():
+                    if item_frequency["on"]:
+                        self.analog_items.append(AnalogItem(
+                            name=name_frequency,
+                            pin=item_frequency["pin"],
+                            is_frequency=True
+                        ))
+            else:
+                if item["is_volume"]:
+                    is_volume = True
+                else:
+                    is_volume = False
+                self.analog_items.append(AnalogItem(
+                    name=name,
+                    pin=item["pin"],
+                    min_=item["min"],
+                    max_=item["max"],
+                    is_volume=is_volume
+                ))
+        for button_name, button_item in self.settings["buttons"]:
+            for index, analog_item in enumerate(self.analog_items):
+                if button_item["frequency"]["pos"] == analog_item.name:
+                    self.analog_items[index].frequency_list = Frequencies(button_item["musicList"])
+                    self.analog_items[index].button = button_name
 
-    def process(self, data: AnalogData):
-        for analog in data.get_data():
-            if analog.pin == self.pin_volume:
-                self.set_volume(analog.value)
-            elif analog.pin == self.pin_bass:
-                self.set_bass(analog.value)
-            elif analog.pin == self.pin_treble:
-                self.set_treble(analog.value)
+    def process(self, data: AnalogData, active_actions: Restrictions):
+        # TODO: multiple analog values must be possible
+        new_data = []
+        for analog in data.get_data_sensor():
+            for item in self.analog_items:
+                if item.is_frequency:
+                    analog.value = self.set_frequency(item, analog.value, active_actions)
+                elif item.is_volume:
+                    analog.value = self.set_volume(item, analog.value)
+                else:
+                    analog.value = self.set_analog_sensor(item, analog.value)
+            new_data.append(analog)
+        data.set_data(new_data)
 
-    def set_volume(self, volume):
-        volume = int(-(volume - self.volume_min) / (self.volume_min - self.volume_max) * 100)
-        if volume < 0:
-            volume = 0
-        elif volume > 100:
-            volume = 100
-        if volume == self.volume_old:
-            return
+    def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
+                      active_actions: Restrictions) -> int:
+        if current_frequency_value == frequency_item.value:
+            return current_frequency_value
+        frequency_item.value = current_frequency_value
+        self.set_stream(frequency_item, active_actions)
+        self.db.replace_frequency(frequency_item.name, current_frequency_value)
+        self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
+        return current_frequency_value
+
+    def set_stream(self, frequency: AnalogItem, active_actions: Restrictions):
+        if active_actions.is_empty():
+            return None
+        play_music_action = active_actions.get_play_music()
+        if not play_music_action:
+            return None
+        if not play_music_action.frequency_pin_name == frequency.name:
+            return None
+        button: ButtonProcessData = self.db.get_button_data(frequency.button)
+        current_stream: str = self.db.get_stream()
+        new_stream = button.get_frequency_stream(frequency.value)
+        if new_stream != current_stream:
+            self.db.replace_stream(new_stream)
+            self.publish_function(f"stream:{new_stream}")
+
+    @staticmethod
+    def _map(max_: int, min_: int, value):
+        return int(-(value - min_) / (min_ - max_) * 100)
+
+    def set_volume(self, volume: AnalogItem, value: int) -> int:
+        # volume = int(-(value - volume.min) / (volume.min - volume.max) * 100)
+        value_new = self._map(volume.max, volume.min, value)
+        if value_new < 0:
+            value_new = 0
+        elif value_new > 100:
+            value_new = 100
+        if volume.value == value_new:
+            return value_new
         # print(f"Volume: {volume}")
-        self.volume_old = volume
-        self.db.replace_volume(volume)
-        self.publish_function(f"volume:{volume}")
+        self.db.replace_volume(value_new)
+        self.publish_function(f"volume:{value_new}")
+        return value_new
 
-    def set_bass(self, bass):
-        bass = int(-(bass - self.bass_min) / (self.bass_min - self.bass_max) * 40) - 20
-        if bass < 0:
-            bass = 0
-        elif bass > 100:
-            bass = 100
-        if bass == self.bass_old:
-            return
-        self.bass_old = bass
-        self.db.replace_bass(bass)
-        self.publish_function(f"bass:{bass}")
-
-    def set_treble(self, treble):
-        treble = -(int(-(self.treble_max - treble) / (self.treble_min - self.treble_max) * 40) - 20)
-        if treble < -20:
-            treble = -20
-        elif treble > 20:
-            treble = 20
-        if treble == self.treble_old:
-            return
-        self.treble_old = treble
-        self.db.replace_treble(treble)
-        self.publish_function(f"treble:{treble}")
+    def set_analog_sensor(self, analog_item: AnalogItem, value: int) -> int:
+        value_calc = int(-(value - analog_item.min) / (analog_item.min - analog_item.max) * 40) - 20
+        if value_calc < 0:
+            value_calc = 0
+        elif value_calc > 100:
+            value_calc = 100
+        if value_calc == analog_item.value:
+            return value_calc
+        self.db.replace_bass(value_calc)
+        self.publish_function(f"{analog_item.name}:{value_calc}")
+        return value_calc

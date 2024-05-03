@@ -19,7 +19,7 @@ class TestDb(TestCase):
         self.db.init()
 
     def test_(self):
-        abc = self.db.cur.execute("PRAGMA index_list('radio');")
+        abc = self.db.cur.check_and_execute("PRAGMA index_list('radio');")
         d = abc.fetchall()
         print()
 

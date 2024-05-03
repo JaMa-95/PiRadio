@@ -11,9 +11,9 @@ class TestCollector(unittest.TestCase):
         while True:
             data: SensorMsg = collector.data_transmitter.receive()
             buttons = data.buttons_data.get_data()
-            analogs = data.analog_data.get_data()
+            analogs = data.analog_data.get_data_sensor()
             button_printable = []
-            for button in buttons.data:
+            for button in buttons.sensor_data:
                 button_printable.append({"pin": button.pin, "state": button.state, "states": button.state})
             analog_printable = []
             for analog in analogs.data:
