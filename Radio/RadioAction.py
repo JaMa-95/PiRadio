@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 from Radio.sensorMsg import SensorMsg, ButtonState
+from Radio.util.RadioExceptions import PlayMusicActionError
 from Radio.util.util import Singleton
 
 class ButtonClickStates(Enum):
@@ -63,9 +64,9 @@ class HoldFrequencyX(RadioAction):
 
 
 class PlayMusic(RadioAction):
-    def __init__(self, apply_states: [ButtonClickStates], name, frequency_pin_name):
+    def __init__(self, apply_states: [ButtonClickStates], button_name, frequency_pin_name):
         super().__init__(apply_states=apply_states)
-        self.button_name: str = name
+        self.button_name: str = button_name
         self.frequency_pin_name: str = frequency_pin_name
 
 
@@ -82,36 +83,43 @@ class AddRestriction(RadioAction):
     pass
 
 
-class Restrictions(Singleton):
+class Actions(Singleton):
     def __init__(self):
-        self._restrictions: List[RadioAction] = []
+        self._actions: List[RadioAction] = []
 
     def get_play_music(self) -> None | RadioAction:
-        raise NotImplemented
+        # TODO: error when multiple or return multiple
+        action_return = None
+        for action in self._actions:
+            if isinstance(action, PlayMusic):
+                if action_return:
+                    raise PlayMusicActionError("Multiple play music actions at the same time not supported")
+                action_return = action
+        return action_return
 
     def is_empty(self):
-        if not self._restrictions:
+        if not self._actions:
             return True
         return False
 
     def process(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg):
-        for restriction in self._restrictions:
-            sensor_msg_current = restriction.execute(sensor_msg_current=sensor_msg_current,
+        for action in self._actions:
+            sensor_msg_current = action.execute(sensor_msg_current=sensor_msg_current,
                                                      sensor_msg_old=sensor_msg_old)
         return sensor_msg_current
 
-    def add_restriction(self, restriction: RadioAction):
-        self._restrictions.append(restriction)
+    def add_action(self, action: RadioAction):
+        self._actions.append(action)
 
-    def remove_restriction(self, restriction_new: RadioAction):
-        for index, restriction in enumerate(self._restrictions):
-            if restriction == restriction_new:
-                self._restrictions.pop(index)
+    def remove_action(self, action_new: RadioAction):
+        for index, action in enumerate(self._actions):
+            if action == action_new:
+                self._actions.pop(index)
 
-    def add_or_remove_restriction(self, restriction_new: RadioAction):
-        for index, restriction in enumerate(self._restrictions):
-            if restriction == restriction_new:
-                self._restrictions.pop(index)
-        self._restrictions.append(restriction_new)
+    def add_or_remove_action(self, action_new: RadioAction):
+        for index, action in enumerate(self._actions):
+            if action == action_new:
+                self._actions.pop(index)
+        self._actions.append(action_new)
 
 

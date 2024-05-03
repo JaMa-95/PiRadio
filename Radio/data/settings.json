@@ -33,7 +33,7 @@
       "min_final": -20,
       "max_final": 20,
       "on": true,
-      "pin": 2
+      "pin": 4
     }
   },
   "button_general": {

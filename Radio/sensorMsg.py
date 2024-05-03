@@ -61,9 +61,8 @@ class AnalogData:
     def __init__(self):
         self.sensor_data: List[AnalogValue] = []
 
-    def is_empty(self):
-        is_empty_sensor = not self.sensor_data
-        return not is_empty_sensor
+    def is_empty(self) -> bool:
+        return not self.sensor_data
 
     def get_data_sensor(self) -> List[AnalogValue]:
         return self.sensor_data

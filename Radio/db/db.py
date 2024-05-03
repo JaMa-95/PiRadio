@@ -1,6 +1,5 @@
 import threading
 
-from Radio.dataProcessor import ButtonProcessData
 from Radio.util.singleton import Singleton
 
 
@@ -347,7 +346,7 @@ class Database(Singleton):
             elif name == "buttonSprMus":
                 return self.button_spr_mus
 
-    def get_button_data(self, name: str) -> ButtonProcessData:
+    def get_button_data(self, name: str):
         raise NotImplemented
 
     def get_button_on_off(self):

@@ -1,13 +1,13 @@
 import json
 import time
-from typing import List, Any
+from typing import List
 
-from Radio.RadioAction import RadioAction, ButtonClickStates, Restrictions
+from Radio.RadioAction import RadioAction, ButtonClickStates, Actions
 from Radio.db.db import Database
 from Radio.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState
 from Radio.util.DataTransmitter import DataTransmitter
-from Radio.util.util import get_project_root, Singleton
-from Radio.radioFrequency import Frequencies, RadioFrequency
+from Radio.util.util import get_project_root
+from Radio.radioFrequency import Frequencies
 
 
 class DataProcessor:
@@ -18,7 +18,7 @@ class DataProcessor:
         self.analog_processor: AnalogProcessor = AnalogProcessor(self.publish)
 
         self.sensor_msg_old: SensorMsg = SensorMsg()
-        self.active_actions: Restrictions = Restrictions()
+        self.active_actions: Actions = Actions()
 
         self.__subscribers = []
         self.__content = None
@@ -79,7 +79,7 @@ class DataProcessor:
     def process_buttons(self, buttons_data: ButtonsData):
         self.button_processor.process(buttons_data)
 
-    def process_analogs(self, analog_data: AnalogData, active_actions: Restrictions):
+    def process_analogs(self, analog_data: AnalogData, active_actions: Actions):
         if analog_data.is_empty():
             return None
         if self.sensor_msg_old.analog_data.get_data_sensor() == analog_data:
@@ -88,7 +88,8 @@ class DataProcessor:
 
 
 class ButtonProcessData:
-    def __init__(self, pin: int, apply_state: ButtonClickStates, frequency_list: Frequencies):
+    def __init__(self, name: str, pin: int, apply_state: ButtonClickStates, frequency_list: Frequencies):
+        self.name = name
         self.pin = pin
         self.data: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
         self.short_threshold: int = 2
@@ -118,10 +119,10 @@ class ButtonProcessData:
                                                     sensor_msg_current,
                                                     sensor_msg_old)
 
-    def get_frequency_stream(self, encoder_value) -> str | None:
+    def get_frequency_stream(self, sensor_value: int) -> str | None:
         for radio_frequency in self.frequency_list.frequencies:
             try:
-                if radio_frequency.minimum <= encoder_value < radio_frequency.maximum:
+                if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
                     return radio_frequency
             except TypeError:
                 return None
@@ -171,9 +172,10 @@ class ButtonProcessor:
 
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
-                self.buttons[name] = ButtonProcessData(button_settings["pin"],
-                                                       button_settings["apply_state"],
-                                                       Frequencies(settings["buttons"][name]["frequency"]["musicList"]))
+                self.buttons.append(ButtonProcessData(name,
+                                                      button_settings["pin"],
+                                                      button_settings["apply_state"],
+                                                      Frequencies(settings["buttons"][name]["frequency"]["musicList"])))
 
     def process(self, buttons_data: ButtonsData):
         for button in buttons_data.get_data():
@@ -194,7 +196,7 @@ class AnalogItem:
         self.is_frequency: bool = is_frequency
         self.value: int = 0
         self.frequency_list: Frequencies = Frequencies()
-        self.button: str = ""
+        self.buttons: List[str] = []
 
 
 class AnalogProcessor:
@@ -212,7 +214,7 @@ class AnalogProcessor:
         with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
         # TODO: make class out of this
-        for name, item in self.settings["analog"]:
+        for name, item in self.settings["analog"].items():
             if name == "frequencies":
                 for name_frequency, item_frequency in item.items():
                     if item_frequency["on"]:
@@ -222,8 +224,11 @@ class AnalogProcessor:
                             is_frequency=True
                         ))
             else:
-                if item["is_volume"]:
-                    is_volume = True
+                if "is_volume" in item:
+                    if item["is_volume"]:
+                        is_volume = True
+                    else:
+                        is_volume = False
                 else:
                     is_volume = False
                 self.analog_items.append(AnalogItem(
@@ -233,28 +238,32 @@ class AnalogProcessor:
                     max_=item["max"],
                     is_volume=is_volume
                 ))
-        for button_name, button_item in self.settings["buttons"]:
+        for button_name, button_item in self.settings["buttons"].items():
             for index, analog_item in enumerate(self.analog_items):
                 if button_item["frequency"]["pos"] == analog_item.name:
-                    self.analog_items[index].frequency_list = Frequencies(button_item["musicList"])
-                    self.analog_items[index].button = button_name
+                    self.analog_items[index].frequency_list = Frequencies(button_item["frequency"]["musicList"])
+                    self.analog_items[index].buttons.append(button_name)
 
-    def process(self, data: AnalogData, active_actions: Restrictions):
+    def process(self, data: AnalogData, active_actions: Actions):
         # TODO: multiple analog values must be possible
-        new_data = []
         for analog in data.get_data_sensor():
-            for item in self.analog_items:
-                if item.is_frequency:
-                    analog.value = self.set_frequency(item, analog.value, active_actions)
-                elif item.is_volume:
-                    analog.value = self.set_volume(item, analog.value)
-                else:
-                    analog.value = self.set_analog_sensor(item, analog.value)
-            new_data.append(analog)
-        data.set_data(new_data)
+            for index, item in enumerate(self.analog_items):
+                if item.pin == analog.pin:
+                    if item.is_frequency:
+                        value = self.set_frequency(item, analog.value, active_actions)
+                        self.analog_items[index].value = value
+                        break
+                    elif item.is_volume:
+                        value = self.set_volume(item, analog.value)
+                        self.analog_items[index].value = value
+                        break
+                    else:
+                        value = self.set_analog_sensor(item, analog.value)
+                        self.analog_items[index].value = value
+                        break
 
     def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
-                      active_actions: Restrictions) -> int:
+                      active_actions: Actions) -> int:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         frequency_item.value = current_frequency_value
@@ -263,15 +272,15 @@ class AnalogProcessor:
         self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
         return current_frequency_value
 
-    def set_stream(self, frequency: AnalogItem, active_actions: Restrictions):
+    def set_stream(self, frequency: AnalogItem, active_actions: Actions):
         if active_actions.is_empty():
             return None
         play_music_action = active_actions.get_play_music()
         if not play_music_action:
             return None
-        if not play_music_action.frequency_pin_name == frequency.name:
+        if play_music_action.frequency_pin_name != frequency.name:
             return None
-        button: ButtonProcessData = self.db.get_button_data(frequency.button)
+        button: ButtonProcessData = self.db.get_button_data(frequency.buttons)
         current_stream: str = self.db.get_stream()
         new_stream = button.get_frequency_stream(frequency.value)
         if new_stream != current_stream:
