@@ -61,6 +61,8 @@ class Database(Singleton):
         self.volume_web: int = 0
         self.re_active: bool = False
 
+        # new data
+        self.button_data: dict = {}
         self.frequencies: dict = {}
 
     def create(self):
@@ -71,28 +73,6 @@ class Database(Singleton):
 
     def init(self):
         return
-        self.insert_volume(0)
-        self.insert_stream("INITIALIZING")
-        self.insert_pos_lang_mittel_kurz(0)
-        self.insert_pos_ukw(0)
-        self.insert_button_ukw(0)
-        self.insert_button_lang(0)
-        self.insert_button_mittel(0)
-        self.insert_button_kurz(0)
-        self.insert_button_on_off(0)
-        self.insert_button_spr_mus(0)
-        self.insert_button_ta(0)
-        self.insert_ads_pin_value(0, 0)
-        self.insert_ads_pin_value(0, 1)
-        self.insert_ads_pin_value(0, 2)
-        self.insert_ads_pin_value(0, 3)
-        self.insert_radio_name("---")
-        self.insert_web_control_value(False)
-        self.insert_poti_value_web(0)
-        self.insert_shutdown(False)
-        self.insert_re_active(False)
-        self.insert_radio_name_re("---")
-        self.insert_stream_re("INITIALIZING")
 
     ###################################################################################
 
@@ -140,6 +120,13 @@ class Database(Singleton):
                 self.button_ukw = value
             elif name == "buttonSprMus":
                 self.button_spr_mus = value
+
+    def replace_button_data(self, name: str, value):
+        with self.lock:
+            try:
+                self.button_data[name] = value
+            except Exception:
+                return None
 
     def replace_button_on_off(self, value: int):
         with self.lock:
@@ -347,7 +334,14 @@ class Database(Singleton):
                 return self.button_spr_mus
 
     def get_button_data(self, name: str):
-        raise NotImplemented
+        with self.lock:
+            try:
+                return self.button_data[name]
+            except Exception:
+                return None
+    def get_buttons_data(self):
+        with self.lock:
+            return self.button_data
 
     def get_button_on_off(self):
         with self.lock:

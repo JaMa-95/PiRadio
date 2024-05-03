@@ -53,10 +53,9 @@ class TestAnalogProcessor(unittest.TestCase):
             if data.pin == pin:
                 self.assertEqual(data.value, 101)
 
-        actions = Actions()
-        actions.add_action(PlayMusic(pin, "Ta", "posLangKurzMittel"))
-        data_processor.process_analogs(analog_data,
-                                       actions)
+        action = PlayMusic(pin, "Ta", "posLangKurzMittel")
+        data_processor.add_remove_actions(action)
+        data_processor.process_analogs(analog_data)
 
         for item in data_processor.analog_processor.analog_items:
             if item.pin == pin:

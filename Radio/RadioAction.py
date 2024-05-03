@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import List
-from Radio.sensorMsg import SensorMsg, ButtonState
+from Radio.sensorMsg import SensorMsg, ButtonState, ButtonsData
 from Radio.util.RadioExceptions import PlayMusicActionError
 from Radio.util.util import Singleton
+
 
 class ButtonClickStates(Enum):
     BUTTON_STATE_OFF = 0
@@ -19,13 +20,13 @@ class RadioAction:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def check_and_execute(self, button_click_state: ButtonClickStates, sensor_msg_current: SensorMsg,
+    def check_and_execute(self, button_click_state: ButtonClickStates, sensor_msg_new: SensorMsg,
                           sensor_msg_old: SensorMsg):
         if self.check_state(button_click_state):
-            self.execute(sensor_msg_current, sensor_msg_old)
+            self.execute(sensor_msg_new, sensor_msg_old)
 
     # apply action to sensor msg
-    def execute(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+    def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         raise NotImplemented("This class is only used as a interface. Please, use one of the child classes")
 
     def check_state(self, button_state: ButtonClickStates):
@@ -39,28 +40,33 @@ class OffRestriction(RadioAction):
         super().__init__(apply_states)
         self.exception_pin: int = exception_pin
 
-    def execute(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+    def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         updated_buttons = []
-        for button in sensor_msg_current.buttons_data.get_data():
+        for button in sensor_msg_old.buttons_data.get_data():
             if button.pin not in self.exception_pin:
                 updated_buttons.append(
                     ButtonState(button.pin, False, [False])
                 )
             else:
                 updated_buttons.append(button)
-        sensor_msg_current.buttons_data.set_data(updated_buttons)
-        return sensor_msg_current
+        sensor_msg_new.buttons_data.set_data(updated_buttons)
+        return sensor_msg_new
 
 
 class HoldFrequencyX(RadioAction):
-    def __init__(self, holding_pin: int, apply_states: [ButtonClickStates]):
+    def __init__(self, holding_pin: int, holding_frequency_pin: int, apply_states: [ButtonClickStates]):
         super().__init__(apply_states)
         self.holding_pin: int = holding_pin
+        self.holding_frequency_pin: int = holding_frequency_pin
 
-    def execute(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
-        sensor_msg_current.buttons_data.update_value(self.holding_pin,
-                                                     sensor_msg_old.buttons_data.get_value(self.holding_pin))
-        return sensor_msg_current
+    def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        for index, frequency_data in enumerate(sensor_msg_new.analog_data.sensor_data):
+            for index_old, frequency_data_old in enumerate(sensor_msg_old.analog_data.sensor_data):
+                if (frequency_data.pin == self.holding_frequency_pin and frequency_data_old.pin ==
+                        self.holding_frequency_pin):
+                    sensor_msg_new.analog_data.sensor_data[index].value  = (
+                        sensor_msg_old.analog_data.sensor_data[index_old].value)
+                    return sensor_msg_new
 
 
 class PlayMusic(RadioAction):

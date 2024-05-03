@@ -33,6 +33,8 @@ class DataProcessor:
         self.settings: dict = {}
         self.load_settings()
 
+        self.db: Database = Database()
+
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
@@ -70,54 +72,67 @@ class DataProcessor:
                 sensor_msg_current: SensorMsg = self.data_transmitter.receive()
                 sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
                                                                  sensor_msg_old=self.sensor_msg_old)
-                self.process_analogs(sensor_msg_current.analog_data, self.active_actions)
+                self.process_analogs(sensor_msg_current.analog_data)
                 self.process_buttons(sensor_msg_current.buttons_data)
                 self.sensor_msg_old = sensor_msg_current
             else:
                 time.sleep(self.cycle_time)
 
+    # mostly for testing purpose
+    def add_remove_actions(self, action: RadioAction):
+        self.active_actions.add_or_remove_action(action)
+
     def process_buttons(self, buttons_data: ButtonsData):
         self.button_processor.process(buttons_data)
 
-    def process_analogs(self, analog_data: AnalogData, active_actions: Actions):
+    def process_analogs(self, analog_data: AnalogData):
         if analog_data.is_empty():
             return None
         if self.sensor_msg_old.analog_data.get_data_sensor() == analog_data:
             return None
-        self.analog_processor.process(analog_data, active_actions)
+        self.analog_processor.process(analog_data, self.active_actions)
+
+
+class ButtonStatus:
+    def __init__(self, name: str, pin: int, frequency_list: Frequencies):
+        self.name: str = name
+        self.pin: int = pin
+        self.frequency_list: Frequencies = frequency_list
+        self.status: bool = False
 
 
 class ButtonProcessData:
     def __init__(self, name: str, pin: int, apply_state: ButtonClickStates, frequency_list: Frequencies):
         self.name = name
         self.pin = pin
-        self.data: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
+        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
         self.short_threshold: int = 2
         self.long_threshold: int = 10
         self.button_happening: RadioAction = RadioAction(apply_state)
         self.frequency_list: Frequencies = frequency_list
 
-    def process_data(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg):
-        if self.data.state:
-            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_ON,
-                                                    sensor_msg_current,
-                                                    sensor_msg_old)
+    def process_data(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        sensor_msg_updated = None
+        if self.state.state:
+            sensor_msg_updated = self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_ON,
+                                                                         sensor_msg_new,
+                                                                         sensor_msg_old)
         else:
-            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_OFF,
-                                                    sensor_msg_current,
-                                                    sensor_msg_old)
+            sensor_msg_updated = self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_OFF,
+                                                                         sensor_msg_new,
+                                                                         sensor_msg_old)
         if self.is_short_click():
-            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_SHORT_CLICK,
-                                                    sensor_msg_current,
-                                                    sensor_msg_old)
+            return self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_SHORT_CLICK,
+                                                           sensor_msg_updated,
+                                                           sensor_msg_old)
         elif self.is_long_click():
-            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_LONG_CLICK,
-                                                    sensor_msg_current,
-                                                    sensor_msg_old)
+            return self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_LONG_CLICK,
+                                                           sensor_msg_updated,
+                                                           sensor_msg_old)
         elif self.is_double_click():
-            self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK,
-                                                    sensor_msg_current,
-                                                    sensor_msg_old)
+            return self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK,
+                                                           sensor_msg_updated,
+                                                           sensor_msg_old)
 
     def get_frequency_stream(self, sensor_value: int) -> str | None:
         for radio_frequency in self.frequency_list.frequencies:
@@ -131,7 +146,7 @@ class ButtonProcessData:
     def _is_click(self, threshold: int):
         # TODO: measure is click with time
         counter = 0
-        for value in self.data.states():
+        for value in self.state.states():
             if value is True:
                 counter += 1
                 if counter > threshold:
@@ -162,8 +177,9 @@ class AnalogProcessData:
 
 class ButtonProcessor:
     def __init__(self):
-        self.buttons: list = []
+        self.buttons: List[ButtonProcessData] = []
         self._load_settings()
+        self.db: Database = Database()
 
     def _load_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -172,17 +188,28 @@ class ButtonProcessor:
 
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
-                self.buttons.append(ButtonProcessData(name,
-                                                      button_settings["pin"],
-                                                      button_settings["apply_state"],
-                                                      Frequencies(settings["buttons"][name]["frequency"]["musicList"])))
+                button = ButtonProcessData(name,
+                                           button_settings["pin"],
+                                           button_settings["apply_state"],
+                                           Frequencies(settings["buttons"][name]["frequency"]["musicList"]))
+                self.buttons.append(button)
+                self.db.replace_button_data(name, button_settings)
 
-    def process(self, buttons_data: ButtonsData):
-        for button in buttons_data.get_data():
-            self._check_button(button)
+    def process(self, new_buttons_data: ButtonsData):
+        # TODO: change from list to dict
+        for state_new in new_buttons_data.get_data():
+            for index, button_old in enumerate(self.buttons):
+                if button_old.pin == state_new.pin:
+                    if self._check_button_change(state_new, button_old.state):
+                        self.buttons[index].process_data(new_buttons_data, self.buttons)
+                        self.buttons[index].state = state_new
 
-    def _check_button(self, data):
-        pass
+    @staticmethod
+    def _check_button_change(state_new: ButtonState, state_old: ButtonState):
+        if state_old == state_new:
+            return False
+        else:
+            return True
 
 
 class AnalogItem:
@@ -280,7 +307,9 @@ class AnalogProcessor:
             return None
         if play_music_action.frequency_pin_name != frequency.name:
             return None
-        button: ButtonProcessData = self.db.get_button_data(frequency.buttons)
+        button: ButtonProcessData = self.db.get_button_data(play_music_action.button_name)
+        if not button:
+            return None
         current_stream: str = self.db.get_stream()
         new_stream = button.get_frequency_stream(frequency.value)
         if new_stream != current_stream:
