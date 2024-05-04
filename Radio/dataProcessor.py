@@ -7,7 +7,7 @@ from Radio.db.db import Database
 from Radio.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState
 from Radio.util.DataTransmitter import DataTransmitter
 from Radio.util.util import get_project_root
-from Radio.radioFrequency import Frequencies
+from Radio.radioFrequency import Frequencies, RadioFrequency
 
 
 class DataProcessor:
@@ -134,14 +134,20 @@ class ButtonProcessData:
                                                            sensor_msg_updated,
                                                            sensor_msg_old)
 
-    def get_frequency_stream(self, sensor_value: int) -> str | None:
-        for radio_frequency in self.frequency_list.frequencies:
+    # TODO: Test this with min max
+    def get_frequency_stream(self, sensor_value: int) -> None | RadioFrequency:
+        over_min_max_frequency = None
+        for index, radio_frequency in enumerate(self.frequency_list.frequencies):
             try:
                 if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
                     return radio_frequency
+                elif index == 0 and sensor_value < radio_frequency.minimum:
+                    over_min_max_frequency = radio_frequency
+                elif index == len(self.frequency_list.frequencies) and sensor_value > radio_frequency.maximum:
+                    over_min_max_frequency = radio_frequency
             except TypeError:
                 return None
-        return None
+        return over_min_max_frequency
 
     def _is_click(self, threshold: int):
         # TODO: measure is click with time
@@ -178,8 +184,8 @@ class AnalogProcessData:
 class ButtonProcessor:
     def __init__(self):
         self.buttons: List[ButtonProcessData] = []
-        self._load_settings()
         self.db: Database = Database()
+        self._load_settings()
 
     def _load_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -193,7 +199,7 @@ class ButtonProcessor:
                                            button_settings["apply_state"],
                                            Frequencies(settings["buttons"][name]["frequency"]["musicList"]))
                 self.buttons.append(button)
-                self.db.replace_button_data(name, button_settings)
+                self.db.replace_button_data(name, button)
 
     def process(self, new_buttons_data: ButtonsData):
         # TODO: change from list to dict

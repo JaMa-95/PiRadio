@@ -1,6 +1,7 @@
 import time
 from dataclasses import dataclass
 import json
+from typing import List
 import vlc
 
 from Radio.util.util import get_project_root
@@ -87,7 +88,7 @@ class RadioFrequency:
 
 class Frequencies:
     def __init__(self, file_name: str = None):
-        self.frequencies = []
+        self.frequencies: List[RadioFrequency] = []
         self.min_frequency: int = 0
         self.max_frequency: int = 0
         self.load_settings()
@@ -158,77 +159,3 @@ class Frequencies:
         for frequency in self.frequencies:
             data.append(frequency.to_list())
         return data
-
-
-class KurzFrequencies(Frequencies):
-    # NOT WORKING: Berum, stockholm,Falun
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_kurz_2.json")
-        self.init_min_max()
-
-
-class LangFrequencies(Frequencies):
-    # not working: That 70s Station, 80s80s Radio, 80s80s NDW, Eurodance 90, Radio 2000, rs2 -2010er, FM Top 40
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_lang.json")
-        self.init_min_max()
-
-
-class MittelFrequencies(Frequencies):
-    # electro swing
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_mittel.json")
-        self.init_min_max()
-
-
-class UKWFrequencies(Frequencies):
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_ukw.json")
-        self.init_min_max()
-
-
-class SprFrequencies(Frequencies):
-    # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_kurz_1.json")
-        self.init_min_max()
-
-
-class TaFrequencies(Frequencies):
-    # NOT WORKING; LA MEGA ESPANA, FM MALAGA ESPANA, RADIO ENGLAND, Hardstyle radio NL, only hit japan
-    def __init__(self):
-        self.frequencies = []
-        self.min_frequency: int = 0
-        self.max_frequency: int = 0
-        self.load_settings()
-        self.load_from_file("data/freq_ta.json")
-        self.init_min_max()
-
-
-if __name__ == "__main__":
-    kurz = KurzFrequencies()
-    lang = LangFrequencies()
-    mittel = MittelFrequencies()
-    ukw = UKWFrequencies()
-    ta = TaFrequencies()
-    print()

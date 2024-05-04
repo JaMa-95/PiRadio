@@ -1,5 +1,6 @@
 import threading
 
+from Radio.radioFrequency import RadioFrequency
 from Radio.util.singleton import Singleton
 
 
@@ -13,8 +14,8 @@ class Database(Singleton):
         self.web_control_value: bool = False
         self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
         self.volume: int = 0
-        self.stream: str = "INITIALIZING"
-        self.stream_re: str = "INITIALIZING"
+        self.stream: RadioFrequency = RadioFrequency()
+        self.stream_re: str = ""
         self.pos_lang_mittel_kurz: int = 0
         self.pos_ukw: int = 0
         self.button_ukw: int = 0
@@ -38,8 +39,8 @@ class Database(Singleton):
         self.web_control_value: bool = False
         self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
         self.volume: int = 0
-        self.stream: str = "INITIALIZING"
-        self.stream_re: str = "INITIALIZING"
+        self.stream: RadioFrequency = RadioFrequency()
+        self.stream_re: str = ""
         self.pos_lang_mittel_kurz: int = 0
         self.pos_ukw: int = 0
         self.button_ukw: int = 0
@@ -339,6 +340,7 @@ class Database(Singleton):
                 return self.button_data[name]
             except Exception:
                 return None
+
     def get_buttons_data(self):
         with self.lock:
             return self.button_data

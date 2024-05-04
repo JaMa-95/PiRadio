@@ -2,6 +2,7 @@ import unittest
 
 from Radio.RadioAction import Actions, HoldFrequencyX, ButtonClickStates, PlayMusic
 from Radio.dataProcessor import DataProcessor
+from Radio.db.db import Database
 from Radio.sensorMsg import AnalogData, AnalogValue
 
 
@@ -19,6 +20,7 @@ class TestDataProcessor(unittest.TestCase):
         self.assertEqual(data_processor.button_processor.buttons[0].name, "OnOffRaspi")
         self.assertEqual(len(data_processor.button_processor.buttons), 9)
 
+
 class TestAnalogProcessor(unittest.TestCase):
     def test_analog_frequency(self):
         data_processor = DataProcessor()
@@ -34,8 +36,7 @@ class TestAnalogProcessor(unittest.TestCase):
 
         actions = Actions()
         actions.add_action(HoldFrequencyX(pin, ButtonClickStates.BUTTON_STATE_ON))
-        data_processor.process_analogs(analog_data,
-                                       actions)
+        data_processor.process_analogs(analog_data, actions)
 
         for item in data_processor.analog_processor.analog_items:
             if item.pin == pin:
@@ -57,9 +58,9 @@ class TestAnalogProcessor(unittest.TestCase):
         data_processor.add_remove_actions(action)
         data_processor.process_analogs(analog_data)
 
-        for item in data_processor.analog_processor.analog_items:
-            if item.pin == pin:
-                self.assertEqual(item.value, 101)
+        db = Database()
+        stream = db.get_stream()
+        self.assertEqual(stream.name, "Relaxed")
 
     def test_analog_volume(self):
         data_processor = DataProcessor()
