@@ -4,14 +4,14 @@ from statistics import mean
 from random import randint
 from Radio.util.util import is_raspberry
 if is_raspberry():
-    is_raspberry = True
+    IS_RASPBERRY = True
     import board
     import busio
     from adafruit_ads1x15.analog_in import AnalogIn
     import adafruit_ads1x15.ads1115 as ADS
     from adafruit_ads1x15.ads1x15 import Mode
 else:
-    is_raspberry = False
+    IS_RASPBERRY = False
 
 from Radio.db.db import Database
 from Radio.sensorMsg import AnalogData, AnalogValue
@@ -21,13 +21,9 @@ from Radio.util.util import get_project_root
 class AdsObject:
     # TODO: Refactor
     def __init__(self, mock: bool = False):
-        self.pin_volume: int = -1
-        self.pin_bass: int = -1
-        self.pin_treble: int = -1
-        # TODO: multiple frequencies
-        self.pin_frequency: int = -1
+        # TODO: make list of single ads sensor object
+        self.analog_sensors: list = []
         self._load_settings()
-        self.pins = [self.pin_frequency, self.pin_volume, self.pin_bass, self.pin_treble]
 
         self.ads = AdsSingle(None, mock=mock)
 
@@ -36,22 +32,26 @@ class AdsObject:
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
         # TODO: Loop over frequencies
-        self.pin_volume = settings["volume"]["pin"]
-        self.pin_bass = settings["bass"]["pin"]
-        self.pin_treble = settings["treble"]["pin"]
-        self.pin_frequency = settings["frequencies"]["posLangKurzMittel"]["pin"]
+        for name, analog_item in settings["analog"].items():
+            if name == "frequencies":
+                for name_frequency, frequency_item in analog_item.items():
+                    frequency_item["is_frequency"] = True
+                    self.analog_sensors.append(frequency_item)
+            else:
+                analog_item["is_frequency"] = False
+                self.analog_sensors.append(analog_item)
 
     def set_to_db(self):
-        for pin in self.pins:
-            if pin == self.pin_frequency:
-                self.ads.set_to_db_smoothed_by_pin(pin, True)
+        for item in self.analog_sensors:
+            if item["is_frequency"]:
+                self.ads.set_to_db_smoothed_by_pin(item["pin"], True)
             else:
-                self.ads.set_to_db_smoothed_by_pin(pin, True)
+                self.ads.set_to_db_smoothed_by_pin(item["pin"], True)
 
     def get(self):
         data = AnalogData()
-        for pin in self.pins:
-            data.add_value(AnalogValue(pin, self.ads.get_value_smoothed_by_pin(pin, True)))
+        for item in self.analog_sensors:
+            data.add_value(AnalogValue(item["pin"], self.ads.get_value_smoothed_by_pin(item["pin"], True)))
         return data
 
 

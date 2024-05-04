@@ -3,22 +3,23 @@ import vlc
 
 from Radio.radioFrequency import RadioFrequency
 from Radio.util.util import Subscriber
-from db.db import Database
+from Radio.db.db import Database
 
 
 class AudioPlayer(Subscriber):
     def __init__(self, publisher):
         self.noise_player = None  # Not implemented yet
+        # TODO: extra publisher class and subscriber and use it as object
         self.publisher = publisher
         self.publisher.attach(self)
         self.noise = 30
         self.volume = 50
 
-        self.equalizer = vlc.AudioEqualizer()
-        self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-        self.player = self.instance.media_player_new()
+        self.equalizer: vlc.AudioEqualizer = vlc.AudioEqualizer()
+        self.instance: vlc.Instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+        self.player: vlc.MediaPlayer = self.instance.media_player_new()
 
-        self.database = Database()
+        self.database: Database = Database()
         self.stream: RadioFrequency = None
         self.stream_re: RadioFrequency = None
         self.re_active: bool = False
@@ -28,7 +29,7 @@ class AudioPlayer(Subscriber):
 
     def update(self):
         content = self.publisher.get_content()
-        if type(content) == RadioFrequency:
+        if isinstance(content, RadioFrequency):
             # TODO: database always returns default values
             # self.stream = self.database.get_stream()
             # self.stream_re = self.database.get_stream_re()
@@ -52,7 +53,7 @@ class AudioPlayer(Subscriber):
             radio_url = stream.radio_url_re
         else:
             radio_url = stream.radio_url
-        if radio_url == "INITIALIZING":
+        if radio_url == "":
             return
         self.player.stop()
         # print(f"stream url: {radio_url}")

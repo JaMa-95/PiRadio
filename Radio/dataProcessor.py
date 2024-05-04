@@ -35,6 +35,8 @@ class DataProcessor:
 
         self.db: Database = Database()
 
+
+    # TODO: extra publisher class
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
@@ -44,7 +46,11 @@ class DataProcessor:
         # self.amplifier_switch_pin = self.settings["amplifier_pin"]
         # GPIO.setup(self.amplifier_switch_pin, GPIO.OUT)
 
-    # implement this as reference class
+    # TODO: implement this as reference class
+    # PUB METHODS
+    def attach(self, subscriber):
+        self.__subscribers.append(subscriber)
+
     def detach(self):
         self.__subscribers.pop()
 

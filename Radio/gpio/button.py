@@ -6,10 +6,10 @@ from Radio.util.RadioExceptions import SystemNotSupported
 from Radio.util.util import is_raspberry
 
 if is_raspberry():
-    is_raspberry = True
+    IS_RASPBERRY_PI = True
     import RPi.GPIO as GPIO
 else:
-    is_raspberry = False
+    IS_RASPBERRY_PI = False
 
 from Radio.db.db import Database
 from Radio.radioFrequency import Frequencies
@@ -59,7 +59,7 @@ class ButtonRaspi:
                 self.is_frequency_lock = settings["buttons"][self.name]["is_frequency_lock"]
 
     def setup_pin(self):
-        if not is_raspberry and not self.mock:
+        if not IS_RASPBERRY_PI and not self.mock:
             raise SystemNotSupported("Not a raspberry pi or unsupported version")
         if not self.mock:
             GPIO.setmode(GPIO.BCM)
