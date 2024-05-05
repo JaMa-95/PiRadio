@@ -15,7 +15,7 @@ class ShutdownGpio:
 
     @staticmethod
     def load_shutdown_pin():
-        with open('data/settings.json') as f:
+        with open('../data/settings.json') as f:
             settings = load(f)
 
         return settings["buttons"]["shutdown"]["pin"]

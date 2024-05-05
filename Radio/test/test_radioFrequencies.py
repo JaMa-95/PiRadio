@@ -3,7 +3,7 @@ from playsound import playsound
 import vlc
 import unittest
 
-from Radio.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
+from Radio.dataProcessing.radioFrequency import KurzFrequencies, LangFrequencies, MittelFrequencies, UKWFrequencies, SprFrequencies
 
 
 class TestFrequencies(unittest.TestCase):

@@ -2,8 +2,8 @@ import time
 import unittest
 from threading import Thread
 
-from Radio.radioFrequency import RadioFrequency
-from Radio.audioPlayer import AudioPlayer
+from Radio.dataProcessing.radioFrequency import RadioFrequency
+from Radio.audio.audioPlayer import AudioPlayer
 from Radio.radio import Radio, USBReader
 
 

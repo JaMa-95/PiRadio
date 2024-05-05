@@ -1,6 +1,6 @@
 import unittest
 from multiprocessing import Process
-from Radio.util.DataTransmitter import DataTransmitter
+from Radio.util.dataTransmitter import DataTransmitter
 
 
 class TestDataTransmitter(unittest.TestCase):

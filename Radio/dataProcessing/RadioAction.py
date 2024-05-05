@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List
-from Radio.sensorMsg import SensorMsg, ButtonState, ButtonsData
-from Radio.util.RadioExceptions import PlayMusicActionError
+from Radio.util.sensorMsg import SensorMsg, ButtonState
+from Radio.util.radioExceptions import PlayMusicActionError
 from Radio.util.util import Singleton
 
 

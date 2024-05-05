@@ -12,7 +12,7 @@ from fastapi import Body, status, HTTPException
 import uvicorn
 from starlette.responses import StreamingResponse
 
-from Radio.radioFrequency import Frequencies, RadioFrequency
+from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.util.util import get_project_root
 
 app = FastAPI()

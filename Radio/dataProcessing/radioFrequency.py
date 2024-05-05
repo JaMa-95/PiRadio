@@ -132,7 +132,7 @@ class Frequencies:
 
     def load_from_file(self, path: str = None):
         if not path:
-            path = 'data/freq_kurz_2.json'
+            path = '../data/frequencies/freq_kurz_2.json'
         path = get_project_root() / path
         with open(path.resolve(), encoding='utf-8') as file_handler:
             frequency_data = json.load(file_handler)

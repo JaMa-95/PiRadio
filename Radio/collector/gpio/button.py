@@ -2,7 +2,7 @@ import json
 from collections import deque
 from typing import List
 
-from Radio.util.RadioExceptions import SystemNotSupported
+from Radio.util.radioExceptions import SystemNotSupported
 from Radio.util.util import is_raspberry
 
 if is_raspberry():
@@ -12,10 +12,10 @@ else:
     IS_RASPBERRY_PI = False
 
 from Radio.db.db import Database
-from Radio.radioFrequency import Frequencies
+from Radio.dataProcessing.radioFrequency import Frequencies
 from Radio.util.util import get_project_root
 from Radio.util.singleton import Singleton
-from Radio.sensorMsg import ButtonsData, ButtonState
+from Radio.util.sensorMsg import ButtonsData, ButtonState
 
 
 class ButtonRaspi:

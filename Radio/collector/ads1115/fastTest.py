@@ -56,25 +56,18 @@ class AdsSingle:
 
         # delete min man values
         for _ in range(int(num_values/10)):
-            if (max(values) -min(values) > 5):
+            if max(values) -min(values) > 5:
                 values.remove(max(values))
                 values.remove(min(values))
             else:
                 break
-        if self.pin == 3:
-            print(max(values) - min(values))
-            print(f"MEAN: {mean(values)}")
-            print("---------------")
+        print(max(values) - min(values))
+        print(f"MEAN: {mean(values)}")
+        print("---------------")
         return mean(values)
 
 if __name__ == "__main__":
     while True:
         adsO = AdsSingle(0)
         print(adsO.get_value_smoothed())
-        ads1 = AdsSingle(1)
-        print(ads1.get_value_smoothed())
-        ads2 = AdsSingle(2)
-        print(ads2.get_value_smoothed())
-        ads3 = AdsSingle(3)
-        print(ads3.get_value_smoothed())
         time.sleep(1)

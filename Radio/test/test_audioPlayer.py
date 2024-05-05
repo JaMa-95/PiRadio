@@ -1,11 +1,11 @@
 import time
 import unittest
 
-from Radio.audioPlayer import AudioPlayer
-from Radio.dataProcessor import DataProcessor, Equalizer
+from Radio.audio.audioPlayer import AudioPlayer
+from Radio.dataProcessing.dataProcessor import DataProcessor, EqualizerReductionData
 from multiprocessing import Process
 
-from Radio.radioFrequency import RadioFrequency
+from Radio.dataProcessing.radioFrequency import RadioFrequency
 
 
 class TestAudioPlayer(unittest.TestCase):
@@ -44,6 +44,6 @@ class TestAudioPlayer(unittest.TestCase):
         time.sleep(3)
         print(f"bass to: {bass}")
         player.set_equalizer(bass,
-                             Equalizer(1, 2, 3, 4, -1, -1, -1))
+                             EqualizerReductionData(1, 2, 3, 4, -1, -1, -1))
         time.sleep(3)
         self.assertEqual(player.equalizer.get_amp_at_index(0), bass)

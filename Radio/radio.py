@@ -4,10 +4,10 @@ import time
 from dataclasses import dataclass
 import RPi.GPIO as GPIO
 
-from Radio.radioFrequency import RadioFrequency
-from Radio.gpio.button import RadioButtonsRaspi
+from Radio.dataProcessing.radioFrequency import RadioFrequency
+from Radio.collector.gpio.button import RadioButtonsRaspi
 from Radio.db.db import Database
-from Radio.raspberry import Raspberry
+from Radio.raspberry.raspberry import Raspberry
 from Radio.mqtt.mqttBroker import MqttBroker
 # from Radio.led.ledStrip import LedStrip, LedData
 from Radio.util.util import get_project_root

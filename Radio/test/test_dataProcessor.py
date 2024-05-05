@@ -1,9 +1,9 @@
 import unittest
 
-from Radio.RadioAction import Actions, HoldFrequencyX, ButtonClickStates, PlayMusic
-from Radio.dataProcessor import DataProcessor
+from Radio.dataProcessing.RadioAction import Actions, HoldFrequencyX, ButtonClickStates, PlayMusic
+from Radio.dataProcessing.dataProcessor import DataProcessor
 from Radio.db.db import Database
-from Radio.sensorMsg import AnalogData, AnalogValue
+from Radio.util.sensorMsg import AnalogData, AnalogValue
 
 
 class TestDataProcessor(unittest.TestCase):

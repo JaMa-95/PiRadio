@@ -15,7 +15,7 @@ else:
     IS_RASPBERRY = False
 
 from Radio.db.db import Database
-from Radio.sensorMsg import AnalogData, AnalogValue
+from Radio.util.sensorMsg import AnalogData, AnalogValue
 from Radio.util.util import get_project_root
 
 

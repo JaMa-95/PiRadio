@@ -1,8 +1,8 @@
 import time
 import unittest
 from multiprocessing import Process
-from Radio.collector import Collector
-from Radio.sensorMsg import SensorMsg
+from Radio.collector.collector import Collector
+from Radio.util.sensorMsg import SensorMsg
 
 
 class TestCollector(unittest.TestCase):

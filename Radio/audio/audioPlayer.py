@@ -1,8 +1,8 @@
 import time
 import vlc
 
-from Radio.dataProcessor import Equalizer
-from Radio.radioFrequency import RadioFrequency
+from Radio.dataProcessing.dataProcessor import EqualizerReductionData
+from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.util.util import Subscriber
 from Radio.db.db import Database
 
@@ -25,7 +25,7 @@ class AudioPlayer(Subscriber):
         self.stream_re: RadioFrequency = None
         self.re_active: bool = False
 
-        self.set_equalizer(0, Equalizer())
+        self.set_equalizer([0,0,0,0,0,0,0,0])
 
     def update(self):
         content = self.publisher.get_content()
@@ -42,11 +42,8 @@ class AudioPlayer(Subscriber):
             if "volume" in content:
                 self.set_volume(int(content.strip("volume:")))
             elif "equalizer" in content:
-                self.set_equalizer(content.strip("equalizer"))
-            elif "bass" in content:
-                self.set_bass(int(content.strip("bass:")))
-            elif "treble" in content:
-                self.set_treble(int(content.strip("treble:")))
+                data = eval(content.strip("equalizer:"))
+                self.set_equalizer(data)
         else:
             print("ERROR")
 
@@ -77,10 +74,9 @@ class AudioPlayer(Subscriber):
             self.player.audio_set_volume(volume)
         self.volume = volume
 
-    def set_equalizer(self, value: int, equalizer_data: Equalizer):
-        for reduction in equalizer_data:
-            if reduction != -1:
-                self.equalizer.set_amp_at_index(value, reduction)
+    def set_equalizer(self, equalizer_data: list):
+        for index, value in enumerate(equalizer_data):
+            self.equalizer.set_amp_at_index(value, index)
         self.player.set_equalizer(self.equalizer)
 
     def add_static_noise(self, level):

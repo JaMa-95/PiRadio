@@ -2,12 +2,12 @@ import json
 import time
 from typing import List
 
-from Radio.RadioAction import RadioAction, ButtonClickStates, Actions
+from Radio.dataProcessing.RadioAction import RadioAction, ButtonClickStates, Actions
 from Radio.db.db import Database
-from Radio.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState
-from Radio.util.DataTransmitter import DataTransmitter
+from Radio.util.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState
+from Radio.util.dataTransmitter import DataTransmitter
 from Radio.util.util import get_project_root
-from Radio.radioFrequency import Frequencies, RadioFrequency
+from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 
 
 class DataProcessor:
@@ -223,10 +223,10 @@ class ButtonProcessor:
             return True
 
 
-class Equalizer:
-    def __init__(self, reduction_60_hz: int = 0, reduction_170_hz: int = 0, reduction_310_hz: int = 0,
-                 reduction_1_khz: int = 0, reduction_3_khz: int = 0, reduction_6_khz: int = 0,
-                 reduction_12_hkz: int = 0):
+class EqualizerReductionData:
+    def __init__(self, reduction_60_hz: int = 1, reduction_170_hz: int = 1, reduction_310_hz: int = 1,
+                 reduction_1_khz: int = 1, reduction_3_khz: int = 1, reduction_6_khz: int = 1,
+                 reduction_12_hkz: int = 1):
         self.reduction_60_hz: int = reduction_60_hz
         self.reduction_170_hz: int = reduction_170_hz
         self.reduction_310_hz: int = reduction_310_hz
@@ -234,40 +234,6 @@ class Equalizer:
         self.reduction_3_khz: int = reduction_3_khz
         self.reduction_6_khz: int = reduction_6_khz
         self.reduction_12_hkz: int = reduction_12_hkz
-
-        self._iterator: int = 0
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):  # Python 2: def next(self)
-        if self._iterator == 0:
-            self._iterator += 1
-            return self.reduction_60_hz
-        if self._iterator == 1:
-            self._iterator += 1
-            return self.reduction_170_hz
-        if self._iterator == 2:
-            self._iterator += 1
-            return self.reduction_310_hz
-        if self._iterator == 3:
-            self._iterator += 1
-            return self.reduction_1_khz
-        if self._iterator == 4:
-            self._iterator += 1
-            return self.reduction_3_khz
-        if self._iterator == 5:
-            self._iterator += 1
-            return self.reduction_6_khz
-        if self._iterator == 6:
-            self._iterator += 1
-            return self.reduction_12_hkz
-        if self._iterator == 7:
-            raise StopIteration
-
-    def to_list(self) -> list:
-        return [self.reduction_60_hz, self.reduction_170_hz, self.reduction_310_hz, self.reduction_1_khz,
-                self.reduction_3_khz, self.reduction_6_khz, self.reduction_12_hkz]
 
     def from_list(self, data: list):
         self.reduction_60_hz: int = data[0]
@@ -277,6 +243,69 @@ class Equalizer:
         self.reduction_3_khz: int = data[4]
         self.reduction_6_khz: int = data[5]
         self.reduction_12_hkz: int = data[6]
+
+
+class Equalizer:
+    def __init__(self):
+        self.value_60_hz: int = 0
+        self.value_170_hz: int = 0
+        self.value_310_hz: int = 0
+        self.value_1_khz: int = 0
+        self.value_3_khz: int = 0
+        self.value_6_khz: int = 0
+        self.value_12_hkz: int = 0
+
+        self.reduction: EqualizerReductionData = EqualizerReductionData()
+
+        self._iterator: int = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):  # Python 2: def next(self)
+        if self._iterator == 0:
+            self._iterator += 1
+            return self.value_60_hz
+        if self._iterator == 1:
+            self._iterator += 1
+            return self.value_170_hz
+        if self._iterator == 2:
+            self._iterator += 1
+            return self.value_310_hz
+        if self._iterator == 3:
+            self._iterator += 1
+            return self.value_1_khz
+        if self._iterator == 4:
+            self._iterator += 1
+            return self.value_3_khz
+        if self._iterator == 5:
+            self._iterator += 1
+            return self.value_6_khz
+        if self._iterator == 6:
+            self._iterator += 1
+            return self.value_12_hkz
+        if self._iterator == 7:
+            raise StopIteration
+
+    def to_list(self) -> list:
+        return [self.value_60_hz, self.value_170_hz, self.value_310_hz, self.value_1_khz,
+                self.value_3_khz, self.value_6_khz, self.value_12_hkz]
+
+    def calc_equalizer_with_reductions(self, value: int):
+        if self.reduction.reduction_60_hz != -1:
+            self.value_60_hz = value / self.reduction.reduction_60_hz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_170_hz = value / self.reduction.reduction_170_hz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_310_hz = value / self.reduction.reduction_310_hz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_1_khz = value / self.reduction.reduction_1_khz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_3_khz = value / self.reduction.reduction_3_khz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_6_khz = value / self.reduction.reduction_6_khz
+        if self.reduction.reduction_60_hz != -1:
+            self.value_12_hkz = value / self.reduction.reduction_12_hkz
 
 
 class AnalogItem:
@@ -320,8 +349,8 @@ class AnalogProcessor:
                     is_equalizer=item["is_equalizer"]
                 )
                 if item["is_equalizer"]:
-                    equalizer = item["equalizer"]
-                    analog_item.equalizer.from_list(
+                    equalizer = item["equalizer_reduction"]
+                    analog_item.equalizer.reduction.from_list(
                         [
                             equalizer["60Hz"],
                             equalizer["170Hz"],
@@ -419,11 +448,10 @@ class AnalogProcessor:
         self.publish_function(f"{analog_item.name}:{value_calc}")
         return value_calc
 
-    def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int,
-                      active_actions: Actions) -> int:
+    def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int) -> int:
         if current_equalizer_value == frequency_item.value:
             return current_equalizer_value
-        self.db.replace_equalizer_value(frequency_item.name, current_equalizer_value)
-        msg = {"value": current_equalizer_value, "data": frequency_item.equalizer.to_list()}
-        self.publish_function(f'equalizer:{str(msg)}')
+        frequency_item.equalizer.calc_equalizer_with_reductions(current_equalizer_value)
+        self.db.replace_equalizer(frequency_item.equalizer)
+        self.publish_function(f'equalizer:{str(frequency_item.equalizer.to_list())}')
         return current_equalizer_value

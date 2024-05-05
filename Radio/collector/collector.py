@@ -1,10 +1,10 @@
 from time import sleep
 from Radio.db.db import Database
-from Radio.gpio.button import RadioButtonsRaspi
-from Radio.util.DataTransmitter import DataTransmitter
-from Radio.sensorMsg import SensorMsg
+from Radio.collector.gpio.button import RadioButtonsRaspi
+from Radio.util.dataTransmitter import DataTransmitter
+from Radio.util.sensorMsg import SensorMsg
 
-from Radio.ads1115.ads import AdsObject
+from Radio.collector.ads1115.ads import AdsObject
 
 
 class Collector:

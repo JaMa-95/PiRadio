@@ -1,17 +1,17 @@
 import sys
 import os
 
-from Radio.dataProcessor import DataProcessor
+from Radio.dataProcessing.dataProcessor import DataProcessor
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from threading import Thread
 
-from audioPlayer import AudioPlayer
+from Radio.audio.audioPlayer import AudioPlayer
 from app import run as app_run
 from db.db import Database
-from collector import Collector
+from collector.collector import Collector
 from Radio.util.util import is_raspberry
 
 IS_RASPBERRY_PI = False

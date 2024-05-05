@@ -33,11 +33,11 @@
         "max": 30000,
         "min_final": -20,
         "max_final": 20,
-        "on": true,
+        "on": false,
         "is_volume": false,
         "is_frequency": false,
         "is_equalizer": true,
-        "equalizer": {
+        "equalizer_reduction": {
           "60Hz":  1,
           "170Hz": 2,
           "310Hz": 3,
@@ -55,11 +55,11 @@
         "max": 25900,
         "min_final": -20,
         "max_final": 20,
-        "on": true,
+        "on": false,
         "is_volume": false,
         "is_frequency": false,
         "is_equalizer": true,
-        "equalizer": {
+        "equalizer_reduction": {
           "60Hz":  -1,
           "170Hz": -1,
           "310Hz": -1,

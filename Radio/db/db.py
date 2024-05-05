@@ -1,6 +1,7 @@
 import threading
 
-from Radio.radioFrequency import RadioFrequency
+from Radio.dataProcessing.dataProcessor import Equalizer
+from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.util.singleton import Singleton
 
 
@@ -12,19 +13,12 @@ class Database(Singleton):
 
         self.lock = threading.Lock()
         self.web_control_value: bool = False
+
         self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
         self.volume: int = 0
         self.stream: RadioFrequency = RadioFrequency()
-        self.stream_re: str = ""
         self.pos_lang_mittel_kurz: int = 0
         self.pos_ukw: int = 0
-        self.button_ukw: int = 0
-        self.button_lang: int = 0
-        self.button_mittel: int = 0
-        self.button_kurz: int = 0
-        self.button_on_off: int = 0
-        self.button_spr_mus: int = 0
-        self.button_ta: int = 0
         self.radio_name: str = ""
         self.radio_name_re: str = ""
         self.web_control_value: bool = False
@@ -33,47 +27,10 @@ class Database(Singleton):
         self.bass: int = 0
         self.treble: int = 0
         self.re_active: bool = False
-        self._initialize()
 
-    def _initialize(self):
-        self.web_control_value: bool = False
-        self.pins: dict = {0: 0, 1: 0, 2: 0, 3: 0}
-        self.volume: int = 0
-        self.stream: RadioFrequency = RadioFrequency()
-        self.stream_re: str = ""
-        self.pos_lang_mittel_kurz: int = 0
-        self.pos_ukw: int = 0
-        self.button_ukw: int = 0
-        self.button_lang: int = 0
-        self.button_mittel: int = 0
-        self.button_kurz: int = 0
-        self.button_on_off: int = 0
-        self.button_spr_mus: int = 0
-        self.button_ta: int = 0
-        self.radio_name: str = ""
-        self.radio_name_re: str = ""
-        self.web_control_value: bool = False
-        self.poti_value_web: int = 0
-        self.shutdown: bool = False
-        self.bass: int = 0
-        self.treble: int = 0
-        self.treble_web: int = 0
-        self.bass_web: int = 0
-        self.volume_web: int = 0
-        self.re_active: bool = False
-
-        # new data
+        self.equalizer: Equalizer = Equalizer()
         self.button_data: dict = {}
         self.frequencies: dict = {}
-
-    def create(self):
-        return
-
-    def clear(self):
-        self._initialize()
-
-    def init(self):
-        return
 
     ###################################################################################
 
@@ -105,6 +62,7 @@ class Database(Singleton):
         with self.lock:
             self.re_active = value
 
+    # TODO: deprecated?
     def replace_button(self, name: str, value: int):
         with self.lock:
             if name == "buttonOnOff":
@@ -128,34 +86,6 @@ class Database(Singleton):
                 self.button_data[name] = value
             except Exception:
                 return None
-
-    def replace_button_on_off(self, value: int):
-        with self.lock:
-            self.button_on_off = value
-
-    def replace_button_ta(self, value: int):
-        with self.lock:
-            self.button_ta = value
-
-    def replace_button_lang(self, value: int):
-        with self.lock:
-            self.button_lang = value
-
-    def replace_button_mittel(self, value: int):
-        with self.lock:
-            self.button_mittel = value
-
-    def replace_button_kurz(self, value: int):
-        with self.lock:
-            self.button_kurz = value
-
-    def replace_button_ukw(self, value: int):
-        with self.lock:
-            self.button_ukw = value
-
-    def replace_button_spr_mus(self, value: int):
-        with self.lock:
-            self.button_spr_mus = value
 
     def replace_volume(self, value: int):
         with self.lock:
