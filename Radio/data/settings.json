@@ -3,37 +3,75 @@
   "amplifier_pin": 13,
   "mqtt": false,
   "analog": {
-    "frequencies": {
+    "devices": {
+      "ads_1": {"address":  72}
+    },
+    "sensors": {
       "posLangKurzMittel": {
         "min": 4000,
         "max": 28000,
         "on": true,
-        "pin": 3
+        "pin": 3,
+        "is_volume": false,
+        "is_frequency": true,
+        "is_equalizer": false,
+        "device": "ads_1"
+      },
+      "volume": {
+        "min": -4000,
+        "max": 30000,
+        "formula": true,
+        "on": true,
+        "is_volume": true,
+        "is_frequency": false,
+        "is_equalizer": false,
+        "pin": 1,
+        "device": "ads_1"
+      },
+      "bass": {
+        "min": 0,
+        "max": 30000,
+        "min_final": -20,
+        "max_final": 20,
+        "on": true,
+        "is_volume": false,
+        "is_frequency": false,
+        "is_equalizer": true,
+        "equalizer": {
+          "60Hz":  1,
+          "170Hz": 2,
+          "310Hz": 3,
+          "600Hz": 4,
+          "1kHz": -1,
+          "3kHz": -1,
+          "6kHz": -1,
+          "12kHz": -1
+        },
+        "pin": 2,
+        "device": "ads_1"
+      },
+      "treble": {
+        "min": 24100,
+        "max": 25900,
+        "min_final": -20,
+        "max_final": 20,
+        "on": true,
+        "is_volume": false,
+        "is_frequency": false,
+        "is_equalizer": true,
+        "equalizer": {
+          "60Hz":  -1,
+          "170Hz": -1,
+          "310Hz": -1,
+          "600Hz": -1,
+          "1kHz": 4,
+          "3kHz": 3,
+          "6kHz": 2,
+          "12kHz": 1
+        },
+        "pin": 4,
+        "device": "ads_1"
       }
-    },
-    "volume": {
-    "min": -4000,
-    "max": 30000,
-    "formula": true,
-    "on": true,
-    "is_volume": true,
-    "pin": 1
-  },
-    "bass": {
-      "min": 0,
-      "max": 30000,
-      "min_final": -20,
-      "max_final": 20,
-      "on": true,
-      "pin": 2
-    },
-    "treble": {
-      "min": 24100,
-      "max": 25900,
-      "min_final": -20,
-      "max_final": 20,
-      "on": true,
-      "pin": 4
     }
   },
   "button_general": {

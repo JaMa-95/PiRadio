@@ -105,6 +105,7 @@ async def test_frequencies(frequencies_data: list = Body(), response: Response =
     response.status_code = 200
     return result
 
+
 @app.post("/frequencies/test")
 async def get_image_file(frequencies_data: list = Body(), response: Response = 200):
     name = frequencies_data[0]
@@ -125,7 +126,7 @@ async def get_image_file(frequencies_data: list = Body(), response: Response = 2
 def test_all_frequencies(frequencies_obj: Frequencies) -> Generator:
     for frequency in frequencies_obj.frequencies:
         yield json.dumps([frequency.radio_url, frequency.test_radio_frequency(),
-               frequency.radio_url_re, frequency.test_radio_frequency(test_re=True)])
+                          frequency.radio_url_re, frequency.test_radio_frequency(test_re=True)])
 
 
 @app.post("/frequency/test/")
@@ -163,7 +164,7 @@ async def test_frequencies(url: dict):
 def save_in_file(file_path: Path, data):
     for item in data:
         print(item)
-    with open(file_path.resolve(), "w", encoding='utf-8',   ) as file_handler:
+    with open(file_path.resolve(), "w", encoding='utf-8', ) as file_handler:
         json.dump(data, file_handler, indent=4)
 
 

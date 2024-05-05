@@ -1,6 +1,7 @@
 import time
 import vlc
 
+from Radio.dataProcessor import Equalizer
 from Radio.radioFrequency import RadioFrequency
 from Radio.util.util import Subscriber
 from Radio.db.db import Database
@@ -24,8 +25,7 @@ class AudioPlayer(Subscriber):
         self.stream_re: RadioFrequency = None
         self.re_active: bool = False
 
-        self.set_treble(0)
-        self.set_bass(0)
+        self.set_equalizer(0, Equalizer())
 
     def update(self):
         content = self.publisher.get_content()
@@ -41,6 +41,8 @@ class AudioPlayer(Subscriber):
         elif isinstance(content, str):
             if "volume" in content:
                 self.set_volume(int(content.strip("volume:")))
+            elif "equalizer" in content:
+                self.set_equalizer(content.strip("equalizer"))
             elif "bass" in content:
                 self.set_bass(int(content.strip("bass:")))
             elif "treble" in content:
@@ -63,25 +65,6 @@ class AudioPlayer(Subscriber):
         self.player.set_media(media)
         self.player.play()
 
-        """
-        for _ in range(5):
-            is_playing = self.player.is_playing()
-            if is_playing:
-                return None
-            else:
-                time.sleep(1)
-        print("Stream not working. Changing to re")
-        if self.re_active:
-            radio_url = self.stream
-        else:
-            radio_url = self.stream_re
-        media = self.instance.media_new(radio_url)
-        media.get_mrl()
-        self.player.audio_set_volume(self.volume)
-        self.player.set_media(media)
-        self.player.play()
-        """
-
     def stop(self):
         self.player.stop()
 
@@ -94,20 +77,10 @@ class AudioPlayer(Subscriber):
             self.player.audio_set_volume(volume)
         self.volume = volume
 
-    def set_bass(self, bass):
-        self.equalizer.set_amp_at_index(bass, 0)  # 60 Hz
-        self.equalizer.set_amp_at_index(bass / 2, 1)  # 170 Hz
-        self.equalizer.set_amp_at_index(bass / 3, 2)  # 310 Hz
-        self.equalizer.set_amp_at_index(bass / 4, 3)  # 600 Hz
-        self.player.set_equalizer(self.equalizer)
-        # print(f"BASS: {bass}")
-
-    def set_treble(self, treble):
-        treble = 0
-        self.equalizer.set_amp_at_index(treble / 4, 4)  # 1 kHz
-        self.equalizer.set_amp_at_index(treble / 3, 5)  # 3 kHz
-        self.equalizer.set_amp_at_index(treble / 2, 6)  # 6 kHz
-        self.equalizer.set_amp_at_index(treble, 7)  # 12 kHz
+    def set_equalizer(self, value: int, equalizer_data: Equalizer):
+        for reduction in equalizer_data:
+            if reduction != -1:
+                self.equalizer.set_amp_at_index(value, reduction)
         self.player.set_equalizer(self.equalizer)
 
     def add_static_noise(self, level):

@@ -2,7 +2,7 @@ import time
 import unittest
 
 from Radio.audioPlayer import AudioPlayer
-from Radio.dataProcessor import DataProcessor
+from Radio.dataProcessor import DataProcessor, Equalizer
 from multiprocessing import Process
 
 from Radio.radioFrequency import RadioFrequency
@@ -42,6 +42,8 @@ class TestAudioPlayer(unittest.TestCase):
         # Could be that radio link is broken
         player.play(RadioFrequency(radio_url="https://live.hunter.fm/80s_high"))
         time.sleep(3)
-        player.set_bass(bass)
+        print(f"bass to: {bass}")
+        player.set_equalizer(bass,
+                             Equalizer(1, 2, 3, 4, -1, -1, -1))
         time.sleep(3)
         self.assertEqual(player.equalizer.get_amp_at_index(0), bass)

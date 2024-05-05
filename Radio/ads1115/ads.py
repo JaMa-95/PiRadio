@@ -2,6 +2,7 @@ import time
 import json
 from statistics import mean
 from random import randint
+from typing import List
 from Radio.util.util import is_raspberry
 if is_raspberry():
     IS_RASPBERRY = True
@@ -21,42 +22,43 @@ from Radio.util.util import get_project_root
 class AdsObject:
     # TODO: Refactor
     def __init__(self, mock: bool = False):
-        # TODO: make list of single ads sensor object
-        self.analog_sensors: list = []
+        self.mock: bool = mock
+        self.analog_sensors: List[AdsSingle] = []
         self._load_settings()
 
         self.ads = AdsSingle(None, mock=mock)
+
+        self.sensors: List[AdsSingle] = []
 
     def _load_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        # TODO: Loop over frequencies
-        for name, analog_item in settings["analog"].items():
-            if name == "frequencies":
-                for name_frequency, frequency_item in analog_item.items():
-                    frequency_item["is_frequency"] = True
-                    self.analog_sensors.append(frequency_item)
-            else:
-                analog_item["is_frequency"] = False
-                self.analog_sensors.append(analog_item)
+        for _, analog_item in settings["analog"]["sensors"].items():
+            # self.analog_sensors.append(analog_item)
+            self.analog_sensors.append(
+                AdsSingle(pin=analog_item["pin"],
+                          mock=self.mock,
+                          address=settings["analog"]["devices"][analog_item["device"]])
+            )
 
     def set_to_db(self):
         for item in self.analog_sensors:
-            if item["is_frequency"]:
-                self.ads.set_to_db_smoothed_by_pin(item["pin"], True)
-            else:
-                self.ads.set_to_db_smoothed_by_pin(item["pin"], True)
+            item.ads.set_to_db_smoothed_by_pin(item.pin, True)
 
     def get(self):
         data = AnalogData()
-        for item in self.analog_sensors:
-            data.add_value(AnalogValue(item["pin"], self.ads.get_value_smoothed_by_pin(item["pin"], True)))
+        for sensor in self.analog_sensors:
+            value_ = sensor.get_value_smoothed()
+            data.add_value(
+                AnalogValue(sensor.pin, value_)
+            )
+            # data.add_value(AnalogValue(item["pin"], self.ads.get_value_smoothed_by_pin(item["pin"], True)))
         return data
 
 
 class AdsSingle:
-    def __init__(self, pin, mock: bool = False):
+    def __init__(self, pin, mock: bool = False, address: int = 0x48):
         self.pin = pin
         self.db = Database()
 
@@ -65,9 +67,8 @@ class AdsSingle:
         self.mock = mock
         if not self.mock:
             i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
-            # i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
             # TODO: make check for i2c device not found ValueError
-            self.ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
+            self.ads = ADS.ADS1115(i2c, address=address)  # Create the ADC object using the I2C bus
 
             if self.pin == 1:
                 self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
@@ -109,6 +110,8 @@ class AdsSingle:
         return self.chan.voltage
 
     def get_value_smoothed(self):
+        if self.mock:
+            return randint(0, 5000)
         values = []
         if self.pin == 1:
             num_values = 700

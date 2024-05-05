@@ -35,7 +35,6 @@ class DataProcessor:
 
         self.db: Database = Database()
 
-
     # TODO: extra publisher class
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
@@ -224,15 +223,73 @@ class ButtonProcessor:
             return True
 
 
+class Equalizer:
+    def __init__(self, reduction_60_hz: int = 0, reduction_170_hz: int = 0, reduction_310_hz: int = 0,
+                 reduction_1_khz: int = 0, reduction_3_khz: int = 0, reduction_6_khz: int = 0,
+                 reduction_12_hkz: int = 0):
+        self.reduction_60_hz: int = reduction_60_hz
+        self.reduction_170_hz: int = reduction_170_hz
+        self.reduction_310_hz: int = reduction_310_hz
+        self.reduction_1_khz: int = reduction_1_khz
+        self.reduction_3_khz: int = reduction_3_khz
+        self.reduction_6_khz: int = reduction_6_khz
+        self.reduction_12_hkz: int = reduction_12_hkz
+
+        self._iterator: int = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):  # Python 2: def next(self)
+        if self._iterator == 0:
+            self._iterator += 1
+            return self.reduction_60_hz
+        if self._iterator == 1:
+            self._iterator += 1
+            return self.reduction_170_hz
+        if self._iterator == 2:
+            self._iterator += 1
+            return self.reduction_310_hz
+        if self._iterator == 3:
+            self._iterator += 1
+            return self.reduction_1_khz
+        if self._iterator == 4:
+            self._iterator += 1
+            return self.reduction_3_khz
+        if self._iterator == 5:
+            self._iterator += 1
+            return self.reduction_6_khz
+        if self._iterator == 6:
+            self._iterator += 1
+            return self.reduction_12_hkz
+        if self._iterator == 7:
+            raise StopIteration
+
+    def to_list(self) -> list:
+        return [self.reduction_60_hz, self.reduction_170_hz, self.reduction_310_hz, self.reduction_1_khz,
+                self.reduction_3_khz, self.reduction_6_khz, self.reduction_12_hkz]
+
+    def from_list(self, data: list):
+        self.reduction_60_hz: int = data[0]
+        self.reduction_170_hz: int = data[1]
+        self.reduction_310_hz: int = data[2]
+        self.reduction_1_khz: int = data[3]
+        self.reduction_3_khz: int = data[4]
+        self.reduction_6_khz: int = data[5]
+        self.reduction_12_hkz: int = data[6]
+
+
 class AnalogItem:
     def __init__(self, name: str, pin: int, min_: int = 0, max_: int = 0, is_volume: bool = False,
-                 is_frequency: bool = False):
+                 is_frequency: bool = False, is_equalizer: bool = False):
         self.pin: int = pin
         self.name: str = name
         self.min: int = min_
         self.max: int = max_
         self.is_volume: bool = is_volume
         self.is_frequency: bool = is_frequency
+        self.is_equalizer: bool = is_equalizer
+        self.equalizer: Equalizer = Equalizer()
         self.value: int = 0
         self.frequency_list: Frequencies = Frequencies()
         self.buttons: List[str] = []
@@ -253,30 +310,30 @@ class AnalogProcessor:
         with open(get_project_root() / 'data/settings.json') as f:
             self.settings = json.load(f)
         # TODO: make class out of this
-        for name, item in self.settings["analog"].items():
-            if name == "frequencies":
-                for name_frequency, item_frequency in item.items():
-                    if item_frequency["on"]:
-                        self.analog_items.append(AnalogItem(
-                            name=name_frequency,
-                            pin=item_frequency["pin"],
-                            is_frequency=True
-                        ))
-            else:
-                if "is_volume" in item:
-                    if item["is_volume"]:
-                        is_volume = True
-                    else:
-                        is_volume = False
-                else:
-                    is_volume = False
-                self.analog_items.append(AnalogItem(
+        for name, item in self.settings["analog"]["sensors"].items():
+            if item["on"]:
+                analog_item = AnalogItem(
                     name=name,
                     pin=item["pin"],
-                    min_=item["min"],
-                    max_=item["max"],
-                    is_volume=is_volume
-                ))
+                    is_frequency=item["is_frequency"],
+                    is_volume=item["is_volume"],
+                    is_equalizer=item["is_equalizer"]
+                )
+                if item["is_equalizer"]:
+                    equalizer = item["equalizer"]
+                    analog_item.equalizer.from_list(
+                        [
+                            equalizer["60Hz"],
+                            equalizer["170Hz"],
+                            equalizer["310Hz"],
+                            equalizer["600Hz"],
+                            equalizer["1kHz"],
+                            equalizer["3kHz"],
+                            equalizer["6kHz"],
+                            equalizer["12kHz"]
+                        ]
+                    )
+                self.analog_items.append(analog_item)
         for button_name, button_item in self.settings["buttons"].items():
             for index, analog_item in enumerate(self.analog_items):
                 if button_item["frequency"]["pos"] == analog_item.name:
@@ -294,6 +351,10 @@ class AnalogProcessor:
                         break
                     elif item.is_volume:
                         value = self.set_volume(item, analog.value)
+                        self.analog_items[index].value = value
+                        break
+                    elif item.is_equalizer:
+                        value = self.set_equalizer(item, analog.value)
                         self.analog_items[index].value = value
                         break
                     else:
@@ -357,3 +418,12 @@ class AnalogProcessor:
         self.db.replace_bass(value_calc)
         self.publish_function(f"{analog_item.name}:{value_calc}")
         return value_calc
+
+    def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int,
+                      active_actions: Actions) -> int:
+        if current_equalizer_value == frequency_item.value:
+            return current_equalizer_value
+        self.db.replace_equalizer_value(frequency_item.name, current_equalizer_value)
+        msg = {"value": current_equalizer_value, "data": frequency_item.equalizer.to_list()}
+        self.publish_function(f'equalizer:{str(msg)}')
+        return current_equalizer_value
