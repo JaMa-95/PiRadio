@@ -27,9 +27,6 @@ if __name__ == "__main__":
         GPIO.output(6, True)
         GPIO.setup(5, GPIO.OUT)
         GPIO.output(5, True)
-    db = Database()
-    db.create()
-    db.init()
 
     # shutdownPin = ShutdownGpio()
     collector = Collector(mock=True)

@@ -59,7 +59,7 @@ class TestAnalogProcessor(unittest.TestCase):
         data_processor.process_analogs(analog_data)
 
         db = Database()
-        stream = db.get_stream()
+        stream = db.get_radio_frequency()
         self.assertEqual(stream.name, "Relaxed")
 
     def test_analog_volume(self):

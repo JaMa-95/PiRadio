@@ -25,7 +25,7 @@ class TestDb(TestCase):
 
     def test_replace_all(self):
         self.db.replace_volume(2)
-        self.db.replace_stream("def")
+        self.db.replace_radio_frequency("def")
         self.db.replace_pos_lang_mittel_kurz(2)
         self.db.replace_pos_ukw(2)
         self.db.replace_button_ukw(2)

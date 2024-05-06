@@ -93,7 +93,7 @@ class Frequencies:
         self.max_frequency: int = 0
         self.load_settings()
         if file_name:
-            self.load_from_file(f"data/{file_name}")
+            self.load_from_file(f"data/frequencies/{file_name}")
             self.init_min_max()
         self.name: str = ""
 

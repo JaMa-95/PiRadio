@@ -133,15 +133,6 @@ class RadioButtonsRaspi(Singleton):
             else:
                 self.buttons.append(ButtonRaspi(name, mock=self.mock))
 
-    def set_values_to_db(self):
-        self.set_values()
-        for button in self.buttons:
-            if button.name == "OnOff":
-                print(button.state)
-            self.db.replace_button(name=button.name,
-                                   value=button.state)
-        self.db.replace_shutdown(self.change_speaker_button.state)
-
     def set_values(self):
         for button in self.buttons:
             button.set_value()
