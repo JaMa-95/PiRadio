@@ -6,6 +6,9 @@ class SensorMsg:
         self.buttons_data: ButtonsData = ButtonsData()
         self.analog_data: AnalogData = AnalogData()
 
+    def set_buttons_data(self, data):
+        self.buttons_data = data
+
 
 class ButtonState:
     def __init__(self, pin: int, state: bool, states: []):
@@ -22,10 +25,10 @@ class ButtonsData:
         is_empty = not self.data
         return not is_empty
 
-    def get_data(self):
+    def get_data(self) -> List[ButtonState]:
         return self.data
 
-    def set_data(self, data):
+    def set_data(self, data: List[ButtonState]):
         self.data = data
 
     def add_value(self, value: ButtonState):
@@ -52,9 +55,11 @@ class ButtonsData:
 
 
 class AnalogValue:
-    def __init__(self, pin: int, value: int):
+    def __init__(self, pin: int, value: int, min_: int, max_: int):
         self.pin: int = pin
         self.value: int = value
+        self.min: int = min_
+        self.max: int = max_
         
 
 class AnalogData:

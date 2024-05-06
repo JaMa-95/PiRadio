@@ -1,6 +1,9 @@
 import unittest
 from multiprocessing import Process
+from threading import Thread
+
 from Radio.util.dataTransmitter import DataTransmitter
+from Radio.util.sensorMsg import SensorMsg
 
 
 class TestDataTransmitter(unittest.TestCase):
@@ -24,3 +27,12 @@ class TestDataTransmitter(unittest.TestCase):
         data = data_transmitter.receive()
         p.join()
         self.assertEqual(data, "Hello World!")
+
+    def test_thread(self):
+        data_transmitter = DataTransmitter()
+        data_receiver = DataTransmitter()
+        msg = SensorMsg()
+        thread = Thread(target=data_transmitter.send, args=(msg, ))
+        thread.start()
+        data = data_receiver.receive()
+        self.assertTrue(isinstance(data, SensorMsg))

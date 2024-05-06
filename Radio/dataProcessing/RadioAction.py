@@ -76,7 +76,6 @@ class PlayMusic(RadioAction):
         self.frequency_pin_name: str = frequency_pin_name
 
 
-
 class TurnOffMusic(RadioAction):
     pass
 

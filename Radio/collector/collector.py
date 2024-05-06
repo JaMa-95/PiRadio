@@ -22,8 +22,8 @@ class Collector:
                 buttons_data = self.buttons.get_values()
                 analog_data = self.ads.get()
                 sensor_msg = SensorMsg()
-                sensor_msg.buttons_data.set_data(buttons_data)
-                sensor_msg.analog_data.set_data(analog_data)
+                sensor_msg.set_buttons_data(buttons_data)
+                sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
             sleep(0.0001)
 

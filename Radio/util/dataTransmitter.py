@@ -1,7 +1,9 @@
 from multiprocessing import Pipe
 
+from Radio.util.singleton import Singleton
 
-class DataTransmitter:
+
+class DataTransmitter(Singleton):
     def __init__(self):
         self.parent_conn, self.child_conn = Pipe()
 

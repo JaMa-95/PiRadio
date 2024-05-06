@@ -108,7 +108,7 @@ class ButtonStatus:
 
 
 class ButtonProcessData:
-    def __init__(self, name: str, pin: int, apply_state: ButtonClickStates, frequency_list: Frequencies):
+    def __init__(self, name: str, pin: int, apply_state: List[int], frequency_list: Frequencies):
         self.name = name
         self.pin = pin
         self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
@@ -118,7 +118,6 @@ class ButtonProcessData:
         self.frequency_list: Frequencies = frequency_list
 
     def process_data(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
-        sensor_msg_updated = None
         if self.state.state:
             sensor_msg_updated = self.button_happening.check_and_execute(ButtonClickStates.BUTTON_STATE_ON,
                                                                          sensor_msg_new,
@@ -158,7 +157,7 @@ class ButtonProcessData:
     def _is_click(self, threshold: int):
         # TODO: measure is click with time
         counter = 0
-        for value in self.state.states():
+        for value in self.state.states:
             if value is True:
                 counter += 1
                 if counter > threshold:
@@ -175,6 +174,7 @@ class ButtonProcessData:
 
     def is_double_click(self):
         # TODO
+        return False
         raise NotImplemented
 
 
@@ -209,6 +209,7 @@ class ButtonProcessor:
 
     def process(self, new_buttons_data: ButtonsData):
         # TODO: change from list to dict
+        a = new_buttons_data.get_data()
         for state_new in new_buttons_data.get_data():
             for index, button_old in enumerate(self.buttons):
                 if button_old.pin == state_new.pin:
@@ -247,6 +248,9 @@ class AnalogProcessor:
         self.db: Database = Database()
 
         self.analog_items: List[AnalogItem] = []
+
+        # TODO: nicer solution
+        self.is_first_run: bool = True
 
         self.settings = {}
         self.load_settings()
@@ -290,6 +294,9 @@ class AnalogProcessor:
         for analog in data.get_data_sensor():
             for index, item in enumerate(self.analog_items):
                 if item.pin == analog.pin:
+                    if self.is_first_run:
+                        item.max = analog.max
+                        item.min = analog.min
                     if item.is_frequency:
                         value = self.set_frequency(item, analog.value, active_actions)
                         self.analog_items[index].value = value
@@ -304,6 +311,7 @@ class AnalogProcessor:
                         break
                     else:
                         raise NotImplemented
+        self.is_first_run = False
 
     def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
                       active_actions: Actions) -> int:
@@ -334,6 +342,8 @@ class AnalogProcessor:
 
     @staticmethod
     def _map(max_: int, min_: int, value):
+        if min_ - max_ == 0:
+            raise ValueError("Min and max cant be 0")
         return int(-(value - min_) / (min_ - max_) * 100)
 
     def set_volume(self, volume: AnalogItem, value: int) -> int:
