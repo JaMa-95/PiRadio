@@ -1,4 +1,7 @@
+import threading
 from typing import List
+
+from Radio.util.singleton import Singleton
 
 
 class SensorMsg:
@@ -8,6 +11,30 @@ class SensorMsg:
 
     def set_buttons_data(self, data):
         self.buttons_data = data
+
+
+class SensorData(Singleton):
+    def __init__(self):
+        self.buttons_data: ButtonsData = ButtonsData()
+        self.analog_data: AnalogData = AnalogData()
+        self.lock = threading.Lock()
+
+    def set_buttons_data(self, data):
+        with self.lock:
+            self.buttons_data = data
+
+    def set_analog_data(self, data):
+        with self.lock:
+            self.analog_data = data
+
+    def set_data(self, sensor_msg: SensorMsg):
+        with self.lock:
+            self.buttons_data = sensor_msg.buttons_data
+            self.analog_data = sensor_msg.analog_data
+
+
+class SensorDataOld(SensorData):
+    pass
 
 
 class ButtonState:

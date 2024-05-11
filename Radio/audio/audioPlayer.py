@@ -3,7 +3,7 @@ import vlc
 
 from Radio.dataProcessing.dataProcessor import EqualizerReductionData
 from Radio.dataProcessing.radioFrequency import RadioFrequency
-from Radio.util.util import Subscriber
+from Radio.util.dataTransmitter import Subscriber
 from Radio.db.db import Database
 
 

@@ -18,6 +18,7 @@ class Database(Singleton):
         self.button_data: dict = {}
         self.volume: int = 0
         self.radio_frequency: RadioFrequency = RadioFrequency()
+        self.active_url: str = ""
         self.equalizer: Equalizer = Equalizer()
 
         self.shutdown: bool = False
@@ -26,6 +27,9 @@ class Database(Singleton):
         self.frequencies: dict = {}
 
     ###################################################################################
+    def replace_active_radio_url(self, url: str):
+        with self.lock:
+            self.active_url = url
 
     def replace_web_control_value(self, value: bool):
         with self.lock:
@@ -73,7 +77,7 @@ class Database(Singleton):
         with self.lock:
             return self.digital_values[pin]
 
-    def get_radio_frequency(self):
+    def get_radio_frequency(self) -> RadioFrequency:
         with self.lock:
             return self.radio_frequency
 

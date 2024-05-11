@@ -2,6 +2,7 @@ import sys
 import os
 
 from Radio.dataProcessing.dataProcessor import DataProcessor
+from Radio.util.dataTransmitter import Publisher
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -28,10 +29,11 @@ if __name__ == "__main__":
         GPIO.setup(5, GPIO.OUT)
         GPIO.output(5, True)
 
+    publisher: Publisher = Publisher()
     # shutdownPin = ShutdownGpio()
     collector = Collector(mock=True)
-    data_processor = DataProcessor()
-    audioPlayer = AudioPlayer(data_processor)
+    data_processor = DataProcessor(publisher)
+    audioPlayer = AudioPlayer(publisher)
 
     processor_thread = Thread(target=data_processor.run)
     collector_thread = Thread(target=collector.run)
