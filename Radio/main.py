@@ -1,5 +1,6 @@
 import sys
 import os
+from multiprocessing import Process
 
 from Radio.dataProcessing.dataProcessor import DataProcessor
 from Radio.util.dataTransmitter import Publisher
@@ -11,7 +12,7 @@ from threading import Thread
 
 from Radio.audio.audioPlayer import AudioPlayer
 from app import run as app_run
-from db.db import Database
+
 from collector.collector import Collector
 from Radio.util.util import is_raspberry
 
@@ -35,13 +36,16 @@ if __name__ == "__main__":
     data_processor = DataProcessor(publisher)
     audioPlayer = AudioPlayer(publisher)
 
-    processor_thread = Thread(target=data_processor.run)
-    collector_thread = Thread(target=collector.run)
-    audio_thread = Thread(target=audioPlayer.run)
+    processor_thread = Process(target=data_processor.run)
+    collector_thread = Process(target=collector.run)
+    audio_thread = Process(target=audioPlayer.run)
 
     collector_thread.start()
     processor_thread.start()
     audio_thread.start()
 
+    collector_thread.join()
+    processor_thread.join()
+    audio_thread.join()
     # start the web app
     app_run()

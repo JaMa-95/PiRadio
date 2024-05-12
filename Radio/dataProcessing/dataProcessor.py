@@ -1,5 +1,6 @@
 import json
 import time
+from statistics import mean
 from typing import List
 
 from Radio.dataProcessing.RadioAction import RadioAction, ButtonClickStates, Actions, RadioActionFactory
@@ -43,7 +44,12 @@ class DataProcessor:
         self.cycle_time = self.settings["cycle_time"]
 
     def run(self):
+        times = []
         while True:
+            if len(times) >= 50000:
+                print(f"TIME PROCESSOR: {mean(times)}")
+                times.clear()
+            start = time.time()
             # TODO: wait instead of endless loop
             if self.data_transmitter.has_data():
                 sensor_msg_current = self.data_transmitter.receive()
@@ -57,6 +63,8 @@ class DataProcessor:
                 self.sensor_msg_old = sensor_msg_current
             else:
                 time.sleep(self.cycle_time)
+            end = time.time()
+            times.append(end-start)
 
     # mostly for testing purpose
     def add_remove_actions(self, action: RadioAction):

@@ -1,5 +1,5 @@
 {
-  "cycle_time": 0.1,
+  "cycle_time": 0.001,
   "amplifier_pin": 13,
   "mqtt": false,
   "analog": {

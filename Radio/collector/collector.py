@@ -1,3 +1,5 @@
+import time
+from statistics import mean
 from time import sleep
 from Radio.db.db import Database
 from Radio.collector.gpio.button import RadioButtonsRaspi
@@ -17,7 +19,12 @@ class Collector:
         self.db = Database()
 
     def run(self):
+        times = []
         while True:
+            if len(times) >= 50000:
+                print(f"TIME COLLECTOR: {mean(times)}")
+                times.clear()
+            start = time.time()
             if not self.db.get_web_control_value():
                 buttons_data = self.buttons.get_values()
                 analog_data = self.ads.get()
@@ -25,7 +32,8 @@ class Collector:
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
-            sleep(0.0001)
+            end = time.time()
+            times.append(end-start)
 
 
 if __name__ == "__main__":
