@@ -101,7 +101,6 @@ class ButtonProcessor:
                     action_type=button_settings["action"]["type"],
                     apply_states=button_settings["action"]["apply_state"],
                     button_name=name,
-                    button_pin=button_settings["pin"],
                     frequency_pin_name=button_settings["frequency"]["pos"]
                 )
                 button.add_radio_action(radio_action)

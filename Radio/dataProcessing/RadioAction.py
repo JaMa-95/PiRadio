@@ -9,7 +9,7 @@ from Radio.util.dataTransmitter import Publisher
 from Radio.util.sensorMsg import SensorMsg, ButtonState
 from Radio.util.radioExceptions import PlayMusicActionError
 from Radio.util.util import Singleton, get_project_root
-from Radio.dataProcessing.states import ButtonClickStates
+from Radio.dataProcessing.states import ButtonClickStates, RadioActionTypes
 
 
 class RadioAction:
@@ -44,16 +44,16 @@ class RadioAction:
 
 class RadioActionFactory:
     @staticmethod
-    def create(action_type: int, apply_states: [ButtonState], button_name: str = "", button_pin: int = 0,
+    def create(action_type: int, apply_states: [ButtonState], button_name: str = "",
                frequency_pin_name: str = "") \
             -> RadioAction:
-        if action_type == 0:
+        if action_type == RadioActionTypes.TURN_OFF_RASPBERRY:
             return TurnOffRaspberry(apply_states)
-        elif action_type == 1:
+        elif action_type == RadioActionTypes.TURN_OFF_MUSIC:
             return TurnOffMusic(apply_states)
-        elif action_type == 2:
+        elif action_type == RadioActionTypes.PLAY_MUSIC:
             return PlayMusic(apply_states, button_name, frequency_pin_name)
-        elif action_type == 3:
+        elif action_type == RadioActionTypes.HOLD_FREQUENCY:
             return HoldFrequencyX(button_name, frequency_pin_name, apply_states)
         else:
             # not implemented
