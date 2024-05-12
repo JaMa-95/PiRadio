@@ -95,7 +95,10 @@ class ButtonRaspi:
                 self.state = not self.state
             self._put_state_to_list(self.state)
         else:
-            self.state = not self.state
+            if self.pin == 24:
+                self.state = True
+            else:
+                self.state = False
             self._put_state_to_list(self.state)
 
 

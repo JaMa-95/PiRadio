@@ -1,57 +1,44 @@
+from collections import deque
+from typing import List
 from Radio.dataProcessing.states import ButtonClickStates
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.util.sensorMsg import AnalogData, ButtonState, SensorMsg
 
 
 class ButtonProcessData:
-    def __init__(self, name: str, pin: int, frequency_list: Frequencies):
+    def __init__(self, name: str, pin: int):
         self.name = name
         self.pin = pin
-        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=[])
+        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=deque([False, False]))
         self.short_threshold: int = 2
         self.long_threshold: int = 10
-        self.radio_action = None
-        self.frequency_list: Frequencies = frequency_list
+        self.radio_actions: list = []
 
-    def set_radio_action(self, action):
-        self.radio_action = action
+    def add_radio_action(self, action):
+        self.radio_actions.append(action)
 
-    def process_data(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
-        if self.state.state:
-            sensor_msg_updated = self.radio_action.check_and_execute(ButtonClickStates.BUTTON_STATE_ON,
-                                                                     sensor_msg_new,
-                                                                     sensor_msg_old)
-        else:
-            sensor_msg_updated = self.radio_action.check_and_execute(ButtonClickStates.BUTTON_STATE_OFF,
-                                                                     sensor_msg_new,
-                                                                     sensor_msg_old)
-        if self.is_short_click():
-            return self.radio_action.check_and_execute(ButtonClickStates.BUTTON_STATE_SHORT_CLICK,
-                                                       sensor_msg_updated,
-                                                       sensor_msg_old)
-        elif self.is_long_click():
-            return self.radio_action.check_and_execute(ButtonClickStates.BUTTON_STATE_LONG_CLICK,
-                                                       sensor_msg_updated,
-                                                       sensor_msg_old)
-        elif self.is_double_click():
-            return self.radio_action.check_and_execute(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK,
-                                                       sensor_msg_updated,
-                                                       sensor_msg_old)
+    def get_radio_actions_to_activate(self) -> list:
+        radio_actions = []
+        states = self.get_click_states()
+        for state in states:
+            for action in self.radio_actions:
+                if action.check_state(state):
+                    radio_actions.append(action)
+        return radio_actions
 
-    # TODO: Test this with min max
-    def get_frequency_stream(self, sensor_value: int) -> None | RadioFrequency:
-        over_min_max_frequency = None
-        for index, radio_frequency in enumerate(self.frequency_list.frequencies):
-            try:
-                if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
-                    return radio_frequency
-                elif index == 0 and sensor_value < radio_frequency.minimum:
-                    over_min_max_frequency = radio_frequency
-                elif index == len(self.frequency_list.frequencies) and sensor_value > radio_frequency.maximum:
-                    over_min_max_frequency = radio_frequency
-            except TypeError:
-                return None
-        return over_min_max_frequency
+    def get_click_states(self) -> List[ButtonClickStates]:
+        states = []
+        if self.is_long_click():
+            states.append(ButtonClickStates.BUTTON_STATE_LONG_CLICK)
+        elif self.is_short_click():
+            states.append(ButtonClickStates.BUTTON_STATE_SHORT_CLICK)
+        if self.is_to_on():
+            states.append(ButtonClickStates.BUTTON_STATE_ON)
+        elif self.is_to_off():
+            states.append(ButtonClickStates.BUTTON_STATE_OFF)
+        if self.is_double_click():
+            states.append(ButtonClickStates.BUTTON_STATE_DOUBLE_CLICK)
+        return states
 
     def _is_click(self, threshold: int):
         # TODO: measure is click with time
@@ -63,6 +50,16 @@ class ButtonProcessData:
                     return True
             else:
                 return False
+        return False
+
+    def is_to_on(self) -> bool:
+        if self.state.states[0] and not self.state.states[1]:
+            return True
+        return False
+
+    def is_to_off(self) -> bool:
+        if self.state.states[0] and not self.state.states[1]:
+            return True
         return False
 
     def is_short_click(self):

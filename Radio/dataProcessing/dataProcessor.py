@@ -49,7 +49,10 @@ class DataProcessor:
                 sensor_msg_current = self.data_transmitter.receive()
                 sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
                                                                  sensor_msg_old=self.sensor_msg_old)
+                # publish/save volume, stream(frequ), equalizer
                 self.process_analogs(sensor_msg_current.analog_data)
+                # get change in buttons. which button has which button event
+                # button click, button long click, button to 1, button to 0
                 self.process_buttons(sensor_msg_current)
                 self.sensor_msg_old = sensor_msg_current
             else:
@@ -93,9 +96,7 @@ class ButtonProcessor:
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
                 # TODO: append happening
-                button = ButtonProcessData(name,
-                                           button_settings["pin"],
-                                           Frequencies(settings["buttons"][name]["frequency"]["musicList"]))
+                button = ButtonProcessData(name, button_settings["pin"])
                 radio_action = self.action_factory.create(
                     action_type=button_settings["action"]["type"],
                     apply_states=button_settings["action"]["apply_state"],
@@ -103,7 +104,7 @@ class ButtonProcessor:
                     button_pin=button_settings["pin"],
                     frequency_pin_name=button_settings["frequency"]["pos"]
                 )
-                button.set_radio_action(radio_action)
+                button.add_radio_action(radio_action)
                 self.buttons.append(button)
                 self.db.replace_button_data(name, button)
 
@@ -114,8 +115,9 @@ class ButtonProcessor:
             for index, button_old in enumerate(self.buttons):
                 if button_old.pin == state_new.pin:
                     if self._check_button_change(state_new, button_old.state):
-                        new_actions.append(self.buttons[index].radio_action)
                         self.buttons[index].state = state_new
+                        actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
+                        new_actions.extend(actions_to_activate)
         return new_actions
 
     @staticmethod
@@ -187,7 +189,6 @@ class AnalogProcessor:
         for button_name, button_item in self.settings["buttons"].items():
             for index, analog_item in enumerate(self.analog_items):
                 if button_item["frequency"]["pos"] == analog_item.name:
-                    self.analog_items[index].frequency_list = Frequencies(button_item["frequency"]["musicList"])
                     self.analog_items[index].buttons.append(button_name)
 
     def process(self, data: AnalogData, active_actions: Actions):
@@ -220,7 +221,7 @@ class AnalogProcessor:
             return current_frequency_value
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)
-        self.db.replace_frequency(frequency_item.name, current_frequency_value)
+        self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
         self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
         return current_frequency_value
 

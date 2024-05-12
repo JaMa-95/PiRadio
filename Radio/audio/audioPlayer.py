@@ -21,42 +21,27 @@ class AudioPlayer(Subscriber):
         self.player: vlc.MediaPlayer = self.instance.media_player_new()
 
         self.database: Database = Database()
-        self.stream: RadioFrequency = None
-        self.stream_re: RadioFrequency = None
-        self.re_active: bool = False
 
-        self.set_equalizer([0,0,0,0,0,0,0,0])
+        # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
 
     def update(self):
         content = self.publisher.get_content()
-        if isinstance(content, RadioFrequency):
-            # TODO: database always returns default values
-            # self.stream = self.database.get_stream()
-            # self.stream_re = self.database.get_stream_re()
-            # self.re_active = self.database.get_re_active()
-            print(f"STREAM: {self.stream}, {self.stream_re}")
-            self.play(content)
+        if "stream:" in content:
+            url = content.strip("stream:")
+            self.play(url)
         elif content == "stop":
             self.stop()
-        elif isinstance(content, str):
-            if "volume" in content:
-                self.set_volume(int(content.strip("volume:")))
-            elif "equalizer" in content:
-                data = eval(content.strip("equalizer:"))
-                self.set_equalizer(data)
+        elif "volume" in content:
+            self.set_volume(int(content.strip("volume:")))
+        elif "equalizer" in content:
+            data = eval(content.strip("equalizer:"))
+            self.set_equalizer(data)
         else:
-            print("ERROR")
+            print(f"unknown content at audio player: {content}")
 
-    def play(self, stream: RadioFrequency):
-        if stream.re_active:
-            radio_url = stream.radio_url_re
-        else:
-            radio_url = stream.radio_url
-        if radio_url == "":
-            return
+    def play(self, url: str):
         self.player.stop()
-        # print(f"stream url: {radio_url}")
-        media = self.instance.media_new(radio_url)
+        media = self.instance.media_new(url)
         media.get_mrl()
         self.player.audio_set_volume(self.volume)
         self.player.set_media(media)

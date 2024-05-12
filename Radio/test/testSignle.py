@@ -6,6 +6,7 @@ url = "https://streams.radiomast.io/8846a94e-9874-4692-a1a0-ec7aadbe2771"
 instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
 player = instance.media_player_new()
 equalizer = vlc.AudioEqualizer()
+#player.set_equalizer(equalizer)
 media = instance.media_new(url)
 media.get_mrl()
 player.set_media(media)
@@ -53,7 +54,7 @@ is_playing = player.is_playing()
 print(is_playing)
 
 non_working_url = []
-for radio_frequency in KurzFrequencies().frequencies:
+for radio_frequency in KurzFrequencies().frequency_values:
     url = radio_frequency.radio_url
     instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
     player = instance.media_player_new()

@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List
 
 from Radio.dataProcessing.processData import ButtonProcessData
-from Radio.dataProcessing.radioFrequency import RadioFrequency
+from Radio.dataProcessing.radioFrequency import RadioFrequency, Frequencies
 from Radio.db.db import Database
 from Radio.util.dataTransmitter import Publisher
 from Radio.util.sensorMsg import SensorMsg, ButtonState
@@ -109,6 +109,12 @@ class PlayMusic(RadioAction):
         self.frequency_pin_name: str = frequency_pin_name
         self.db: Database = Database()
         self.publisher: Publisher = Publisher()
+        self.frequency_list: Frequencies = self.get_frequency_list()
+
+    def get_frequency_list(self) -> Frequencies:
+        with open(get_project_root() / 'data/settings.json') as f:
+            settings = json.load(f)
+        return Frequencies(settings["buttons"][self.button_name]["frequency"]["musicList"])
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         self.play_music()
@@ -120,13 +126,31 @@ class PlayMusic(RadioAction):
         button: ButtonProcessData = self.db.get_button_data(self.button_name)
         if not button:
             return None
-        radio_frequency: RadioFrequency = self.db.get_radio_frequency()
+        radio_frequency: RadioFrequency = self.get_radio_frequency()
+        if radio_frequency == self.db.get_radio_frequency():
+            return None
+        self.db.replace_radio_frequency(radio_frequency)
         if radio_frequency.re_active:
             url = radio_frequency.radio_url_re
         else:
             url = radio_frequency.radio_url
         self.publisher.publish(f"stream:{url}")
         self.db.replace_active_radio_url(url)
+
+    def get_radio_frequency(self) -> None | RadioFrequency:
+        sensor_value = self.db.get_frequency_value(self.frequency_pin_name)
+        over_min_max_frequency = None
+        for index, radio_frequency in enumerate(self.frequency_list.frequencies):
+            try:
+                if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
+                    return radio_frequency
+                elif index == 0 and sensor_value < radio_frequency.minimum:
+                    over_min_max_frequency = radio_frequency
+                elif index == len(self.frequency_list.frequencies) and sensor_value > radio_frequency.maximum:
+                    over_min_max_frequency = radio_frequency
+            except TypeError:
+                return None
+        return over_min_max_frequency
 
     def execute_exit(self):
         self.publisher.publish("stream:")
@@ -159,6 +183,7 @@ class Actions(Singleton):
         for action in self._actions:
             if isinstance(action, PlayMusic):
                 if action_return:
+                    return None
                     raise PlayMusicActionError("Multiple play music actions at the same time not supported")
                 action_return = action
         return action_return

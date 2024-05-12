@@ -38,10 +38,17 @@ class SensorDataOld(SensorData):
 
 
 class ButtonState:
-    def __init__(self, pin: int, state: bool, states: []):
+    def __init__(self, pin: int, state: bool, states=None):
+        if states is None:
+            states = [0, 0]
         self.pin = pin
         self.state = state
         self.states = states
+
+    def __eq__(self, other):
+        if self.state == other.state and self.states == other.states:
+            return True
+        return False
 
 
 class ButtonsData:

@@ -116,7 +116,7 @@ class AdsSingle:
 
     def get_value_smoothed(self):
         if self.mock:
-            return randint(0, 5000)
+            return 5000 # randint(0, 5000)
         values = []
         if self.pin == 1:
             num_values = 700

@@ -1,7 +1,8 @@
 import threading
+from typing import Dict
 
 from Radio.dataProcessing.equalizerData import Equalizer
-from Radio.dataProcessing.radioFrequency import RadioFrequency
+from Radio.dataProcessing.radioFrequency import RadioFrequency, Frequencies
 from Radio.util.singleton import Singleton
 
 
@@ -24,7 +25,7 @@ class Database(Singleton):
         self.shutdown: bool = False
         self.re_active: bool = False
 
-        self.frequencies: dict = {}
+        self.frequency_values: Dict[str, int] = {}
 
     ###################################################################################
     def replace_active_radio_url(self, url: str):
@@ -60,14 +61,21 @@ class Database(Singleton):
         with self.lock:
             self.equalizer = equalizer
 
-    def replace_frequency(self, name: str, value: int):
-        self.frequencies[name] = value
+    def replace_frequency_value(self, name: str, value: int):
+        self.frequency_values[name] = value
 
     def replace_shutdown(self, value: bool):
         with self.lock:
             self.shutdown = value
 
     #######################################################################
+
+    def get_frequency_value(self, name) -> int | None:
+        with self.lock:
+            try:
+                return self.frequency_values[name]
+            except KeyError:
+                return None
 
     def get_web_control_value(self):
         with self.lock:

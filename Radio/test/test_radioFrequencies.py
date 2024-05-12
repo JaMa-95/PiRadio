@@ -13,7 +13,7 @@ class TestFrequencies(unittest.TestCase):
 
     def test_radio_frequencies_kurz(self):
         non_working_url = []
-        for radio_frequency in KurzFrequencies().frequencies:
+        for radio_frequency in KurzFrequencies().frequency_values:
             url = radio_frequency.radio_url
             instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
             player = instance.media_player_new()
@@ -35,7 +35,7 @@ class TestFrequencies(unittest.TestCase):
 
     def test_radio_frequencies_lang(self):
         non_working_url = []
-        for radio_frequency in LangFrequencies().frequencies:
+        for radio_frequency in LangFrequencies().frequency_values:
             url = radio_frequency.radio_url
             instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
             player = instance.media_player_new()
@@ -57,7 +57,7 @@ class TestFrequencies(unittest.TestCase):
 
     def test_radio_frequencies_mittel(self):
         non_working_url = []
-        for radio_frequency in MittelFrequencies().frequencies:
+        for radio_frequency in MittelFrequencies().frequency_values:
             url = radio_frequency.radio_url
             instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
             player = instance.media_player_new()
@@ -79,7 +79,7 @@ class TestFrequencies(unittest.TestCase):
 
     def test_radio_frequencies_ukw(self):
         non_working_url = []
-        for radio_frequency in UKWFrequencies().frequencies:
+        for radio_frequency in UKWFrequencies().frequency_values:
             url = radio_frequency.radio_url
             instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
             player = instance.media_player_new()
@@ -101,7 +101,7 @@ class TestFrequencies(unittest.TestCase):
 
     def test_radio_frequencies_spr(self):
         non_working_url = []
-        for radio_frequency in SprFrequencies().frequencies:
+        for radio_frequency in SprFrequencies().frequency_values:
             url = radio_frequency.radio_url
             instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
             player = instance.media_player_new()
