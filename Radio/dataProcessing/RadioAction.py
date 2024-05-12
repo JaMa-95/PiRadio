@@ -44,17 +44,16 @@ class RadioAction:
 
 class RadioActionFactory:
     @staticmethod
-    def create(action_type: int, apply_states: [ButtonState], button_name: str = "",
-               frequency_pin_name: str = "") \
+    def create(action_type: int, apply_states: [ButtonState], button_name: str = "", frequency_pin_name: str = "") \
             -> RadioAction:
-        if action_type == RadioActionTypes.TURN_OFF_RASPBERRY:
+        if action_type == RadioActionTypes.TURN_OFF_RASPBERRY.value:
             return TurnOffRaspberry(apply_states)
-        elif action_type == RadioActionTypes.TURN_OFF_MUSIC:
+        elif action_type == RadioActionTypes.TURN_OFF_MUSIC.value:
             return TurnOffMusic(apply_states)
-        elif action_type == RadioActionTypes.PLAY_MUSIC:
+        elif action_type == RadioActionTypes.PLAY_MUSIC.value:
             return PlayMusic(apply_states, button_name, frequency_pin_name)
-        elif action_type == RadioActionTypes.HOLD_FREQUENCY:
-            return HoldFrequencyX(button_name, frequency_pin_name, apply_states)
+        elif action_type == RadioActionTypes.HOLD_FREQUENCY.value:
+            return HoldFrequencyX(holding_pin_name=button_name, apply_states=apply_states)
         else:
             # not implemented
             return RadioAction(apply_states)
@@ -79,27 +78,26 @@ class OffRestriction(RadioAction):
 
 
 class HoldFrequencyX(RadioAction):
-    def __init__(self, holding_pin_name: str, holding_frequency_pin_name: str, apply_states: [ButtonClickStates]):
+    def __init__(self, holding_pin_name: str, apply_states: [ButtonClickStates]):
         super().__init__(apply_states)
         self.holding_pin_name: str = holding_pin_name
-        self.holding_frequency_pin: int = self.get_frequency_pin(holding_frequency_pin_name)
+        self.holding_frequency_pin: List[int] = self.get_holding_pins(holding_pin_name)
 
     @staticmethod
-    def get_frequency_pin(frequency_name: str) -> int:
-        with open(get_project_root() / 'data/settings.json') as f:
+    def get_holding_pins(holding_pin_name: str) -> List[int]:
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        for name, item in settings["analog"]["sensors"].items():
-            if name == frequency_name:
-                return item["pin"]
+        return settings["buttons"][holding_pin_name]["action"]["holding_pins"]
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         for index, frequency_data in enumerate(sensor_msg_new.analog_data.sensor_data):
             for index_old, frequency_data_old in enumerate(sensor_msg_old.analog_data.sensor_data):
-                if (frequency_data.pin == self.holding_frequency_pin and frequency_data_old.pin ==
-                        self.holding_frequency_pin):
-                    sensor_msg_new.analog_data.sensor_data[index].value = (
-                        sensor_msg_old.analog_data.sensor_data[index_old].value)
-                    return sensor_msg_new
+                for holding_pin in self.holding_frequency_pin:
+                    if frequency_data.pin == holding_pin and frequency_data_old.pin == holding_pin:
+                        sensor_msg_new.analog_data.sensor_data[index].value = (
+                            sensor_msg_old.analog_data.sensor_data[index_old].value)
+                        return sensor_msg_new
 
 
 class PlayMusic(RadioAction):
@@ -183,7 +181,6 @@ class Actions(Singleton):
         for action in self._actions:
             if isinstance(action, PlayMusic):
                 if action_return:
-                    return None
                     raise PlayMusicActionError("Multiple play music actions at the same time not supported")
                 action_return = action
         return action_return
@@ -196,7 +193,7 @@ class Actions(Singleton):
     def process(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg):
         for action in self._actions:
             sensor_msg_current_return = action.execute(sensor_msg_new=sensor_msg_current,
-                                                sensor_msg_old=sensor_msg_old)
+                                                       sensor_msg_old=sensor_msg_old)
             if sensor_msg_current_return:
                 sensor_msg_current = sensor_msg_current_return
         return sensor_msg_current

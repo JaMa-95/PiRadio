@@ -230,7 +230,8 @@
       "active": true,
       "action": {
         "apply_state": [1],
-        "type": 3
+        "type": 3,
+        "holding_pins": [3]
       },
       "is_frequency_lock": true,
       "frequency": {

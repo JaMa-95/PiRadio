@@ -37,7 +37,8 @@ class AudioPlayer(Subscriber):
             data = eval(content.strip("equalizer:"))
             self.set_equalizer(data)
         else:
-            print(f"unknown content at audio player: {content}")
+            pass
+            # print(f"unknown content at audio player: {content}")
 
     def play(self, url: str):
         self.player.stop()
