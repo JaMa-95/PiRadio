@@ -46,10 +46,10 @@ class DataProcessor:
     def run(self):
         times = []
         while True:
-            if len(times) >= 50000:
-                print(f"TIME PROCESSOR: {mean(times)}")
-                times.clear()
-            start = time.time()
+            #if len(times) >= 50000:
+            #    print(f"TIME PROCESSOR: {mean(times)}")
+            #    times.clear()
+            #start = time.time()
             # TODO: wait instead of endless loop
             if self.data_transmitter.has_data():
                 sensor_msg_current = self.data_transmitter.receive()
@@ -63,8 +63,8 @@ class DataProcessor:
                 self.sensor_msg_old = sensor_msg_current
             else:
                 time.sleep(self.cycle_time)
-            end = time.time()
-            times.append(end-start)
+            #end = time.time()
+            #times.append(end-start)
 
     # mostly for testing purpose
     def add_remove_actions(self, action: RadioAction):
@@ -103,7 +103,6 @@ class ButtonProcessor:
 
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
-                # TODO: append happening
                 button = ButtonProcessData(name, button_settings["pin"])
                 radio_action = self.action_factory.create(
                     action_type=button_settings["action"]["type"],

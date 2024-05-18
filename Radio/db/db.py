@@ -44,7 +44,6 @@ class Database(Singleton):
         with self.lock:
             self.radio_frequency = value
 
-    # TODO: implement
     def replace_re_active(self, value: bool):
         with self.lock:
             self.re_active = value

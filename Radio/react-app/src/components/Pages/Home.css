@@ -1,8 +1,22 @@
-.switch {                   /* Das label-Element */ 
-	position: relative; /* Um im nächsten Schritt den runden Button mit position:absolute festzusetzen */ 
+.main{
+    border-right: 100px solid white;
+    border-left: 100px solid white;
+    height: 100vh
+}
+
+
+.container{
+  height: 300px;
+  text-align: center
+}
+
+
+.switch {                   /* Das label-Element */
+	position: relative; /* Um im nächsten Schritt den runden Button mit position:absolute festzusetzen */
 	width: 64px;
 	height: 34px;
 	display: inline-block;
+	float: right;
 }
 
 .switch span {		    /* Der graue Untergrund des Schalters */ 
@@ -37,5 +51,4 @@ input:checked + span::before {
 }
 
 .switch input {
-	display: none;
 }

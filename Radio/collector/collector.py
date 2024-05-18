@@ -19,12 +19,12 @@ class Collector:
         self.db = Database()
 
     def run(self):
-        times = []
+        # times = []
         while True:
-            if len(times) >= 50000:
-                print(f"TIME COLLECTOR: {mean(times)}")
-                times.clear()
-            start = time.time()
+            #if len(times) >= 50000:
+            #    print(f"TIME COLLECTOR: {mean(times)}")
+            #    times.clear()
+            #start = time.time()
             if not self.db.get_web_control_value():
                 buttons_data = self.buttons.get_values()
                 analog_data = self.ads.get()
@@ -32,8 +32,8 @@ class Collector:
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
-            end = time.time()
-            times.append(end-start)
+            #end = time.time()
+            #times.append(end-start)
 
 
 if __name__ == "__main__":

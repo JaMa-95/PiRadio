@@ -9,8 +9,7 @@ from Radio.db.db import Database
 
 class AudioPlayer(Subscriber):
     def __init__(self, publisher):
-        self.noise_player = None  # Not implemented yet
-        # TODO: extra publisher class and subscriber and use it as object
+        self.noise_player = None
         self.publisher = publisher
         self.publisher.attach(self)
         self.noise = 30

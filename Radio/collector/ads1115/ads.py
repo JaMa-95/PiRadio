@@ -61,6 +61,7 @@ class AdsObject:
 
 
 class AdsSingle:
+    # TODO: REFACTOR. too many methods which are not used, bad naming
     def __init__(self, pin, mock: bool = False, address: int = 0x48, min_: int = 0, max_: int = 0):
         self.pin = pin
         self.min: int = min_
@@ -86,18 +87,6 @@ class AdsSingle:
 
             self.ads.mode = Mode.CONTINUOUS
             self.ads.data_rate = self.RATE
-
-    def set_to_db(self):
-        value = self.get_value()
-        self.db.replace_ads_pin_value(value, self.pin)
-
-    def set_to_db_by_pin(self, pin):
-        value = self.get_value()
-        self.db.replace_ads_pin_value(value, pin)
-
-    def set_to_db_smoothed(self):
-        value = self.get_value_smoothed()
-        self.db.replace_ads_pin_value(value, self.pin)
 
     def set_to_db_smoothed_by_pin(self, pin: int, high_precision: bool = False):
         try:
@@ -134,6 +123,7 @@ class AdsSingle:
             else:
                 break
         if self.pin == 5:
+            # todo: add debug print
             print(max(values) - min(values))
             print(f"MEAN: {mean(values)}")
             print(f"pin: {self.pin}")
