@@ -1,8 +1,8 @@
-import { BasicRadio } from "./Basic";
+import BasicRadio  from "./Basic";
 import { FancyRadio } from "./Fancy";
 import { useState } from 'react';
 
-export const RadioControl = () => {
+export const RadioControl = (props) => {
   const [basicRadio, setBasicRadio] = useState([]);
   const handleSetBasicRadio = (event) => {
     setBasicRadio(event.target.checked);
@@ -25,12 +25,13 @@ export const RadioControl = () => {
   };
 
   return (
-    <div class="main">
-        <label class="switch">
+    <div className="main">
+        <label className="switch">
             <input type="checkbox" checked={basicRadio} onChange={handleSetBasicRadio}></input>
             <span></span>
             <p>Basic Radio</p>
-            {basicRadio ? <BasicRadio buttons={buttons}/> : <FancyRadio buttons={buttons}/>}
+            {basicRadio ? <BasicRadio buttons={buttons} webControl={props.webControl}/> :
+                <FancyRadio buttons={buttons} webControl={props.webControl}/>}
         </label>
     </div>
   );

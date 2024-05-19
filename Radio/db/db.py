@@ -15,7 +15,7 @@ class Database(Singleton):
         self.lock = threading.Lock()
 
         self.web_control_value: bool = False
-        self.digital_values: dict = {}
+        self.analog_values: dict = {}
         self.button_data: dict = {}
         self.volume: int = 0
         self.radio_frequency: RadioFrequency = RadioFrequency()
@@ -38,7 +38,7 @@ class Database(Singleton):
 
     def replace_ads_pin_value(self, value: float, pin: int):
         with self.lock:
-            self.digital_values[pin] = value
+            self.analog_values[pin] = value
 
     def replace_radio_frequency(self, value: RadioFrequency):
         with self.lock:
@@ -82,7 +82,7 @@ class Database(Singleton):
 
     def get_ads_pin_value(self, pin: int):
         with self.lock:
-            return self.digital_values[pin]
+            return self.analog_values[pin]
 
     def get_radio_frequency(self) -> RadioFrequency:
         with self.lock:

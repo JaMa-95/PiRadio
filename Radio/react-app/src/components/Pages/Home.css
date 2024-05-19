@@ -15,7 +15,6 @@
 	position: relative; /* Um im nächsten Schritt den runden Button mit position:absolute festzusetzen */
 	width: 64px;
 	height: 34px;
-	display: inline-block;
 	float: right;
 }
 
