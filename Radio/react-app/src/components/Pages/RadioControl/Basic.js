@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Basic.css';
 
 
@@ -41,6 +41,29 @@ function Button(props) {
 
 function Volume(props) {
     const [volume, setVolume] = useState(50); // Default volume set to 50
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:8000/stream/volume", 'echo-protocol');
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket volume");
+        };
+
+        ws.onmessage = function(event) {
+            setVolume(JSON.parse(event.data).volume);
+        };
+
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket is closed now.");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
 
     const handleVolumeChange = (event) => {
         setVolume(event.target.value);
@@ -59,6 +82,76 @@ function Volume(props) {
 
 function RadioFrequency(props) {
     const [frequency, setFrequency] = useState(88); // Default frequency set to 88
+    const [radioName, setRadioName] = useState('');
+
+    const [url, setUrl] = useState('');
+    const [backupActive, setBackupActive] = useState(false);
+    const [nameBackup, setNameBackup] = useState('');
+    const [urlBackup, setUrlBackup] = useState('');
+    const [minimum, setMinimum] = useState(0);
+    const [maximum, setMaximum] = useState(0);
+    const [sweetSpot, setSweetSpot] = useState(0);
+
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:8000/stream/frequency_values", 'echo-protocol');
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket frequency values");
+        };
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log("Frequency Data:", data);
+            setFrequency(data.first);
+        };
+
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket is closed now.");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:8000/stream/radio_frequency", 'echo-protocol');
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket volume");
+        };
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log("Frequency Data:", data);
+            setFrequency(data.frequency);
+            setRadioName(data.radio_name);
+            setUrl(data.url);
+            setBackupActive(data.re_active);
+            setNameBackup(data.name_re);
+            setUrlBackup(data.url_re);
+            setMinimum(data.minimum);
+            setMaximum(data.maximum);
+            setSweetSpot(data.sweet_spot);
+        };
+
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket is closed now.");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
     return (
         <div>
             <label>
@@ -67,28 +160,36 @@ function RadioFrequency(props) {
                     onChange={(e) => setFrequency(e.target.value)} disabled={!props.webControl} />
             </label>
             <label>
-                Name: <input type="text" name="radio_name" disabled/>
+                Name: <input type="text" name="radio_name" value={radioName} onChange={(e) => setRadioName(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                URL: <input type="number" name="min" disabled/>
+                URL: <input type="text" name="url" value={url} onChange={(e) => setUrl(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                Backup active: <input type="checkbox" name="re_active" disabled={!props.webControl}/>
+                Backup active: <input type="checkbox" name="re_active" checked={backupActive} 
+                onChange={(e) => setBackupActive(e.target.checked)} disabled={!props.webControl}/>
             </label>
             <label>
-                Name Backup: <input type="text" name="name_re" disabled/>
+                Name Backup: <input type="text" name="name_re" value={nameBackup} onChange={(e) => setNameBackup(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                URL Backup: <input type="text" name="url_re" disabled/>
+                URL Backup: <input type="text" name="url_re" value={urlBackup} onChange={(e) => setUrlBackup(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                Minimum: <input type="number" name="min" disabled/>
+                Minimum: <input type="number" name="min" value={minimum} onChange={(e) => setMinimum(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                Maximum: <input type="number" name="max" disabled/>
+                Maximum: <input type="number" name="max" value={maximum} onChange={(e) => setMaximum(e.target.value)} 
+                disabled/>
             </label>
             <label>
-                Sweet spot: <input type="number" name="sweet_spot" disabled/>
+                Sweet spot: <input type="number" name="sweet_spot" value={sweetSpot} onChange={(e) => setSweetSpot(e.target.value)} 
+                disabled/>
             </label>
         </div>
     );
@@ -102,6 +203,36 @@ function Equalizer(props) {
     const [khz3, setKhz3] = React.useState(0);
     const [khz6, setKhz6] = React.useState(0);
     const [khz12, setKhz12] = React.useState(0);
+
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:8000/stream/equalizer", 'echo-protocol');
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket volume");
+        };
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            setHz60(data.hz60);
+            setHz170(data.hz170);
+            setHz310(data.hz310);
+            setKhz1(data.khz1);
+            setKhz3(data.khz3);
+            setKhz6(data.khz6);
+            setKhz12(data.khz12);
+        };
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket is closed now.");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
 
     return (
         <div className="Equalizer">

@@ -6,6 +6,8 @@ from Radio.dataProcessing.radioFrequency import RadioFrequency, Frequencies
 from Radio.util.singleton import Singleton
 
 
+
+# TODO: do i need to return copies only?
 class Database(Singleton):
     def __init__(self):
         if self._Singleton__initialized:
@@ -69,12 +71,20 @@ class Database(Singleton):
 
     #######################################################################
 
+    def get_equalizer(self) -> Equalizer:
+        with self.lock:
+            return self.equalizer
+
     def get_frequency_value(self, name) -> int | None:
         with self.lock:
             try:
                 return self.frequency_values[name]
             except KeyError:
                 return None
+
+    def get_frequency_values(self) -> dict:
+        with self.lock:
+            return self.frequency_values
 
     def get_web_control_value(self):
         with self.lock:

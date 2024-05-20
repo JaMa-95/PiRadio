@@ -34,6 +34,19 @@ class Equalizer:
 
         self._iterator: int = 0
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        if self.value_60_hz != other.value_60_hz or \
+           self.value_170_hz != other.value_170_hz or \
+           self.value_310_hz != other.value_310_hz or \
+           self.value_1_khz != other.value_1_khz or \
+           self.value_3_khz != other.value_3_khz or \
+           self.value_6_khz != other.value_6_khz or \
+           self.value_12_hkz != other.value_12_hkz:
+            return False
+        return True
+        
     def __iter__(self):
         return self
 
@@ -62,9 +75,29 @@ class Equalizer:
         if self._iterator == 7:
             raise StopIteration
 
+    def to_dict(self) -> dict:
+        return {
+            "hz60": self.value_60_hz,
+            "hz170_hz": self.value_170_hz,
+            "hz310_hz": self.value_310_hz,
+            "khz1": self.value_1_khz,
+            "khz3": self.value_3_khz,
+            "khz6": self.value_6_khz,
+            "khz12": self.value_12_hkz
+        }
+
     def to_list(self) -> list:
         return [self.value_60_hz, self.value_170_hz, self.value_310_hz, self.value_1_khz,
                 self.value_3_khz, self.value_6_khz, self.value_12_hkz]
+
+    def from_list(self, data: list):
+        self.value_60_hz = data[0]
+        self.value_170_hz = data[1]
+        self.value_310_hz = data[2]
+        self.value_1_khz = data[3]
+        self.value_3_khz = data[4]
+        self.value_6_khz = data[5]
+        self.value_12_hkz = data[6]
 
     def calc_equalizer_with_reductions(self, value: int):
         if self.reduction.reduction_60_hz != -1:

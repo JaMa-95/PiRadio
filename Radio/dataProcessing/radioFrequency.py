@@ -35,6 +35,21 @@ class RadioFrequency:
         self.radio_url_re = radio_url_re
         self.re_active: bool = re_active
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        if self.name != other.name or \
+           self.minimum != other.minimum or \
+           self.maximum != other.maximum or \
+           self.sweet_spot != other.sweet_spot or \
+           self.radio_name != other.radio_name or \
+           self.radio_name_re != other.radio_name_re or \
+           self.radio_url != other.radio_url or \
+           self.radio_url_re != other.radio_url_re or \
+           self.re_active != other.re_active:
+            return False
+        return True
+
     def from_list(self, data: list) -> bool:
         if len(data) != 8:
             if len(data) >= 0:
@@ -61,14 +76,28 @@ class RadioFrequency:
             self.radio_url,
             self.radio_name_re,
             self.radio_url_re,
-            self.re_active
+            self.re_active,
+            self.sweet_spot
         ]
+
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "minimum": self.minimum,
+            "maximum": self.maximum,
+            "radio_name": self.radio_name,
+            "radio_url": self.radio_url,
+            "radio_name_re": self.radio_name_re,
+            "radio_url_re": self.radio_url_re,
+            "re_active": self.re_active,
+            "sweet_spot": self.sweet_spot
+        }
 
     def test_radio_frequency(self, test_re: bool = False):
         if test_re:
             url = self.radio_url_re
         else:
-                url = self.radio_url
+            url = self.radio_url
         instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         player = instance.media_player_new()
         media = instance.media_new(url)

@@ -1,26 +1,105 @@
+import asyncio
 import json
 import time
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
+from random import randint
 from typing import Generator
 
-from fastapi import FastAPI
-from fastapi.responses import Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import Body, status, HTTPException
 import uvicorn
+from fastapi import Body, status, HTTPException
+from fastapi import FastAPI, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from starlette.responses import StreamingResponse
 
+from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
+from Radio.db.db import Database
 from Radio.util.util import get_project_root
 
 app = FastAPI()
+db = Database()
 
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.websocket("/stream/volume")
+async def websocket_volume(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        volume_old = None
+        while True:
+            volume = db.get_volume()
+            if volume_old != volume:
+                volume_old = volume
+                volume_data = json.dumps({"volume": volume})
+                await websocket.send_text(volume_data)
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception:
+        print("WebSocket disconnected")
+        await websocket.close()
+
+
+@app.websocket("/stream/equalizer")
+async def websocket_equalizer(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        equalizer_old: Equalizer = Equalizer()
+        equalizer_data = json.dumps(equalizer_old.to_dict())
+        await websocket.send_text(equalizer_data)
+        while True:
+            equalizer: Equalizer = db.get_equalizer()
+            if equalizer_old != equalizer:
+                equalizer_old.from_list(equalizer.to_list())
+                equalizer_data = json.dumps(equalizer.to_dict())
+                await websocket.send_text(equalizer_data)
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception:
+        print("WebSocket disconnected")
+        await websocket.close()
+
+@app.websocket("/stream/frequency_values")
+async def websocket_frequency_values(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        frequency_old = {}
+        while True:
+            frequency = db.get_frequency_values()
+            if frequency_old != frequency:
+                frequency_old = frequency.copy()  # Create a copy of frequency
+                frequency_data = json.dumps(frequency)
+                print(frequency_data)
+                await websocket.send_text(frequency_data)
+            await asyncio.sleep(0.01)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception:
+        print("WebSocket disconnected")
+        await websocket.close()
+
+
+@app.websocket("/stream/radio_frequency")
+async def websocket_radio_frequency(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        frequency_old = RadioFrequency()
+        while True:
+            frequency = db.get_radio_frequency()
+            if frequency_old != frequency:
+                frequency_old = RadioFrequency(name=frequency.name, minimum=frequency.minimum,
+                                               maximum=frequency.maximum, radio_name=frequency.radio_name,
+                                               radio_url=frequency.radio_url, radio_name_re=frequency.radio_name_re,
+                                               radio_url_re=frequency.radio_url_re, re_active=frequency.re_active)
+                frequency_data = json.dumps(frequency.to_dict())
+                await websocket.send_text(frequency_data)
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception:
+        print("WebSocket radio frequ disconnected")
+        await websocket.close()
+
 
 
 @app.get("/frequencies/{name}")
