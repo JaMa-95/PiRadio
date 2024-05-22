@@ -1,6 +1,6 @@
 import BasicRadio  from "./Basic";
 import { FancyRadio } from "./Fancy";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const RadioControl = (props) => {
   const [basicRadio, setBasicRadio] = useState([]);
@@ -8,21 +8,41 @@ export const RadioControl = (props) => {
     setBasicRadio(event.target.checked);
   };
 
-  const [buttons, setButtons] = useState([{"button_1": false}]);
+  const [buttons, setButtons] = useState([]);
+  const [frequencyValues, setFrequencyValues] = useState([]);
 
   const fetchButtons= () => {
-      return fetch('http://127.0.0.1:8000/buttons/', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-        },
+    return fetch('http://127.0.0.1:8000/button_names/', {
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+      },
+  })
+    .then((res) => res.json())
+    .then((data) => 
+    {
+      setButtons(data);
+    })
+};
+
+  const fetchFrequencyValues = () => {
+    return fetch('http://127.0.0.1:8000/frequency_names/', {
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+      },
     })
       .then((res) => res.json())
-      .then((data) =>
-      {
-        setButtons(data);
-      })
+      .then((data) => {
+        console.log("Frequency Values:", data);
+        setFrequencyValues(data);
+      });
   };
+
+  useEffect(() => {
+    fetchFrequencyValues();
+    fetchButtons();
+  }, []);
 
   return (
     <div className="main">
@@ -30,8 +50,10 @@ export const RadioControl = (props) => {
             <input type="checkbox" checked={basicRadio} onChange={handleSetBasicRadio}></input>
             <span></span>
             <p>Basic Radio</p>
-            {basicRadio ? <BasicRadio buttons={buttons} webControl={props.webControl}/> :
-                <FancyRadio buttons={buttons} webControl={props.webControl}/>}
+            {basicRadio ? <BasicRadio buttons={buttons} webControl={props.webControl} 
+                            frequencyValues={frequencyValues}/> :
+                          <FancyRadio buttons={buttons} webControl={props.webControl} 
+                            frequencyValues={frequencyValues}/>}
         </label>
     </div>
   );

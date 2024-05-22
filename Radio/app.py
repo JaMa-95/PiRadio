@@ -88,6 +88,7 @@ async def websocket_radio_frequency(websocket: WebSocket):
         frequency_old = RadioFrequency()
         while True:
             frequency = db.get_radio_frequency()
+            frequency.maximum = randint(5, 55)
             if frequency_old != frequency:
                 frequency_old = RadioFrequency(name=frequency.name, minimum=frequency.minimum,
                                                maximum=frequency.maximum, radio_name=frequency.radio_name,
@@ -96,10 +97,33 @@ async def websocket_radio_frequency(websocket: WebSocket):
                 frequency_data = json.dumps(frequency.to_dict())
                 await websocket.send_text(frequency_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
-    except Exception:
+    except Exception as e:
         print("WebSocket radio frequ disconnected")
         await websocket.close()
 
+
+@app.get("/button_names/")
+async def get_buttons_settings():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    buttons = []
+    for name, button_settings in settings["buttons"].items():
+        if button_settings["active"]:
+            buttons.append({name: False})
+    return buttons
+
+@app.get("/frequency_names")
+async def get_frequency_names():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    frequency_names = []
+    for name, analog_item in settings["analog"]["sensors"].items():
+        if analog_item["is_frequency"] and analog_item["on"]:
+            frequency_names.append({name: {"min": analog_item["min"], "max": analog_item["max"]}})
+    print(frequency_names)
+    return frequency_names
 
 
 @app.get("/frequencies/{name}")

@@ -4,11 +4,14 @@ import './Basic.css';
 
 
 export default function BasicRadio(props) {
-    console.log("Web Control Value:", props.webControl);
+    console.log("Web Control Value:", props.frequencyValues);
     return (
         <div className="buttons">
             <section>
                 <Volume webControl={props.webControl}/>
+            </section>
+            <section>
+                <FrequencyValues webControl={props.webControl} frequencyValues={props.frequencyValues}/>
             </section>
             <section>
                 <RadioFrequency webControl={props.webControl}/>
@@ -80,18 +83,16 @@ function Volume(props) {
     );
 };
 
-function RadioFrequency(props) {
-    const [frequency, setFrequency] = useState(88); // Default frequency set to 88
-    const [radioName, setRadioName] = useState('');
+function FrequencyValues(props) {
+    return props.frequencyValues.map((item, index) => (
+        <div>
+            <FrequencyValue webControl={props.webControl} name={Object.keys(item)[0]}/>
+        </div>
+    ));
+}
 
-    const [url, setUrl] = useState('');
-    const [backupActive, setBackupActive] = useState(false);
-    const [nameBackup, setNameBackup] = useState('');
-    const [urlBackup, setUrlBackup] = useState('');
-    const [minimum, setMinimum] = useState(0);
-    const [maximum, setMaximum] = useState(0);
-    const [sweetSpot, setSweetSpot] = useState(0);
-
+function FrequencyValue(props) {
+    const [frequency, setFrequency] = useState(0);
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:8000/stream/frequency_values", 'echo-protocol');
 
@@ -101,7 +102,7 @@ function RadioFrequency(props) {
 
         ws.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            console.log("Frequency Data:", data);
+            console.log("Frequency values:", data);
             setFrequency(data.first);
         };
 
@@ -117,6 +118,26 @@ function RadioFrequency(props) {
             ws.close();
         };
     }, []);
+    return (
+        <div>
+            <label>
+                <p>{frequency} MHz</p>
+                Frequency: <input type="range" name="frequency_value" min="87.5" max="108" value={frequency} 
+                    onChange={(e) => setFrequency(e.target.value)} disabled={!props.webControl} />
+            </label>
+        </div>
+    );
+};
+
+function RadioFrequency(props) {
+    const [radioName, setRadioName] = useState('');
+    const [url, setUrl] = useState('');
+    const [backupActive, setBackupActive] = useState(false);
+    const [nameBackup, setNameBackup] = useState('');
+    const [urlBackup, setUrlBackup] = useState('');
+    const [minimum, setMinimum] = useState(0);
+    const [maximum, setMaximum] = useState(0);
+    const [sweetSpot, setSweetSpot] = useState(0);
 
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:8000/stream/radio_frequency", 'echo-protocol');
@@ -127,13 +148,11 @@ function RadioFrequency(props) {
 
         ws.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            console.log("Frequency Data:", data);
-            setFrequency(data.frequency);
             setRadioName(data.radio_name);
-            setUrl(data.url);
+            setUrl(data.radio_url);
             setBackupActive(data.re_active);
-            setNameBackup(data.name_re);
-            setUrlBackup(data.url_re);
+            setNameBackup(data.radio_name_re);
+            setUrlBackup(data.radio_url_re);
             setMinimum(data.minimum);
             setMaximum(data.maximum);
             setSweetSpot(data.sweet_spot);
@@ -154,11 +173,6 @@ function RadioFrequency(props) {
 
     return (
         <div>
-            <label>
-                <p>{frequency} MHz</p>
-                Frequency: <input type="range" name="frequency_value" min="87.5" max="108" value={frequency} 
-                    onChange={(e) => setFrequency(e.target.value)} disabled={!props.webControl} />
-            </label>
             <label>
                 Name: <input type="text" name="radio_name" value={radioName} onChange={(e) => setRadioName(e.target.value)} 
                 disabled/>
