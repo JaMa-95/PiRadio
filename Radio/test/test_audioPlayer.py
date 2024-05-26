@@ -14,12 +14,13 @@ class TestAudioPlayer(unittest.TestCase):
         AudioPlayer(processor)
 
     def test_play_music(self):
-        processor = DataProcessor()
-        player = AudioPlayer(processor)
+        publisher = Publisher()
+        processor = DataProcessor(publisher)
+        player = AudioPlayer(publisher)
 
         # Could be that radio link is broken
-        player.play(RadioFrequency(radio_url="https://relax.stream.publicradio.org/relax.mp3?srcid"))
-        time.sleep(3)
+        player.play("https://relax.stream.publicradio.org/relax.mp3?srcid")
+        time.sleep(7)
         self.assertTrue(player.player.is_playing())
 
     def test_play_music_pub_sub(self):
@@ -47,3 +48,8 @@ class TestAudioPlayer(unittest.TestCase):
                              EqualizerReductionData(1, 2, 3, 4, -1, -1, -1))
         time.sleep(3)
         self.assertEqual(player.equalizer.get_amp_at_index(0), bass)
+
+
+if __name__ == '__main__':
+    player = TestAudioPlayer()
+    player.test_play_music_pub_sub()

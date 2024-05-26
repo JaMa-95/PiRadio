@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from starlette.responses import StreamingResponse
 
+from Radio.util.dataTransmitter import DataTransmitter
 from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
@@ -21,7 +22,7 @@ from Radio.util.util import get_project_root
 
 app = FastAPI()
 db = Database()
-
+data_transmitter: DataTransmitter = DataTransmitter()
 
 @app.get("/")
 async def root():
@@ -47,9 +48,8 @@ async def websocket_volume(websocket: WebSocket):
 @app.post("/volume")
 async def set_volume(volume: dict):
     print("Volume set to: ", volume)
-    db.replace_volume(volume["volume"])
+    data_transmitter.send({"volume": volume["volume"]})
     return {"message": "Volume set successfully"}
-
 
 @app.websocket("/stream/equalizer")
 async def websocket_equalizer(websocket: WebSocket):
@@ -74,7 +74,7 @@ async def set_equalizer(equalizer_data: dict):
     print("Equalizer set to: ", equalizer_data)
     euqalizer = Equalizer()
     euqalizer.from_dict(equalizer_data)
-    db.replace_equalizer(equalizer_data)
+    data_transmitter.send(euqalizer)
     return {"message": "Equalizer set successfully"}
 
 @app.websocket("/stream/frequency_values")
@@ -97,11 +97,12 @@ async def websocket_frequency_values(websocket: WebSocket):
 @app.post("/frequency")
 async def set_frequency(frequency: dict):
     print("Frequency set to: ", frequency)
-    db.replace_frequency_value(frequency["name"], frequency["value"])
+    data_transmitter.send({"frequency": {"name": frequency["name"], "value": frequency["value"]}})
     return {"message": "Frequency set successfully"}
 
 @app.post("/re_active")
 async def set_re_active(active: dict):
+    # TODO: Implement the necessary operations to set the re_active
     print("Re active set to: ", active)
     db.replace_re_active(active["active"])
     return {"message": "Radio active status set successfully"}
@@ -142,7 +143,7 @@ async def get_buttons_settings():
 @app.post("/button")
 async def set_button(button: dict):
     print("Button set to: ", button)
-    db.replace_button_data(button["name"], button["value"])
+    data_transmitter.send({"button": {"name": button["name"], "value": button["value"]}})
     # Perform the necessary operations to set the button
     return {"message": "Button set successfully"}
 

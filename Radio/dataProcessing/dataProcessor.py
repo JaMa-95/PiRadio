@@ -52,15 +52,35 @@ class DataProcessor:
             #start = time.time()
             # TODO: wait instead of endless loop
             if self.data_transmitter.has_data():
-                sensor_msg_current = self.data_transmitter.receive()
-                sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
+                data = self.data_transmitter.receive()
+                if isinstance(data, SensorMsg):
+                    sensor_msg_current = data
+                    sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
                                                                  sensor_msg_old=self.sensor_msg_old)
-                # publish/save volume, stream(frequ), equalizer
-                self.process_analogs(sensor_msg_current.analog_data)
-                # get change in buttons. which button has which button event
-                # button click, button long click, button to 1, button to 0
-                self.process_buttons(sensor_msg_current)
-                self.sensor_msg_old = sensor_msg_current
+                    # publish/save volume, stream(frequ), equalizer
+                    self.process_analogs(sensor_msg_current.analog_data)
+                    # get change in buttons. which button has which button event
+                    # button click, button long click, button to 1, button to 0
+                    self.process_buttons(sensor_msg_current)
+                    self.sensor_msg_old = sensor_msg_current
+                elif isinstance(data, dict):
+                    if "volume" in data:
+                        self.db.replace_volume(data["volume"])
+                        self.publish_function(f"volume:{data['volume']}")
+                    elif "frequency" in data:
+                        self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"], self.active_actions)
+                    elif "button" in data:
+                        print("CHANGE BUTTON")
+                        new_action = self.button_processor.process_button_web(data["button"]["name"], data["button"]["value"])
+                        print("NEW ACTION", new_action)
+                        if new_action:
+                            self.active_actions.add_or_remove_action(new_action)
+                elif isinstance(data, Equalizer):
+                    # TODO: implement
+                    pass
+                    # self.db.replace_equalizer(data)
+                    # self.publish_function(f'equalizer:{str(data.to_list())}')
+                    
             else:
                 time.sleep(self.cycle_time)
             #end = time.time()
@@ -125,9 +145,20 @@ class ButtonProcessor:
                         actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
                         new_actions.extend(actions_to_activate)
         return new_actions
+    
+    def process_button_web(self, button_name: str, value: int) -> RadioAction | None:
+        states = [value] * 5
+        button_state = ButtonState(pin=0, state=value, states=states)
+        for index, button in enumerate(self.buttons):
+            if button.name == button_name:
+                if self._check_button_change(button_state, button.state):
+                    self.buttons[index].state = button_state
+                    actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
+                    return actions_to_activate
+        return None
 
     @staticmethod
-    def _check_button_change(state_new: ButtonState, state_old: ButtonState):
+    def _check_button_change(state_new: ButtonState, state_old: ButtonState) -> bool:
         if state_old == state_new:
             return False
         else:
@@ -220,6 +251,13 @@ class AnalogProcessor:
                     else:
                         raise NotImplemented
         self.is_first_run = False
+
+    def set_frequency_web(self, name: str, value: int, active_actions: Actions):
+        for item in self.analog_items:
+            if item.name == name:
+                if item.is_frequency:
+                    self.set_frequency(item, value, active_actions)
+                    break
 
     def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
                       active_actions: Actions) -> int:

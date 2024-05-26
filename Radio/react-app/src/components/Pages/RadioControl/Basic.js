@@ -109,7 +109,7 @@ function Volume(props) {
 function FrequencyValues(props) {
     return props.frequencyValues.map((item, index) => (
         <div>
-            <FrequencyValue webControl={props.webControl} name={Object.keys(item)[0]}/>
+            <FrequencyValue webControl={props.webControl} name={Object.keys(item)[0]} max={item[Object.keys(item)[0]].max} min={item[Object.keys(item)[0]].min}/>
         </div>
     ));
 }
@@ -157,7 +157,7 @@ function FrequencyValue(props) {
     return (
         <div>
             <label>
-                Frequency {props.name}: <input type="range" name="frequency_value" min="87.5" max="108" value={frequency} 
+                Frequency {props.name}: <input type="range" name="frequency_value" min={props.min} max={props.max} value={frequency} 
                     onChange={(e) => handleFrequencyChange(e.target.value)} disabled={!props.webControl} />
                 <p>{frequency} MHz</p>  
             </label>

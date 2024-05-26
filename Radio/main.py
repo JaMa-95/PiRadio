@@ -8,12 +8,10 @@ from Radio.util.dataTransmitter import Publisher
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from threading import Thread
-
 from Radio.audio.audioPlayer import AudioPlayer
-from app import run as app_run
+from Radio.app import run as app_run
 
-from collector.collector import Collector
+from Radio.collector.collector import Collector
 from Radio.util.util import is_raspberry
 
 IS_RASPBERRY_PI = False
@@ -39,13 +37,27 @@ if __name__ == "__main__":
     processor_thread = Process(target=data_processor.run)
     collector_thread = Process(target=collector.run)
     audio_thread = Process(target=audioPlayer.run)
+    app_thread = Process(target=app_run)
 
-    collector_thread.start()
-    processor_thread.start()
-    audio_thread.start()
+    WEB_CONTROL = True
+    try:
+        if not WEB_CONTROL:
+            collector_thread.start()
+        processor_thread.start()
+        audio_thread.start()
+        app_thread.start()
+        print("All threads are started")
+        if not WEB_CONTROL:
+            collector_thread.join()
+        processor_thread.join()
+        audio_thread.join()
+        app_thread.join()
+        print("All threads are done")
+    finally:
+        collector_thread.terminate()
+        processor_thread.terminate()
+        app_thread.terminate()
+        app_thread.terminate()
 
-    collector_thread.join()
-    processor_thread.join()
-    audio_thread.join()
-    # start the web app
-    app_run()
+        
+
