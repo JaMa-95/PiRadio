@@ -4,7 +4,6 @@ import './Basic.css';
 
 
 export default function BasicRadio(props) {
-    console.log("Web Control Value:", props.frequencyValues);
     return (
         <div className="buttons">
             <section>
@@ -17,7 +16,8 @@ export default function BasicRadio(props) {
                 <RadioFrequency webControl={props.webControl}/>
             </section>
             <section>
-                <Buttons webControl={props.webControl} buttons={props.buttons}/>
+                <Buttons webControl={props.webControl} buttons={props.buttons} handleFrequencyButtons={props.handleFrequencyButtons} 
+                handleNormalButtons={props.handleNormalButtons} />
             </section>
             <section>
                 <Equalizer webControl={props.webControl}/>
@@ -27,17 +27,24 @@ export default function BasicRadio(props) {
 };
 
 function Buttons(props) {
-    return props.buttons.map((item, index) => (
+    return (
         <div>
-            <Button webControl={props.webControl} name={Object.keys(item)[0]}/>
+            {props.buttons.map((button, index) => {
+                if (button.type === 2) {
+                    return <Button key={index} item={button} webControl={props.webControl} handle={props.handleFrequencyButtons}/>;
+                } else {
+                    return <Button key={index} item={button} webControl={props.webControl} handle={props.handleNormalButtons}/>;
+                }
+            })}
         </div>
-    ));
+    );
 };
 
 function Button(props) {
     return (
        <label>
-            {props.name}: <input type="checkbox" name="myCheckbox" disabled={!props.webControl}/>
+            {props.item.name}: <input type="checkbox" name="myCheckbox" disabled={!props.webControl} 
+                onChange={(e) => props.handle(props.item.name, e.target.checked)} checked={props.item.state}/>
       </label>
     );
 };
@@ -46,7 +53,6 @@ function Volume(props) {
     const [volume, setVolume] = useState(50); // Default volume set to 50
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:8000/stream/volume", 'echo-protocol');
-
         ws.onopen = () => {
             console.log("Connected to WebSocket volume");
         };
@@ -62,14 +68,31 @@ function Volume(props) {
         ws.onclose = function(event) {
             console.log("WebSocket is closed now.");
         };
-
         return () => {
             ws.close();
         };
     }, []);
 
     const handleVolumeChange = (event) => {
-        setVolume(event.target.value);
+        const newVolume = event.target.value;
+        setVolume(newVolume);
+
+        // Send the new volume value to the server
+        fetch('http://localhost:8000/volume', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ volume: newVolume })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update volume');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     };
 
     return (
@@ -118,12 +141,25 @@ function FrequencyValue(props) {
             ws.close();
         };
     }, []);
+
+    const handleFrequencyChange = (value) => {
+        setFrequency(value);
+        // Send the new frequency value to the server
+        fetch('http://localhost:8000/frequency', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "name": props.name, "value": value})
+        })
+        .then(response => {});
+    };
     return (
         <div>
             <label>
-                <p>{frequency} MHz</p>
-                Frequency: <input type="range" name="frequency_value" min="87.5" max="108" value={frequency} 
-                    onChange={(e) => setFrequency(e.target.value)} disabled={!props.webControl} />
+                Frequency {props.name}: <input type="range" name="frequency_value" min="87.5" max="108" value={frequency} 
+                    onChange={(e) => handleFrequencyChange(e.target.value)} disabled={!props.webControl} />
+                <p>{frequency} MHz</p>  
             </label>
         </div>
     );
@@ -171,6 +207,25 @@ function RadioFrequency(props) {
         };
     }, []);
 
+    function handleBackupActiveChange(active) {
+        // Send the backup active value to the server
+        fetch('http://localhost:8000/re_active', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "active": active })
+        })
+        .then(response => {
+            // Handle the response
+        });
+    }
+
+    const handleBackupActiveCheckboxChange = (isChecked) => {
+        setBackupActive(isChecked);
+        handleBackupActiveChange(isChecked);
+    };
+    
     return (
         <div>
             <label>
@@ -183,7 +238,7 @@ function RadioFrequency(props) {
             </label>
             <label>
                 Backup active: <input type="checkbox" name="re_active" checked={backupActive} 
-                onChange={(e) => setBackupActive(e.target.checked)} disabled={!props.webControl}/>
+                onChange={(e) => handleBackupActiveCheckboxChange(e.target.checked)} disabled={!props.webControl}/>
             </label>
             <label>
                 Name Backup: <input type="text" name="name_re" value={nameBackup} onChange={(e) => setNameBackup(e.target.value)} 
@@ -248,34 +303,64 @@ function Equalizer(props) {
         };
     }, []);
 
+    const handleEqualizerChange = () => {
+        const equalizerData = {
+            hz60: hz60,
+            hz170: hz170,
+            hz310: hz310,
+            khz1: khz1,
+            khz3: khz3,
+            khz6: khz6,
+            khz12: khz12
+        };
+
+        // Send the equalizer data to the server
+        fetch('http://localhost:8000/equalizer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(equalizerData)
+        })
+        .then(response => {
+            // Handle the response
+            // ...
+        });
+    };
+
+    useEffect(() => {
+        // Call the handleEqualizerChange function whenever any of the equalizer values change
+        handleEqualizerChange();
+    }, [hz60, hz170, hz310, khz1, khz3, khz6, khz12]);
+
     return (
         <div className="Equalizer">
             <label>
-                60 Hz: <input type="range" name="60hz" min="-20" max="20" value={hz60} onChange={(e) => setHz60(e.target.value)} 
+                60 Hz: <input type="range" name="60hz" min="-20" max="20" value={hz60} onChange={(e) => {setHz60(e.target.value); handleEqualizerChange();}} 
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                170 Hz: <input type="range" name="170hz" min="-20" max="20" value={hz170} onChange={(e) => setHz170(e.target.value)}    
+                170 Hz: <input type="range" name="170hz" min="-20" max="20" value={hz170} onChange={(e) => {setHz170(e.target.value); handleEqualizerChange();}}    
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                310 Hz: <input type="range" name="310hz" min="-20" max="20" value={hz310} onChange={(e) => setHz310(e.target.value)} 
+                310 Hz: <input type="range" name="310hz" min="-20" max="20" value={hz310} onChange={(e) => {setHz310(e.target.value); handleEqualizerChange();}} 
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                1 kHz: <input type="range" name="1khz" min="-20" max="20" value={khz1} onChange={(e) => setKhz1(e.target.value)} 
+                1 kHz: <input type="range" name="1khz" min="-20" max="20" value={khz1} onChange={(e) => {setKhz1(e.target.value); handleEqualizerChange();}} 
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                3 kHz: <input type="range" name="3khz" min="-20" max="20" value={khz3} onChange={(e) => setKhz3(e.target.value)}    
+                3 kHz: <input type="range" name="3khz" min="-20" max="20" value={khz3} onChange={(e) => {setKhz3(e.target.value); handleEqualizerChange();}}    
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                6 kHz: <input type="range" name="6khz" min="-20" max="20" value={khz6} onChange={(e) => setKhz6(e.target.value)} 
+                6 kHz: <input type="range" name="6khz" min="-20" max="20" value={khz6} onChange={(e) => {setKhz6(e.target.value); handleEqualizerChange();}} 
                     disabled={!props.webControl} orient="vertical"/>
             </label>
             <label>
-                12 kHz: <input type="range" name="12khz" min="-20" max="20" value={khz12} onChange={(e) => setKhz12(e.target.value)} 
+                12 kHz: <input type="range" name="12khz" min="-20" max="20" value={khz12} onChange={(e) => {setKhz12(e.target.value); handleEqualizerChange();}} 
                     disabled={!props.webControl} orient="vertical"/>
             </label>
         </div>

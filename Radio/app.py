@@ -44,6 +44,12 @@ async def websocket_volume(websocket: WebSocket):
         print("WebSocket disconnected")
         await websocket.close()
 
+@app.post("/volume")
+async def set_volume(volume: dict):
+    print("Volume set to: ", volume)
+    db.replace_volume(volume["volume"])
+    return {"message": "Volume set successfully"}
+
 
 @app.websocket("/stream/equalizer")
 async def websocket_equalizer(websocket: WebSocket):
@@ -63,6 +69,14 @@ async def websocket_equalizer(websocket: WebSocket):
         print("WebSocket disconnected")
         await websocket.close()
 
+@app.post("/equalizer")
+async def set_equalizer(equalizer_data: dict):
+    print("Equalizer set to: ", equalizer_data)
+    euqalizer = Equalizer()
+    euqalizer.from_dict(equalizer_data)
+    db.replace_equalizer(equalizer_data)
+    return {"message": "Equalizer set successfully"}
+
 @app.websocket("/stream/frequency_values")
 async def websocket_frequency_values(websocket: WebSocket):
     await websocket.accept()
@@ -80,6 +94,17 @@ async def websocket_frequency_values(websocket: WebSocket):
         print("WebSocket disconnected")
         await websocket.close()
 
+@app.post("/frequency")
+async def set_frequency(frequency: dict):
+    print("Frequency set to: ", frequency)
+    db.replace_frequency_value(frequency["name"], frequency["value"])
+    return {"message": "Frequency set successfully"}
+
+@app.post("/re_active")
+async def set_re_active(active: dict):
+    print("Re active set to: ", active)
+    db.replace_re_active(active["active"])
+    return {"message": "Radio active status set successfully"}
 
 @app.websocket("/stream/radio_frequency")
 async def websocket_radio_frequency(websocket: WebSocket):
@@ -88,7 +113,6 @@ async def websocket_radio_frequency(websocket: WebSocket):
         frequency_old = RadioFrequency()
         while True:
             frequency = db.get_radio_frequency()
-            frequency.maximum = randint(5, 55)
             if frequency_old != frequency:
                 frequency_old = RadioFrequency(name=frequency.name, minimum=frequency.minimum,
                                                maximum=frequency.maximum, radio_name=frequency.radio_name,
@@ -102,7 +126,7 @@ async def websocket_radio_frequency(websocket: WebSocket):
         await websocket.close()
 
 
-@app.get("/button_names/")
+@app.get("/buttons/")
 async def get_buttons_settings():
     path_settings = get_project_root() / 'data/settings.json'
     with open(path_settings.resolve()) as f:
@@ -110,8 +134,17 @@ async def get_buttons_settings():
     buttons = []
     for name, button_settings in settings["buttons"].items():
         if button_settings["active"]:
-            buttons.append({name: False})
+            buttons.append({"name": name, "reversed": button_settings["reversed"],
+                             "type": button_settings["action"]["type"], "state": False})
+    print("Buttons: ", buttons)
     return buttons
+
+@app.post("/button")
+async def set_button(button: dict):
+    print("Button set to: ", button)
+    db.replace_button_data(button["name"], button["value"])
+    # Perform the necessary operations to set the button
+    return {"message": "Button set successfully"}
 
 @app.get("/frequency_names")
 async def get_frequency_names():
