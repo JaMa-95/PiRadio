@@ -109,6 +109,10 @@ class Database(Singleton):
             except KeyError:
                 print(f"KeyError for {name} in db buttons")
                 return None
+            
+    def get_buttons_data(self):
+        with self.lock:
+            return self.button_data
 
     def get_volume(self):
         with self.lock:

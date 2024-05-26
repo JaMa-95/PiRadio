@@ -11,7 +11,7 @@ export const RadioControl = (props) => {
   const [buttons, setButtons] = useState([]);
   const [frequencyValues, setFrequencyValues] = useState([]);
 
-  const fetchButtons= () => {
+  const fetchButtons = () => {
     return fetch('http://127.0.0.1:8000/buttons/', {
       method: 'GET',
       headers: {
@@ -24,6 +24,39 @@ export const RadioControl = (props) => {
       setButtons(data);
     })
   };
+
+  const setupWebSocket = () => {
+    const socket = new WebSocket('ws://localhost:8000/stream/buttons');
+    
+    socket.onopen = () => {
+      console.log('WebSocket connection established.');
+    };
+
+    socket.onmessage = (event) => {
+      if (Object.keys(event.data).length <= 3) return; 
+      const data = JSON.parse(event.data);
+      console.log(Object.keys(event.data).length)
+      console.log("DATA:", data);
+      data.forEach((item) => {
+        let newButtons = [...buttons];
+        newButtons.forEach((button, index) => {
+          if (button.name === item.name) {
+            newButtons[index].state = item.state;
+          };
+        });
+        setButtons(newButtons);
+      });
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  };
+
   function handleNormalButtonChange(name, value) {
     let newButtons = [...buttons];
     newButtons.forEach((item, index) => {
@@ -86,6 +119,7 @@ export const RadioControl = (props) => {
   };
 
   useEffect(() => {
+    setupWebSocket();
     fetchFrequencyValues();
     fetchButtons();
   }, []);

@@ -146,6 +146,19 @@ async def set_button(button: dict):
     # Perform the necessary operations to set the button
     return {"message": "Button set successfully"}
 
+@app.websocket("/stream/buttons")
+async def websocket_buttons(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            buttons = db.get_buttons_data()
+            print("Buttons: ", buttons)
+            await websocket.send_text(json.dumps(buttons))
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception:
+        print("WebSocket disconnected")
+        await websocket.close()
+
 @app.get("/frequency_names")
 async def get_frequency_names():
     path_settings = get_project_root() / 'data/settings.json'
