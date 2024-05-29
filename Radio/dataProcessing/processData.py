@@ -9,7 +9,7 @@ class ButtonProcessData:
     def __init__(self, name: str, pin: int):
         self.name = name
         self.pin = pin
-        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=deque([False, False]))
+        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=deque([False]*ButtonState.max_values))
         self.short_threshold: int = 2
         self.long_threshold: int = 10
         self.radio_actions: list = []

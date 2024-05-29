@@ -206,13 +206,19 @@ class Actions(Singleton):
             if action == action_new:
                 self._actions.pop(index)
 
-    def add_or_remove_action(self, action_new: RadioAction):
-        for index, action in enumerate(self._actions):
-            if action == action_new:
-                self._actions[index].execute_exit()
-                self._actions.pop(index)
-        action_new.try_execute()
-        self._actions.append(action_new)
+    def add_or_remove_action(self, actions_new: List[RadioAction]):
+        for index_new, action_new in enumerate(actions_new):
+            if len(self._actions) > 0:
+                for index, action in enumerate(self._actions):
+                    if action == action_new:
+                        self._actions[index].execute_exit()
+                        self._actions.pop(index)
+                    else:
+                        action_new.try_execute()
+                        self._actions.append(action_new)
+            else:
+                action_new.try_execute()
+                self._actions.append(action_new)
 
     def add_or_remove_actions(self, actions_new: List[RadioAction]):
         for action in actions_new:

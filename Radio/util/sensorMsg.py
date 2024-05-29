@@ -1,5 +1,6 @@
 import threading
 from typing import List
+from collections import deque
 
 from Radio.util.singleton import Singleton
 
@@ -38,14 +39,16 @@ class SensorDataOld(SensorData):
 
 
 class ButtonState:
+    max_values = 5
     def __init__(self, pin: int, state: bool, states=None):
         if states is None:
-            states = [0, 0]
+            states = deque([False] * self.max_values)
         self.pin = pin
         self.state = state
         self.states = states
 
     def __eq__(self, other):
+        print(f"self: {self.state} {self.states} other: {other.state} {other.states}")
         if self.state == other.state and self.states == other.states:
             return True
         return False

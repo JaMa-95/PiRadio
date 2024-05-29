@@ -3,6 +3,7 @@ import time
 from statistics import mean
 from typing import List
 
+from collections import deque
 from Radio.dataProcessing.RadioAction import RadioAction, ButtonClickStates, Actions, RadioActionFactory
 from Radio.dataProcessing.equalizerData import Equalizer, EqualizerReductionData
 from Radio.dataProcessing.processData import ButtonProcessData
@@ -134,7 +135,7 @@ class ButtonProcessor:
                 self.buttons.append(button)
                 self.db.replace_button_data(name, button)
 
-    def process(self, sensor_msg_current: SensorMsg):
+    def process(self, sensor_msg_current: SensorMsg) -> List[RadioAction] | None:
         # TODO: change from list to dict
         new_actions = []
         for state_new in sensor_msg_current.buttons_data.get_data():
@@ -146,19 +147,21 @@ class ButtonProcessor:
                         new_actions.extend(actions_to_activate)
         return new_actions
     
-    def process_button_web(self, button_name: str, value: int) -> RadioAction | None:
-        states = [value] * 5
-        button_state = ButtonState(pin=0, state=value, states=states)
+    def process_button_web(self, button_name: str, value: int) -> List[RadioAction] | None:
+        states = deque([value, not value, not value, not value, not value])
+        button_state_new = ButtonState(pin=0, state=value, states=states)
         for index, button in enumerate(self.buttons):
             if button.name == button_name:
-                if self._check_button_change(button_state, button.state):
-                    self.buttons[index].state = button_state
+                if self._check_button_change(button_state_new, button.state):
+                    self.buttons[index].state.state = button_state_new.state
+                    self.buttons[index].state.states = button_state_new.states
                     actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
                     return actions_to_activate
         return None
 
     @staticmethod
     def _check_button_change(state_new: ButtonState, state_old: ButtonState) -> bool:
+        print(f"STATE NEW: {state_new} and STATE OLD: {state_old}")
         if state_old == state_new:
             return False
         else:
