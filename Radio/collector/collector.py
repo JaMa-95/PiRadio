@@ -17,6 +17,7 @@ class Collector:
         self.buttons: RadioButtonsRaspi = RadioButtonsRaspi(mock=mock)
         self.ads = AdsObject(mock=mock)
         self.db = Database()
+        print("Collector started")
 
     def run(self):
         # times = []

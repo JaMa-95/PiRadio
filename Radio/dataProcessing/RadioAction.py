@@ -125,7 +125,8 @@ class PlayMusic(RadioAction):
         if not button:
             return None
         radio_frequency: RadioFrequency = self.get_radio_frequency()
-        if radio_frequency == self.db.get_radio_frequency():
+        current_radio_frequency = self.db.get_radio_frequency()
+        if radio_frequency == self.db.get_radio_frequency() or not radio_frequency:
             return None
         self.db.replace_radio_frequency(radio_frequency)
         if radio_frequency.re_active:
@@ -146,7 +147,7 @@ class PlayMusic(RadioAction):
                     over_min_max_frequency = radio_frequency
                 elif index == len(self.frequency_list.frequencies) and sensor_value > radio_frequency.maximum:
                     over_min_max_frequency = radio_frequency
-            except TypeError:
+            except TypeError as error:
                 return None
         return over_min_max_frequency
 

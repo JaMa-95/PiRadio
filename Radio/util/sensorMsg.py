@@ -48,7 +48,6 @@ class ButtonState:
         self.states = states
 
     def __eq__(self, other):
-        print(f"self: {self.state} {self.states} other: {other.state} {other.states}")
         if self.state == other.state and self.states == other.states:
             return True
         return False

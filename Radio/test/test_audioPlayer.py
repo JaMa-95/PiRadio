@@ -27,11 +27,15 @@ class TestAudioPlayer(unittest.TestCase):
         publisher = Publisher()
         player = AudioPlayer(publisher)
 
+        processor = DataProcessor(publisher)
+        b_process = Process(target=processor.run)
         p_send = Process(target=player.run)
         p_send.start()
+        b_process.start()
         p_send.join()
-
-        publisher.publish("https://stream.radiojar.com/whwyhz188a0uv")
+        b_process.join()
+        publisher.publish("volume:50")
+        publisher.publish("stream:https://relax.stream.publicradio.org/relax.mp3?srcid")
         # CONFIRM MUSIC IS PLAYING
         time.sleep(10)
 

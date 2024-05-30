@@ -20,7 +20,7 @@ class AudioPlayer(Subscriber):
         self.player: vlc.MediaPlayer = self.instance.media_player_new()
 
         self.database: Database = Database()
-
+        print("Audio Player started")
         # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
 
     def update(self):
@@ -52,7 +52,9 @@ class AudioPlayer(Subscriber):
 
     def run(self):
         # TODO: add noise with encoder value
-        self.player.play()
+        # self.player.play()
+        # check playing if yes play
+        pass
 
     def set_volume(self, volume):
         if self.player:

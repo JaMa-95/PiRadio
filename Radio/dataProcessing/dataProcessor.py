@@ -37,6 +37,7 @@ class DataProcessor:
         self.load_settings()
 
         self.db: Database = Database()
+        print("Data Processor started")
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
@@ -67,13 +68,11 @@ class DataProcessor:
                 elif isinstance(data, dict):
                     if "volume" in data:
                         self.db.replace_volume(data["volume"])
-                        self.publish_function(f"volume:{data['volume']}")
+                        self.publisher.publish(f"volume:{data['volume']}")
                     elif "frequency" in data:
                         self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"], self.active_actions)
                     elif "button" in data:
-                        print("CHANGE BUTTON")
                         new_action = self.button_processor.process_button_web(data["button"]["name"], data["button"]["value"])
-                        print("NEW ACTION", new_action)
                         if new_action:
                             self.active_actions.add_or_remove_action(new_action)
                 elif isinstance(data, Equalizer):
@@ -161,7 +160,6 @@ class ButtonProcessor:
 
     @staticmethod
     def _check_button_change(state_new: ButtonState, state_old: ButtonState) -> bool:
-        print(f"STATE NEW: {state_new} and STATE OLD: {state_old}")
         if state_old == state_new:
             return False
         else:

@@ -47,8 +47,7 @@ async def websocket_volume(websocket: WebSocket):
 
 @app.post("/volume")
 async def set_volume(volume: dict):
-    print("Volume set to: ", volume)
-    data_transmitter.send({"volume": volume["volume"]})
+    data_transmitter.send({"volume": int(volume["volume"])})
     return {"message": "Volume set successfully"}
 
 @app.websocket("/stream/equalizer")
@@ -66,15 +65,13 @@ async def websocket_equalizer(websocket: WebSocket):
                 await websocket.send_text(equalizer_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
-        print("WebSocket disconnected")
         await websocket.close()
 
 @app.post("/equalizer")
 async def set_equalizer(equalizer_data: dict):
-    print("Equalizer set to: ", equalizer_data)
-    euqalizer = Equalizer()
-    euqalizer.from_dict(equalizer_data)
-    data_transmitter.send(euqalizer)
+    equalizer = Equalizer()
+    equalizer.from_dict(equalizer_data)
+    data_transmitter.send(equalizer)
     return {"message": "Equalizer set successfully"}
 
 @app.websocket("/stream/frequency_values")
@@ -87,23 +84,19 @@ async def websocket_frequency_values(websocket: WebSocket):
             if frequency_old != frequency:
                 frequency_old = frequency.copy()  # Create a copy of frequency
                 frequency_data = json.dumps(frequency)
-                print(frequency_data)
                 await websocket.send_text(frequency_data)
             await asyncio.sleep(0.01)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
-        print("WebSocket disconnected")
         await websocket.close()
 
 @app.post("/frequency")
 async def set_frequency(frequency: dict):
-    print("Frequency set to: ", frequency)
-    data_transmitter.send({"frequency": {"name": frequency["name"], "value": frequency["value"]}})
+    data_transmitter.send({"frequency": {"name": frequency["name"], "value": int(frequency["value"])}})
     return {"message": "Frequency set successfully"}
 
 @app.post("/re_active")
 async def set_re_active(active: dict):
     # TODO: Implement the necessary operations to set the re_active
-    print("Re active set to: ", active)
     db.replace_re_active(active["active"])
     return {"message": "Radio active status set successfully"}
 
@@ -123,7 +116,6 @@ async def websocket_radio_frequency(websocket: WebSocket):
                 await websocket.send_text(frequency_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception as e:
-        print("WebSocket radio frequ disconnected")
         await websocket.close()
 
 
@@ -137,12 +129,10 @@ async def get_buttons_settings():
         if button_settings["active"]:
             buttons.append({"name": name, "reversed": button_settings["reversed"],
                              "type": button_settings["action"]["type"], "state": False})
-    print("Buttons: ", buttons)
     return buttons
 
 @app.post("/button")
 async def set_button(button: dict):
-    print("Button set to: ", button)
     data_transmitter.send({"button": {"name": button["name"], "value": button["value"]}})
     # Perform the necessary operations to set the button
     return {"message": "Button set successfully"}
@@ -153,11 +143,9 @@ async def websocket_buttons(websocket: WebSocket):
     try:
         while True:
             buttons = db.get_buttons_data()
-            print("Buttons: ", buttons)
             await websocket.send_text(json.dumps(buttons))
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
-        print("WebSocket disconnected")
         await websocket.close()
 
 @app.get("/frequency_names")
@@ -169,7 +157,6 @@ async def get_frequency_names():
     for name, analog_item in settings["analog"]["sensors"].items():
         if analog_item["is_frequency"] and analog_item["on"]:
             frequency_names.append({name: {"min": analog_item["min"], "max": analog_item["max"]}})
-    print(frequency_names)
     return frequency_names
 
 
