@@ -21,7 +21,6 @@ if is_raspberry():
     IS_RASPBERRY_PI = True
     import RPi.GPIO as GPIO
 
-
 if __name__ == "__main__":
     if IS_RASPBERRY_PI:
         GPIO.cleanup()
@@ -37,32 +36,26 @@ if __name__ == "__main__":
     audioPlayer = AudioPlayer(publisher)
 
     processor_thread = Thread(target=data_processor.run)
-    collector_thread = Thread(target=collector.run)
+    collector_thread = Process(target=collector.run)
     audio_thread = Process(target=audioPlayer.run)
-    app_thread = Thread(target=app_run)
+    app_thread = Process(target=app_run)
 
-    WEB_CONTROL = True
+    SOLE_WEB_CONTROL = True
     try:
-        if not WEB_CONTROL:
+        if not SOLE_WEB_CONTROL:
             collector_thread.start()
         processor_thread.start()
-        # audio_thread.start()
+        audio_thread.start()
         app_thread.start()
         print("All threads are started")
-        if not WEB_CONTROL:
+        if not SOLE_WEB_CONTROL:
             collector_thread.join()
         processor_thread.join()
-        #audio_thread.join()
+        audio_thread.join()
         app_thread.join()
-        while True:
-            audio_thread.run()
-            time.sleep(0.01)
         print("All threads are done")
     finally:
         collector_thread.terminate()
         processor_thread.terminate()
         app_thread.terminate()
         app_thread.terminate()
-
-        
-
