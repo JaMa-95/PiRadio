@@ -1,17 +1,16 @@
 import json
 import time
-from statistics import mean
+from collections import deque
 from typing import List
 
-from collections import deque
-from Radio.dataProcessing.RadioAction import RadioAction, ButtonClickStates, Actions, RadioActionFactory
-from Radio.dataProcessing.equalizerData import Equalizer, EqualizerReductionData
+from Radio.dataProcessing.RadioAction import RadioAction, Actions, RadioActionFactory
+from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.processData import ButtonProcessData
+from Radio.dataProcessing.radioFrequency import Frequencies
 from Radio.db.db import Database
-from Radio.util.sensorMsg import SensorMsg, ButtonsData, AnalogData, ButtonState, SensorData, SensorDataOld
 from Radio.util.dataTransmitter import DataTransmitter, Publisher
+from Radio.util.sensorMsg import SensorMsg, AnalogData, ButtonState
 from Radio.util.util import get_project_root
-from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 
 
 class DataProcessor:
@@ -75,11 +74,6 @@ class DataProcessor:
                         new_action = self.button_processor.process_button_web(data["button"]["name"], data["button"]["value"])
                         if new_action:
                             self.active_actions.add_or_remove_action(new_action)
-                elif isinstance(data, Equalizer):
-                    # TODO: implement
-                    pass
-                    # self.db.replace_equalizer(data)
-                    # self.publish_function(f'equalizer:{str(data.to_list())}')
                     
             else:
                 time.sleep(self.cycle_time)

@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from starlette.responses import StreamingResponse
 
-from Radio.util.dataTransmitter import DataTransmitter
+from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
@@ -23,6 +23,7 @@ from Radio.util.util import get_project_root
 app = FastAPI()
 db = Database()
 data_transmitter: DataTransmitter = DataTransmitter()
+publisher: Publisher = Publisher()
 
 @app.get("/")
 async def root():
@@ -71,7 +72,7 @@ async def websocket_equalizer(websocket: WebSocket):
 async def set_equalizer(equalizer_data: dict):
     equalizer = Equalizer()
     equalizer.from_dict(equalizer_data)
-    data_transmitter.send(equalizer)
+    publisher.publish(f'equalizer:{str(equalizer.to_list())}')
     return {"message": "Equalizer set successfully"}
 
 @app.websocket("/stream/frequency_values")

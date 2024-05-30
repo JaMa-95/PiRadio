@@ -1,10 +1,10 @@
 import time
+
 import vlc
 
-from Radio.dataProcessing.dataProcessor import EqualizerReductionData
 from Radio.dataProcessing.radioFrequency import RadioFrequency
-from Radio.util.dataTransmitter import Subscriber
 from Radio.db.db import Database
+from Radio.util.dataTransmitter import Subscriber
 
 
 class AudioPlayer(Subscriber):
@@ -18,6 +18,7 @@ class AudioPlayer(Subscriber):
         self.equalizer: vlc.AudioEqualizer = vlc.AudioEqualizer()
         self.instance: vlc.Instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player: vlc.MediaPlayer = self.instance.media_player_new()
+        self.player.set_equalizer(self.equalizer)
 
         self.database: Database = Database()
         print("Audio Player started")
@@ -65,6 +66,9 @@ class AudioPlayer(Subscriber):
         for index, value in enumerate(equalizer_data):
             self.equalizer.set_amp_at_index(value, index)
         self.player.set_equalizer(self.equalizer)
+        for index, a in enumerate(equalizer_data):
+            amp = self.equalizer.get_amp_at_index(index)
+            print(amp)
 
     def add_static_noise(self, level):
         self.noise_player.audio_set_volume(level)

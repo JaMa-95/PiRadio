@@ -85,18 +85,15 @@ class Equalizer:
             "khz6": self.value_6_khz,
             "khz12": self.value_12_hkz
         }
-    
-    @classmethod
-    def from_dict(cls, data: dict) -> 'Equalizer':
-        equalizer = cls()
-        equalizer.value_60_hz = data.get("hz60", 0)
-        equalizer.value_170_hz = data.get("hz170", 0)
-        equalizer.value_310_hz = data.get("hz310", 0)
-        equalizer.value_1_khz = data.get("khz1", 0)
-        equalizer.value_3_khz = data.get("khz3", 0)
-        equalizer.value_6_khz = data.get("khz6", 0)
-        equalizer.value_12_hkz = data.get("khz12", 0)
-        return equalizer
+
+    def from_dict(self, data: dict):
+        self.value_60_hz = int(data["hz60"])
+        self.value_170_hz = int(data["hz170"])
+        self.value_310_hz = int(data["hz310"])
+        self.value_1_khz = int(data["khz1"])
+        self.value_3_khz = int(data["khz3"])
+        self.value_6_khz = int(data["khz6"])
+        self.value_12_hkz = int(data["khz12"])
 
     def to_list(self) -> list:
         return [self.value_60_hz, self.value_170_hz, self.value_310_hz, self.value_1_khz,
