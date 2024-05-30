@@ -1,0 +1,222 @@
+[
+    [
+        "Rock",
+        5000,
+        5345,
+        "Rock Antenne",
+        "http://stream.rockantenne.de/rockantenne/stream/mp3?aw_0_1st.playerid=com",
+        "",
+        "",
+        0
+    ],
+    [
+        "Indie",
+        5346,
+        5691,
+        "Delta Radio Indie",
+        "http://streams.deltaradio.de/delta-indie/mp3-192",
+        "",
+        "",
+        0
+    ],
+    [
+        "Oldies",
+        5692,
+        6037,
+        "Stereo Oldies Radio",
+        "http://mediajukebox.dyndns.org:88/broadwave.mp3",
+        "",
+        "",
+        0
+    ],
+    [
+        "Jazz",
+        6038,
+        6383,
+        "Jazz Cafe",
+        "http://radio.wanderingsheep.tv:8059/jazzcafe320",
+        "",
+        "",
+        0
+    ],
+    [
+        "Reggaeton",
+        6384,
+        6729,
+        "NRJ Reggaeton",
+        "https://scdn.nrjaudio.fm/adwz1/fr/31023/mp3_128.mp3?origineradio",
+        "",
+        "",
+        0
+    ],
+    [
+        "Cumbia",
+        6730,
+        7075,
+        "Estrella 100 cumbia sonidera",
+        "https://usa5.fastcast4u.com/proxy/onztbbyh?mp=/1",
+        "",
+        "",
+        0
+    ],
+    [
+        "HipHop",
+        7076,
+        7421,
+        "HipHop Station",
+        "http://streaming.radio.co/s97881c7e0/listen",
+        "bigFM US RAP & HIP-HOP",
+        "https://stream.bigfm.de/ushiphop/mp3-128",
+        true
+    ],
+    [
+        "HipHop Oldies",
+        7422,
+        7767,
+        "Old School that Jams",
+        "http://computronpc.net:8000/949",
+        "80s80s Hip Hop",
+        "https://streams.80s80s.de/hiphop/mp3-192/",
+        true
+    ],
+    [
+        "90s",
+        7768,
+        8113,
+        "90s Hits",
+        "http://stream.zeno.fm/etd6kax1xv8uv",
+        "",
+        "",
+        0
+    ],
+    [
+        "90er",
+        8114,
+        8459,
+        "Eurodance 90 - Dance Anos 90",
+        "http://stream.zeno.fm/pdgmg8eu8k0uv",
+        "",
+        "",
+        true
+    ],
+    [
+        "eurodance",
+        8460,
+        8805,
+        "Eurodance 90",
+        "http://eurodance90stream.ddns.net/",
+        "",
+        "",
+        0
+    ],
+    [
+        "Techno",
+        8806,
+        9151,
+        "Techno FM",
+        "http://stream.techno.fm/radio320.mp3",
+        "",
+        "",
+        0
+    ],
+    [
+        "Techno",
+        9152,
+        9497,
+        "TECHNO STYLE Radio",
+        "http://212.108.220.119:1039/stream.mp3",
+        "Deeredradio",
+        "https://webcast.deeredradio.com:8410/stream",
+        true
+    ],
+    [
+        "Techno",
+        9498,
+        9843,
+        "TECHNO STYLE Radio",
+        "http://212.108.220.119:1039/stream.mp3",
+        "Techno Lovers",
+        "https://stream.technolovers.fm/techno?ref",
+        true
+    ],
+    [
+        "Electro Swing",
+        9844,
+        10189,
+        "Electro Swing Revolution Radio",
+        "http://stream-23.zeno.fm/gdtbdqwzrf9uv?zs=ZpZ8h41ISO6eVCeo2JJ3uQ",
+        "",
+        "",
+        0
+    ],
+    [
+        "Trance",
+        10190,
+        10535,
+        "Digital Impulse - Trance Resident Paradise",
+        "http://orion.shoutca.st:8922/stream",
+        "Trance Athena",
+        "http://cast.streams.ovh:8008/stream",
+        true
+    ],
+    [
+        "House",
+        10536,
+        10881,
+        "0nlineradio HOUSE",
+        "https://stream.0nlineradio.com/house?ref",
+        "",
+        "",
+        0
+    ],
+    [
+        "Hardstyle",
+        10882,
+        11227,
+        "NRJ Hardstyle",
+        "https://scdn.nrjaudio.fm/adwz1/fr/56708/mp3_128.mp3?origineradio",
+        "",
+        "",
+        0
+    ],
+    [
+        "Drum and Base",
+        11228,
+        11573,
+        "Vanilla Drum and Bass",
+        "http://vanilladnb.co.ua:8000/stream",
+        "",
+        "",
+        0
+    ],
+    [
+        "Schlager",
+        11574,
+        11919,
+        "0nlineradio Schlager Evergreens",
+        "https://stream.0nlineradio.com/schlager-evergreens?ref",
+        "",
+        "",
+        0
+    ],
+    [
+        "Blasmusik",
+        11920,
+        12265,
+        "Alles Blasmusik",
+        "http://stream.bayerwaldradio.com/allesblasmusik",
+        "",
+        "",
+        0
+    ],
+    [
+        "Klassik",
+        12266,
+        12611,
+        "0nlineradio Klassik",
+        "https://stream.0nlineradio.com/klassik?ref",
+        "",
+        "",
+        0
+    ]
+]

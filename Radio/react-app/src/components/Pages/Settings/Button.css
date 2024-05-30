@@ -1,0 +1,40 @@
+input:not([type='checkbox']), label {
+    display:block;
+}
+
+[type="checkbox"]
+{
+    vertical-align:middle;
+    margin-right: 10px;
+}
+
+#pin  {
+    width: 30px;
+    float: right;
+    margin-right: 20%;
+}
+
+#reversed {
+    float: right;
+    margin-right: 20%;
+}
+
+h3, .reversedLabel, .pinLabel {
+    display: inline-block;
+}
+
+.subtractLogo {
+    width: 20px;
+    height: 20px;
+}
+
+.Delete {
+    border-radius: 5px;
+    background-color: red; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}

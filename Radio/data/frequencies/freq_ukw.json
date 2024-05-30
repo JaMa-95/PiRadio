@@ -1,0 +1,22 @@
+[
+    [
+        "Relaxed",
+        5000,
+        5447,
+        "1000Slots to relax",
+        "http://hyades.shoutca.st:8714/stream",
+        "",
+        "",
+        0
+    ],
+    [
+        "Classic relax",
+        5448,
+        5895,
+        "YourClassical Relax",
+        "https://relax.stream.publicradio.org/relax.mp3?srcid",
+        "",
+        "",
+        0
+    ]
+]

@@ -1,0 +1,34 @@
+.mainBasic {
+    border: 1px solid red
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between; /* This will spread the sections across the full width */
+    align-items: center;
+    margin-left: 10vw;
+    margin-right: 20vw;
+    width: 60%; /* Adjust width to fill the space after margins */
+    gap: 5vw;
+}
+
+.Equalizer {
+    display: flex; /* Use flexbox to layout children */
+    flex-direction: row; /* Align children horizontally */
+    align-items: center; /* Center-align items vertically */
+    justify-content: space-around; /* Distribute space evenly around items */
+}
+
+.Equalizer label {
+    margin: 0 10px; /* Adds space between each label */
+}
+
+.Volume {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Volume input {
+    width: 100%;
+}

@@ -1,0 +1,124 @@
+.buttonsFrequencies {
+    display:flex; flex-direction:row;
+}
+
+.container {
+    display: inline-block;
+    margin: 5px 5px 5px 5px;
+}
+
+.loader {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.frequency {
+    border: solid 1px;
+    width: fit-content;
+    margin: 10px;
+}
+
+.attention {
+  animation: attentionEffect 0.5s infinite alternate;
+}
+
+@keyframes attentionEffect {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+img {
+    width: 25px;
+    height: 25px;
+}
+
+img.addLogo {
+    margin: 5px;
+}
+
+img.addLogo:hover {
+    width: 30px;
+    height: 30px;
+    filter: invert(71%) sepia(12%) saturate(1427%) hue-rotate(42deg) brightness(90%) contrast(92%);
+}
+
+img.subtractLogo:hover {
+    width: 30px;
+    filter: invert(12%) sepia(60%) saturate(6864%) hue-rotate(357deg) brightness(122%) contrast(120%);
+}
+
+.buttonFrequencyInactive {
+    font-size: 20px;
+    margin: 2px;
+}
+
+.buttonFrequencyActive {
+    font-size: 20px;
+    margin: 2px;
+    color: blue;
+}
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: -13px;
+  left: 10px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-left: -90px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+  transform: rotate(90deg);;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+.popup .hide {
+    visibility: hidden;
+    -webkit-animation: fadeIn 2s;
+    animation: fadeIn 2s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}   

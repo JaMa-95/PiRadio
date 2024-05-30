@@ -6,7 +6,7 @@ from paho.mqtt import client as mqtt_client
 
 class MqttBroker:
     def __init__(self):
-        self.broker = "192.168.0.47"
+        self.broker = "192.168.0.49"
         self.port = 1883
         self.topic_start = "piradio/start"
         self.topic_stream = "piradio/stream"
@@ -17,7 +17,8 @@ class MqttBroker:
         self.password = 'piradio'
         self.client = None
 
-    def on_connect(self, client, userdata, flags, rc):
+    @staticmethod
+    def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
@@ -38,13 +39,12 @@ class MqttBroker:
             print(f"Failed to send message to topic {self.topic_start}")
 
     def publish_volume(self, volume):
-        print("publish volume")
         result = self.client.publish(self.topic_volume, volume)
         status = result[0]
         if status != 0:
             print(f"Failed to send message to topic {self.topic_volume}")
 
-    def publish_stream(self, stream: None):
+    def publish_stream(self, stream: str = None):
         print("publish stream")
         result = self.client.publish(self.topic_stream, stream)
         status = result[0]

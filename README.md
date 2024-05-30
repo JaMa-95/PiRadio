@@ -1,7 +1,5 @@
 # Radio
 Using python and vlc player to stream music from online radios. Using the IO-Pins and potentiometers to change switch between radio streams.
-Additionally add led strip to highlight the current used settings.
-
 Use the webapp to change to settings or control the radio.
 
 # Known Issues
@@ -10,7 +8,6 @@ Use the webapp to change to settings or control the radio.
 
   
 # helpful links
-
 https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/raspberry-pi-usage
 https://raspberrypi.stackexchange.com/questions/639/how-to-get-pulseaudio-running
 https://pimylifeup.com/raspberry-pi-vlc/
@@ -29,6 +26,15 @@ https://raspberrypi.stackexchange.com/questions/108694/how-to-start-a-python-scr
 
 ### service is no working because of user rights which are needed to interact with audio
 sudo nano /lib/systemd/system/radio.service
+
+https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
+
+# TODO
+logarithmic poti
+
+# react
+
+npm install react-bootstrap bootstrap
 
 # Power up
 https://embeddedcomputing.com/technology/open-source/development-kits/raspberry-pi-power-up-and-shutdown-with-a-physical-button
@@ -93,4 +99,3 @@ for pid in $(pidof -x radioStart.sh); do
 done
 echo "start script"
 sudo python /home/pi/PiRadio/Radio/main.py &>  cat /home/pi/log.log
-
