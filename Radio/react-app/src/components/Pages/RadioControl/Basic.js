@@ -125,8 +125,7 @@ function FrequencyValue(props) {
 
         ws.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            console.log("Frequency values:", data);
-            setFrequency(data.first);
+            setFrequency(data[props.name]);
         };
 
         ws.onerror = function(event) {
@@ -166,6 +165,8 @@ function FrequencyValue(props) {
 };
 
 function RadioFrequency(props) {
+    const [currentRadioStation, setCurrentRadioStation] = useState('');
+    const [currentSong, setCurrentSong] = useState('');
     const [radioName, setRadioName] = useState('');
     const [url, setUrl] = useState('');
     const [backupActive, setBackupActive] = useState(false);
@@ -176,13 +177,17 @@ function RadioFrequency(props) {
     const [sweetSpot, setSweetSpot] = useState(0);
 
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8000/stream/radio_frequency", 'echo-protocol');
+        const ws_radio_station = new WebSocket("ws://localhost:8000/stream/current_radio", 'echo-protocol');
+        const ws_radio_frequency = new WebSocket("ws://localhost:8000/stream/radio_frequency", 'echo-protocol');
 
-        ws.onopen = () => {
-            console.log("Connected to WebSocket volume");
+        ws_radio_frequency.onopen = () => {
+            console.log("Connected to WebSocket radio frequency");
+        };
+        ws_radio_station.onopen = () => {
+            console.log("Connected to WebSocket radio station");
         };
 
-        ws.onmessage = function(event) {
+        ws_radio_frequency.onmessage = function(event) {
             const data = JSON.parse(event.data);
             setRadioName(data.radio_name);
             setUrl(data.radio_url);
@@ -192,18 +197,32 @@ function RadioFrequency(props) {
             setMinimum(data.minimum);
             setMaximum(data.maximum);
             setSweetSpot(data.sweet_spot);
+            console.log("Radio frequency data:", data);
         };
 
-        ws.onerror = function(event) {
-            console.error("WebSocket error:", event);
+        ws_radio_station.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log("Radio station data:", data);
+            setCurrentRadioStation(data.radio_station);
+            setCurrentSong(data.song);
         };
 
-        ws.onclose = function(event) {
-            console.log("WebSocket is closed now.");
+        ws_radio_frequency.onerror = function(event) {
+            console.error("WebSocket radio frequ error:", event);
+        };
+        ws_radio_station.onerror = function(event) {
+            console.error("WebSocket radio station error:", event);
+        };
+
+        ws_radio_frequency.onclose = function(event) {
+            console.log("WebSocket is radio frequency closed.");
+        };
+        ws_radio_station.onclose = function(event) {
+            console.log("WebSocket is radio station closed.");
         };
 
         return () => {
-            ws.close();
+            ws_radio_frequency.close();
         };
     }, []);
 
@@ -228,6 +247,13 @@ function RadioFrequency(props) {
     
     return (
         <div>
+            <label>
+                Radio station: <input type="text" name="current_radio_station" value={currentRadioStation} 
+                onChange={(e) => setCurrentRadioStation(e.target.value)} disabled/>
+            </label>
+            <label>
+                Song: <input type="text" name="current_song" value={currentSong} onChange={(e) => setCurrentSong(e.target.value)} disabled/>
+            </label>
             <label>
                 Name: <input type="text" name="radio_name" value={radioName} onChange={(e) => setRadioName(e.target.value)} 
                 disabled/>

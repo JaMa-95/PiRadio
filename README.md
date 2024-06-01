@@ -11,6 +11,7 @@ Use the webapp to change to settings or control the radio from any device.
 - assembly components according to PCB layout
 
 # Installation
+## packages
 - sudo apt update
 - sudo apt upgrade
 - sudo apt install python3-pip
@@ -22,6 +23,22 @@ Use the webapp to change to settings or control the radio from any device.
 - sudo adduser root pulse-access
 
 - cp Radio/radio.sh  /etc/profile.d/radioStart.sh
+
+## mpd
+edit file /etc/mpd.conf
+```commandline
+    # An example of an ALSA output:
+    #       
+    audio_output {
+            type            "alsa"
+            name            "My ALSA Device"
+    #       device          "hw:0,0"        # optional
+            mixer_type      "software"      # optional
+    #       mixer_device    "default"       # optional
+    #       mixer_control   "PCM"           # optional
+    #       mixer_index     "0"             # optional
+    }
+```
 
 # autostart
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login

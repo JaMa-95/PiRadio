@@ -30,15 +30,15 @@ if __name__ == "__main__":
         GPIO.output(5, True)
 
     publisher: Publisher = Publisher()
-    # shutdownPin = ShutdownGpio()
+    
     collector = Collector(mock=True)
     data_processor = DataProcessor(publisher)
     audioPlayer = AudioPlayer(publisher)
 
     processor_thread = Thread(target=data_processor.run)
-    collector_thread = Process(target=collector.run)
+    collector_thread = Thread(target=collector.run)
     audio_thread = Process(target=audioPlayer.run)
-    app_thread = Process(target=app_run)
+    app_thread = Thread(target=app_run)
 
     SOLE_WEB_CONTROL = True
     try:

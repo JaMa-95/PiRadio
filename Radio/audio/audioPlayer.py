@@ -1,6 +1,6 @@
 import time
 
-import vlc
+from mpd import MPDClient
 
 from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.db.db import Database
@@ -15,14 +15,19 @@ class AudioPlayer(Subscriber):
         self.noise = 30
         self.volume = 50
 
-        self.equalizer: vlc.AudioEqualizer = vlc.AudioEqualizer()
-        self.instance: vlc.Instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-        self.player: vlc.MediaPlayer = self.instance.media_player_new()
-        self.player.set_equalizer(self.equalizer)
+        self.client = MPDClient()               # create client object
+        self.client.timeout = 10                # network timeout in seconds (floats allowed), default: None
+        self.client.idletimeout = None          # timeout for fetching the result of the idle command is handled seperately, default: None
+        self.client.connect("localhost", 6600)  # connect to localhost:6600
 
         self.database: Database = Database()
         print("Audio Player started")
         # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
+
+    def __del__(self):
+        self.client.stop()
+        self.client.disconnect()
+        print("Audio Player stopped")
 
     def update(self):
         content = self.publisher.get_content()
@@ -41,28 +46,28 @@ class AudioPlayer(Subscriber):
             # print(f"unknown content at audio player: {content}")
 
     def play(self, url: str):
-        self.player.stop()
-        media = self.instance.media_new(url)
-        media.get_mrl()
-        self.player.audio_set_volume(self.volume)
-        self.player.set_media(media)
-        self.player.play()
+        print("Playing: ", url)
+        self.client.clear()
+        self.client.add(url)  # add the URL stream to the playlist
+        self.client.play()                               # start playing the stream
 
     def stop(self):
-        self.player.stop()
+        self.client.stop()
 
     def run(self):
-        # TODO: add noise with encoder value
-        # self.player.play()
-        # check playing if yes play
-        pass
+        while True:
+            status = self.client.status()
+            if status['state'] == 'play':
+                current_song = self.client.currentsong()
+                self.database.replace_song_name(current_song["name"])
+                self.database.replace_song_station(current_song["file"])
+            time.sleep(1)
 
     def set_volume(self, volume):
-        if self.player:
-            self.player.audio_set_volume(volume)
-        self.volume = volume
+        self.client.setvol(volume)
 
     def set_equalizer(self, equalizer_data: list):
+        return None
         for index, value in enumerate(equalizer_data):
             self.equalizer.set_amp_at_index(value, index)
         self.player.set_equalizer(self.equalizer)

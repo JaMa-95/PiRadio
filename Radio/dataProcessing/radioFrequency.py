@@ -11,17 +11,17 @@ max_value_kurz_mittel_lang = 17150
 max_value_ukw = 21100
 
 
-@dataclass
 class RadioFrequency:
-    name: str = ""
-    minimum: int = 0
-    maximum: int = 0
-    sweet_spot: int = 0
-    radio_name: str = ""
-    radio_name_re: str = ""
-    radio_url: str = ""
-    radio_url_re: str = ""
-    re_active: bool = False
+    def __int__(self):
+        self.name: str = ""
+        self.minimum: int = 0
+        self.maximum: int = 0
+        self.sweet_spot: int = 0
+        self.radio_name: str = ""
+        self.radio_name_re: str = ""
+        self.radio_url: str = ""
+        self.radio_url_re: str = ""
+        self.re_active: bool = False
 
     def __init__(self, name: str = "", minimum: int = 0, maximum: int = 0, radio_name: str = "", radio_url: str = "",
                  radio_name_re: str = "", radio_url_re: str = "", re_active: bool = False):
@@ -50,8 +50,24 @@ class RadioFrequency:
             return False
         return True
 
+    def copy(self):
+        return RadioFrequency(
+            name=self.name,
+            minimum=self.minimum,
+            maximum=self.maximum,
+            radio_name=self.radio_name,
+            radio_name_re=self.radio_name_re,
+            radio_url=self.radio_url,
+            radio_url_re=self.radio_url_re,
+            re_active=self.re_active
+        )
+
     def from_list(self, data: list) -> bool:
-        if len(data) != 8:
+        if len(data) == 9:
+            self.sweet_spot = data[8]
+        elif len(data) == 8:
+            self.sweet_spot = int((self.maximum - self.minimum) / 2)
+        else:
             if len(data) >= 0:
                 raise TypeError(f"data length incorrect. Not equal 7: {len(data)}. Name: {data[0]}")
             else:
@@ -59,7 +75,7 @@ class RadioFrequency:
         self.name = data[0]
         self.minimum = int(data[1])
         self.maximum = int(data[2])
-        self.sweet_spot = int((self.maximum - self.minimum) / 2)
+
         self.radio_name = data[3]
         self.radio_url = data[4]
         self.radio_name_re = data[5]

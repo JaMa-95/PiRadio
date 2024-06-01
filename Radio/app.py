@@ -4,7 +4,6 @@ import time
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
-from random import randint
 from typing import Generator
 
 import uvicorn
@@ -20,8 +19,8 @@ from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
 from Radio.util.util import get_project_root
 
-app = FastAPI()
 db = Database()
+app = FastAPI()
 data_transmitter: DataTransmitter = DataTransmitter()
 publisher: Publisher = Publisher()
 
@@ -50,6 +49,26 @@ async def websocket_volume(websocket: WebSocket):
 async def set_volume(volume: dict):
     data_transmitter.send({"volume": int(volume["volume"])})
     return {"message": "Volume set successfully"}
+
+@app.websocket("/stream/current_radio")
+async def websocket_current_radio(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        song_old = None
+        radio_station_old = None
+        while True:
+            song = db.get_song()
+            radio_station = db.get_radio_station()
+            print("song", song)
+            print("radio_station", radio_station)
+            if song != song_old or radio_station != radio_station_old:
+                radio_station_old = radio_station
+                song_old = song
+                radio_data = json.dumps({"radio_station": radio_station, "song": song})
+                await websocket.send_text(radio_data)
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception as e:
+        await websocket.close()
 
 @app.websocket("/stream/equalizer")
 async def websocket_equalizer(websocket: WebSocket):
@@ -105,7 +124,7 @@ async def set_re_active(active: dict):
 async def websocket_radio_frequency(websocket: WebSocket):
     await websocket.accept()
     try:
-        frequency_old = RadioFrequency()
+        frequency_old = None
         while True:
             frequency = db.get_radio_frequency()
             if frequency_old != frequency:
@@ -265,38 +284,6 @@ def test_all_frequencies(frequencies_obj: Frequencies) -> Generator:
     for frequency in frequencies_obj.frequencies:
         yield json.dumps([frequency.radio_url, frequency.test_radio_frequency(),
                           frequency.radio_url_re, frequency.test_radio_frequency(test_re=True)])
-
-
-@app.post("/frequency/test/")
-async def test_frequencies(url: dict):
-    frequency = RadioFrequency()
-    frequency.radio_url = url["url"]
-    if frequency.test_radio_frequency() == 1:
-        return True
-    else:
-        return False
-
-
-@app.post("/frequency/testWithRe/")
-async def test_frequencies(url: dict):
-    frequency = RadioFrequency()
-    frequency.radio_url = url["url"]
-    frequency.radio_url_re = url["url_re"]
-    if url["url"]:
-        if frequency.test_radio_frequency() == 1:
-            url_state = True
-        else:
-            url_state = False
-    else:
-        url_state = None
-    if url["url_re"]:
-        if frequency.test_radio_frequency(True) == 1:
-            url_state_re = True
-        else:
-            url_state_re = False
-    else:
-        url_state_re = None
-    return url_state, url_state_re
 
 
 def save_in_file(file_path: Path, data):
