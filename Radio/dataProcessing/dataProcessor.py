@@ -69,9 +69,11 @@ class DataProcessor:
                         self.db.replace_volume(data["volume"])
                         self.publisher.publish(f"volume:{data['volume']}")
                     elif "frequency" in data:
-                        self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"], self.active_actions)
+                        self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"],
+                                                                self.active_actions)
                     elif "button" in data:
-                        new_action = self.button_processor.process_button_web(data["button"]["name"], data["button"]["value"])
+                        new_action = self.button_processor.process_button_web(data["button"]["name"],
+                                                                              data["button"]["value"])
                         if new_action:
                             self.active_actions.add_or_remove_action(new_action)
                     
@@ -118,13 +120,14 @@ class ButtonProcessor:
         for name, button_settings in settings["buttons"].items():
             if button_settings["active"]:
                 button = ButtonProcessData(name, button_settings["pin"])
-                radio_action = self.action_factory.create(
-                    action_type=button_settings["action"]["type"],
-                    apply_states=button_settings["action"]["apply_state"],
-                    button_name=name,
-                    frequency_pin_name=button_settings["frequency"]["pos"]
-                )
-                button.add_radio_action(radio_action)
+                for action_settings in button_settings["action"]:
+                    radio_action = self.action_factory.create(
+                        action_type=action_settings["action_type"],
+                        apply_states=action_settings["apply_state"],
+                        button_name=name,
+                        frequency_pin_name=button_settings["frequency"]["pos"]
+                    )
+                    button.add_radio_action(radio_action)
                 self.buttons.append(button)
                 self.db.replace_button_data(name, button)
 
@@ -258,9 +261,9 @@ class AnalogProcessor:
                       active_actions: Actions) -> int:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
+        self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)
-        self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
         self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
         return current_frequency_value
 

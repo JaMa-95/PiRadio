@@ -86,10 +86,10 @@
       "reversed": false,
       "active": false,
       "is_on_off": true,
-      "action": {
+      "action": [{
         "apply_state": [1],
-        "type": 1
-      },
+        "action_type": 1
+      }],
       "frequency": {
         "pos": null,
         "musicList": null
@@ -101,10 +101,10 @@
       "reversed": false,
       "active": true,
       "is_on_off_raspi": true,
-      "action": {
+      "action": [{
         "apply_state": [1],
-        "type": 0
-      },
+        "action_type": 0
+      }],
       "frequency": {
         "pos": null,
         "musicList": null
@@ -116,10 +116,10 @@
       "reversed": true,
       "active": false,
       "is_change_speaker": true,
-      "action": {
+      "action": [{
         "apply_state": [1],
-        "type": 99
-      },
+        "action_type": 99
+      }],
       "frequency": {
         "pos": null,
         "musicList": null
@@ -130,10 +130,16 @@
       "pin": 24,
       "reversed": false,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_lang.json"
@@ -144,10 +150,16 @@
       "pin": 26,
       "reversed": false,
       "active": true,
-     "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+     "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_mittel.json"
@@ -158,10 +170,16 @@
       "pin": 21,
       "reversed": false,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_kurz_2.json"
@@ -172,10 +190,16 @@
       "pin": 20,
       "reversed": false,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ukw.json"
@@ -186,10 +210,16 @@
       "pin": 19,
       "reversed": false,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_kurz_1.json"
@@ -200,10 +230,16 @@
       "pin": 23,
       "reversed": true,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ta.json"
@@ -214,10 +250,16 @@
       "pin": 17,
       "reversed": true,
       "active": true,
-      "action": {
-        "apply_state": [1],
-        "type": 2
-      },
+      "action": [
+        {
+          "apply_state": [1, 5],
+          "action_type": 2
+        },
+        {
+          "apply_state": [0, 6],
+          "action_type": 1
+        }
+      ],
       "frequency": {
         "pos": "posLangKurzMittel",
         "musicList": "freq_ta.json"
@@ -228,11 +270,11 @@
       "pin": 4,
       "reversed": false,
       "active": true,
-      "action": {
+      "action": [{
         "apply_state": [1],
-        "type": 3,
+        "action_type": 3,
         "holding_pins": [3]
-      },
+      }],
       "is_frequency_lock": true,
       "frequency": {
         "pos": null,

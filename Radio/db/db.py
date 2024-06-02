@@ -17,7 +17,7 @@ class Database(Singleton):
         self.web_control_value: bool = False
         self.analog_values: dict = {}
         self.button_data: dict = {}
-        self.volume: int = 0
+        self.volume: int = 50
         self.radio_frequency: RadioFrequency = RadioFrequency()
         self.song_name: dict = {"name": "", "station": ""}
         self.active_url: str = ""

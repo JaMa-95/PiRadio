@@ -81,16 +81,20 @@ export const RadioControl = (props) => {
         newButtons.forEach((item, index) => {
             if (item.name === name) {
               newButtons[index].state = value;
+              postButtonValue(name, value);
             } else {
-              newButtons[index].state = false;
+              if (newButtons[index].state !== false) {
+                newButtons[index].state = false;
+                postButtonValue(newButtons[index].name, false);
+              }
             };
-            postButtonValue(name, value);
         });
     }
     setButtons(newButtons);
   };
 
   function postButtonValue(name, value) {
+    console.log("POSTED: ", name, value);
     // Send the button value to the server
     fetch('http://localhost:8000/button', {
         method: 'POST',

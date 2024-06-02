@@ -58,7 +58,7 @@ class ButtonProcessData:
         return False
 
     def is_to_off(self) -> bool:
-        if self.state.states[0] and not self.state.states[1]:
+        if not self.state.states[0] and self.state.states[1]:
             return True
         return False
 

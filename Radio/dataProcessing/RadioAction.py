@@ -48,8 +48,8 @@ class RadioActionFactory:
             -> RadioAction:
         if action_type == RadioActionTypes.TURN_OFF_RASPBERRY.value:
             return TurnOffRaspberry(apply_states)
-        elif action_type == RadioActionTypes.TURN_OFF_MUSIC.value:
-            return TurnOffMusic(apply_states)
+        elif action_type == RadioActionTypes.STOP_MUSIC.value:
+            return TurnOffMusic(apply_states, button_name, frequency_pin_name)
         elif action_type == RadioActionTypes.PLAY_MUSIC.value:
             return PlayMusic(apply_states, button_name, frequency_pin_name)
         elif action_type == RadioActionTypes.HOLD_FREQUENCY.value:
@@ -88,7 +88,9 @@ class HoldFrequencyX(RadioAction):
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        return settings["buttons"][holding_pin_name]["action"]["holding_pins"]
+        for action_settings in settings["buttons"][holding_pin_name]["action"]:
+            if "holding_pins" in action_settings:
+                return action_settings["holding_pins"]
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         for index, frequency_data in enumerate(sensor_msg_new.analog_data.sensor_data):
@@ -125,7 +127,7 @@ class PlayMusic(RadioAction):
         if not button:
             return None
         radio_frequency: RadioFrequency = self.get_radio_frequency()
-        current_radio_frequency =  self.db.get_radio_frequency()
+        current_radio_frequency = self.db.get_radio_frequency()
         if radio_frequency == current_radio_frequency or not radio_frequency:
             return None
         self.db.replace_radio_frequency(radio_frequency)
@@ -157,8 +159,24 @@ class PlayMusic(RadioAction):
 
 
 class TurnOffMusic(RadioAction):
+    def __init__(self, apply_states: [ButtonClickStates], button_name, frequency_pin_name):
+        super().__init__(apply_states=apply_states)
+        self.button_name: str = button_name
+        self.frequency_pin_name: str = frequency_pin_name
+        self.db: Database = Database()
+        self.publisher: Publisher = Publisher()
+
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
-        raise NotImplemented("Turn off music")
+        self.stop_music()
+
+    def try_execute(self) -> bool:
+        self.stop_music()
+        return True
+
+    def stop_music(self):
+        self.db.replace_radio_frequency(RadioFrequency())
+        self.publisher.publish(f"stop")
+        self.db.replace_active_radio_url("")
 
 
 class TurnOffRaspberry(RadioAction):

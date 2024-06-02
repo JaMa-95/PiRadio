@@ -12,15 +12,16 @@ class AudioPlayer(Subscriber):
         self.noise_player = None
         self.publisher = publisher
         self.publisher.attach(self)
+        self.database: Database = Database()
         self.noise = 30
-        self.volume = 50
+        self.volume = self.database.get_volume()
 
         self.client = MPDClient()               # create client object
         self.client.timeout = 10                # network timeout in seconds (floats allowed), default: None
         self.client.idletimeout = None          # timeout for fetching the result of the idle command is handled seperately, default: None
         self.client.connect("localhost", 6600)  # connect to localhost:6600
+        self.set_volume(self.volume)
 
-        self.database: Database = Database()
         print("Audio Player started")
         # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
 
@@ -59,8 +60,11 @@ class AudioPlayer(Subscriber):
             status = self.client.status()
             if status['state'] == 'play':
                 current_song = self.client.currentsong()
-                self.database.replace_song_name(current_song["name"])
-                self.database.replace_song_station(current_song["file"])
+                try:
+                    self.database.replace_song_name(current_song["name"])
+                    self.database.replace_song_station(current_song["file"])
+                except KeyError:
+                    pass
             time.sleep(1)
 
     def set_volume(self, volume):
