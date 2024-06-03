@@ -111,7 +111,6 @@ class Database(Singleton):
 
     def get_radio_frequency(self) -> RadioFrequency:
         with self.lock:
-            print("getting radio frequency: ", self.radio_frequency)
             return self.radio_frequency.copy()
 
 

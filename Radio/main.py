@@ -55,7 +55,7 @@ if __name__ == "__main__":
         app_thread.join()
         print("All threads are done")
     finally:
-        collector_thread.terminate()
+        collector_thread.close()
         processor_thread.terminate()
         app_thread.terminate()
         app_thread.terminate()

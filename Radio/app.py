@@ -59,8 +59,8 @@ async def websocket_current_radio(websocket: WebSocket):
         while True:
             song = db.get_song()
             radio_station = db.get_radio_station()
-            print("song", song)
-            print("radio_station", radio_station)
+            # print("song", song)
+            # print("radio_station", radio_station)
             if song != song_old or radio_station != radio_station_old:
                 radio_station_old = radio_station
                 song_old = song
@@ -148,7 +148,7 @@ async def get_buttons_settings():
     for name, button_settings in settings["buttons"].items():
         if button_settings["active"]:
             buttons.append({"name": name, "reversed": button_settings["reversed"],
-                             "type": button_settings["action"]["type"], "state": False})
+                             "action": button_settings["action"], "state": False})
     return buttons
 
 @app.post("/button")
@@ -211,7 +211,7 @@ def get_frequency_names():
 
 
 def get_freq_files():
-    path_data = get_project_root() / 'data'
+    path_data = get_project_root() / 'data/frequencies'
     freq_files = [f for f in listdir(path_data) if isfile(join(path_data, f)) and f.startswith("freq")]
     return freq_files
 

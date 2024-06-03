@@ -30,7 +30,7 @@ function Buttons(props) {
     return (
         <div>
             {props.buttons.map((button, index) => {
-                if (button.type === 2) {
+                if (button.action.find(item => item.action_type === 2)) {
                     return <Button key={index} item={button} webControl={props.webControl} handle={props.handleFrequencyButtons}/>;
                 } else {
                     return <Button key={index} item={button} webControl={props.webControl} handle={props.handleNormalButtons}/>;

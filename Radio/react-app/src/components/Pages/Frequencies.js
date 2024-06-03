@@ -24,6 +24,7 @@ export const Frequencies = (props) => {
       .then((res) => res.json())
       .then((d) => 
       {
+        console.log(d);
         setFrequencyNames(d);
         setCurrentButton(d[0]);
         fetchFrequencyList(d[0]);
