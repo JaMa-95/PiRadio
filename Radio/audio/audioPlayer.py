@@ -85,6 +85,17 @@ class AudioPlayer(Subscriber):
     def play_radio_anouncement(self):
         pass
 
+    def is_valid(self, url: str) -> bool:
+        self.client.clear()
+        self.client.add(url)
+        self.client.play()
+        time.sleep(0.2)
+        self.client.status()
+        self.client.stop()
+        if "error" in self.client.status():
+            return False
+        return True
+
 
 if __name__ == "__main__":
     audio_player = AudioPlayer(None)

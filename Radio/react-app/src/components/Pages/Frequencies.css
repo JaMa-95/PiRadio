@@ -1,5 +1,28 @@
 .buttonsFrequencies {
-    display:flex; flex-direction:row;
+      display: flex;
+      flex-direction: row;
+      /* Add any other necessary styles */
+      align-content: flex-start;
+      flex-wrap: nowrap;
+}
+
+.buttons {
+  height: 80px;
+  width: 120px;
+  margin: 10px;
+}
+
+.buttonFrequencyInactive {
+  font-size: 20px;
+  margin: 2px;
+  width: 120px;
+}
+
+.buttonFrequencyActive {
+  font-size: 20px;
+  margin: 2px;
+  width: 120px;
+  color: blue;
 }
 
 .container {
@@ -14,10 +37,16 @@
     margin: 10px;
 }
 
+.frequencies {
+  height: auto;
+  min-height: 100% !important;
+}
+
 .frequency {
     border: solid 1px;
     width: fit-content;
     margin: 10px;
+    height: 80px;
 }
 
 .attention {
@@ -51,17 +80,6 @@ img.addLogo:hover {
 img.subtractLogo:hover {
     width: 30px;
     filter: invert(12%) sepia(60%) saturate(6864%) hue-rotate(357deg) brightness(122%) contrast(120%);
-}
-
-.buttonFrequencyInactive {
-    font-size: 20px;
-    margin: 2px;
-}
-
-.buttonFrequencyActive {
-    font-size: 20px;
-    margin: 2px;
-    color: blue;
 }
 
 /* Popup container */

@@ -6,6 +6,7 @@ from os.path import isfile, join
 from pathlib import Path
 from typing import Generator
 
+from Radio.audio.audioPlayer import AudioPlayer
 import uvicorn
 from fastapi import Body, status, HTTPException
 from fastapi import FastAPI, WebSocket
@@ -263,8 +264,9 @@ async def test_frequencies(frequencies_data: list = Body(), response: Response =
     return result
 
 
-@app.post("/frequencies/test")
-async def get_image_file(frequencies_data: list = Body(), response: Response = 200):
+@app.post("/frequencies/testWithRe")
+async def get_image_file(frequencies_data: dict, response: Response = 200):
+    print(frequencies_data)
     name = frequencies_data[0]
     frequencies_data.pop(0)
     frequencies_data = frequency_dict_to_list(frequencies_data)
@@ -278,6 +280,16 @@ async def get_image_file(frequencies_data: list = Body(), response: Response = 2
         )
     except Exception as error:
         raise HTTPException(detail=error.__str__(), status_code=status.HTTP_404_NOT_FOUND)
+    
+@app.post("/frequency/testWithRe")
+async def test_frequency(urls: dict):
+    audio_player = AudioPlayer(publisher=publisher)
+    volume = audio_player.volume
+    audio_player.set_volume(0)
+    url_valid = audio_player.is_valid(urls["url"])
+    url_re_valid = audio_player.is_valid(urls["url_re"])
+    audio_player.set_volume(volume)
+    return {"result": {"url": url_valid, "url_re": url_re_valid}}
 
 
 def test_all_frequencies(frequencies_obj: Frequencies) -> Generator:

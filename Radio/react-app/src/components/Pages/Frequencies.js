@@ -13,6 +13,7 @@ export const Frequencies = (props) => {
   const [stopTest, setStopTest] = useState(false);
   const elementsRef = useRef([]);
   const refStop = React.useRef(false);
+  const [globalTestValue, setGlobalTestValue] = useState(-1);
 
   const fetchFrequencyNames= () => {
       return fetch('http://127.0.0.1:8000/frequencyNames/', {
@@ -200,13 +201,18 @@ export const Frequencies = (props) => {
     }
   },[refStop.current])
 
+
+  const handleTestChange = (newValue) => {
+    setGlobalTestValue(newValue);
+  };
+
   const testFrequencyList = async () => { 
     let index = 0;
     for (const item of frequencyList) {
       try {
         // Stop the fetching
         // window.alert("Stop test: " + refStop.current)
-
+        item["startTest"] = true;
         if (refStop.current) {
           refStop.current = (false);
           window.alert("BREAK: " + frequenciesTestRunning + " " + index);
@@ -214,62 +220,27 @@ export const Frequencies = (props) => {
           "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
           "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
           "url_state_re": item.url_state_re, "attention": false});
-          stopTest(false);
+          setStopTest(false);
           setFrequenciesTestRunning(false);
           this.forceUpdate();
           return;
         }
+        
+        setGlobalTestValue(item.id);
+        window.alert("Test: " + item.id);
+        let counter = 0;
+        while (globalTestValue === item.id || globalTestValue === -1) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            counter++;
+            if (counter > 2) {
+              break;
+            }
+        }
         index++;
-        
-        item.attention = true; // Set attention to true before fetching
-        // Update the state to trigger re-render
-        setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
-          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
-          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
-          "url_state_re": item.url_state_re, "attention": item.attention});
-        
-        const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe/', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({"url": item.radio_url, "url_re": item.radio_url_re}),
-        });
-        const testResult = await response.json();
-        // window.alert(JSON.stringify(testResult))
-        if (testResult[0]) {
-          item.url_state = "green";
-          item.re_active = false;
-        } else if (testResult[0] == false) {
-          item.url_state = "red";
-          item.re_active = true;
-        } else {
-          item.url_state = "black";
-        }
-
-        if (testResult[1] == true) {
-          item.url_state_re = "green";
-        } else if (testResult[1] == false) {
-          item.url_state_re = "red";
-        } else {
-          item.url_state_re = "black";
-        }
-
-        if (testResult[0] === false && !item.url_re) {
-          item.re_active = false;
-        } 
-
-        item.attention = false; // Set attention to false after fetching
-        setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
-          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
-          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
-          "url_state_re": item.url_state_re, "attention": item.attention});// Update the state to trigger re-render
       } catch (error) {
         console.error('Error:', error);
       }
     }
-    window.alert("FINISHED")
     setFrequenciesTestRunning(false);
     if (index >= frequencyList.length) {index--};
     setFrequency(frequencyList[index].id, 
@@ -301,7 +272,7 @@ export const Frequencies = (props) => {
           </div>
           <button type="button" onClick={startTestFrequencyList}>{frequenciesTestRunning ? 'Stop Test Frequency' : 'Start Test Frequency'}</button>
       </div>
-      <div>
+      <div class="frequencies">
           {frequencyList != null &&
               frequencyList.map((item, index) => {
               return (<div key={item["id"]}>
@@ -321,7 +292,10 @@ export const Frequencies = (props) => {
                       setFrequency={setFrequency}
                       elementsRef={elementsRef} 
                       delete={deleteFrequency}
-                      index={index}/>
+                      index={index}
+                      handleTestChange={handleTestChange}
+                      globalTestValue={globalTestValue}
+                      />
                 </div>);
             }
           )};
@@ -350,10 +324,18 @@ function Frequency(props) {
   const [urlStateRe, setUrlStateRe] = useState(props.url_state_re);
   const [attention, setAttention] = useState(props.attention);
 
+  useEffect(() => {
+    // Code to execute when props.globalTestValue changes
+    if (props.globalTestValue === props.id) {
+      testURL();
+    }
+  }, [props.globalTestValue]);
+
   const testURL = async () => {
     setAttention(true);
+    props.handleTestChange(-2);
     try {
-      const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe/', {
+      const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -363,20 +345,19 @@ function Frequency(props) {
         body: JSON.stringify({"url": url, "url_re": urlRe}),
       });
       const testResult = await response.json();
-      // window.alert(JSON.stringify(testResult))
-      if (testResult[0]) {
+      if (testResult["result"]["url"]) {
         setReActive(false);
         setUrlState("green");
-      } else if (testResult[0] === false) {
+      } else if (testResult["result"]["url"] === false) {
         setReActive(true);
         setUrlState("red");
       } else {
         setUrlState("black");
       }
 
-      if (testResult[1] === true) {
+      if (testResult["result"]["url_re"] === true) {
         setUrlStateRe("green");
-      } else if (testResult[1] === false) {
+      } else if (testResult["result"]["url_re"] === false) {
         setUrlStateRe("red");
       } else {
         setUrlStateRe("black");
@@ -385,7 +366,9 @@ function Frequency(props) {
         setReActive(false);
       } 
       setAttention(false);
+      props.handleTestChange(-3);
     } catch (error) {
+      props.handleTestChange(-99);
       window.alert("ERROR")
       console.error(error);
     }

@@ -142,28 +142,6 @@ class Frequencies:
             self.init_min_max()
         self.name: str = ""
 
-    def test_radio_frequencies(self) -> dict:
-        result = {"working": [], "broken": []}
-        for frequency in self.frequencies:
-            url = frequency.radio_url
-            instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-            player = instance.media_player_new()
-            media = instance.media_new(url)
-            media.get_mrl()
-            player.set_media(media)
-            player.audio_set_volume(0)
-            player.play()
-            for _ in range(5):
-                is_playing = player.is_playing()
-                if is_playing:
-                    break
-            if is_playing == 1:
-                result["working"].append(frequency)
-            else:
-                result["broken"].append(frequency)
-            player.stop()
-        return result
-
     def init_min_max(self):
         number_frequencies = len(self.frequencies)
         frequency_width = int((self.max_frequency - self.min_frequency) / number_frequencies)
