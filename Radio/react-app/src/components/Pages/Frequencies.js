@@ -210,24 +210,7 @@ export const Frequencies = (props) => {
     let index = 0;
     for (const item of frequencyList) {
       try {
-        // Stop the fetching
-        // window.alert("Stop test: " + refStop.current)
-        item["startTest"] = true;
-        if (refStop.current) {
-          refStop.current = (false);
-          window.alert("BREAK: " + frequenciesTestRunning + " " + index);
-          setFrequency(item.id, {"name": item.name, "minimum": item.minimum, "maximum": item.maximum,
-          "radio_name": item.radio_name, "radio_name_re": item.radio_name_re, "radio_url": item.radio_url, 
-          "radio_url_re": item.radio_url_re, "re_active": item.re_active, "url_state": item.url_state,
-          "url_state_re": item.url_state_re, "attention": false});
-          setStopTest(false);
-          setFrequenciesTestRunning(false);
-          this.forceUpdate();
-          return;
-        }
-        
         setGlobalTestValue(item.id);
-        window.alert("Test: " + item.id);
         let counter = 0;
         while (globalTestValue === item.id || globalTestValue === -1) {
             await new Promise(resolve => setTimeout(resolve, 100));
@@ -236,26 +219,14 @@ export const Frequencies = (props) => {
               break;
             }
         }
+        console.log("item", item);
         index++;
       } catch (error) {
         console.error('Error:', error);
       }
     }
+    setGlobalTestValue(-1);
     setFrequenciesTestRunning(false);
-    if (index >= frequencyList.length) {index--};
-    setFrequency(frequencyList[index].id, 
-      {"name": frequencyList[index].name, 
-        "minimum": frequencyList[index].minimum, 
-        "maximum": frequencyList[index].maximum,
-        "radio_name": frequencyList[index].radio_name, 
-        "radio_name_re": frequencyList[index].radio_name_re, 
-        "radio_url": frequencyList[index].radio_url, 
-        "radio_url_re": frequencyList[index].radio_url_re, 
-        "re_active": frequencyList[index].re_active, 
-        "url_state": frequencyList[index].url_state,
-        "url_state_re": frequencyList[index].url_state_re, 
-        "attention": false});
-        this.forceUpdate();
   }
 
   return (
