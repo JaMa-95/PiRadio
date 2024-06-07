@@ -139,6 +139,12 @@ async def websocket_radio_frequency(websocket: WebSocket):
     except Exception as e:
         await websocket.close()
 
+@app.get("/buttonsSettings/")
+async def get_buttons_settings():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    return settings["buttons"]
 
 @app.get("/buttons/")
 async def get_buttons_settings():
@@ -240,7 +246,7 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
     response.status_code = 200
     return True
 
-
+# ------------------- Test -------------------
 @app.post("/frequencies/test2")
 async def test_frequencies(frequencies_data: list = Body(), response: Response = 200):
     name = frequencies_data[0]

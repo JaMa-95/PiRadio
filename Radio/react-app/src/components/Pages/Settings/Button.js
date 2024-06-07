@@ -1,6 +1,13 @@
 import './Button.css'
-
+import {useState} from 'react';
 export default function Button(props) {
+    const [name, setName] = useState(props.name);
+    const [active, setActive] = useState(props.settings.active);
+    const [reversed, setReversed] = useState(props.settings.reversed);
+    const [pin, setPin] = useState(props.settings.pin);
+    const [freq, setFreq] = useState(props.settings.freq);
+    const [action, setAction] = useState(props.settings.action);
+
     const renderFreq = () => {
         if (props.freq) {
           return <Frequency/>;

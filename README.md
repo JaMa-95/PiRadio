@@ -11,16 +11,16 @@ Use the webapp to change to settings or control the radio from any device.
 - assembly components according to PCB layout
 
 # Installation
+- enable I2C
 ## packages
 - sudo apt update
 - sudo apt upgrade
 - sudo apt install python3-pip
-- sudo apt install pulseaudio   # for vlc
 - sudo apt install npm 
 
-- pip install -r Radio/requirements.txt
-
-- sudo adduser root pulse-access
+- python -m ./Radio/venv ./Radio/venv
+- pip install -r ./Radio/requirements.txt
+- npm --prefix ./Radio/react-app install ./Radio/react-app
 
 - cp Radio/radio.sh  /etc/profile.d/radioStart.sh
 
