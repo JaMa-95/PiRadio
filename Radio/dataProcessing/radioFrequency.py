@@ -2,7 +2,6 @@ import time
 from dataclasses import dataclass
 import json
 from typing import List
-import vlc
 
 from Radio.util.util import get_project_root
 
@@ -108,27 +107,6 @@ class RadioFrequency:
             "re_active": self.re_active,
             "sweet_spot": self.sweet_spot
         }
-
-    def test_radio_frequency(self, test_re: bool = False):
-        if test_re:
-            url = self.radio_url_re
-        else:
-            url = self.radio_url
-        instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-        player = instance.media_player_new()
-        media = instance.media_new(url)
-        media.get_mrl()
-        player.set_media(media)
-        player.audio_set_volume(0)
-        player.play()
-        for _ in range(5):
-            is_playing = player.is_playing()
-            if is_playing:
-                break
-            else:
-                time.sleep(1)
-        player.stop()
-        return is_playing
 
 
 class Frequencies:

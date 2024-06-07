@@ -21,6 +21,20 @@ class TestCollector(unittest.TestCase):
             print(button_printable, analog_printable)
             time.sleep(1)
 
+    def test_analog(self):
+        pins_to_print = [0]
+        collector = Collector(True)
+        while True:
+            data: SensorMsg = collector.data_transmitter.receive()
+            analogs = data.analog_data.get_data_sensor()
+            analog_printable = []
+            for analog in analogs.data:
+                if analog.pin not in pins_to_print:
+                    continue
+                analog_printable.append({"pin": analog.pin, "value": analog.value})
+            print(analog_printable)
+            time.sleep(1)
+
     def test_init(self):
         collector = Collector(True)
         p_send = Process(target=collector.run)
@@ -31,3 +45,8 @@ class TestCollector(unittest.TestCase):
 
         p_send.join()
         p_recv.join()
+
+
+if __name__ == '__main__':
+    tester = TestCollector()
+    tester.test_analog()
