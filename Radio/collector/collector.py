@@ -11,6 +11,7 @@ from Radio.collector.ads1115.ads import AdsObject
 
 class Collector:
     def __init__(self, mock: bool = False):
+        print("START COLLECTIN SENSOR VALUES WITH MOCK: ", mock)
         self.mock: bool = mock
         self.data_transmitter: DataTransmitter = DataTransmitter()
 

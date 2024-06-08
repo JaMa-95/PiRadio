@@ -113,7 +113,7 @@ class AdsSingle:
         else:
             num_values = 150
         for i in range(num_values):
-            values.append(self.chan.value)
+            values.append(self.chan.voltage)
 
         # delete min man values
         for _ in range(10):

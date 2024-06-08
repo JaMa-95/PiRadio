@@ -20,6 +20,9 @@ Use the webapp to change to settings or control the radio from any device.
 
 - python -m ./Radio/venv ./Radio/venv
 - pip install -r ./Radio/requirements.txt
+- pip install RPi.GPIO
+- pip install adafruit-blinka
+- pip install adafruit-circuitpython-ads1x15
 - npm --prefix ./Radio/react-app install ./Radio/react-app
 
 - cp Radio/radio.sh  /etc/profile.d/radioStart.sh

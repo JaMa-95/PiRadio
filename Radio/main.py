@@ -16,6 +16,7 @@ from Radio.app import run as app_run
 from Radio.collector.collector import Collector
 from Radio.util.util import is_raspberry
 
+mock = True
 IS_RASPBERRY_PI = False
 if is_raspberry():
     IS_RASPBERRY_PI = True
@@ -23,15 +24,10 @@ if is_raspberry():
 
 if __name__ == "__main__":
     if IS_RASPBERRY_PI:
-        GPIO.cleanup()
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.output(6, True)
-        GPIO.setup(5, GPIO.OUT)
-        GPIO.output(5, True)
-
+        mock = False
+       
     publisher: Publisher = Publisher()
-    
-    collector = Collector(mock=True)
+    collector = Collector(mock=mock)
     data_processor = DataProcessor(publisher)
     audioPlayer = AudioPlayer(publisher)
 

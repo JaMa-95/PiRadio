@@ -21,22 +21,34 @@ class TestCollector(unittest.TestCase):
             print(button_printable, analog_printable)
             time.sleep(1)
 
-    def test_analog(self):
-        pins_to_print = [0]
-        collector = Collector(True)
+    def test_analog(self, collector: Collector):
+        pins_to_print = [3]
         while True:
             data: SensorMsg = collector.data_transmitter.receive()
             analogs = data.analog_data.get_data_sensor()
             analog_printable = []
-            for analog in analogs.data:
+            for analog in analogs:
                 if analog.pin not in pins_to_print:
                     continue
                 analog_printable.append({"pin": analog.pin, "value": analog.value})
             print(analog_printable)
             time.sleep(1)
 
+    def test_run_analog(self):
+        mock = False
+        collector = Collector(mock)
+        p_send = Process(target=collector.run)
+        p_recv = Process(target=self.test_analog, args=(collector,))
+
+        p_send.start()
+        p_recv.start()
+
+        p_send.join()
+        p_recv.join()
+
     def test_init(self):
-        collector = Collector(True)
+        mock = False
+        collector = Collector(mock)
         p_send = Process(target=collector.run)
         p_recv = Process(target=self.receive_and_print, args=(collector,))
 
@@ -46,7 +58,17 @@ class TestCollector(unittest.TestCase):
         p_send.join()
         p_recv.join()
 
+    def is_raspberry(self) -> bool:
+        import os
+        import io
+        try:
+            with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
+                if 'raspberry pi' in m.read().lower(): return True
+        except Exception: pass
+        return False
+
 
 if __name__ == '__main__':
     tester = TestCollector()
-    tester.test_analog()
+    print(tester.is_raspberry())
+    #tester.test_run_analog()
