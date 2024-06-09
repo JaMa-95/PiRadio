@@ -16,3 +16,5 @@ class RadioActionTypes(Enum):
     STOP_MUSIC = 1
     PLAY_MUSIC = 2
     HOLD_FREQUENCY = 3
+    ROTATE_AUDIO_SOURCE = 4
+    SET_AUDIO_SOURCE = 5

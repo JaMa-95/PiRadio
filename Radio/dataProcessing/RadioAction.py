@@ -1,7 +1,7 @@
 import json
-from enum import Enum
 from typing import List
 
+from Radio.collector.gpio.audioSourceSwitcher import AudioSourceSwitcher
 from Radio.dataProcessing.processData import ButtonProcessData
 from Radio.dataProcessing.radioFrequency import RadioFrequency, Frequencies
 from Radio.db.db import Database
@@ -13,10 +13,10 @@ from Radio.dataProcessing.states import ButtonClickStates, RadioActionTypes
 
 
 class RadioAction:
-    def __init__(self, apply_states: [ButtonClickStates] = None):
+    def __init__(self, apply_states: List[ButtonClickStates] = None):
         if not apply_states:
             apply_states = []
-        self.apply_states: [ButtonClickStates] = apply_states
+        self.apply_states: List[ButtonClickStates] = apply_states
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -44,8 +44,8 @@ class RadioAction:
 
 class RadioActionFactory:
     @staticmethod
-    def create(action_type: int, apply_states: [ButtonState], button_name: str = "", frequency_pin_name: str = "") \
-            -> RadioAction:
+    def create(action_type: int, apply_states: List[ButtonState], button_name: str = "", frequency_pin_name: str = "", 
+               switch_values: List[bool, bool] = []) -> RadioAction:
         if action_type == RadioActionTypes.TURN_OFF_RASPBERRY.value:
             return TurnOffRaspberry(apply_states)
         elif action_type == RadioActionTypes.STOP_MUSIC.value:
@@ -54,6 +54,10 @@ class RadioActionFactory:
             return PlayMusic(apply_states, button_name, frequency_pin_name)
         elif action_type == RadioActionTypes.HOLD_FREQUENCY.value:
             return HoldFrequencyX(holding_pin_name=button_name, apply_states=apply_states)
+        elif action_type == RadioActionTypes.ROTATE_AUDIO_SOURCE.value:
+            return RotateAudioSource(apply_states)
+        elif action_type == RadioActionTypes.SET_AUDIO_SOURCE.value:
+            return SwitchAudioSource(apply_states, value_a=switch_values[0], value_b=switch_values[1])
         else:
             # not implemented
             return RadioAction(apply_states)
@@ -159,7 +163,7 @@ class PlayMusic(RadioAction):
 
 
 class TurnOffMusic(RadioAction):
-    def __init__(self, apply_states: [ButtonClickStates], button_name, frequency_pin_name):
+    def __init__(self, apply_states: List[ButtonClickStates], button_name, frequency_pin_name):
         super().__init__(apply_states=apply_states)
         self.button_name: str = button_name
         self.frequency_pin_name: str = frequency_pin_name
@@ -181,14 +185,33 @@ class TurnOffMusic(RadioAction):
 
 class TurnOffRaspberry(RadioAction):
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
-        pass
-        #raise NotImplemented("Turn off raspi")
+        raise NotImplemented("Turn off raspi")
 
 
 class AddRestriction(RadioAction):
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         raise NotImplemented("Add restriction")
 
+
+class SwitchAudioSource(RadioAction):
+    def __init__(self, apply_states: List[ButtonClickStates], value_a: bool, value_b: bool):
+        super().__init__(apply_states=apply_states)
+        self.type: int = type
+        self.audio_source_switcher: AudioSourceSwitcher = AudioSourceSwitcher()
+
+    def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        self.audio_source_switcher.switch(self.value_a, self.value_b)
+        return sensor_msg_new
+    
+class RotateAudioSource(RadioAction):
+    def __init__(self, apply_states: List[ButtonClickStates]):
+        super().__init__(apply_states=apply_states)
+        self.audio_source_switcher: AudioSourceSwitcher = AudioSourceSwitcher()
+
+    def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        self.audio_source_switcher.rotate_source()
+        return sensor_msg_new
+        
 
 class Actions(Singleton):
     def __init__(self):

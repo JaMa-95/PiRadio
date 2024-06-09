@@ -15,8 +15,11 @@
         }
       }
     },
-    "switcher": [
-      {
+    "switcher": {
+      "pin_a": 27,
+      "pin_b": 17,
+      "devices":
+      [{
         "device": "raspberry",
         "A": false,
         "B": false
@@ -25,8 +28,8 @@
         "device": "tea5767",
         "A": false,
         "B": true
-      }
-    ]
+      }]
+    }
   },
   "analog": {
     "devices": {
