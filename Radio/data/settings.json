@@ -12,8 +12,8 @@
         "hw:0,0": {
           "name": "HDMI",
           "active": false
-        },
-      },
+        }
+      }
     },
     "switcher": [
       {
