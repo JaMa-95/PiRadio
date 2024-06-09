@@ -58,17 +58,7 @@ class TestCollector(unittest.TestCase):
         p_send.join()
         p_recv.join()
 
-    def is_raspberry(self) -> bool:
-        import os
-        import io
-        try:
-            with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
-                if 'raspberry pi' in m.read().lower(): return True
-        except Exception: pass
-        return False
-
 
 if __name__ == '__main__':
     tester = TestCollector()
-    print(tester.is_raspberry())
-    #tester.test_run_analog()
+    tester.test_run_analog()

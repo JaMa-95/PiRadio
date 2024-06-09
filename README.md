@@ -23,6 +23,12 @@ Use the webapp to change to settings or control the radio from any device.
 - pip install RPi.GPIO
 - pip install adafruit-blinka
 - pip install adafruit-circuitpython-ads1x15
+
+ [reason for install uninstall](https://stackoverflow.com/questions/78386891/raspberry-pi-4-python-runtimeerror-error-waiting-for-edge)
+- pip uninstall rpi.gpio
+- pip install rpi-lgpio
+
+prefer using already available node modules. Raspberry takes a long time installing packages
 - npm --prefix ./Radio/react-app install ./Radio/react-app
 
 - cp Radio/radio.sh  /etc/profile.d/radioStart.sh

@@ -38,7 +38,7 @@ class AdsObject:
             self.analog_sensors.append(
                 AdsSingle(pin=analog_item["pin"],
                           mock=self.mock,
-                          address=settings["analog"]["devices"][analog_item["device"]],
+                          address=settings["analog"]["devices"][analog_item["device"]]["address"],
                           min_=analog_item["min"],
                           max_=analog_item["max"]
                           )
