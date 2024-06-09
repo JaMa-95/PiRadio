@@ -3,7 +3,7 @@
   "amplifier_pin": 13,
   "mqtt": false,
   "audio": {
-    "tea5767": {
+    "fm_module": {
       "address":  60,
       "active": true
     },

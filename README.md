@@ -23,6 +23,7 @@ Use the webapp to change to settings or control the radio from any device.
 - pip install RPi.GPIO
 - pip install adafruit-blinka
 - pip install adafruit-circuitpython-ads1x15
+- pip install smbus
 
  [reason for install uninstall](https://stackoverflow.com/questions/78386891/raspberry-pi-4-python-runtimeerror-error-waiting-for-edge)
 - pip uninstall rpi.gpio

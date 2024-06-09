@@ -20,6 +20,7 @@ class FmModule(Subscriber):
         self._init_fm_module()
         self.publisher: Publisher = publisher
         self.publisher.attach(self)
+        self.load_from_settings()
 
     def _init_fm_module(self):
         if self.active:
@@ -31,8 +32,8 @@ class FmModule(Subscriber):
         path_settings = get_project_root() / 'data/settings.json'
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
-        self.i2c_address = settings["audio"]["i2c_address"]
-        self.active = settings["audio"]["active"]
+        self.i2c_address = settings["audio"]["fm_module"]["address"]
+        self.active = settings["audio"]["fm_module"]["active"]
 
     def __del__(self):
         if self.active:
