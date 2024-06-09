@@ -67,7 +67,7 @@ class FmModule(Subscriber):
         data[2] = 0x10  #0b00010000 # 4.bajt (SWP2; STBY, BL; XTAL; smut; HCC, SNC, SI)
         data[3] = 0x00  #0b00000000 # 5.bajt (PLREFF; DTC; 0; 0; 0; 0; 0; 0)
         try:
-            self.i2c.write_i2c_block_data(self.address, init, data)  # Setting a new frequency to the circuit
+            self.i2c.write_i2c_block_data(self.i2c_address, init, data)  # Setting a new frequency to the circuit
             print("Frequency set to: " + str(fm_frequency))
         except IOError:
             subprocess.call(['i2cdetect', '-y', '1'])
@@ -83,7 +83,7 @@ class FmModule(Subscriber):
         data[2] = 0x10
         data[3] = 0x00
         try:
-            self.i2c.write_i2c_block_data(self.address, init, data)
+            self.i2c.write_i2c_block_data(self.i2c_address, init, data)
             print("Radio Muted")
         except IOError:
             subprocess.call(['i2cdetect', '-y', '1'])
