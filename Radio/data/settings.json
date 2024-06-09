@@ -2,6 +2,32 @@
   "cycle_time": 0.001,
   "amplifier_pin": 13,
   "mqtt": false,
+  "audio": {
+    "tea5767": {
+      "address":  60,
+      "active": true
+    },
+    "raspberry": {
+      "output": {
+        "hw:0,0": {
+          "name": "HDMI",
+          "active": false
+        },
+      },
+    },
+    "switcher": [
+      {
+        "device": "raspberry",
+        "A": false,
+        "B": false
+      },
+      {
+        "device": "tea5767",
+        "A": false,
+        "B": true
+      }
+    ]
+  },
   "analog": {
     "devices": {
       "ads_1": {"address":  72}
