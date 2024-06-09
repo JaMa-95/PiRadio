@@ -17,10 +17,10 @@ class FmModule(Subscriber):
         self.i2c: smbus.SMBus = None
         self.frequency = 0
         self.active: bool = False
-        self._init_fm_module()
         self.publisher: Publisher = publisher
         self.publisher.attach(self)
         self.load_from_settings()
+        self._init_fm_module()
 
     def _init_fm_module(self):
         if self.active:
