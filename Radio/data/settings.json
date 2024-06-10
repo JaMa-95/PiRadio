@@ -281,17 +281,29 @@
       "active": true,
       "action": [
         {
-          "apply_state": [1, 5],
-          "action_type": 2
-        },
-        {
-          "apply_state": [0, 6],
-          "action_type": 1
+          "apply_state": [5],
+          "action_type": 4
         }
       ],
       "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
+        "pos": "",
+        "musicList": ""
+      },
+      "led": 99
+    },
+    "ResetAudioSource": {
+      "pin": 23,
+      "reversed": true,
+      "active": true,
+      "action": [
+        {
+          "apply_state": [5],
+          "action_type": 5,
+        }
+      ],
+      "frequency": {
+        "pos": "raspberry",
+        "musicList": ""
       },
       "led": 99
     },

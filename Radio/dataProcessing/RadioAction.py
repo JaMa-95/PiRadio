@@ -57,14 +57,14 @@ class RadioActionFactory:
         elif action_type == RadioActionTypes.ROTATE_AUDIO_SOURCE.value:
             return RotateAudioSource(apply_states)
         elif action_type == RadioActionTypes.SET_AUDIO_SOURCE.value:
-            return SwitchAudioSource(apply_states, value_a=switch_values[0], value_b=switch_values[1])
+            return SwitchAudioSource(apply_states, switch_to=frequency_pin_name)
         else:
             # not implemented
             return RadioAction(apply_states)
 
 
 class OffRestriction(RadioAction):
-    def __init__(self, exception_pin: [], apply_states: [ButtonClickStates]):
+    def __init__(self, exception_pin: list, apply_states: List[ButtonClickStates]):
         super().__init__(apply_states)
         self.exception_pin: int = exception_pin
 
@@ -194,10 +194,22 @@ class AddRestriction(RadioAction):
 
 
 class SwitchAudioSource(RadioAction):
-    def __init__(self, apply_states: List[ButtonClickStates], value_a: bool, value_b: bool):
+    def __init__(self, apply_states: List[ButtonClickStates], switch_to: str):
         super().__init__(apply_states=apply_states)
-        self.type: int = type
         self.audio_source_switcher: AudioSourceSwitcher = AudioSourceSwitcher()
+        self.swtich_to: str = switch_to
+        self.value_a: bool = False
+        self.value_b: bool = False
+        self.load_from_settings()
+
+    def load_from_settings(self):
+        path_settings = get_project_root() / 'data/settings.json'
+        with open(path_settings.resolve()) as f:
+            settings = json.load(f)
+        for switch_device in settings["audio"]["switcher"]["devices"]:
+            if switch_device["device"] == self.swtich_to:
+                self.value_a = switch_device["value_a"]
+                self.value_b = switch_device["value_b"]
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         self.audio_source_switcher.switch(self.value_a, self.value_b)
