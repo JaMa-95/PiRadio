@@ -1,0 +1,15 @@
+[Unit]
+Description=PiRadio
+After=network.target
+
+[Service]
+Type=simple
+User=jakob
+WorkingDirectory=~/Code/PiRadio
+ExecStart=~/Code/PiRadio/radio.sh start
+ExecStop=~/Code/PiRadio/radio.sh stop
+ExecReload=~/Code/PiRadio/radio.sh restart
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
