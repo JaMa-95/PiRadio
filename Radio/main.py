@@ -14,6 +14,7 @@ from Radio.app import run as app_run
 
 from Radio.collector.collector import Collector
 from Radio.util.util import is_raspberry
+import datetime
 
 mock = True
 IS_RASPBERRY_PI = False
@@ -26,6 +27,14 @@ def start_app() -> bool:
         if sys.argv[1] == "--app=1":
             return True
     return False
+
+def write():
+    import time
+    while True:
+        with open("output.txt", "w") as file:
+            current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            file.write(current_time)
+        time.sleep(1)
 
 if __name__ == "__main__":
     if IS_RASPBERRY_PI:
@@ -43,12 +52,14 @@ if __name__ == "__main__":
     audio_thread = Thread(target=audioPlayer.run)
     app_thread = Thread(target=app_run)
 
+    write_thread = Thread(target=write)
     SOLE_WEB_CONTROL = True
     try:
         if not SOLE_WEB_CONTROL:
             collector_thread.start()
         processor_thread.start()
         audio_thread.start()
+        write_thread.start()
 
         if start_app:
             app_thread.start()
@@ -56,6 +67,7 @@ if __name__ == "__main__":
             collector_thread.join()
         processor_thread.join()
         audio_thread.join()
+        write_thread.join()
         if start_app:
             app_thread.join()
     finally:

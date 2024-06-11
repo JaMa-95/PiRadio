@@ -1,18 +1,18 @@
 #!/bin/bash
-VENV_PATH="/home/pi/PiRadio/Radio/venv/bin/activate"
-APP_PATH="/home/pi/PiRadio/Radio/main.py"
+MODULE_PATH="~/Code/PiRadio"
 PID_FILE="/var/run/PiRadio.pid"
 
-WEB_APP_PATH="/home/pi/PiRadio/react-app"
+WEB_APP_PATH="home/jakob/Code/PiRadio/Radio/react-app"
 
 start() {
     if [ -f $PID_FILE ]; then
         echo "The service is already running."
     else
-        source $VENV_PATH
-        nohup python3 $APP_PATH &> /dev/null &
+        cd $MODULE_PATH
+        source Radio/venv/bin/activate
+        # python -m Radio.main --app=1 
         echo $! > $PID_FILE
-        npm start --prefix $WEB_APP_PATH &
+        npm start --prefix Radio/react-app
         echo "Service started."
     fi
 }
@@ -21,7 +21,8 @@ stop() {
     if [ -f $PID_FILE ]; then
         kill $(cat $PID_FILE)
         rm $PID_FILE
-        npm stop --prefix $WEB_APP_PATH
+        cd $MODULE_PATH
+        npm stop --prefix Radio/react-app
         echo "Service stopped."
     else
         echo "The service is not running."
