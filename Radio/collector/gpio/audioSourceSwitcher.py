@@ -17,13 +17,13 @@ class AudioSourceSwitcher(Singleton):
         self.current_device: int = 0
 
         self.load_from_settings()
-
-        self.gpio_a = GPIO(self.pin_a, GPIO.OUT)
         self.value_a: bool = False
-        self.gpio_a.write(self.value_a)
-        self.gpio_b = GPIO(self.pin_b, GPIO.OUT)
         self.value_b: bool = False
-        self.gpio_b.write(self.value_b)
+        if IS_RASPBERRY_PI:
+            self.gpio_a = GPIO(self.pin_a, GPIO.OUT)
+            self.gpio_a.write(self.value_a)
+            self.gpio_b = GPIO(self.pin_b, GPIO.OUT)
+            self.gpio_b.write(self.value_b)
 
     def load_from_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -36,8 +36,9 @@ class AudioSourceSwitcher(Singleton):
     def switch(self, A: bool, B: bool):
         self.value_a = A
         self.value_b = B
-        self.gpio_a.write(A)
-        self.gpio_b.write(B)
+        if IS_RASPBERRY_PI:
+            self.gpio_a.write(A)
+            self.gpio_b.write(B)
 
     def rotate_source(self):
         self.current_device += 1
@@ -45,6 +46,7 @@ class AudioSourceSwitcher(Singleton):
             self.current_device = 0
         self.value_a = self.devices[self.current_device]["A"]
         self.value_b = self.devices[self.current_device]["B"]
-        self.gpio_a.write(self.value_a)
-        self.gpio_b.write(self.value_b)
+        if IS_RASPBERRY_PI:
+            self.gpio_a.write(self.value_a)
+            self.gpio_b.write(self.value_b)
         

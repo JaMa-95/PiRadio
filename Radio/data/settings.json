@@ -298,7 +298,7 @@
       "action": [
         {
           "apply_state": [5],
-          "action_type": 5,
+          "action_type": 5
         }
       ],
       "frequency": {

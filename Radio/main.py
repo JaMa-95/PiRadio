@@ -1,6 +1,5 @@
 import sys
 import os
-import time
 from multiprocessing import Process
 from threading import Thread
 
@@ -22,9 +21,17 @@ if is_raspberry():
     IS_RASPBERRY_PI = True
     import RPi.GPIO as GPIO
 
+def start_app() -> bool:
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--app=1":
+            return True
+    return False
+
 if __name__ == "__main__":
     if IS_RASPBERRY_PI:
         mock = False
+    
+    start_app = start_app()
        
     publisher: Publisher = Publisher()
     collector = Collector(mock=mock)
@@ -33,7 +40,7 @@ if __name__ == "__main__":
 
     processor_thread = Thread(target=data_processor.run)
     collector_thread = Thread(target=collector.run)
-    audio_thread = Process(target=audioPlayer.run)
+    audio_thread = Thread(target=audioPlayer.run)
     app_thread = Thread(target=app_run)
 
     SOLE_WEB_CONTROL = True
@@ -42,16 +49,15 @@ if __name__ == "__main__":
             collector_thread.start()
         processor_thread.start()
         audio_thread.start()
-        app_thread.start()
-        print("All threads are started")
+
+        if start_app:
+            app_thread.start()
         if not SOLE_WEB_CONTROL:
             collector_thread.join()
         processor_thread.join()
         audio_thread.join()
-        app_thread.join()
-        print("All threads are done")
+        if start_app:
+            app_thread.join()
     finally:
-        collector_thread.close()
-        processor_thread.terminate()
-        app_thread.terminate()
-        app_thread.terminate()
+        # TODO: stop all threads
+        pass

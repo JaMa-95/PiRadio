@@ -2,11 +2,15 @@
 Build your own url streaming radio by connecting buttons and potentiometers to your raspberry pi.
 Use the webapp to change to settings or control the radio from any device.
 
-# Known Issues
-- Raspbian OS Lite not working because of VLC player. 
-- make Software run as a service. Not working because sound is played with user rights
+# TODO
+- support logarithmic poti
+- run as service
+- test with raspberry pi zero
+- automatic audio driver settings
+- create install script
 
 # Hardware
+- Raspberry Pi 4 (Others should work the same)
 - Optional: print [PCB](PCB) 
 - assembly components according to PCB layout
 
@@ -25,7 +29,7 @@ Use the webapp to change to settings or control the radio from any device.
 - pip install adafruit-circuitpython-ads1x15
 - pip install smbus
 
- [reason for install uninstall](https://stackoverflow.com/questions/78386891/raspberry-pi-4-python-runtimeerror-error-waiting-for-edge)
+ [reason for uninstall install](https://stackoverflow.com/questions/78386891/raspberry-pi-4-python-runtimeerror-error-waiting-for-edge)
 - pip uninstall rpi.gpio
 - pip install rpi-lgpio
 
@@ -34,6 +38,7 @@ prefer using already available node modules. Raspberry takes a long time install
 
 - cp Radio/radio.sh  /etc/profile.d/radioStart.sh
 
+# audio
 ## mpd
 edit file /etc/mpd.conf
 ```commandline
@@ -49,29 +54,15 @@ edit file /etc/mpd.conf
     #       mixer_index     "0"             # optional
     }
 ```
+## uda1334
+TODO
 
 # autostart
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login
 https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
 
-### service is no working because of user rights which are needed to interact with audio
+# service 
 sudo nano /lib/systemd/system/radio.service
-
-https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
-
-# TODO
-logarithmic poti
-
-# react
-npm install react-bootstrap bootstrap
-
-# ADS1x15
-https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython
-
-# Pontentiometer
-Low-Pass Filter with 100yF Capacitor and 47k Ohm Resistance -> frequencies
-Low-Pass Filter with 22yF Capacitor and 47k Ohm Resistance -> volume -> must be faster
-https://www.instructables.com/Smooth-Potentiometer-Input/
 
 # ERROR
 ## Segmentation fault

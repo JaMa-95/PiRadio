@@ -44,8 +44,7 @@ class RadioAction:
 
 class RadioActionFactory:
     @staticmethod
-    def create(action_type: int, apply_states: List[ButtonState], button_name: str = "", frequency_pin_name: str = "", 
-               switch_values: List[bool, bool] = []) -> RadioAction:
+    def create(action_type: int, apply_states: List[ButtonState], button_name: str = "", frequency_pin_name: str = "") -> RadioAction:
         if action_type == RadioActionTypes.TURN_OFF_RASPBERRY.value:
             return TurnOffRaspberry(apply_states)
         elif action_type == RadioActionTypes.STOP_MUSIC.value:
@@ -208,8 +207,8 @@ class SwitchAudioSource(RadioAction):
             settings = json.load(f)
         for switch_device in settings["audio"]["switcher"]["devices"]:
             if switch_device["device"] == self.swtich_to:
-                self.value_a = switch_device["value_a"]
-                self.value_b = switch_device["value_b"]
+                self.value_a = switch_device["A"]
+                self.value_b = switch_device["B"]
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         self.audio_source_switcher.switch(self.value_a, self.value_b)
