@@ -21,4 +21,9 @@ pip install adafruit-circuitpython-ads1x15
 pip install smbus
 pip install rpi-lgpio
 systemctl enable mpd
-# TODO: change radio.sh paths dynamically
+
+# exchange name in start script
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+RADIO_SH_PATH="install.sh"
+MODULE_PLACEHOLDER_PATH="MODULE_PLACEHOLDER_PATH"
+sed -i  "s,$MODULE_PLACEHOLDER_PATH,$SCRIPT_DIR,g" $RADIO_SH_PATH

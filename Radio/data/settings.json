@@ -2,7 +2,7 @@
   "cycle_time": 0.001,
   "amplifier_pin": 13,
   "mqtt": false,
-  "startup_button": {
+  "on_off_button": {
     "active_pin": 5,
     "poll_pin": 22
   },

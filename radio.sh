@@ -1,8 +1,7 @@
 #!/bin/bash
-MODULE_PATH="~/Code/PiRadio"
+#MODULE_PATH="~/Code/PiRadio"
+MODULE_PATH=MODULE_PLACEHOLDER_PATH
 PID_FILE="/var/run/PiRadio.pid"
-
-WEB_APP_PATH="home/jakob/Code/PiRadio/Radio/react-app"
 
 start() {
     if [ -f $PID_FILE ]; then

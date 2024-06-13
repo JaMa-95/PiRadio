@@ -29,8 +29,8 @@ class OnOffButton:
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
-        self.active_pin = settings["startup_button"]["active_pin"]
-        self.poll_pin = settings["startup_button"]["poll_pin"]
+        self.active_pin = settings["on_off_button"]["active_pin"]
+        self.poll_pin = settings["on_off_button"]["poll_pin"]
 
     def activate_pin(self):
         GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)

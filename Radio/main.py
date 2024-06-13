@@ -1,6 +1,5 @@
 import sys
 import os
-from multiprocessing import Process
 from threading import Thread
 
 from Radio.dataProcessing.dataProcessor import DataProcessor
