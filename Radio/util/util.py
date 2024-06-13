@@ -27,3 +27,11 @@ def is_raspberry() -> bool:
                 if 'raspberry pi' in m.read().lower(): return True
         except Exception: pass
         return False
+
+
+def print_(debug: bool, text: str, class_name: str = ""):
+    if debug:
+        if class_name:
+            print(f"{class_name}: {text}")
+        else:
+            print(text)

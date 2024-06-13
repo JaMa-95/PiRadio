@@ -2,6 +2,10 @@
   "cycle_time": 0.001,
   "amplifier_pin": 13,
   "mqtt": false,
+  "startup_button": {
+    "active_pin": 5,
+    "poll_pin": 22
+  },
   "audio": {
     "fm_module": {
       "address":  96,

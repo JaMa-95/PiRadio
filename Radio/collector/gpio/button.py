@@ -104,10 +104,11 @@ class ButtonRaspi:
 
 class RadioButtonsRaspi(Singleton):
 
-    def __init__(self, mock: bool = False):
+    def __init__(self, mock: bool = False, debug: bool = False):
         if self._Singleton__initialized:
             return
         self.mock = mock
+        self.debug: bool = debug
         self.on_off_button: ButtonRaspi = ButtonRaspi(mock=mock)
         self.on_off_raspi_button: ButtonRaspi = ButtonRaspi(mock=mock)
         self.change_speaker_button: ButtonRaspi = ButtonRaspi(mock=mock)

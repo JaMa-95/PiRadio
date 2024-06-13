@@ -21,8 +21,9 @@ from Radio.util.util import get_project_root
 
 class AdsObject:
     # TODO: Refactor
-    def __init__(self, mock: bool = False):
+    def __init__(self, mock: bool = False, debug: bool = False):
         self.mock: bool = mock
+        self.debug: bool = debug
         self.analog_sensors: List[AdsSingle] = []
         self._load_settings()
 
@@ -94,7 +95,6 @@ class AdsSingle:
         except OSError as error:
             # TODO: Restart it
             pass
-        # print(f"pin: {pin}, value: {value}")
         self.db.replace_ads_pin_value(value, pin)
 
     def get_value(self):
@@ -158,9 +158,6 @@ class AdsSingle:
                 values.remove(min(values))
             else:
                 break
-        # if high_precision:
-        #    time_end = time.time()
-        #    print(f"DURATION 2: {time_end - time_start}")
         return mean(values)
 
 
