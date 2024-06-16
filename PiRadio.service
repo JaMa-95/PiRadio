@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-User=jakob
+User=USERNAME
 WorkingDirectory=~/Code/PiRadio
 ExecStart=~/Code/PiRadio/radio.sh start
 ExecStop=~/Code/PiRadio/radio.sh stop

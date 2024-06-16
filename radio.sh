@@ -9,7 +9,7 @@ start() {
     else
         cd $MODULE_PATH
         source Radio/venv/bin/activate
-        # python -m Radio.main --app=1 
+        # python -m Radio.main --app=0 --collector=1 
         echo $! > $PID_FILE
         npm start --prefix Radio/react-app
         echo "Service started."
