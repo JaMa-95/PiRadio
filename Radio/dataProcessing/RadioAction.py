@@ -131,7 +131,9 @@ class PlayMusic(RadioAction):
             return None
         radio_frequency: RadioFrequency = self.get_radio_frequency()
         current_radio_frequency = self.db.get_radio_frequency()
-        if radio_frequency == current_radio_frequency or not radio_frequency:
+        if (radio_frequency.radio_url == current_radio_frequency.radio_url and
+                radio_frequency.radio_url_re == current_radio_frequency.radio_url_re and
+                radio_frequency.name == current_radio_frequency.name) or not radio_frequency:
             return None
         self.db.replace_radio_frequency(radio_frequency)
         if radio_frequency.re_active:
