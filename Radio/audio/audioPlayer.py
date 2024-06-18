@@ -58,13 +58,13 @@ class AudioPlayer(Subscriber):
     def run(self):
         while True:
             status = self.client.status()
-            if status['state'] == 'play':
-                current_song = self.client.currentsong()
-                try:
+            try:
+                if status['state'] == 'play':
+                    current_song = self.client.currentsong()
                     self.database.replace_song_name(current_song["name"])
                     self.database.replace_song_station(current_song["file"])
-                except KeyError:
-                    pass
+            except KeyError:
+                pass
             time.sleep(1)
 
     def set_volume(self, volume):

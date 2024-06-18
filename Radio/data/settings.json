@@ -25,13 +25,14 @@
       "devices":
       [{
         "device": "raspberry",
-        "A": false,
-        "B": false
+        "A": true,
+        "B": false,
+        "startup": true
       },
       {
         "device": "tea5767",
         "A": false,
-        "B": true
+        "B": false
       }]
     }
   },

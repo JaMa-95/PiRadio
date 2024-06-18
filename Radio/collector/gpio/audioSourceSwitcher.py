@@ -24,6 +24,7 @@ class AudioSourceSwitcher(Singleton):
             GPIO.output(self.pin_a, self.value_a)
             GPIO.setup(self.pin_b, GPIO.OUT)
             GPIO.output(self.pin_b, self.value_b)
+        self.set_startup()
 
     def load_from_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -32,6 +33,16 @@ class AudioSourceSwitcher(Singleton):
         self.pin_a = settings["audio"]["switcher"]["pin_a"]
         self.pin_b = settings["audio"]["switcher"]["pin_b"]
         self.devices = settings["audio"]["switcher"]["devices"]
+
+    def set_startup(self):
+        for device in self.devices:
+            if device["startup"]:
+                self.value_a = device["A"]
+                self.value_b = device["B"]
+                if IS_RASPBERRY_PI:
+                    GPIO.output(self.pin_a, self.value_a)
+                    GPIO.output(self.pin_b, self.value_b)
+                break
         
     def switch(self, A: bool, B: bool):
         self.value_a = A
