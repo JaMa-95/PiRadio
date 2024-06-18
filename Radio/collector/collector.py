@@ -14,7 +14,7 @@ class Collector:
     def __init__(self, mock: bool = False, debug: bool = False):
         self.debug: bool = debug
         print_(debug=debug, class_name="Collector",
-               text="START COLLECTING SENSOR VALUES WITH MOCK: "+ mock)
+               text=f"START COLLECTING SENSOR VALUES WITH MOCK: {mock}")
         self.mock: bool = mock
         self.data_transmitter: DataTransmitter = DataTransmitter()
 
