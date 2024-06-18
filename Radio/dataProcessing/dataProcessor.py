@@ -75,7 +75,7 @@ class DataProcessor:
                         new_action = self.button_processor.process_button_web(data["button"]["name"],
                                                                               data["button"]["value"])
                         if new_action:
-                            self.active_actions.add_or_remove_action(new_action)
+                            self.active_actions.add_or_remove_actions(new_action)
                     
             else:
                 time.sleep(self.cycle_time)

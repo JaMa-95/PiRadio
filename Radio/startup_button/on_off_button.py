@@ -8,21 +8,24 @@
 # The rquest is acknowledged by setting GPIO 4 as an output
 # and setting it low.
 import json
-
-import RPi.GPIO as GPIO
 import time
 import subprocess
 
 from Radio.raspberry.raspberry import Raspberry
-from Radio.util.util import get_project_root
+from Radio.util.util import get_project_root, is_raspberry
+IS_RASPBERRY = False
+if is_raspberry():
+    IS_RASPBERRY = True
+    import RPi.GPIO as GPIO
 
 
 class OnOffButton:
     def __init__(self):
         self.active_pin: int = 0
         self.poll_pin: int = 0
-        self.raspberry: Raspberry = Raspberry()
-        self.load_settings()
+        if IS_RASPBERRY:
+            self.raspberry: Raspberry = Raspberry()
+            self.load_settings()
 
         print("STARTUP ON")
 
@@ -38,18 +41,19 @@ class OnOffButton:
         GPIO.output(self.active_pin, GPIO.HIGH)
 
     def run(self):
-        while True:
-            GPIO.wait_for_edge(self.poll_pin, GPIO.FALLING)
-            start = time.time()
-            while not GPIO.input(self.poll_pin):
-                time.sleep(0.01)
+        if IS_RASPBERRY:
+            while True:
+                GPIO.wait_for_edge(self.poll_pin, GPIO.FALLING)
+                start = time.time()
+                while not GPIO.input(self.poll_pin):
+                    time.sleep(0.01)
 
-            if time.time() - start < 0.1:
-                self.poll(start)
-            else:
-                print("Shutdown request detected\n")
-                self.acknowledge()
-                self.raspberry.turn_raspi_off()
+                if time.time() - start < 0.1:
+                    self.poll(start)
+                else:
+                    print("Shutdown request detected\n")
+                    self.acknowledge()
+                    self.raspberry.turn_raspi_off()
 
     def poll(self, start):
         GPIO.setup(self.poll_pin, GPIO.OUT, initial=0)
