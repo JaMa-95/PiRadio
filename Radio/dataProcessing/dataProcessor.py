@@ -235,14 +235,17 @@ class AnalogProcessor:
                         item.max = analog.max
                         item.min = analog.min
                     if item.is_frequency:
+                        # print("FREQUENCY VALUE: ", analog.value)
                         value = self.set_frequency(item, analog.value, active_actions)
                         self.analog_items[index].value = value
                         break
                     elif item.is_volume:
+                        # print("VOLUME VALUE: ", analog.value)
                         value = self.set_volume(item, analog.value)
                         self.analog_items[index].value = value
                         break
                     elif item.is_equalizer:
+                        print("EQUALIZER VALUE: ", analog.value)
                         value = self.set_equalizer(item, analog.value)
                         self.analog_items[index].value = value
                         break
@@ -293,7 +296,7 @@ class AnalogProcessor:
             value_new = 100
         if volume.value == value_new:
             return value_new
-        # print(f"Volume: {volume}")
+        print(f"Volume: {volume}")
         self.db.replace_volume(value_new)
         self.publish_function(f"volume:{value_new}")
         return value_new

@@ -9,12 +9,8 @@ from statistics import mean
 
 i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
 ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
-chan = AnalogIn(ads, ADS.P0)  # Create single-ended input on channel 0
-chan1 = AnalogIn(ads, ADS.P1)  # Create single-ended input on channel 0
-chan2 = AnalogIn(ads, ADS.P2)  # Create single-ended input on channel 0
-chan3 = AnalogIn(ads, ADS.P3)  # Create single-ended input on channel 0
 
-pins = [ADS.P0]
+pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
 
 while True:
     values = []
@@ -26,6 +22,7 @@ while True:
             values.append(chan.value)
             voltage.append(chan.voltage)
             time.sleep(0.01)
+        del chan
         print(f"max: {max(values)}")
         print(f"min: {min(values)}")
         print(f"mean: {mean(values)}")
