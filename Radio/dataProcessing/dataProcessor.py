@@ -139,6 +139,7 @@ class ButtonProcessor:
                 if button_old.pin == state_new.pin:
                     if self._check_button_change(state_new, button_old.state):
                         self.buttons[index].state = state_new
+                        print(f"BUTTON: {self.buttons[index].name} STATE: {state_new.state} STATES: {state_new.states}")
                         actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
                         new_actions.extend(actions_to_activate)
         return new_actions
@@ -288,7 +289,6 @@ class AnalogProcessor:
         return int(-(value - min_) / (min_ - max_) * 100)
 
     def set_volume(self, volume: AnalogItem, value: int) -> int:
-        # volume = int(-(value - volume.min) / (volume.min - volume.max) * 100)
         value_new = self._map(volume.max, volume.min, value)
         if value_new < 0:
             value_new = 0
@@ -296,7 +296,7 @@ class AnalogProcessor:
             value_new = 100
         if volume.value == value_new:
             return value_new
-        print(f"Volume: {volume}")
+        print(f"Volume: {value_new}")
         self.db.replace_volume(value_new)
         self.publish_function(f"volume:{value_new}")
         return value_new

@@ -26,6 +26,7 @@ class OnOffButton:
         if IS_RASPBERRY:
             self.raspberry: Raspberry = Raspberry()
             self.load_settings()
+            self.activate_pins()
 
         print("STARTUP ON")
 
@@ -35,7 +36,7 @@ class OnOffButton:
         self.active_pin = settings["on_off_button"]["active_pin"]
         self.poll_pin = settings["on_off_button"]["poll_pin"]
 
-    def activate_pin(self):
+    def activate_pins(self):
         GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.active_pin, GPIO.OUT)
         GPIO.output(self.active_pin, GPIO.HIGH)
@@ -59,9 +60,7 @@ class OnOffButton:
         GPIO.setup(self.poll_pin, GPIO.OUT, initial=0)
         time.sleep(0.05)
         GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        print("Poll ")
-        print(time.time() - start)
-        print("\n")
+        print("Poll: ", time.time() - start)
 
     def acknowledge(self):
         # Acknowledge by setting the GPIO pin as Output, Low

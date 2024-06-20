@@ -42,18 +42,18 @@
     },
     "sensors": {
       "posLangKurzMittel": {
-        "min": 4000,
-        "max": 28000,
+        "min": 0,
+        "max": 26000,
         "on": true,
-        "pin": 3,
+        "pin": 0,
         "is_volume": false,
         "is_frequency": true,
         "is_equalizer": false,
         "device": "ads_1"
       },
       "volume": {
-        "min": -4000,
-        "max": 30000,
+        "min": 0,
+        "max": 26000,
         "formula": true,
         "on": true,
         "is_volume": true,
@@ -103,7 +103,7 @@
           "6kHz": 2,
           "12kHz": 1
         },
-        "pin": 0,
+        "pin": 3,
         "device": "ads_1"
       }
     }
@@ -116,9 +116,9 @@
   },
   "buttons": {
     "OnOffMusic": {
-      "pin": 0,
+      "pin": 4,
       "reversed": false,
-      "active": false,
+      "active": true,
       "is_on_off": true,
       "action": [{
         "apply_state": [1],
@@ -133,7 +133,7 @@
     "OnOffRaspi": {
       "pin": 22,
       "reversed": false,
-      "active": true,
+      "active": false,
       "is_on_off_raspi": true,
       "action": [{
         "apply_state": [1],
@@ -147,7 +147,7 @@
     },
     "changeSpeaker": {
       "pin": 0,
-      "reversed": true,
+      "reversed": false,
       "active": false,
       "is_change_speaker": true,
       "action": [{
@@ -161,7 +161,7 @@
       "led": 0
     },
     "Lang": {
-      "pin": 24,
+      "pin": 23,
       "reversed": false,
       "active": true,
       "action": [
@@ -181,7 +181,7 @@
       "led": 2
     },
     "Mittel": {
-      "pin": 26,
+      "pin": 24,
       "reversed": false,
       "active": true,
      "action": [
@@ -201,7 +201,7 @@
       "led": 3
     },
     "Kurz_2": {
-      "pin": 21,
+      "pin": 25,
       "reversed": false,
       "active": true,
       "action": [
@@ -221,7 +221,7 @@
       "led": 4
     },
     "UKW": {
-      "pin": 20,
+      "pin": 8,
       "reversed": false,
       "active": true,
       "action": [
@@ -241,7 +241,7 @@
       "led": 5
     },
     "Kurz_1": {
-      "pin": 19,
+      "pin": 7,
       "reversed": false,
       "active": true,
       "action": [
@@ -261,8 +261,8 @@
       "led": 6
     },
     "Ta": {
-      "pin": 23,
-      "reversed": true,
+      "pin": 12,
+      "reversed": false,
       "active": true,
       "action": [
         {
@@ -281,8 +281,8 @@
       "led": 1
     },
     "Language": {
-      "pin": 17,
-      "reversed": true,
+      "pin": 13,
+      "reversed": false,
       "active": true,
       "action": [
         {
@@ -297,8 +297,8 @@
       "led": 99
     },
     "ResetAudioSource": {
-      "pin": 23,
-      "reversed": true,
+      "pin": 6,
+      "reversed": false,
       "active": true,
       "action": [
         {
@@ -313,7 +313,7 @@
       "led": 99
     },
     "Jazz": {
-      "pin": 4,
+      "pin": 11,
       "reversed": false,
       "active": true,
       "action": [{

@@ -1,8 +1,8 @@
 from collections import deque
 from typing import List
 from Radio.dataProcessing.states import ButtonClickStates
-from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
-from Radio.util.sensorMsg import AnalogData, ButtonState, SensorMsg
+from Radio.dataProcessing.radioFrequency import Frequencies
+from Radio.util.sensorMsg import AnalogData, ButtonState
 
 
 class ButtonProcessData:
