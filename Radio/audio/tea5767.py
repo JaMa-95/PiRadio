@@ -23,7 +23,7 @@ class FmModule(Subscriber):
         self._init_fm_module()
 
         self.frequency_value_max: int = 0
-        self.frequency_value_min: int = 0
+        self.frequency_value_min: int = 1
 
         self.fm_min: int = 87.5
         self.fm_max: int = 108.0
@@ -42,6 +42,7 @@ class FmModule(Subscriber):
         self.active = settings["audio"]["fm_module"]["active"]
         for _, analog in settings["analog"]["sensors"].items():
             if analog["is_frequency"]:
+                print("MAX IS: ", analog["max"])
                 self.frequency_value_max = analog["max"]
                 self.frequency_value_min = analog["min"]
 
