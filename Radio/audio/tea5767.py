@@ -76,6 +76,9 @@ class FmModule(Subscriber):
             pass
             # print(f"unknown content at audio player: {content}")
 
+    def set_volume(self, volume):
+        print("Volume not supported by FM module")
+
     def set_freq(self, fm_frequency):
         """set Radio to specific frequency"""
         freq14bit = int(4 * (
