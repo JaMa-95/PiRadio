@@ -22,6 +22,12 @@ class FmModule(Subscriber):
         self.load_from_settings()
         self._init_fm_module()
 
+        self.frequency_value_max: int = 0
+        self.frequency_value_min: int = 0
+
+        self.fm_min: int = 87.5
+        self.fm_max: int = 108.0
+
     def _init_fm_module(self):
         if self.active:
             self.i2c = smbus.SMBus(1)
@@ -34,17 +40,27 @@ class FmModule(Subscriber):
             settings = json.load(f)
         self.i2c_address = settings["audio"]["fm_module"]["address"]
         self.active = settings["audio"]["fm_module"]["active"]
+        for _, analog in settings["analog"]["sensors"].items():
+            if analog["is_frequency"]:
+                self.frequency_value_max = analog["max"]
+                self.frequency_value_min = analog["min"]
 
     def __del__(self):
         if self.active:
             self.i2c.close()
         print("FM module stopped")
 
+    def calcuulate_fm_value(self, frequency_value: int) -> float:
+        return float((frequency_value - self.frequency_value_min) * (self.fm_max - self.fm_min) / (
+                self.frequency_value_max - self.frequency_value_min) + self.fm_min)
+
     def update(self):
         content = self.publisher.get_content()
         if "freq_fm:" in content:
-            fm_frequency = content.strip("freq_fm:")
-            self.set_freq(float(fm_frequency))
+            frequency_value = content.strip("freq_fm:")
+            fm_frequency = self.calcuulate_fm_value(frequency_value)
+            print("FM frequency: ", fm_frequency)
+            self.set_freq(fm_frequency)
         elif content == "stop":
             self.mute()
         elif "volume" in content:

@@ -40,7 +40,6 @@ class RadioFrequency:
         if self.name != other.name or \
            self.minimum != other.minimum or \
            self.maximum != other.maximum or \
-           self.sweet_spot != other.sweet_spot or \
            self.radio_name != other.radio_name or \
            self.radio_name_re != other.radio_name_re or \
            self.radio_url != other.radio_url or \
