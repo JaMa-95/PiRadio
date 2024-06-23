@@ -56,6 +56,8 @@ class FmModule(Subscriber):
             time.sleep(1)
 
     def calcuulate_fm_value(self, frequency_value: int) -> float:
+        if frequency_value == 0:
+            frequency_value = 0.1
         return float((frequency_value - self.frequency_value_min) * (self.fm_max - self.fm_min) / (
                 self.frequency_value_max - self.frequency_value_min) + self.fm_min)
 
