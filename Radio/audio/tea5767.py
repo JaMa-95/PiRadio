@@ -63,7 +63,7 @@ class FmModule(Subscriber):
         content = self.publisher.get_content()
         if "freq_fm:" in content:
             frequency_value = content.strip("freq_fm:")
-            fm_frequency = self.calcuulate_fm_value(frequency_value)
+            fm_frequency = self.calcuulate_fm_value(int(frequency_value))
             print("FM frequency: ", fm_frequency)
             self.set_freq(fm_frequency)
         elif content == "stop":

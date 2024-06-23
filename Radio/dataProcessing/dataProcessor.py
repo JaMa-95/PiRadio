@@ -262,6 +262,7 @@ class AnalogProcessor:
 
     def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
                       active_actions: Actions) -> int:
+        
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
