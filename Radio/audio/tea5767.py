@@ -19,11 +19,11 @@ class FmModule(Subscriber):
         self.active: bool = False
         self.publisher: Publisher = publisher
         self.publisher.attach(self)
-        self.load_from_settings()
         self._init_fm_module()
 
-        self.frequency_value_max: int = 0
-        self.frequency_value_min: int = 1
+        self.frequency_value_max: int = 1
+        self.frequency_value_min: int = 0
+        self.load_from_settings()
 
         self.fm_min: int = 87.5
         self.fm_max: int = 108.0
