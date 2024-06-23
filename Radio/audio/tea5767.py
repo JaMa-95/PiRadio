@@ -49,6 +49,11 @@ class FmModule(Subscriber):
         if self.active:
             self.i2c.close()
         print("FM module stopped")
+    
+    def run(self):
+        while True:
+            # update fm data 
+            time.sleep(1)
 
     def calcuulate_fm_value(self, frequency_value: int) -> float:
         return float((frequency_value - self.frequency_value_min) * (self.fm_max - self.fm_min) / (

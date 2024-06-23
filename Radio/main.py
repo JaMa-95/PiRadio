@@ -10,6 +10,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from Radio.audio.audioPlayer import AudioPlayer
+from Radio.audio.tea5767 import FmModule
 from Radio.app import run as app_run
 
 from Radio.collector.collector import Collector
@@ -55,6 +56,7 @@ if __name__ == "__main__":
     data_processor = DataProcessor(publisher)
     audioPlayer = AudioPlayer(publisher)
     on_off_button: OnOffButton = OnOffButton()
+    fm_module: FmModule = FmModule(publisher)
 
     # THREADS
     on_off_thread = Thread(target=on_off_button.run)
@@ -63,12 +65,14 @@ if __name__ == "__main__":
     audio_thread = Thread(target=audioPlayer.run)
     app_thread = Thread(target=app_run)
     write_thread = Thread(target=write)
+    fm_module_thread = Thread(target=fm_module.run)
 
     try:
         # START
         processor_thread.start()
         audio_thread.start()
         on_off_thread.start()
+        fm_module_thread.start()
         if collector_on:
             collector_thread.start()
         if debug:
@@ -80,6 +84,7 @@ if __name__ == "__main__":
         processor_thread.join()
         audio_thread.join()
         on_off_thread.join()
+        fm_module_thread.join()
         if collector_on:
             collector_thread.join()
         if debug:
