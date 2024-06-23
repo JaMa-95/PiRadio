@@ -39,7 +39,7 @@ class SensorDataOld(SensorData):
 
 
 class ButtonState:
-    max_values = 5
+    max_values = 20
     def __init__(self, pin: int, state: bool, states=None):
         if states is None:
             states = deque([False] * self.max_values)

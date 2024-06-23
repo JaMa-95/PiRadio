@@ -57,6 +57,7 @@ class AudioSourceSwitcher(Singleton):
             self.current_device = 0
         self.value_a = self.devices[self.current_device]["A"]
         self.value_b = self.devices[self.current_device]["B"]
+        print("ROTATE SOURCE: ", self.devices[self.current_device]["device"])
         if IS_RASPBERRY_PI:
             GPIO.output(self.pin_a, self.value_a)
             GPIO.output(self.pin_b, self.value_b)

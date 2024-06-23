@@ -13,10 +13,11 @@ from Radio.dataProcessing.states import ButtonClickStates, RadioActionTypes
 
 
 class RadioAction:
-    def __init__(self, apply_states: List[ButtonClickStates] = None):
+    def __init__(self, apply_states: List[ButtonClickStates] = None, one_time_action: bool = False):
         if not apply_states:
             apply_states = []
         self.apply_states: List[ButtonClickStates] = apply_states
+        self.one_time_action: bool = one_time_action
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -37,6 +38,7 @@ class RadioAction:
         pass
 
     def check_state(self, button_state: ButtonClickStates):
+        print("Check state: ", button_state.value, " in ", self.apply_states)
         if button_state.value in self.apply_states:
             return True
         return False
@@ -54,6 +56,7 @@ class RadioActionFactory:
         elif action_type == RadioActionTypes.HOLD_FREQUENCY.value:
             return HoldFrequencyX(holding_pin_name=button_name, apply_states=apply_states)
         elif action_type == RadioActionTypes.ROTATE_AUDIO_SOURCE.value:
+            print("ROTATE AUDIO SOURCE CREATED")
             return RotateAudioSource(apply_states)
         elif action_type == RadioActionTypes.SET_AUDIO_SOURCE.value:
             return SwitchAudioSource(apply_states, switch_to=frequency_pin_name)
@@ -196,7 +199,7 @@ class AddRestriction(RadioAction):
 
 class SwitchAudioSource(RadioAction):
     def __init__(self, apply_states: List[ButtonClickStates], switch_to: str):
-        super().__init__(apply_states=apply_states)
+        super().__init__(apply_states=apply_states, one_time_action=True)
         self.audio_source_switcher: AudioSourceSwitcher = AudioSourceSwitcher()
         self.swtich_to: str = switch_to
         self.value_a: bool = False
@@ -218,12 +221,15 @@ class SwitchAudioSource(RadioAction):
     
 class RotateAudioSource(RadioAction):
     def __init__(self, apply_states: List[ButtonClickStates]):
-        super().__init__(apply_states=apply_states)
+        super().__init__(apply_states=apply_states, one_time_action=True)
         self.audio_source_switcher: AudioSourceSwitcher = AudioSourceSwitcher()
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         self.audio_source_switcher.rotate_source()
         return sensor_msg_new
+    
+    def try_execute(self) -> SensorMsg:
+        self.execute(None, None)
         
 
 class Actions(Singleton):
@@ -267,12 +273,17 @@ class Actions(Singleton):
                 if action == action_new:
                     self._actions[index].execute_exit()
                     self._actions.pop(index)
+                elif action.one_time_action:
+                    action_new.try_execute()
                 else:
                     action_new.try_execute()
                     self._actions.append(action_new)
         else:
-            action_new.try_execute()
-            self._actions.append(action_new)
+            if action_new.one_time_action:
+                action_new.try_execute()
+            else:
+                action_new.try_execute()
+                self._actions.append(action_new)
 
     def add_or_remove_actions(self, actions_new: List[RadioAction]):
         for action in actions_new:
