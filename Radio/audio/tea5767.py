@@ -68,7 +68,6 @@ class FmModule(Subscriber):
             fm_frequency = self.calcuulate_fm_value(float(frequency_value))
             print("FM frequency: ", fm_frequency)
             self.set_freq(fm_frequency)
-            time.sleep(10)
         elif content == "stop":
             self.mute()
         elif "volume" in content:

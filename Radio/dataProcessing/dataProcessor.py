@@ -266,8 +266,9 @@ class AnalogProcessor:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
+        if current_frequency_value - frequency_item.value > 20:
+            self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
-        self.publish_function(f"freq_fm:{current_frequency_value}")
         self.set_stream(frequency_item, active_actions)
         self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
         return current_frequency_value
