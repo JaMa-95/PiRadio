@@ -15,15 +15,15 @@ class FmModule(Subscriber):
     def __init__(self, publisher: Publisher = Publisher()):
         self.i2c_address: int = 0x60
         self.i2c: smbus.SMBus = None
+        self.active: bool = True
         self.frequency = 0
-        self.active: bool = False
         self.publisher: Publisher = publisher
         self.publisher.attach(self)
-        self._init_fm_module()
 
         self.frequency_value_max: int = 1
         self.frequency_value_min: int = 0
         self.load_from_settings()
+        self._init_fm_module()
 
         self.fm_min: int = 87.5
         self.fm_max: int = 108.0
@@ -57,19 +57,18 @@ class FmModule(Subscriber):
             time.sleep(1)
 
     def calcuulate_fm_value(self, frequency_value: int) -> float:
-        # Convert the left range into a 0-1 range (float)
-        valueScaled = float(frequency_value - self.frequency_value_min) / self.frequency_value_max
-
-        # Convert the 0-1 range into a value in the right range.
-        return self.fm_min + (valueScaled * self.fm_max)
+        valueScaled = (frequency_value - self.frequency_value_min) / (self.frequency_value_max - self.frequency_value_min) * (self.fm_max - self.fm_min) + self.fm_min
+        return valueScaled
 
     def update(self):
         content = self.publisher.get_content()
         if "freq_fm:" in content:
             frequency_value = content.strip("freq_fm:")
+            print("Frequency value: ", frequency_value)
             fm_frequency = self.calcuulate_fm_value(float(frequency_value))
             print("FM frequency: ", fm_frequency)
             self.set_freq(fm_frequency)
+            time.sleep(10)
         elif content == "stop":
             self.mute()
         elif "volume" in content:
@@ -96,7 +95,6 @@ class FmModule(Subscriber):
         data[3] = 0x00  #0b00000000 # 5.bajt (PLREFF; DTC; 0; 0; 0; 0; 0; 0)
         try:
             self.i2c.write_i2c_block_data(self.i2c_address, init, data)  # Setting a new frequency to the circuit
-            print("Frequency set to: " + str(fm_frequency))
         except IOError:
             subprocess.call(['i2cdetect', '-y', '1'])
 
