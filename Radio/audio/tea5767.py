@@ -25,14 +25,20 @@ class FmModule(Subscriber):
         self.load_from_settings()
         self._init_fm_module()
 
+        self.current_fm_frequency: float = 0
+
         self.fm_min: int = 87.5
         self.fm_max: int = 108.0
 
     def _init_fm_module(self):
         if self.active:
-            self.i2c = smbus.SMBus(1)
-            self.i2c.write_quick(self.i2c_address)
-            print("FM module initialized")
+            try:
+                self.i2c = smbus.SMBus(1)
+                self.i2c.write_quick(self.i2c_address)
+                print("FM module initialized")
+            except IOError:
+                print("FM module not connected")
+                self.active = False
 
     def load_from_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -52,7 +58,7 @@ class FmModule(Subscriber):
         print("FM module stopped")
     
     def run(self):
-        while True:
+        while self.active:
             # update fm data 
             time.sleep(1)
 
@@ -62,19 +68,21 @@ class FmModule(Subscriber):
 
     def update(self):
         content = self.publisher.get_content()
-        if "freq_fm:" in content:
-            frequency_value = content.strip("freq_fm:")
-            print("Frequency value: ", frequency_value)
-            fm_frequency = self.calcuulate_fm_value(float(frequency_value))
-            print("FM frequency: ", fm_frequency)
-            self.set_freq(fm_frequency)
-        elif content == "stop":
-            self.mute()
-        elif "volume" in content:
-            self.set_volume(int(content.strip("volume:")))
-        else:
-            pass
-            # print(f"unknown content at audio player: {content}")
+        if self.active:
+            if "freq_fm:" in content:
+                frequency_value = content.strip("freq_fm:")
+                print("Frequency value: ", frequency_value)
+                fm_frequency = self.calcuulate_fm_value(float(frequency_value))
+                print("FM frequency: ", fm_frequency)
+                self.set_freq(fm_frequency)
+            elif content == "stop":
+                print("MUTING FM module")
+                self.mute()
+            elif "volume" in content:
+                self.set_volume(int(content.strip("volume:")))
+            else:
+                pass
+                # print(f"unknown content at audio player: {content}")
 
     def set_volume(self, volume):
         print("Volume not supported by FM module")

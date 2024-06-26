@@ -21,6 +21,11 @@ def get_project_root() -> Path:
     return Path(__file__).parent.parent
 
 
+
+def map_(max_a: int, min_a: int,  max_b: int, min_b: int, value: int):
+    return (value - min_a) / (max_a - min_a) * (max_b - min_b) + min_b
+
+
 def is_raspberry() -> bool:
         try:
             with io.open('/sys/firmware/devicetree/base/model', 'r') as m:

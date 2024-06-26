@@ -64,10 +64,10 @@
       },
       "bass": {
         "min": 0,
-        "max": 30000,
+        "max": 26000,
         "min_final": -20,
         "max_final": 20,
-        "on": false,
+        "on": true,
         "is_volume": false,
         "is_frequency": false,
         "is_equalizer": true,
@@ -85,11 +85,11 @@
         "device": "ads_1"
       },
       "treble": {
-        "min": 24100,
-        "max": 25900,
+        "min": 0,
+        "max": 26000,
         "min_final": -20,
         "max_final": 20,
-        "on": false,
+        "on": true,
         "is_volume": false,
         "is_frequency": false,
         "is_equalizer": true,

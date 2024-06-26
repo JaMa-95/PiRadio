@@ -162,7 +162,8 @@ class PlayMusic(RadioAction):
         return over_min_max_frequency
 
     def execute_exit(self):
-        self.publisher.publish("stream:")
+        print("Stop music")
+        self.publisher.publish("stop")
         self.db.replace_active_radio_url("")
 
 

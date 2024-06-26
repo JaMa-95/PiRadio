@@ -71,13 +71,12 @@ class AudioPlayer(Subscriber):
         self.client.setvol(volume)
 
     def set_equalizer(self, equalizer_data: list):
+        print(f"EQ: {equalizer_data}")
         return None
         for index, value in enumerate(equalizer_data):
-            self.equalizer.set_amp_at_index(value, index)
+            if value != -1:
+                self.equalizer.set_amp_at_index(value, index)
         self.player.set_equalizer(self.equalizer)
-        for index, a in enumerate(equalizer_data):
-            amp = self.equalizer.get_amp_at_index(index)
-            print(amp)
 
     def add_static_noise(self, level):
         self.noise_player.audio_set_volume(level)

@@ -11,6 +11,7 @@ class EqualizerReductionData:
         self.reduction_12_hkz: int = reduction_12_hkz
 
     def from_list(self, data: list):
+        print("REDUCTION DATA: ", data)
         self.reduction_60_hz: int = data[0]
         self.reduction_170_hz: int = data[1]
         self.reduction_310_hz: int = data[2]
@@ -110,17 +111,31 @@ class Equalizer:
 
     def calc_equalizer_with_reductions(self, value: int):
         if self.reduction.reduction_60_hz != -1:
-            self.value_60_hz = value / self.reduction.reduction_60_hz
+            self.value_60_hz = int(value / self.reduction.reduction_60_hz)
+        else:
+            self.value_60_hz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_170_hz = value / self.reduction.reduction_170_hz
+            self.value_170_hz = int(value / self.reduction.reduction_170_hz)
+        else:
+            self.value_170_hz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_310_hz = value / self.reduction.reduction_310_hz
+            self.value_310_hz = int(value / self.reduction.reduction_310_hz)
+        else:
+            self.value_310_hz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_1_khz = value / self.reduction.reduction_1_khz
+            self.value_1_khz = int(value / self.reduction.reduction_1_khz)
+        else:
+            self.value_1_khz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_3_khz = value / self.reduction.reduction_3_khz
+            self.value_3_khz = int(value / self.reduction.reduction_3_khz)
+        else:
+            self.value_3_khz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_6_khz = value / self.reduction.reduction_6_khz
+            self.value_6_khz = int(value / self.reduction.reduction_6_khz)
+        else:
+            self.value_6_khz = -1
         if self.reduction.reduction_60_hz != -1:
-            self.value_12_hkz = value / self.reduction.reduction_12_hkz
+            self.value_12_hkz = int(value / self.reduction.reduction_12_hkz)
+        else:
+            self.value_12_hkz = -1
 
