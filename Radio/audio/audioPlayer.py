@@ -71,7 +71,7 @@ class AudioPlayer(Subscriber):
         self.client.setvol(volume)
 
     def set_equalizer(self, equalizer_data: list):
-        print(f"EQ: {equalizer_data}")
+        print(f"SET EQ: {equalizer_data}")
         return None
         for index, value in enumerate(equalizer_data):
             if value != -1:

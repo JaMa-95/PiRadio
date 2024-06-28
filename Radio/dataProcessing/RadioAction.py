@@ -268,19 +268,34 @@ class Actions(Singleton):
             if action == action_new:
                 self._actions.pop(index)
 
+    def remove_all_of_type(self, typ_: RadioAction):
+        for index, action in enumerate(self._actions):
+            if isinstance(action, typ_):
+                self._actions.pop(index)
+
     def add_or_remove_action(self, action_new: RadioAction):
         if len(self._actions) > 0:
             for index, action in enumerate(self._actions):
-                if action == action_new:
+                if isinstance(action_new, TurnOffMusic):
+                    self.remove_all_of_type(PlayMusic)
+                    action_new.try_execute()
+                    break
+                elif action == action_new:
                     self._actions[index].execute_exit()
                     self._actions.pop(index)
+                    break
                 elif action.one_time_action:
                     action_new.try_execute()
+                    break
                 else:
                     action_new.try_execute()
                     self._actions.append(action_new)
+                    break
         else:
-            if action_new.one_time_action:
+            if isinstance(action_new, TurnOffMusic):
+                self.remove_all_of_type(PlayMusic)
+                action_new.try_execute()
+            elif action_new.one_time_action:
                 action_new.try_execute()
             else:
                 action_new.try_execute()

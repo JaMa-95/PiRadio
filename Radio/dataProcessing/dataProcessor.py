@@ -87,7 +87,9 @@ class DataProcessor:
         self.active_actions.add_or_remove_action(action)
 
     def process_buttons(self, sensor_msg_current: SensorMsg):
-        self.active_actions.add_or_remove_actions(self.button_processor.process(sensor_msg_current))
+        new_actions = self.button_processor.process(sensor_msg_current)
+        if len(new_actions) > 0:
+            self.active_actions.add_or_remove_actions(new_actions)
 
     def process_analogs(self, analog_data: AnalogData):
         if analog_data.is_empty():
@@ -230,24 +232,19 @@ class AnalogProcessor:
         # TODO: smarter solution
         for analog in data.get_data_sensor():
             for index, item in enumerate(self.analog_items):
-                print(f"ANALOG PIN: {analog.pin} ITEM PIN: {item.pin}")
                 if item.pin == analog.pin:
-                    print(f"ANALOG ITEM: {item.name}")
                     if self.is_first_run:
                         item.max = analog.max
                         item.min = analog.min
                     if item.is_frequency:
-                        # print("FREQUENCY VALUE: ", analog.value)
                         value = self.set_frequency(item, analog.value, active_actions)
                         self.analog_items[index].value = value
                         break
                     elif item.is_volume:
-                        # print("VOLUME VALUE: ", analog.value)
                         value = self.set_volume(item, analog.value)
                         self.analog_items[index].value = value
                         break
                     elif item.is_equalizer:
-                        print("EQUALIZER VALUE: ", analog.value)
                         value = self.set_equalizer(item, analog.value)
                         self.analog_items[index].value = value
                         break
@@ -264,11 +261,11 @@ class AnalogProcessor:
 
     def set_frequency(self, frequency_item: AnalogItem, current_frequency_value: int,
                       active_actions: Actions) -> int:
-        
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
         if abs(current_frequency_value - frequency_item.value) > 20:
+            print(f"Frequency: {current_frequency_value}")
             self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)
@@ -306,11 +303,10 @@ class AnalogProcessor:
         return value_new
 
     def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int) -> int:
-        if current_equalizer_value == frequency_item.value:
+        if abs(current_equalizer_value - frequency_item.value) < 20:
             return current_equalizer_value
         mapped_value =  map_(frequency_item.max, frequency_item.min, 20, -20, frequency_item.value)
-        print(f"Equalizer: {mapped_value}")
-        frequency_item.equalizer.calc_equalizer_with_reductions(mapped_value)
+        frequency_item.equalizer.calc_equalizer_with_reductions(mapped_value, self.db.get_equalizer())
         self.db.replace_equalizer(frequency_item.equalizer)
         self.publish_function(f'equalizer:{str(frequency_item.equalizer.to_list())}')
         return current_equalizer_value

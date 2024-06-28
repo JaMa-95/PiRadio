@@ -2,7 +2,7 @@
   "cycle_time": 0.001,
   "amplifier_pin": 13,
   "mqtt": false,
-  "on_off_button": {
+  "on_off_button": {  
     "active_pin": 5,
     "poll_pin": 22
   },
@@ -166,11 +166,11 @@
       "active": true,
       "action": [
         {
-          "apply_state": [1, 5],
+          "apply_state": [1],
           "action_type": 2
         },
         {
-          "apply_state": [0, 6],
+          "apply_state": [0],
           "action_type": 1
         }
       ],
