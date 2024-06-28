@@ -305,7 +305,7 @@ class AnalogProcessor:
     def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int) -> int:
         if abs(current_equalizer_value - frequency_item.value) < 20:
             return current_equalizer_value
-        mapped_value =  map_(frequency_item.max, frequency_item.min, 20, -20, frequency_item.value)
+        mapped_value =  map_(frequency_item.max, frequency_item.min, 20, -20, current_equalizer_value)
         frequency_item.equalizer.calc_equalizer_with_reductions(mapped_value, self.db.get_equalizer())
         self.db.replace_equalizer(frequency_item.equalizer)
         self.publish_function(f'equalizer:{str(frequency_item.equalizer.to_list())}')
