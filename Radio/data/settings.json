@@ -116,7 +116,7 @@
   },
   "buttons": {
     "OnOffMusic": {
-      "pin": 4,
+      "pin": 0,
       "reversed": false,
       "active": true,
       "is_on_off": true,
@@ -161,7 +161,7 @@
       "led": 0
     },
     "Lang": {
-      "pin": 23,
+      "pin": 4,
       "reversed": false,
       "active": true,
       "action": [
@@ -181,7 +181,7 @@
       "led": 2
     },
     "Mittel": {
-      "pin": 24,
+      "pin": 23,
       "reversed": false,
       "active": true,
      "action": [
@@ -200,8 +200,8 @@
       },
       "led": 3
     },
-    "Kurz_2": {
-      "pin": 25,
+    "Kurz_1": {
+      "pin": 24,
       "reversed": false,
       "active": true,
       "action": [
@@ -216,12 +216,12 @@
       ],
       "frequency": {
         "pos": "posLangKurzMittel",
-        "musicList": "freq_kurz_2.json"
+        "musicList": "freq_kurz_1.json"
       },
       "led": 4
     },
     "UKW": {
-      "pin": 8,
+      "pin": 25,
       "reversed": false,
       "active": true,
       "action": [
@@ -240,8 +240,8 @@
       },
       "led": 5
     },
-    "Kurz_1": {
-      "pin": 7,
+    "SPR": {
+      "pin": 8,
       "reversed": false,
       "active": true,
       "action": [
@@ -256,7 +256,7 @@
       ],
       "frequency": {
         "pos": "posLangKurzMittel",
-        "musicList": "freq_kurz_1.json"
+        "musicList": "freq_kurz_2.json"
       },
       "led": 6
     },

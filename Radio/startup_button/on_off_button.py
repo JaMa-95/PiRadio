@@ -21,14 +21,14 @@ if is_raspberry():
 
 class OnOffButton:
     def __init__(self):
-        self.active_pin: int = 0
-        self.poll_pin: int = 0
+        self.active_pin: int = 5
+        self.poll_pin: int = 22
         if IS_RASPBERRY:
             self.raspberry: Raspberry = Raspberry()
-            self.load_settings()
+            # self.load_settings()
             self.activate_pins()
 
-        print("STARTUP ON")
+        print("ON/OFF Button active")
 
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
@@ -39,12 +39,15 @@ class OnOffButton:
     def activate_pins(self):
         GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.active_pin, GPIO.OUT)
-        GPIO.output(self.active_pin, GPIO.HIGH)
+        #GPIO.output(self.active_pin, GPIO.LOW)
+        time.sleep(0.1)
+        # GPIO.output(self.active_pin, GPIO.HIGH)
 
     def run(self):
         if IS_RASPBERRY:
             while True:
                 GPIO.wait_for_edge(self.poll_pin, GPIO.FALLING)
+                print("POLL OVER")
                 start = time.time()
                 while not GPIO.input(self.poll_pin):
                     time.sleep(0.01)

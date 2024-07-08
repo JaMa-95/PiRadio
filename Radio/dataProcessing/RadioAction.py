@@ -126,6 +126,7 @@ class PlayMusic(RadioAction):
         self.play_music()
 
     def try_execute(self):
+        print("PLAY MUSIC", self.button_name)
         self.play_music()
 
     def play_music(self):
@@ -296,6 +297,7 @@ class Actions(Singleton):
                 self.remove_all_of_type(PlayMusic)
                 action_new.try_execute()
             elif action_new.one_time_action:
+                print("TRY EXECUTE")
                 action_new.try_execute()
             else:
                 action_new.try_execute()

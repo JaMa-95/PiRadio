@@ -141,6 +141,7 @@ class ButtonProcessor:
                 if button_old.pin == state_new.pin:
                     if self._check_button_change(state_new, button_old.state):
                         self.buttons[index].state = state_new
+                        print(f"Button: {self.buttons[index].name} {state_new.state}")
                         actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
                         new_actions.extend(actions_to_activate)
         return new_actions
@@ -264,7 +265,7 @@ class AnalogProcessor:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
-        if abs(current_frequency_value - frequency_item.value) > 20:
+        if abs(current_frequency_value - frequency_item.value) > 4:
             print(f"Frequency: {current_frequency_value}")
             self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
@@ -290,6 +291,7 @@ class AnalogProcessor:
         return int(-(value - min_) / (min_ - max_) * 100)
 
     def set_volume(self, volume: AnalogItem, value: int) -> int:
+        # print(f"Volume: {value}")
         value_new = self._map(volume.max, volume.min, value)
         if value_new < 0:
             value_new = 0
@@ -303,6 +305,7 @@ class AnalogProcessor:
         return value_new
 
     def set_equalizer(self, frequency_item: AnalogItem, current_equalizer_value: int) -> int:
+        return current_equalizer_value
         if abs(current_equalizer_value - frequency_item.value) < 20:
             return current_equalizer_value
         mapped_value =  map_(frequency_item.max, frequency_item.min, 20, -20, current_equalizer_value)

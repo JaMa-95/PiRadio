@@ -71,12 +71,11 @@ class FmModule(Subscriber):
         if self.active:
             if "freq_fm:" in content:
                 frequency_value = content.strip("freq_fm:")
-                print("Frequency value: ", frequency_value)
+                # print("Frequency value: ", frequency_value)
                 fm_frequency = self.calcuulate_fm_value(float(frequency_value))
-                print("FM frequency: ", fm_frequency)
+                # print("FM frequency: ", fm_frequency)
                 self.set_freq(fm_frequency)
             elif content == "stop":
-                print("MUTING FM module")
                 self.mute()
             elif "volume" in content:
                 self.set_volume(int(content.strip("volume:")))
@@ -88,9 +87,13 @@ class FmModule(Subscriber):
         print("Volume not supported by FM module")
 
     def set_freq(self, fm_frequency):
+        if self.current_fm_frequency == round(fm_frequency, 1):
+            return None
+        self.current_fm_frequency = round(fm_frequency, 1)
+        print(f"fm frequency is {self.current_fm_frequency}")
         """set Radio to specific frequency"""
         freq14bit = int(4 * (
-                fm_frequency * 1000000 + 225000) / 32768)  # Frequency distribution for two bytes (according to the data sheet)
+                self.current_fm_frequency * 1000000 + 225000) / 32768)  # Frequency distribution for two bytes (according to the data sheet)
         freqH = freq14bit >> 8  #int (freq14bit / 256)
         freqL = freq14bit & 0xFF
 
@@ -101,9 +104,9 @@ class FmModule(Subscriber):
         data[2] = 0x10  #0b00010000 # 4.bajt (SWP2; STBY, BL; XTAL; smut; HCC, SNC, SI)
         data[3] = 0x00  #0b00000000 # 5.bajt (PLREFF; DTC; 0; 0; 0; 0; 0; 0)
         try:
-            self.i2c.write_i2c_block_data(self.i2c_address, init, data)  # Setting a new frequency to the circuit
+            self.i2c.write_i2c_block_data(self.i2c_address, init, data)  # Setting a new frequency to the circuitW
         except IOError:
-            subprocess.call(['i2cdetect', '-y', '1'])
+            print("ERROR: I2C bus not connected")
 
     def mute(self):
         """"mute radio"""
@@ -117,7 +120,7 @@ class FmModule(Subscriber):
         data[3] = 0x00
         try:
             self.i2c.write_i2c_block_data(self.i2c_address, init, data)
-            print("Radio Muted")
+            print("Fm-Radio Muted")
         except IOError:
             subprocess.call(['i2cdetect', '-y', '1'])
 
