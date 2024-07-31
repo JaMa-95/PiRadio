@@ -141,7 +141,7 @@ class ButtonProcessor:
                 if button_old.pin == state_new.pin:
                     if self._check_button_change(state_new, button_old.state):
                         self.buttons[index].state = state_new
-                        print(f"Button: {self.buttons[index].name} {state_new.state}")
+                        # print(f"Button: {self.buttons[index].name} {state_new.state}")
                         actions_to_activate = self.buttons[index].get_radio_actions_to_activate()
                         new_actions.extend(actions_to_activate)
         return new_actions

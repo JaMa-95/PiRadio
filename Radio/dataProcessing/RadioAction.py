@@ -50,13 +50,14 @@ class RadioActionFactory:
         if action_type == RadioActionTypes.TURN_OFF_RASPBERRY.value:
             return TurnOffRaspberry(apply_states)
         elif action_type == RadioActionTypes.STOP_MUSIC.value:
+            print("STOP MUSIC FOR: ", button_name)
             return TurnOffMusic(apply_states, button_name, frequency_pin_name)
         elif action_type == RadioActionTypes.PLAY_MUSIC.value:
+            print("PLAY MUSIC FOR: ", button_name)
             return PlayMusic(apply_states, button_name, frequency_pin_name)
         elif action_type == RadioActionTypes.HOLD_FREQUENCY.value:
             return HoldFrequencyX(holding_pin_name=button_name, apply_states=apply_states)
         elif action_type == RadioActionTypes.ROTATE_AUDIO_SOURCE.value:
-            print("ROTATE AUDIO SOURCE CREATED")
             return RotateAudioSource(apply_states)
         elif action_type == RadioActionTypes.SET_AUDIO_SOURCE.value:
             return SwitchAudioSource(apply_states, switch_to=frequency_pin_name)
@@ -126,7 +127,6 @@ class PlayMusic(RadioAction):
         self.play_music()
 
     def try_execute(self):
-        print("PLAY MUSIC", self.button_name)
         self.play_music()
 
     def play_music(self):
@@ -134,6 +134,8 @@ class PlayMusic(RadioAction):
         if not button:
             return None
         radio_frequency: RadioFrequency = self.get_radio_frequency()
+        if not radio_frequency:
+            return None
         current_radio_frequency = self.db.get_radio_frequency()
         if (radio_frequency.radio_url == current_radio_frequency.radio_url and
                 radio_frequency.radio_url_re == current_radio_frequency.radio_url_re and
@@ -150,7 +152,9 @@ class PlayMusic(RadioAction):
     def get_radio_frequency(self) -> None | RadioFrequency:
         sensor_value = self.db.get_frequency_value(self.frequency_pin_name)
         over_min_max_frequency = None
+        # print("------------------------------------------------------")
         for index, radio_frequency in enumerate(self.frequency_list.frequencies):
+           # print(radio_frequency.minimum, radio_frequency.maximum, sensor_value)
             try:
                 if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
                     return radio_frequency
@@ -159,6 +163,7 @@ class PlayMusic(RadioAction):
                 elif index == len(self.frequency_list.frequencies) and sensor_value > radio_frequency.maximum:
                     over_min_max_frequency = radio_frequency
             except TypeError as error:
+                print("Error: ", error)
                 return None
         return over_min_max_frequency
 
@@ -244,7 +249,8 @@ class Actions(Singleton):
         for action in self._actions:
             if isinstance(action, PlayMusic):
                 if action_return:
-                    raise PlayMusicActionError("Multiple play music actions at the same time not supported")
+                    None
+                    # raise PlayMusicActionError("Multiple play music actions at the same time not supported")
                 action_return = action
         return action_return
 
@@ -275,6 +281,7 @@ class Actions(Singleton):
                 self._actions.pop(index)
 
     def add_or_remove_action(self, action_new: RadioAction):
+        print("Add or remove action: ", action_new.__class__)
         if len(self._actions) > 0:
             for index, action in enumerate(self._actions):
                 if isinstance(action_new, TurnOffMusic):
