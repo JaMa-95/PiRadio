@@ -13,6 +13,8 @@ def signal_handler(sig, frame):
 GPIO.cleanup()
 
 GPIO.setmode(GPIO.BCM)
+
+
 GPIO.setup(23, GPIO.OUT)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(25, GPIO.OUT)
@@ -63,6 +65,8 @@ try:
             print("Pin 6 button is pressed")
         if (GPIO.input(13) == GPIO.HIGH):
             print("Pin 13 button is pressed")
+        else:
+            print("Pin 13 button is not pressed")
         if (GPIO.input(9) == GPIO.HIGH):
             print("Pin 9 button is pressed")
         if (GPIO.input(11) == GPIO.HIGH):

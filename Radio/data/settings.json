@@ -1,6 +1,6 @@
 {
   "cycle_time": 0.001,
-  "amplifier_pin": 13,
+  "amplifier_pin": 99,
   "mqtt": false,
   "on_off_button": {  
     "active_pin": 5,
@@ -161,16 +161,16 @@
       "led": 0
     },
     "Lang": {
-      "pin": 4,
+      "pin": 13,
       "reversed": false,
-      "active": false,
+      "active": true,
       "action": [
         {
-          "apply_state": [0, 6],
+          "apply_state": [1, 5],
           "action_type": 2
         },
         {
-          "apply_state": [1, 5],
+          "apply_state": [0, 6],
           "action_type": 1
         }
       ],
@@ -293,7 +293,7 @@
       "led": 99
     },
     "RotateAudioSource": {
-      "pin": 13,
+      "pin": 14,
       "reversed": false,
       "active": true,
       "action": [
