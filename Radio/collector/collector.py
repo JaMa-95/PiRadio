@@ -11,7 +11,8 @@ from Radio.util.util import print_
 
 
 class Collector:
-    def __init__(self, mock: bool = False, debug: bool = False):
+    def __init__(self, mock: bool = False, debug: bool = False, stop_event=None):
+        self._stop_event = stop_event
         self.debug: bool = debug
         print_(debug=debug, class_name="Collector",
                text=f"START COLLECTING SENSOR VALUES WITH MOCK: {mock}")
@@ -32,6 +33,9 @@ class Collector:
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
+            if self._stop_event.is_set():
+                print("STOPPING COLLECTOR")
+                break
 
 
 if __name__ == "__main__":

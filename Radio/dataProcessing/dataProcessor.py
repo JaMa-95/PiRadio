@@ -14,7 +14,8 @@ from Radio.util.util import get_project_root, map_
 
 
 class DataProcessor:
-    def __init__(self, publisher: Publisher):
+    def __init__(self, publisher: Publisher, stop_event):
+        self.stop_event = stop_event
         self.data_transmitter: DataTransmitter = DataTransmitter()
         self.publisher: Publisher = publisher
 
@@ -52,6 +53,9 @@ class DataProcessor:
             #    times.clear()
             #start = time.time()
             # TODO: wait instead of endless loop
+            if self.stop_event.is_set():
+                print("STOPPING DATA PROCESSOR")
+                break
             if self.data_transmitter.has_data():
                 data = self.data_transmitter.receive()
                 if isinstance(data, SensorMsg):

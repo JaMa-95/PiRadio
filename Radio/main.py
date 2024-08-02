@@ -1,6 +1,9 @@
 import sys
 import os
-from threading import Thread
+import time
+import psutil
+from threading import Thread, Event
+from multiprocessing import Process
 
 from Radio.dataProcessing.dataProcessor import DataProcessor
 from Radio.startup_button.on_off_button import OnOffButton
@@ -40,32 +43,55 @@ def get_args(mock_=False, collector_on_=True, sole_web_control_=False, debug_=Fa
 
 
 def write():
-    import time
     while True:
         with open("output.txt", "w") as file:
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             file.write(current_time)
         time.sleep(1)
 
+def check_stop(process: Process):
+    with open("stop.txt", "w") as file:
+        file.write("")
+    while True:
+        with open("stop.txt", "r") as file:
+            content = file.read()
+            if content != "":
+                print("STOPPING THREADS")
+                stop_event.set()
+                shutdown_server(process)
+                break
+        time.sleep(1)
+
+
+def shutdown_server(process: Process):
+    pid = process.pid
+    parent = psutil.Process(pid)
+    for child in parent.children(recursive=True):
+        child.kill()
+
 
 if __name__ == "__main__":
+    stop_event = Event()
     mock, collector_on, sole_web_control, debug, app = get_args()
     # CLASSES
     publisher: Publisher = Publisher()
-    collector = Collector(mock=mock, debug=debug)
-    data_processor = DataProcessor(publisher)
-    audioPlayer = AudioPlayer(publisher)
-    on_off_button: OnOffButton = OnOffButton()
-    fm_module: FmModule = FmModule(publisher)
+    collector = Collector(stop_event=stop_event, mock=mock, debug=debug)
+    data_processor = DataProcessor(publisher, stop_event=stop_event)
+    audioPlayer = AudioPlayer(publisher, stop_event=stop_event)
+    on_off_button: OnOffButton = OnOffButton(stop_event=stop_event)
+    fm_module: FmModule = FmModule(publisher, stop_event=stop_event)
+
 
     # THREADS
     on_off_thread = Thread(target=on_off_button.run)
     processor_thread = Thread(target=data_processor.run)
     collector_thread = Thread(target=collector.run)
     audio_thread = Thread(target=audioPlayer.run)
-    app_thread = Thread(target=app_run)
+    app_process = Process(target=app_run)
     write_thread = Thread(target=write)
     fm_module_thread = Thread(target=fm_module.run)
+    stop_thread = Thread(target=check_stop, args=(app_process,))
+    
 
     try:
         # START
@@ -73,12 +99,13 @@ if __name__ == "__main__":
         audio_thread.start()
         on_off_thread.start()
         fm_module_thread.start()
+        stop_thread.start()
         if collector_on:
             collector_thread.start()
         if debug:
             write_thread.start()
         if app:
-            app_thread.start()
+            app_process.start()
 
         # JOIN
         processor_thread.join()
@@ -89,8 +116,14 @@ if __name__ == "__main__":
             collector_thread.join()
         if debug:
             write_thread.join()
-        if app:
-            app_thread.join()
+        #if app:
+        #    app_process.join()
+
+        stop_thread.join()
     finally:
         # TODO: stop all threads
         pass
+
+    
+    print("ENddddddddddddddddddddddddddddddddddddddddddddddddD")
+    sys.exit()

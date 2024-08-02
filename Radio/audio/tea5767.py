@@ -12,7 +12,8 @@ if is_raspberry():
 
 
 class FmModule(Subscriber):
-    def __init__(self, publisher: Publisher = Publisher()):
+    def __init__(self, publisher: Publisher = Publisher(), stop_event=None):
+        self._stop_event = stop_event
         self.i2c_address: int = 0x60
         self.i2c: smbus.SMBus = None
         self.active: bool = True
@@ -39,6 +40,8 @@ class FmModule(Subscriber):
             except IOError:
                 print("FM module not connected")
                 self.active = False
+        else:
+            print("FM module not active")
 
     def load_from_settings(self):
         path_settings = get_project_root() / 'data/settings.json'
@@ -52,13 +55,16 @@ class FmModule(Subscriber):
                 self.frequency_value_max = analog["max"]
                 self.frequency_value_min = analog["min"]
 
-    def __del__(self):
+    def stop(self):
         if self.active:
             self.i2c.close()
         print("FM module stopped")
     
     def run(self):
         while self.active:
+            if self._stop_event.is_set():
+                self.stop()
+                break
             # update fm data 
             time.sleep(1)
 

@@ -9,7 +9,6 @@
 # and setting it low.
 import json
 import time
-import subprocess
 
 from Radio.raspberry.raspberry import Raspberry
 from Radio.util.util import get_project_root, is_raspberry
@@ -20,7 +19,8 @@ if is_raspberry():
 
 
 class OnOffButton:
-    def __init__(self):
+    def __init__(self, stop_event):
+        self._stop_event = stop_event
         self.active_pin: int = 5
         self.poll_pin: int = 22
         if IS_RASPBERRY:
@@ -42,22 +42,30 @@ class OnOffButton:
         #GPIO.output(self.active_pin, GPIO.LOW)
         time.sleep(0.1)
         # GPIO.output(self.active_pin, GPIO.HIGH)
+    
+    def check_(self):
+        start = time.time()
+        while not GPIO.input(self.poll_pin):
+            if self._stop_event.is_set():
+                break
+            time.sleep(0.01)
+
+        if time.time() - start < 0.1:
+            self.poll(start)
+            GPIO.add_event_callback(self.poll_pin, self.check_)
+        else:
+            print("Shutdown request detected\n")
+            self.acknowledge()
+            self.raspberry.turn_raspi_off()
 
     def run(self):
         if IS_RASPBERRY:
-            while True:
-                GPIO.wait_for_edge(self.poll_pin, GPIO.FALLING)
-                print("POLL OVER")
-                start = time.time()
-                while not GPIO.input(self.poll_pin):
-                    time.sleep(0.01)
+            GPIO.add_event_detect(self.poll_pin, GPIO.FALLING)
+            GPIO.add_event_callback(self.poll_pin, self.check_)
+            while not self._stop_event.is_set():
+                time.sleep(1)
 
-                if time.time() - start < 0.1:
-                    self.poll(start)
-                else:
-                    print("Shutdown request detected\n")
-                    self.acknowledge()
-                    self.raspberry.turn_raspi_off()
+        print("ON/OFF Button stopped")
 
     def poll(self, start):
         GPIO.setup(self.poll_pin, GPIO.OUT, initial=0)

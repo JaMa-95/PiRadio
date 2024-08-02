@@ -8,7 +8,8 @@ from Radio.util.dataTransmitter import Subscriber
 
 
 class AudioPlayer(Subscriber):
-    def __init__(self, publisher):
+    def __init__(self, publisher, stop_event):
+        self._stop_event = stop_event
         self.noise_player = None
         self.publisher = publisher
         self.publisher.attach(self)
@@ -24,8 +25,9 @@ class AudioPlayer(Subscriber):
 
         print("Audio Player started")
         # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
-
-    def __del__(self):
+    
+    def stop(self):
+        self.publisher.detach()
         self.client.stop()
         self.client.disconnect()
         print("Audio Player stopped")
@@ -52,9 +54,6 @@ class AudioPlayer(Subscriber):
         self.client.add(url)  # add the URL stream to the playlist
         self.client.play()                               # start playing the stream
 
-    def stop(self):
-        self.client.stop()
-
     def run(self):
         while True:
             status = self.client.status()
@@ -63,6 +62,9 @@ class AudioPlayer(Subscriber):
                     current_song = self.client.currentsong()
                     self.database.replace_song_name(current_song["name"])
                     self.database.replace_song_station(current_song["file"])
+                if self._stop_event.is_set():
+                    self.stop()
+                    break
             except KeyError:
                 pass
             time.sleep(1)
