@@ -1,0 +1,50 @@
+STOPPING daemon: /tmp/PiRadio.pid
+Starting daemon
+Traceback (most recent call last):
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 72, in setup_pin
+    GPIO.setup(self.pin, GPIO.OUT)
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/RPi/GPIO/__init__.py", line 704, in setup
+    initial = _check(lgpio.gpio_read(_chip, gpio))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/lgpio.py", line 903, in gpio_read
+    return _u2i(_lgpio._gpio_read(handle&0xffff, gpio))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/lgpio.py", line 458, in _u2i
+    raise error(error_text(v))
+lgpio.error: 'GPIO not allocated'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/pi/PiRadio/Radio/main.py", line 25, in <module>
+    daemon.start()
+  File "/home/pi/PiRadio/Radio/util/daemon.py", line 96, in start
+    self.run()
+  File "/home/pi/PiRadio/Radio/radioDaemon.py", line 101, in run
+    self._start()
+  File "/home/pi/PiRadio/Radio/radioDaemon.py", line 59, in _start
+    self.collector = Collector(stop_event=self.stop_event, mock=mock, debug=self.debug)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/collector.py", line 22, in __init__
+    self.buttons: RadioButtonsRaspi = RadioButtonsRaspi(mock=mock, debug=debug)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 127, in __init__
+    self._init_settings()
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 146, in _init_settings
+    self.buttons.append(ButtonRaspi(name, mock=self.mock))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 45, in __init__
+    self.setup_pin()
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 75, in setup_pin
+    raise lgpio.error(f"ERROR: GPIO PIN {self.pin} is busy: ")
+lgpio.error: 'ERROR: GPIO PIN 13 is busy: '
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2121]
+Starting daemon
+/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/adafruit_blinka/microcontroller/generic_linux/i2c.py:30: RuntimeWarning: I2C frequency is not settable in python, ignoring!
+  warnings.warn(
+STOPPING daemon: /tmp/PiRadio.pid

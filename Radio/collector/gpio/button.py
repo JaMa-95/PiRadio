@@ -122,6 +122,8 @@ class RadioButtonsRaspi(Singleton):
         self.buttons: List[ButtonRaspi] = None
 
         self.db = Database()
+        GPIO.setmode(GPIO.BCM)
+        GPIO.cleanup()
         self._init_settings()
 
     def _init_settings(self):

@@ -1,13 +1,22 @@
-import sys, os, time, atexit
+import sys, os, atexit
+import time
+import psutil
 from signal import SIGTERM
- 
+from Radio.util.util import get_project_root
+
+
 class Daemon:
     """
     A generic daemon class.
     
     Usage: subclass the Daemon class and override the run() method
     """
-    def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
+    def __init__(self, pidfile, stdin='/dev/null', stdout='', stderr=""):
+        root = get_project_root()
+        if not stdout:
+            stdout = root / "out.txt"
+        if not stderr:
+            stderr = root / "error.txt"
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -21,6 +30,7 @@ class Daemon:
         """
         try:
             pid = os.fork()
+            print("PID 1: ", pid)
             if pid > 0:
                 # exit first parent
                 sys.exit(0)
@@ -36,6 +46,7 @@ class Daemon:
         # do second fork
         try:
             pid = os.fork()
+            print("PID 2: ", pid)
             if pid > 0:
                 # exit from second parent
                 sys.exit(0)
@@ -48,7 +59,7 @@ class Daemon:
         sys.stderr.flush()
         si = open(self.stdin, 'r')
         so = open(self.stdout, 'a+')
-        se = open(self.stderr, 'a+', buffering=0)
+        se = open(self.stderr, 'a+')
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -56,7 +67,8 @@ class Daemon:
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        file(self.pidfile,'w+').write("%s\n" % pid)
+        print("PID 3: ", pid)
+        open(self.pidfile,'w+').write("%s\n" % pid)
     
     def delpid(self):
         os.remove(self.pidfile)
@@ -67,6 +79,8 @@ class Daemon:
         """
         # Check for a pidfile to see if the daemon already runs
         try:
+            text = "Starting daemon: " + self.pidfile + "\n"
+            sys.stderr.write(text)
             with open(self.pidfile, "r") as pf:
                 pid = int(pf.read().strip())
         except IOError:
@@ -86,23 +100,42 @@ class Daemon:
         Stop the daemon
         """
         # Get the pid from the pidfile
+        sys.stdout.write("STOPPING daemon: " + self.pidfile + "\n")
         try:
+            text = "STOPPING daemon: " + self.pidfile + "\n"
+            sys.stderr.write(text)
             with open(self.pidfile, "r") as pf:
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
-
-        if not pid:
+        if not pid: 
             message = "pidfile %s does not exist. Daemon not running?\n"
             sys.stderr.write(message % self.pidfile)
             return # not an error in a restart
-
-        # Try killing the daemon process       
         self._stop()
+
+        time.sleep(5)
+        if os.path.exists(self.pidfile):
+            os.remove(self.pidfile)
         try:
-            while 1:
-                os.kill(pid, SIGTERM)
-                time.sleep(0.1)
+            print("DELETE PID ", pid)
+            import subprocess
+            subprocess.run("kill -9 " + str(pid), shell = True, executable="/bin/bash")
+            """
+            print("ABC")
+            p = psutil.Process(pid)
+            print("CDE")
+            p.terminate()
+            print("DEF")
+            os.kill(pid, SIGTERM)
+            print("ASD")
+            time.sleep(0.1)
+            """
+            print("DELETED PID")
+        except psutil.NoSuchProcess:
+            print(f"No such process with PID {pid}")
+        except psutil.AccessDenied:
+            print(f"Access denied when trying to terminate process with PID {pid}")
         except OSError as err:
             err = str(err)
             if err.find("No such process") > 0:
@@ -111,6 +144,13 @@ class Daemon:
             else:
                 print(str(err))
                 sys.exit(1)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        
+        print("DELETE ABC")
+        if os.path.exists(self.pidfile):
+            os.remove(self.pidfile)
+ 
 
     def restart(self):
         """
@@ -119,13 +159,13 @@ class Daemon:
         self.stop()
         self.start()
 
-    def _stop(self):
-        """
-        You should override this method when you subclass Daemon. It should stop all your running processes cleanly
-        """
-
     def run(self):
         """
         You should override this method when you subclass Daemon. It will be called after the process has been
         daemonized by start() or restart().
         """
+
+
+if __name__ == "__main__":
+    daemon = Daemon("/tmp/PiRadio.pid")
+    daemon.stop()
