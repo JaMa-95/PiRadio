@@ -1,7 +1,7 @@
 #!/bin/bash
 MODULE_PATH="/home/pi/PiRadio/"
 #MODULE_PATH=MODULE_PLACEHOLDER_PATH
-PID_FILE="/var/run/PiRadio.pid"
+PID_FILE="/var/run/piradio/PiRadio.pid"
 
 start() {
     if [ -f $PID_FILE ]; then
@@ -9,10 +9,10 @@ start() {
     else
         cd $MODULE_PATH
         source Radio/venv/bin/activate
-        python -m Radio.main   #--app=0 --collector=1 
-	echo "STARTED RADIO"
-	nohup npm start --prefix Radio/react-app &
-	echo "STARTED WEBSERVER"
+        nohup python -m Radio.main &   #--app=0 --collector=1 
+	    echo "STARTED RADIO"
+	    nohup npm start --prefix Radio/react-app &
+	    echo "STARTED WEBSERVER"
         echo $! > $PID_FILE
         echo "Service started."
     fi

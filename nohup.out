@@ -1,0 +1,149 @@
+
+> react-app@0.1.0 start
+> react-scripts --max_old_space_size=4096 start
+
+(node:923) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:923) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view react-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.230:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+
+> react-app@0.1.0 start
+> react-scripts --max_old_space_size=4096 start
+
+/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/adafruit_blinka/microcontroller/generic_linux/i2c.py:30: RuntimeWarning: I2C frequency is not settable in python, ignoring!
+  warnings.warn(
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module initialized
+Frequency: 19945.55
+fm frequency is 102.4
+Volume: 27
+Volume not supported by FM module
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Check state:  1  in  [2]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  http://stream-23.zeno.fm/gdtbdqwzrf9uv?zs=ZpZ8h41ISO6eVCeo2JJ3uQ
+INFO:     Started server process [1013]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Something is already running on port 3000.
+
+> react-app@0.1.0 start
+> react-scripts --max_old_space_size=4096 start
+
+Traceback (most recent call last):
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 72, in setup_pin
+    GPIO.setup(self.pin, GPIO.OUT)
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/RPi/GPIO/__init__.py", line 704, in setup
+    initial = _check(lgpio.gpio_read(_chip, gpio))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/lgpio.py", line 903, in gpio_read
+    return _u2i(_lgpio._gpio_read(handle&0xffff, gpio))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/lgpio.py", line 458, in _u2i
+    raise error(error_text(v))
+lgpio.error: 'GPIO not allocated'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/pi/PiRadio/Radio/main.py", line 84, in <module>
+    collector = Collector(stop_event=stop_event, mock=mock, debug=debug)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/collector.py", line 22, in __init__
+    self.buttons: RadioButtonsRaspi = RadioButtonsRaspi(mock=mock, debug=debug)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 125, in __init__
+    self._init_settings()
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 144, in _init_settings
+    self.buttons.append(ButtonRaspi(name, mock=self.mock))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 45, in __init__
+    self.setup_pin()
+  File "/home/pi/PiRadio/Radio/collector/gpio/button.py", line 75, in setup_pin
+    raise lgpio.error(f"ERROR: GPIO PIN {self.pin} is busy: ")
+lgpio.error: 'ERROR: GPIO PIN 13 is busy: '
+ERROR: GPIO PIN 13 is busy:  'GPIO not allocated'
+Something is already running on port 3000.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1013]
+
+> react-app@0.1.0 start
+> react-scripts --max_old_space_size=4096 start
+
+/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/adafruit_blinka/microcontroller/generic_linux/i2c.py:30: RuntimeWarning: I2C frequency is not settable in python, ignoring!
+  warnings.warn(
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module initialized
+'GPIO busy'
+INFO:     Started server process [715]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+(node:722) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:722) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view react-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.230:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [715]

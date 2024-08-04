@@ -63,6 +63,11 @@ def check_stop(process: Process):
         time.sleep(1)
 
 
+def stop_threads():
+    with open("stop.txt", "w") as file:
+        file.write("stop")
+
+
 def shutdown_server(process: Process):
     pid = process.pid
     parent = psutil.Process(pid)
@@ -71,59 +76,61 @@ def shutdown_server(process: Process):
 
 
 if __name__ == "__main__":
-    stop_event = Event()
-    mock, collector_on, sole_web_control, debug, app = get_args()
-    # CLASSES
-    publisher: Publisher = Publisher()
-    collector = Collector(stop_event=stop_event, mock=mock, debug=debug)
-    data_processor = DataProcessor(publisher, stop_event=stop_event)
-    audioPlayer = AudioPlayer(publisher, stop_event=stop_event)
-    on_off_button: OnOffButton = OnOffButton(stop_event=stop_event)
-    fm_module: FmModule = FmModule(publisher, stop_event=stop_event)
-
-
-    # THREADS
-    on_off_thread = Thread(target=on_off_button.run)
-    processor_thread = Thread(target=data_processor.run)
-    collector_thread = Thread(target=collector.run)
-    audio_thread = Thread(target=audioPlayer.run)
-    app_process = Process(target=app_run)
-    write_thread = Thread(target=write)
-    fm_module_thread = Thread(target=fm_module.run)
-    stop_thread = Thread(target=check_stop, args=(app_process,))
-    
-
     try:
-        # START
-        processor_thread.start()
-        audio_thread.start()
-        on_off_thread.start()
-        fm_module_thread.start()
-        stop_thread.start()
-        if collector_on:
-            collector_thread.start()
-        if debug:
-            write_thread.start()
-        if app:
-            app_process.start()
+        stop_event = Event()
+        mock, collector_on, sole_web_control, debug, app = get_args()
+        # CLASSES
+        publisher: Publisher = Publisher()
+        collector = Collector(stop_event=stop_event, mock=mock, debug=debug)
+        data_processor = DataProcessor(publisher, stop_event=stop_event)
+        audioPlayer = AudioPlayer(publisher, stop_event=stop_event)
+        on_off_button: OnOffButton = OnOffButton(stop_event=stop_event)
+        fm_module: FmModule = FmModule(publisher, stop_event=stop_event)
 
-        # JOIN
-        processor_thread.join()
-        audio_thread.join()
-        on_off_thread.join()
-        fm_module_thread.join()
-        if collector_on:
-            collector_thread.join()
-        if debug:
-            write_thread.join()
-        #if app:
-        #    app_process.join()
 
-        stop_thread.join()
-    finally:
-        # TODO: stop all threads
-        pass
+        # THREADS
+        on_off_thread = Thread(target=on_off_button.run)
+        processor_thread = Thread(target=data_processor.run)
+        collector_thread = Thread(target=collector.run)
+        audio_thread = Thread(target=audioPlayer.run)
+        app_process = Process(target=app_run)
+        write_thread = Thread(target=write)
+        fm_module_thread = Thread(target=fm_module.run)
+        stop_thread = Thread(target=check_stop, args=(app_process,))
+        
 
-    
-    print("ENddddddddddddddddddddddddddddddddddddddddddddddddD")
-    sys.exit()
+        try:
+            # START
+            processor_thread.start()
+            audio_thread.start()
+            on_off_thread.start()
+            fm_module_thread.start()
+            stop_thread.start()
+            if collector_on:
+                collector_thread.start()
+            if debug:
+                write_thread.start()
+            if app:
+                app_process.start()
+
+            # JOIN
+            processor_thread.join()
+            audio_thread.join()
+            on_off_thread.join()
+            fm_module_thread.join()
+            if collector_on:
+                collector_thread.join()
+            if debug:
+                write_thread.join()
+            #if app:
+            #    app_process.join()
+
+            stop_thread.join()
+        finally:
+            # TODO: stop all threads
+            pass
+
+        sys.exit(0)
+    except KeyboardInterrupt:
+        stop_threads()
+        sys.exit(0)

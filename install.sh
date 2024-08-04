@@ -1,4 +1,6 @@
 #!/bin/bash 
+
+# check if script is run as root
 raspi-config nonint do_i2c 0
 
 apt update
@@ -42,3 +44,6 @@ sed -i  "s,$USERNAME_PLACEHOLDER,$USERNAME,g" $PI_RADIO_SERVICE_PATH
 # copy service file to /etc/systemd/system
 SYSTEM_SERVICE_PATH=$SCRIPT_DIR + "/PiRadio.service"
 cp $SYSTEM_SERVICE_PATH  /etc/systemd/system/
+
+mkdir /var/run/piradio
+chown $USER:$USER /var/run/piradio
