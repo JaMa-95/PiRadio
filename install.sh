@@ -40,6 +40,8 @@ sed -i  "s,$MODULE_PLACEHOLDER_PATH,$SCRIPT_DIR,g" $RADIO_SH_PATH
 USERNAME_PLACEHOLDER="USERNAME"
 USERNAME=$(whoami)
 sed -i  "s,$USERNAME_PLACEHOLDER,$USERNAME,g" $PI_RADIO_SERVICE_PATH
+# TODO: exchange path in service file
+
 
 # copy service file to /etc/systemd/system
 SYSTEM_SERVICE_PATH=$SCRIPT_DIR + "/PiRadio.service"
