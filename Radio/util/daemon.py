@@ -46,9 +46,9 @@ class Daemon:
         # redirect standard file descriptors
         sys.stdout.flush()
         sys.stderr.flush()
-        si = file(self.stdin, 'r')
-        so = file(self.stdout, 'a+')
-        se = file(self.stderr, 'a+', 0)
+        si = open(self.stdin, 'r')
+        so = open(self.stdout, 'a+')
+        se = open(self.stderr, 'a+', buffering=0)
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -67,9 +67,8 @@ class Daemon:
         """
         # Check for a pidfile to see if the daemon already runs
         try:
-            pf = file(self.pidfile,'r')
-            pid = int(pf.read().strip())
-            pf.close()
+            with open(self.pidfile, "r") as pf:
+                pid = int(pf.read().strip())
         except IOError:
             pid = None
 
@@ -88,9 +87,8 @@ class Daemon:
         """
         # Get the pid from the pidfile
         try:
-            pf = file(self.pidfile,'r')
-            pid = int(pf.read().strip())
-            pf.close()
+            with open(self.pidfile, "r") as pf:
+                pid = int(pf.read().strip())
         except IOError:
             pid = None
 
@@ -100,6 +98,7 @@ class Daemon:
             return # not an error in a restart
 
         # Try killing the daemon process       
+        self._stop()
         try:
             while 1:
                 os.kill(pid, SIGTERM)
@@ -119,6 +118,11 @@ class Daemon:
         """
         self.stop()
         self.start()
+
+    def _stop(self):
+        """
+        You should override this method when you subclass Daemon. It should stop all your running processes cleanly
+        """
 
     def run(self):
         """

@@ -4,6 +4,7 @@
 import os
 import io
 from pathlib import Path
+import sys
 
 
 class Singleton(object):
@@ -17,9 +18,24 @@ class Singleton(object):
         return cls._instance
 
 
+
+def get_args(mock_=False, collector_on_=True, sole_web_control_=False, debug_=False, app_=True):
+    if len(sys.argv) > 1:
+        for arg in sys.argv:
+            if arg == "--collector=0":
+                collector_on_ = False
+            if arg == "--sole_web=1":
+                sole_web_control_ = True
+            if arg == "--mock=1":
+                mock_ = True
+            if arg == "--debug=1":
+                debug_ = True
+            if arg == "--app=0":
+                app_ = False
+    return mock_, collector_on_, sole_web_control_, debug_, app_
+
 def get_project_root() -> Path:
     return Path(__file__).parent.parent
-
 
 
 def map_(max_a: int, min_a: int,  max_b: int, min_b: int, value: int):
