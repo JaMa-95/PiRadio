@@ -1,7 +1,8 @@
 #!/bin/bash
-MODULE_PATH="/home/pi/PiRadio/"
+MODULE_PATH="/home/jakob/Code/PiRadio/"
 #MODULE_PATH=MODULE_PLACEHOLDER_PATH
-PID_FILE="/var/run/PiRadio.pid"
+# PID_FILE="/var/run/PiRadio.pid"
+PID_FILE="/home/jakob/Code/PiRadio/PiRadio.pid"
 
 start() {
     if [ -f $PID_FILE ]; then
@@ -9,10 +10,10 @@ start() {
     else
         cd $MODULE_PATH
         source Radio/venv/bin/activate
-        python -m Radio.main   #--app=0 --collector=1 
-	echo "STARTED RADIO"
-	nohup npm start --prefix Radio/react-app &
-	echo "STARTED WEBSERVER"
+        python -m Radio.main  --mock=1 #--app=0 --collector=1 
+        echo "STARTED RADIO"
+        nohup npm start --prefix Radio/react-app &
+        echo "STARTED WEBSERVER"
         echo $! > $PID_FILE
         echo "Service started."
     fi
@@ -20,7 +21,8 @@ start() {
 
 stop() {
     if [ -f $PID_FILE ]; then
-        kill $(cat $PID_FILE)
+        # this stops the python script
+        echo "stop" > $MODULE_PATH/stop.txt
         rm $PID_FILE
         cd $MODULE_PATH
         npm stop --prefix Radio/react-app

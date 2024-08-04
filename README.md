@@ -41,6 +41,8 @@ prefer using already available node modules. Raspberry takes a long time install
 # audio
 ## mpd
 edit file /etc/mpd.conf
+
+When using aux ouput or comment out when using uda1334
 ```commandline
     # An example of an ALSA output:
     #       
@@ -55,7 +57,7 @@ edit file /etc/mpd.conf
     }
 ```
 ## uda1334
-TODO
+[Installation guide](https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/raspberry-pi-usage)
 
 # autostart
 https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login

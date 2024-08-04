@@ -15,8 +15,8 @@
 
 #define LED 4 // Pin 6
 #define RELAY 1 // Pin 2
-#define TXD 3 // Pin 3 -> RPI 22
-#define GPIO_PI 0     // PB0 -> RPi 5
+#define TXD 3 // Pin 3 -> RPI 5
+#define GPIO_PI 0     // PB0 -> RPi 22
 #define BUTTON 2 // ????????
 // Gnd 4
 // Vcc 8
