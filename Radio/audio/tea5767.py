@@ -12,10 +12,12 @@ if is_raspberry():
 
 
 class FmModule(Subscriber):
-    def __init__(self, publisher: Publisher = Publisher(), stop_event=None):
+    def __init__(self, publisher: Publisher = Publisher(), stop_event=None, mock=False):
         self._stop_event = stop_event
         self.i2c_address: int = 0x60
-        self.i2c: smbus.SMBus = None
+        self.mock: bool = mock
+        if not self.mock:
+            self.i2c: smbus.SMBus = None
         self.active: bool = True
         self.frequency = 0
         self.publisher: Publisher = publisher
@@ -32,6 +34,10 @@ class FmModule(Subscriber):
         self.fm_max: int = 108.0
 
     def _init_fm_module(self):
+        if self.mock:
+            print("FM module mocked")
+            self.active = False
+            return None
         if self.active:
             try:
                 self.i2c = smbus.SMBus(1)

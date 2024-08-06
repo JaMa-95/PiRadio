@@ -1,5 +1,7 @@
 import asyncio
 import json
+import os
+import signal
 import time
 from os import listdir
 from os.path import isfile, join
@@ -19,6 +21,7 @@ from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
 from Radio.util.util import get_project_root
+import asyncio
 
 db = Database()
 app = FastAPI()
@@ -311,6 +314,17 @@ def save_in_file(file_path: Path, data):
         json.dump(data, file_handler, indent=4)
 
 
+@app.get("/shutdown")
+async def shutdown(response: Response = 200):
+    print("Shutting down server...")
+    asyncio.create_task(delayed_shutdown())
+    return Response(status_code=200)
+
+async def delayed_shutdown():
+    await asyncio.sleep(1)
+    server.should_exit = True
+
+
 def run():
     origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
 
@@ -321,7 +335,10 @@ def run():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    config = uvicorn.Config(app, host="127.0.0.1", port=8000)
+    global server
+    server = uvicorn.Server(config)
+    server.run()
 
 
 if __name__ == "__main__":
@@ -334,4 +351,9 @@ if __name__ == "__main__":
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
+
+    config = uvicorn.Config(app, host="127.0.0.1", port=8000)
+    global server
+    server = uvicorn.Server(config)
+    server.run()

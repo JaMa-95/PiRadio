@@ -26,13 +26,16 @@ class AdsObject:
         self.debug: bool = debug
         self.analog_sensors: List[AdsSingle] = []
 
-        i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
-            # TODO: make check for i2c device not found ValueError
-        self.RATE = 860
+        if not self.mock:
+            i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
+                # TODO: make check for i2c device not found ValueError
+            self.RATE = 860
 
-        self.ads = ADS.ADS1115(i2c, address=0x48)  # Create the ADC object using the I2C bus
-        self.ads.mode = Mode.CONTINUOUS
-        self.ads.data_rate = self.RATE
+            self.ads = ADS.ADS1115(i2c, address=0x48)  # Create the ADC object using the I2C bus
+            self.ads.mode = Mode.CONTINUOUS
+            self.ads.data_rate = self.RATE
+        else:
+            self.ads = None
         self._load_settings()
 
 
@@ -75,17 +78,21 @@ class AdsSingle:
         self.min: int = min_
         self.max: int = max_
         self.db = Database()
-        self.ads: ADS.ADS1115 = ads
+        if not mock:
+            self.ads: ADS.ADS1115 = ads
 
         self.mock = mock
-        if pin == 1:
-            self.adas_pin = ADS.P1
-        elif pin == 2:
-            self.adas_pin = ADS.P2
-        elif pin == 3:
-            self.adas_pin = ADS.P3
+        if self.mock:
+            self.adas_pin = 0
         else:
-            self.adas_pin = ADS.P0
+            if pin == 1:
+                self.adas_pin = ADS.P1
+            elif pin == 2:
+                self.adas_pin = ADS.P2
+            elif pin == 3:
+                self.adas_pin = ADS.P3
+            else:
+                self.adas_pin = ADS.P0
 
             
 

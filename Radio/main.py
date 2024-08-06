@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -28,7 +29,10 @@ if __name__ == "__main__":
             stop()
             # daemon.stop()
         elif 'restart' == sys.argv[1]:
+            # its another process, thats why we have to wait
             stop()
+            # TODO: wait till PiRadio.pid is deleted
+            time.sleep(8)
             # daemon.stop()
             daemon.start()
         else:

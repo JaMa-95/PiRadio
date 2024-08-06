@@ -99,7 +99,7 @@ class ButtonRaspi:
                 self.state = not self.state
             self._put_state_to_list(self.state)
         else:
-            print("MOCKING BUTTON VALUE")
+            # print("MOCKING BUTTON VALUE")
             if self.pin == 24 or self.pin == 4:
                 self.state = True
             else:
@@ -122,8 +122,9 @@ class RadioButtonsRaspi(Singleton):
         self.buttons: List[ButtonRaspi] = None
 
         self.db = Database()
-        GPIO.setmode(GPIO.BCM)
-        GPIO.cleanup()
+        if not self.mock:
+            GPIO.setmode(GPIO.BCM)
+            GPIO.cleanup()
         self._init_settings()
 
     def _init_settings(self):

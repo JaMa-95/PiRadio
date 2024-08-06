@@ -3,6 +3,8 @@ import psutil
 from threading import Thread, Event
 from multiprocessing import Process
 
+import requests
+
 from Radio.dataProcessing.dataProcessor import DataProcessor
 from Radio.startup_button.on_off_button import OnOffButton
 from Radio.util.dataTransmitter import Publisher
@@ -14,6 +16,8 @@ from Radio.collector.collector import Collector
 from Radio.util.util import is_raspberry, get_project_root
 from Radio.util.daemon import Daemon
 
+mock = True
+IS_RASPBERRY_PI = False
 if is_raspberry():
     IS_RASPBERRY_PI = True
     mock = False
@@ -44,13 +48,10 @@ class RadioDaemon(Daemon):
 
     def shutdown_server(self):
         if not self.app_process:
+            print("NO APP PROCESS")
             return
-        return
-        pid = self.app_process.pid
-        parent = psutil.Process(pid)
-        for child in parent.children(recursive=True):
-            child.kill()
-        print("KILLED APP")
+        response = requests.get('http://localhost:8000/shutdown').content
+        print(f"Reponse server shutdown: {response}")
         
     def _start(self):
         print("STARTING THREADS")
@@ -60,13 +61,13 @@ class RadioDaemon(Daemon):
         self.data_processor = DataProcessor(publisher, stop_event=self.stop_event)
         self.audioPlayer = AudioPlayer(publisher, stop_event=self.stop_event)
         self.on_off_button: OnOffButton = OnOffButton(stop_event=self.stop_event)
-        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event)
+        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event, mock=mock)
          # THREADS
         self.on_off_thread = Thread(target=self.on_off_button.run)
         self.processor_thread = Thread(target=self.data_processor.run)
         self.collector_thread = Thread(target=self.collector.run)
         self.audio_thread = Thread(target=self.audioPlayer.run)
-        #self.app_process = Process(target=app_run)
+        self.app_process = Process(target=app_run)
         self.fm_module_thread = Thread(target=self.fm_module.run)
         self.stop_thread = Thread(target=self.check_stop)
         print("STARTING THREADS")
@@ -79,8 +80,7 @@ class RadioDaemon(Daemon):
         if self.collector_on:
             self.collector_thread.start()
         if self.app:
-           pass
-           # self.app_process.start()
+           self.app_process.start()
 
         # JOIN
         self.processor_thread.join()
@@ -89,8 +89,8 @@ class RadioDaemon(Daemon):
         self.fm_module_thread.join()
         if self.collector_on:
             self.collector_thread.join()
-        #if app:
-        #    app_process.join()
+        if self.app:
+            self.app_process.join()
 
         self.stop_thread.join()
         print("ALL THREADS FINISHED")

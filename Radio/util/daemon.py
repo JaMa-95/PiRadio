@@ -30,7 +30,6 @@ class Daemon:
         """
         try:
             pid = os.fork()
-            print("PID 1: ", pid)
             if pid > 0:
                 # exit first parent
                 sys.exit(0)
@@ -46,7 +45,6 @@ class Daemon:
         # do second fork
         try:
             pid = os.fork()
-            print("PID 2: ", pid)
             if pid > 0:
                 # exit from second parent
                 sys.exit(0)
@@ -67,7 +65,6 @@ class Daemon:
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        print("PID 3: ", pid)
         open(self.pidfile,'w+').write("%s\n" % pid)
     
     def delpid(self):
@@ -112,20 +109,21 @@ class Daemon:
             message = "pidfile %s does not exist. Daemon not running?\n"
             sys.stderr.write(message % self.pidfile)
             return # not an error in a restart
+        
         self._stop()
 
-        time.sleep(5)
         if os.path.exists(self.pidfile):
             os.remove(self.pidfile)
         try:
             print("DELETE PID ", pid)
             import subprocess
-            subprocess.run("kill -9 " + str(pid), shell = True, executable="/bin/bash")
-            """
+            # subprocess.run("kill -9 " + str(pid), shell = True, executable="/bin/bash")
+            
             print("ABC")
             p = psutil.Process(pid)
             print("CDE")
             p.terminate()
+            """
             print("DEF")
             os.kill(pid, SIGTERM)
             print("ASD")
