@@ -93,6 +93,7 @@ async def websocket_equalizer(websocket: WebSocket):
 
 @app.post("/equalizer")
 async def set_equalizer(equalizer_data: dict):
+    print("equalizer_data", equalizer_data)
     equalizer = Equalizer()
     equalizer.from_dict(equalizer_data)
     publisher.publish(f'equalizer:{str(equalizer.to_list())}')

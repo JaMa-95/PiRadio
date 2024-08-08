@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# check if script is run as root
+# TODO: check if script must be run as root
 raspi-config nonint do_i2c 0
 
 apt update
