@@ -107,11 +107,9 @@ class Daemon:
             pid = None
         if not pid: 
             message = "pidfile %s does not exist. Daemon not running?\n"
-            sys.stderr.write(message % self.pidfile)
-            return # not an error in a restart
-        
-        self._stop()
 
+        self._stop()
+        time.sleep(10)
         if os.path.exists(self.pidfile):
             os.remove(self.pidfile)
         try:
@@ -119,9 +117,7 @@ class Daemon:
             import subprocess
             # subprocess.run("kill -9 " + str(pid), shell = True, executable="/bin/bash")
             
-            print("ABC")
             p = psutil.Process(pid)
-            print("CDE")
             p.terminate()
             """
             print("DEF")

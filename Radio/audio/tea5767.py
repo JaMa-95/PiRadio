@@ -1,10 +1,11 @@
 import json
 import sys
+from threading import Event
 
 from Radio.util.dataTransmitter import Subscriber
 import subprocess
 import time
-from Radio.util.util import get_project_root, is_raspberry
+from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry
 from Radio.util.dataTransmitter import Publisher
 
 if is_raspberry():
@@ -12,10 +13,11 @@ if is_raspberry():
 
 
 class FmModule(Subscriber):
-    def __init__(self, publisher: Publisher = Publisher(), stop_event=None, mock=False):
+    def __init__(self, publisher: Publisher = Publisher(), stop_event: Event=None, mock: bool=False, thread_stopped_counter: ThreadSafeInt = None):
         self._stop_event = stop_event
         self.i2c_address: int = 0x60
         self.mock: bool = mock
+        self.thread_stopped_counter = thread_stopped_counter
         if not self.mock:
             self.i2c: smbus.SMBus = None
         self.active: bool = True
@@ -73,6 +75,8 @@ class FmModule(Subscriber):
                 break
             # update fm data 
             time.sleep(1)
+        print("FM module stopped")
+        self.thread_stopped_counter.increment()
 
     def calcuulate_fm_value(self, frequency_value: int) -> float:
         valueScaled = (frequency_value - self.frequency_value_min) / (self.frequency_value_max - self.frequency_value_min) * (self.fm_max - self.fm_min) + self.fm_min

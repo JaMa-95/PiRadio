@@ -1,3 +1,4 @@
+from threading import Event
 import time
 from statistics import mean
 from time import sleep
@@ -7,13 +8,14 @@ from Radio.util.dataTransmitter import DataTransmitter
 from Radio.util.sensorMsg import SensorMsg
 
 from Radio.collector.ads1115.ads import AdsObject
-from Radio.util.util import print_
+from Radio.util.util import ThreadSafeInt, print_
 
 
 class Collector:
-    def __init__(self, mock: bool = False, debug: bool = False, stop_event=None):
-        self._stop_event = stop_event
+    def __init__(self, mock: bool = False, debug: bool = False, stop_event: Event=None, thread_stopped_counter: ThreadSafeInt=None):
+        self._stop_event: Event = stop_event
         self.debug: bool = debug
+        self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
         print_(debug=debug, class_name="Collector",
                text=f"START COLLECTING SENSOR VALUES WITH MOCK: {mock}")
         self.mock: bool = mock
@@ -33,7 +35,10 @@ class Collector:
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
+            # print(f"COLLECTOR  {self._stop_event.is_set()}")
+            time.sleep(0.1)
             if self._stop_event.is_set():
+                self.thread_stopped_counter.increment()
                 print("STOPPING COLLECTOR")
                 break
 

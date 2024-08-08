@@ -13,7 +13,7 @@ from Radio.audio.tea5767 import FmModule
 from Radio.app import run as app_run
 
 from Radio.collector.collector import Collector
-from Radio.util.util import is_raspberry, get_project_root
+from Radio.util.util import is_raspberry, get_project_root, ThreadSafeInt
 from Radio.util.daemon import Daemon
 
 mock = True
@@ -27,6 +27,8 @@ class RadioDaemon(Daemon):
     def __init__(self, pidfile, mock, collector_on, sole_web_control, debug, app) -> None:
         super().__init__(pidfile)
         self.stop_event = Event()
+        self.thread_stopped_counter = ThreadSafeInt()
+        self.amount_stop_threads: int = 5
         self.mock = mock
         self.collector_on = collector_on
         self.sole_web_control = sole_web_control
@@ -45,6 +47,9 @@ class RadioDaemon(Daemon):
     def _stop(self):
         self.shutdown_server()
         self.stop_event.set()
+        while self.thread_stopped_counter.get() < self.amount_stop_threads:
+            print(f"STOPPING THREADS: {self.thread_stopped_counter.get()}")
+            time.sleep(0.1)
 
     def shutdown_server(self):
         if not self.app_process:
@@ -57,16 +62,17 @@ class RadioDaemon(Daemon):
         print("STARTING THREADS")
         # INSTANCES
         publisher: Publisher = Publisher()
-        self.collector = Collector(stop_event=self.stop_event, mock=mock, debug=self.debug)
-        self.data_processor = DataProcessor(publisher, stop_event=self.stop_event)
-        self.audioPlayer = AudioPlayer(publisher, stop_event=self.stop_event)
-        self.on_off_button: OnOffButton = OnOffButton(stop_event=self.stop_event)
-        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event, mock=mock)
+        self.collector = Collector(stop_event=self.stop_event, mock=mock, debug=self.debug, thread_stopped_counter=self.thread_stopped_counter)
+        self.data_processor = DataProcessor(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
+        self.audio_player = AudioPlayer(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
+        self.on_off_button: OnOffButton = OnOffButton(stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
+        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event, mock=mock, thread_stopped_counter=self.thread_stopped_counter)
+
          # THREADS
         self.on_off_thread = Thread(target=self.on_off_button.run)
         self.processor_thread = Thread(target=self.data_processor.run)
         self.collector_thread = Thread(target=self.collector.run)
-        self.audio_thread = Thread(target=self.audioPlayer.run)
+        self.audio_thread = Thread(target=self.audio_player.run)
         self.app_process = Process(target=app_run)
         self.fm_module_thread = Thread(target=self.fm_module.run)
         self.stop_thread = Thread(target=self.check_stop)

@@ -5,6 +5,21 @@ import os
 import io
 from pathlib import Path
 import sys
+import threading
+
+
+class ThreadSafeInt:
+    def __init__(self, value=0):
+        self._value = value
+        self._lock = threading.Lock()
+
+    def increment(self):
+        with self._lock:
+            self._value += 1
+
+    def get(self):
+        with self._lock:
+            return self._value
 
 
 class Singleton(object):

@@ -1,16 +1,19 @@
 import time
 
 from mpd import MPDClient
+from threading import Event
 
 from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.db.db import Database
 from Radio.util.dataTransmitter import Subscriber
+from Radio.util.util import ThreadSafeInt
 
 
 class AudioPlayer(Subscriber):
-    def __init__(self, publisher, stop_event):
+    def __init__(self, publisher, stop_event: Event, thread_stopped_counter: ThreadSafeInt):
         self._stop_event = stop_event
         self.noise_player = None
+        self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
         self.publisher = publisher
         self.publisher.attach(self)
         self.database: Database = Database()
@@ -62,11 +65,13 @@ class AudioPlayer(Subscriber):
                     current_song = self.client.currentsong()
                     self.database.replace_song_name(current_song["name"])
                     self.database.replace_song_station(current_song["file"])
-                if self._stop_event.is_set():
-                    self.stop()
-                    break
-            except KeyError:
+            except KeyError as e:
                 pass
+            if self._stop_event.is_set():
+                print("STOP EVENT AUDIO PLAYER")
+                self.stop()
+                self.thread_stopped_counter.increment()
+                break
             time.sleep(1)
 
     def set_volume(self, volume):

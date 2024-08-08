@@ -1,0 +1,332 @@
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:47748 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:60700 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:49340 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:51718 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:45336 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:55462 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:46258 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:58982 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:54316 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+Shutting down server...
+INFO:     127.0.0.1:59758 - "GET /shutdown HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3

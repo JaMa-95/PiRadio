@@ -8,10 +8,11 @@
 # The rquest is acknowledged by setting GPIO 4 as an output
 # and setting it low.
 import json
+from threading import Event
 import time
 
 from Radio.raspberry.raspberry import Raspberry
-from Radio.util.util import get_project_root, is_raspberry
+from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry
 IS_RASPBERRY = False
 if is_raspberry():
     IS_RASPBERRY = True
@@ -19,8 +20,9 @@ if is_raspberry():
 
 
 class OnOffButton:
-    def __init__(self, stop_event):
+    def __init__(self, stop_event: Event, thread_stopped_counter: ThreadSafeInt):
         self._stop_event = stop_event
+        self.thread_stopped_counter = thread_stopped_counter
         self.active_pin: int = 5
         self.poll_pin: int = 22
         if IS_RASPBERRY:
@@ -64,7 +66,7 @@ class OnOffButton:
             GPIO.add_event_callback(self.poll_pin, self.check_)
             while not self._stop_event.is_set():
                 time.sleep(1)
-
+        self.thread_stopped_counter.increment()
         print("ON/OFF Button stopped")
 
     def poll(self, start):

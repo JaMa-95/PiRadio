@@ -20,25 +20,11 @@ def stop():
 
 
 if __name__ == "__main__":
-    daemon = RadioDaemon("/tmp/PiRadio.pid", *get_args())
-    if len(sys.argv) == 2:
-        if 'start' == sys.argv[1]:
-            daemon.start()
-        elif 'stop' == sys.argv[1]:
-            # we cannot stop the daemon from the daemon itself, because of threads
+    try:
+        if 'stop' == sys.argv[1]:
             stop()
-            # daemon.stop()
-        elif 'restart' == sys.argv[1]:
-            # its another process, thats why we have to wait
-            stop()
-            # TODO: wait till PiRadio.pid is deleted
-            time.sleep(8)
-            # daemon.stop()
-            daemon.start()
-        else:
-            print("Unknown command")
-            sys.exit(2)
+        elif 'start' == sys.argv[1]:
+            daemon = RadioDaemon("", *get_args())
+            daemon._start()
+    except KeyboardInterrupt:
         sys.exit(0)
-    else:
-        print("usage: %s start|stop|restart" % sys.argv[0])
-        sys.exit(2)

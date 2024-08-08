@@ -14,10 +14,11 @@ from Radio.util.util import get_project_root, map_
 
 
 class DataProcessor:
-    def __init__(self, publisher: Publisher, stop_event):
+    def __init__(self, publisher: Publisher, stop_event, thread_stopped_counter):
         self.stop_event = stop_event
         self.data_transmitter: DataTransmitter = DataTransmitter()
         self.publisher: Publisher = publisher
+        self.thread_stopped_counter = thread_stopped_counter
 
         self.button_processor: ButtonProcessor = ButtonProcessor()
         self.analog_processor: AnalogProcessor = AnalogProcessor(self.publisher.publish)
@@ -54,6 +55,7 @@ class DataProcessor:
             #start = time.time()
             # TODO: wait instead of endless loop
             if self.stop_event.is_set():
+                self.thread_stopped_counter.increment()
                 print("STOPPING DATA PROCESSOR")
                 break
             if self.data_transmitter.has_data():
