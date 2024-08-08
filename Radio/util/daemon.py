@@ -1,7 +1,6 @@
 import sys, os, atexit
-import time
 import psutil
-from signal import SIGTERM
+
 from Radio.util.util import get_project_root
 
 
@@ -99,33 +98,21 @@ class Daemon:
         # Get the pid from the pidfile
         sys.stdout.write("STOPPING daemon: " + self.pidfile + "\n")
         try:
-            text = "STOPPING daemon: " + self.pidfile + "\n"
+            text = "Deleting file: " + self.pidfile + "\n"
             sys.stderr.write(text)
             with open(self.pidfile, "r") as pf:
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
-        if not pid: 
-            message = "pidfile %s does not exist. Daemon not running?\n"
 
         self._stop()
-        time.sleep(10)
         if os.path.exists(self.pidfile):
             os.remove(self.pidfile)
         try:
             print("DELETE PID ", pid)
-            import subprocess
-            # subprocess.run("kill -9 " + str(pid), shell = True, executable="/bin/bash")
             
             p = psutil.Process(pid)
             p.terminate()
-            """
-            print("DEF")
-            os.kill(pid, SIGTERM)
-            print("ASD")
-            time.sleep(0.1)
-            """
-            print("DELETED PID")
         except psutil.NoSuchProcess:
             print(f"No such process with PID {pid}")
         except psutil.AccessDenied:
@@ -141,7 +128,6 @@ class Daemon:
         except Exception as e:
             print(f"An error occurred: {e}")
         
-        print("DELETE ABC")
         if os.path.exists(self.pidfile):
             os.remove(self.pidfile)
  
