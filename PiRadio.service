@@ -4,12 +4,12 @@ After=network.target
 
 [Service]
 Type=forking
-User=USERNAME
-WorkingDirectory=PATH_TO_PIRADIO
-Environment=PYTHONPATH=PATH_TO_PIRADIO
-ExecStart=PATH_RO_PPATH_TO_PIRADIOIRADIO/Radio/venv/bin/python -m Radio.daemonMain start --app=0
-ExecStop=PATH_TO_PIRADIO/Radio/venv/bin/python -m Radio.daemonMain stop
-ExecReload=PATH_TO_PIRADIO/Radio/venv/bin/python -m Radio.daemonMain restart --app=0
+User=root
+WorkingDirectory=/home/pi/PiRadio
+Environment=PYTHONPATH=/home/pi/PiRadio
+ExecStart=/home/pi/PiRadio/Radio/venv/bin/python -m Radio.daemonMain start --app=1
+ExecStop=/home/pi/PiRadio/Radio/venv/bin/python -m Radio.daemonMain stop
+ExecReload=/home/pi/PiRadio/Radio/venv/bin/python -m Radio.daemonMain restart --app=1
 Restart=always
 RestartSec=2
 StandardOutput=journal

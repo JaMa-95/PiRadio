@@ -21,10 +21,11 @@ def stop():
 
 if __name__ == "__main__":
     try:
+        daemon = RadioDaemon("", *get_args())
         if 'stop' == sys.argv[1]:
             stop()
         elif 'start' == sys.argv[1]:
-            daemon = RadioDaemon("", *get_args())
             daemon._start()
     except KeyboardInterrupt:
+        daemon._stop()
         sys.exit(0)

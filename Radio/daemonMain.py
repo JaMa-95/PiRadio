@@ -5,7 +5,7 @@ import time
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from Radio.util.util import is_raspberry, get_args, get_project_root
+from Radio.util.util import is_raspberry, get_args, get_project_root, react_app_start
 from Radio.radioDaemon import RadioDaemon
 
 if is_raspberry():
@@ -24,6 +24,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             print("START REQUESTED")
+            react_app_start()
             daemon.start()
         elif 'stop' == sys.argv[1]:
             # we cannot stop the daemon from the daemon itself, because of threads
