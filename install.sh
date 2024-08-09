@@ -1,11 +1,11 @@
 #!/bin/bash 
 
 # TODO: check if script must be run as root
-raspi-config nonint do_i2c 0
+#raspi-config nonint do_i2c 0
 
-apt update
-apt upgrade
-apt install python3-pip
+#apt update
+#apt upgrade
+#apt install python3-pip
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PI_RADIO_SERVICE_PATH="PiRadio.service"
@@ -16,7 +16,7 @@ while true; do
         [Yy]* ) apt install npm; 
         sed -i  "s,$APP_PLACEHOLDER_TEXT,--app=1,g" $PI_RADIO_SERVICE_PATH
                 break;;
-        [Nn]* ) break;
+        [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
 done
