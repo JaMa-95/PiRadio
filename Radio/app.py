@@ -67,8 +67,6 @@ async def websocket_current_radio(websocket: WebSocket):
         while True:
             song = db.get_song()
             radio_station = db.get_radio_station()
-            # print("song", song)
-            # print("radio_station", radio_station)
             if song != song_old or radio_station != radio_station_old:
                 radio_station_old = radio_station
                 song_old = song

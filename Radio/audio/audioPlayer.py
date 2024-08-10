@@ -60,19 +60,30 @@ class AudioPlayer(Subscriber):
     def run(self):
         while True:
             status = self.client.status()
-            try:
-                if status['state'] == 'play':
-                    current_song = self.client.currentsong()
-                    self.database.replace_song_name(current_song["name"])
-                    self.database.replace_song_station(current_song["file"])
-            except KeyError as e:
-                pass
+            if status['state'] == 'play':
+                current_song = self.client.currentsong()
+                self.database.replace_song_name(self.get_song_title(current_song))
+                self.database.replace_song_station(self.get_station_name(current_song))
+                    
             if self._stop_event.is_set():
                 print("STOP EVENT AUDIO PLAYER")
                 self.stop()
                 self.thread_stopped_counter.increment()
                 break
             time.sleep(1)
+
+    def get_song_title(self, current_song):
+        try:
+            return current_song["title"]
+        except KeyError as e:
+            return "Unknown"
+    
+    def get_station_name(self, current_song):
+        try:
+            return current_song["name"]
+        except KeyError as e:
+            return "Unknown"
+        
 
     def set_volume(self, volume):
         self.client.setvol(volume)
