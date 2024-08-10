@@ -21,6 +21,9 @@ def stop():
 
 if __name__ == "__main__":
     try:
+        if len(sys.argv) < 2:
+            print("Usage: python main.py start|stop")
+            sys.exit(1)
         if 'stop' == sys.argv[1]:
             stop()
         elif 'start' == sys.argv[1]:

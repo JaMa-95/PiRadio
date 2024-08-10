@@ -6,6 +6,12 @@ import io
 from pathlib import Path
 import sys
 import threading
+import subprocess
+
+
+def react_app_start():
+    root = get_project_root() / "react-app"
+    subprocess.Popen(f"cd {root} && npm start", shell=True)
 
 
 class ThreadSafeInt:

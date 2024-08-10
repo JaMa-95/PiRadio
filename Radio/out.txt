@@ -330,3 +330,129 @@ Check state:  1  in  [1, 5]
 Check state:  1  in  [0, 6]
 Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
 Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+STOPPING daemon: /tmp/PiRadio.pid
+Shutting down server...
+INFO:     127.0.0.1:45492 - "GET /shutdown HTTP/1.1" 200 OK
+Reponse server shutdown: b''
+STOPPING THREADS: 2
+STOPPING DATA PROCESSOR
+STOPPING COLLECTOR
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOP EVENT AUDIO PLAYER
+Audio Player stopped
+DELETE PID  11050
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+STOPPING daemon: /tmp/PiRadio.pid
+Shutting down server...
+INFO:     127.0.0.1:56226 - "GET /shutdown HTTP/1.1" 200 OK
+Reponse server shutdown: b''
+STOPPING THREADS: 2
+STOPPING DATA PROCESSOR
+STOPPING COLLECTOR
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOP EVENT AUDIO PLAYER
+Audio Player stopped
+DELETE PID  12076
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  SPR
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  20300
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+Playing:  https://flucast-b04-01.flumotion.com/cope/net1.mp3
+INFO:     127.0.0.1:58462 - "GET /frequency_names/ HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58472 - "GET /buttons/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58502 - "OPTIONS /equalizer HTTP/1.1" 200 OK
+equalizer_data {'hz60': 0, 'hz170': 0, 'hz310': 0, 'hz600': 0, 'khz1': 0, 'khz3': 0, 'khz6': 0, 'khz12': 0}
+SET EQ: [0, 0, 0, 0, 0, 0, 0, 0]
+INFO:     127.0.0.1:58502 - "POST /equalizer HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58472 - "GET /frequency_names HTTP/1.1" 200 OK
+STOPPING daemon: /tmp/PiRadio.pid
+Shutting down server...
+INFO:     127.0.0.1:59848 - "GET /shutdown HTTP/1.1" 200 OK
+Reponse server shutdown: b''
+STOPPING THREADS: 2
+STOPPING DATA PROCESSOR
+STOPPING COLLECTOR
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOPPING THREADS: 4
+STOP EVENT AUDIO PLAYER
+Audio Player stopped
+DELETE PID  12324

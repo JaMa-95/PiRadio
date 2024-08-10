@@ -42,7 +42,8 @@ sed -i  "s,$USERNAME_PLACEHOLDER,$USERNAME,g" $PI_RADIO_SERVICE_PATH
 
 
 # copy service file to /etc/systemd/system
-SYSTEM_SERVICE_PATH=$SCRIPT_DIR + "/PiRadio.service"
+SYSTEM_SERVICE_PATH=$SCRIPT_DIR/PiRadio.service
 cp $SYSTEM_SERVICE_PATH  /etc/systemd/system/
 
-systemctl enable mpd
+systemctl daemon-reload
+systemctl enable PiRadio

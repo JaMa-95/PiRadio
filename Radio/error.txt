@@ -126,3 +126,49 @@ INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
 INFO:     Finished server process [3209]
+Starting daemon
+INFO:     Started server process [11059]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Deleting file: /tmp/PiRadio.pid
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [11059]
+Starting daemon
+INFO:     Started server process [12083]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Deleting file: /tmp/PiRadio.pid
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12083]
+Starting daemon
+INFO:     Started server process [12340]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     ('127.0.0.1', 58448) - "WebSocket /stream/volume" [accepted]
+INFO:     connection open
+INFO:     ('127.0.0.1', 58456) - "WebSocket /stream/current_radio" [accepted]
+INFO:     connection open
+INFO:     ('127.0.0.1', 58484) - "WebSocket /stream/radio_frequency" [accepted]
+INFO:     connection open
+INFO:     ('127.0.0.1', 58494) - "WebSocket /stream/equalizer" [accepted]
+INFO:     connection open
+INFO:     ('127.0.0.1', 58508) - "WebSocket /stream/buttons" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('127.0.0.1', 58510) - "WebSocket /stream/frequency_values" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+Deleting file: /tmp/PiRadio.pid
+INFO:     Shutting down
+INFO:     Waiting for background tasks to complete. (CTRL+C to force quit)
