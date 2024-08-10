@@ -14,6 +14,11 @@ def react_app_start():
     subprocess.Popen(f"cd {root} && npm start", shell=True)
 
 
+def react_app_start():
+    root = get_project_root() / "react-app"
+    os.system(f"cd {root} && npm start")
+
+
 class ThreadSafeInt:
     def __init__(self, value=0):
         self._value = value

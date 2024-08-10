@@ -25,6 +25,7 @@ if __name__ == "__main__":
         if 'start' == sys.argv[1]:
             react_app_start()
             print("START REQUESTED")
+            react_app_start()
             daemon.start()
         elif 'stop' == sys.argv[1]:
             # we cannot stop the daemon from the daemon itself, because of threads
