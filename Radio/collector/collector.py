@@ -35,8 +35,6 @@ class Collector:
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
                 self.data_transmitter.send(sensor_msg)
-            # print(f"COLLECTOR  {self._stop_event.is_set()}")
-            time.sleep(0.1)
             if self._stop_event.is_set():
                 self.thread_stopped_counter.increment()
                 print("STOPPING COLLECTOR")

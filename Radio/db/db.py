@@ -34,6 +34,7 @@ class Database(Singleton):
             self.active_url = url
 
     def replace_web_control_value(self, value: bool):
+        print(f"Web control value: {value}")
         with self.lock:
             self.web_control_value = value
 

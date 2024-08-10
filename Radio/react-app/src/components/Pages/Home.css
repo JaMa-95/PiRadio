@@ -1,24 +1,27 @@
-.main{
-    border-right: 100px solid white;
-    border-left: 100px solid white;
-    height: 100vh
+.main {
+	border-right: 100px solid white;
+	border-left: 100px solid white;
+	height: 100vh
 }
 
 
-.container{
-  height: 300px;
-  text-align: center
+.container {
+	height: 300px;
+	text-align: center
 }
 
 
-.switch {                   /* Das label-Element */
-	position: relative; /* Um im nächsten Schritt den runden Button mit position:absolute festzusetzen */
+.switch {
+	/* Das label-Element */
+	position: relative;
+	/* Um im nächsten Schritt den runden Button mit position:absolute festzusetzen */
 	width: 64px;
 	height: 34px;
-	float: right;
+	float: left;
 }
 
-.switch span {		    /* Der graue Untergrund des Schalters */ 
+.switch span {
+	/* Der graue Untergrund des Schalters */
 	position: absolute;
 	background-color: #ccc;
 	border-radius: 17px;
@@ -30,7 +33,8 @@
 	transition: background-color .4s;
 }
 
-.switch span::before {    /* Der kreisrunde Button im Switch */
+.switch span::before {
+	/* Der kreisrunde Button im Switch */
 	background-color: white;
 	border-radius: 50%;
 	content: "";
@@ -41,13 +45,12 @@
 	width: 26px;
 }
 
-input:checked + span {
-  background-color: darkgreen;
+input:checked+span {
+	background-color: darkgreen;
 }
 
-input:checked + span::before {
-  transform: translateX(30px);
+input:checked+span::before {
+	transform: translateX(30px);
 }
 
-.switch input {
-}
+.switch input {}

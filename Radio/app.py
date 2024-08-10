@@ -1,7 +1,5 @@
 import asyncio
 import json
-import os
-import signal
 import time
 from os import listdir
 from os.path import isfile, join
@@ -48,6 +46,11 @@ async def websocket_volume(websocket: WebSocket):
     except Exception:
         print("WebSocket disconnected")
         await websocket.close()
+
+@app.post("/webcontrol")
+async def webcontrol(data: dict):
+    data_transmitter.send({"web_control": bool(data["web_control"])})
+    return {"message": "Web control executed successfully"}
 
 @app.post("/volume")
 async def set_volume(volume: dict):

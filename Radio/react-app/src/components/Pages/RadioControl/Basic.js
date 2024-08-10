@@ -5,7 +5,7 @@ import './Basic.css';
 
 export default function BasicRadio(props) {
     return (
-        <div className="buttons">
+        <div className="basic">
             <section>
                 <Volume webControl={props.webControl} />
             </section>

@@ -71,6 +71,8 @@ class DataProcessor:
                     self.process_buttons(sensor_msg_current)
                     self.sensor_msg_old = sensor_msg_current
                 elif isinstance(data, dict):
+                    if "web_control" in data:
+                        self.db.replace_web_control_value(data["web_control"])
                     if "volume" in data:
                         self.db.replace_volume(data["volume"])
                         self.publisher.publish(f"volume:{data['volume']}")
@@ -272,7 +274,7 @@ class AnalogProcessor:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
         if abs(current_frequency_value - frequency_item.value) > 4:
-            print(f"Frequency: {current_frequency_value}")
+            # print(f"Frequency: {current_frequency_value}")
             self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)

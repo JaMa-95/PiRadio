@@ -1,11 +1,26 @@
-import BasicRadio  from "./Basic";
+import BasicRadio from "./Basic";
 import { FancyRadio } from "./Fancy";
 import { useState, useEffect } from 'react';
 
 export const RadioControl = (props) => {
+  const [webControl, setWebControl] = useState(false);
   const [basicRadio, setBasicRadio] = useState([]);
   const handleSetBasicRadio = (event) => {
     setBasicRadio(event.target.checked);
+  };
+
+  const handleWebControl = (checked) => {
+    setWebControl(checked);
+    fetch('http://localhost:8000/webcontrol', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "web_control": checked })
+    })
+      .then(response => {
+        // Handle the response
+      });
   };
 
   const [buttons, setButtons] = useState([]);
@@ -15,25 +30,24 @@ export const RadioControl = (props) => {
     return fetch('http://127.0.0.1:8000/buttons/', {
       method: 'GET',
       headers: {
-          'Accept': 'application/json',
+        'Accept': 'application/json',
       },
-  })
-    .then((res) => res.json())
-    .then((data) => 
-    {
-      setButtons(data);
     })
+      .then((res) => res.json())
+      .then((data) => {
+        setButtons(data);
+      })
   };
 
   const setupWebSocket = () => {
     const socket = new WebSocket('ws://localhost:8000/stream/buttons');
-    
+
     socket.onopen = () => {
       console.log('WebSocket connection established.');
     };
 
     socket.onmessage = (event) => {
-      if (Object.keys(event.data).length <= 3) return; 
+      if (Object.keys(event.data).length <= 3) return;
       const data = JSON.parse(event.data);
       console.log(Object.keys(event.data).length)
       console.log("DATA:", data);
@@ -60,9 +74,9 @@ export const RadioControl = (props) => {
   function handleNormalButtonChange(name, value) {
     let newButtons = [...buttons];
     newButtons.forEach((item, index) => {
-        if (item.name === name) {
-          newButtons[index].state = value;
-        };
+      if (item.name === name) {
+        newButtons[index].state = value;
+      };
     });
     setButtons(newButtons);
     postButtonValue(name, value);
@@ -71,24 +85,24 @@ export const RadioControl = (props) => {
   function handleFrequencyButtonChange(name, value) {
     let newButtons = [...buttons];
     if (!value) {
-        newButtons.forEach((item, index) => {
-            if (item.name === name) {
-                newButtons[index].state = value;
-                postButtonValue(name, value);
-            };
-        });
+      newButtons.forEach((item, index) => {
+        if (item.name === name) {
+          newButtons[index].state = value;
+          postButtonValue(name, value);
+        };
+      });
     } else {
-        newButtons.forEach((item, index) => {
-            if (item.name === name) {
-              newButtons[index].state = value;
-              postButtonValue(name, value);
-            } else {
-              if (newButtons[index].state !== false) {
-                newButtons[index].state = false;
-                postButtonValue(newButtons[index].name, false);
-              }
-            };
-        });
+      newButtons.forEach((item, index) => {
+        if (item.name === name) {
+          newButtons[index].state = value;
+          postButtonValue(name, value);
+        } else {
+          if (newButtons[index].state !== false) {
+            newButtons[index].state = false;
+            postButtonValue(newButtons[index].name, false);
+          }
+        };
+      });
     }
     setButtons(newButtons);
   };
@@ -97,15 +111,15 @@ export const RadioControl = (props) => {
     console.log("POSTED: ", name, value);
     // Send the button value to the server
     fetch('http://localhost:8000/button', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "name": name, "value": value })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "name": name, "value": value })
     })
-    .then(response => {
+      .then(response => {
         // Handle the response
-    });
+      });
   }
 
 
@@ -113,7 +127,7 @@ export const RadioControl = (props) => {
     return fetch('http://127.0.0.1:8000/frequency_names/', {
       method: 'GET',
       headers: {
-          'Accept': 'application/json',
+        'Accept': 'application/json',
       },
     })
       .then((res) => res.json())
@@ -130,15 +144,20 @@ export const RadioControl = (props) => {
 
   return (
     <div className="main">
-        <label className="switch">
-            <input type="checkbox" checked={basicRadio} onChange={handleSetBasicRadio}></input>
-            <span></span>
-            <p>Basic Radio</p>
-            {basicRadio ? <BasicRadio buttons={buttons} webControl={props.webControl} 
-                            frequencyValues={frequencyValues} handleFrequencyButtons={handleFrequencyButtonChange} handleNormalButtons={handleNormalButtonChange}/> :
-                          <FancyRadio buttons={buttons} webControl={props.webControl} 
-                            frequencyValues={frequencyValues} handleFrequencyButtons={handleFrequencyButtonChange} handleNormalButtons={handleNormalButtonChange}/>}
-        </label>
+      <label className="switch">
+        <input type="checkbox" checked={webControl} onChange={() => handleWebControl(!webControl)}></input>
+        <span></span>
+        <p>Web-Control</p>
+      </label>
+      <label className="switch">
+        <input type="checkbox" checked={basicRadio} onChange={handleSetBasicRadio}></input>
+        <span></span>
+        <p>Basic Radio</p>
+      </label>
+      {basicRadio ? <BasicRadio buttons={buttons} webControl={webControl}
+        frequencyValues={frequencyValues} handleFrequencyButtons={handleFrequencyButtonChange} handleNormalButtons={handleNormalButtonChange} /> :
+        <FancyRadio buttons={buttons} webControl={webControl}
+          frequencyValues={frequencyValues} handleFrequencyButtons={handleFrequencyButtonChange} handleNormalButtons={handleNormalButtonChange} />}
     </div>
   );
 };
