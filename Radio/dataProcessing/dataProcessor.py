@@ -71,6 +71,7 @@ class DataProcessor:
                     self.process_buttons(sensor_msg_current)
                     self.sensor_msg_old = sensor_msg_current
                 elif isinstance(data, dict):
+                    print(self.db.get_radio_frequency_dict())
                     if "web_control" in data:
                         self.db.replace_web_control_value(data["web_control"])
                     if "volume" in data:

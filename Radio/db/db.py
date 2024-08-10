@@ -1,3 +1,4 @@
+import copy
 import threading
 from typing import Dict
 
@@ -114,6 +115,10 @@ class Database(Singleton):
         with self.lock:
             return self.radio_frequency.copy()
 
+    def get_radio_frequency_dict(self) -> dict:
+        # print("get_radio_frequency_dict", self.radio_frequency.to_dict())
+        with self.lock:
+            return self.radio_frequency.to_dict()
 
     def print_radio(self):
         print(self.radio_frequency.to_list())

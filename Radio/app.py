@@ -1,4 +1,5 @@
 import asyncio
+import copy
 import json
 import time
 from os import listdir
@@ -134,13 +135,11 @@ async def websocket_radio_frequency(websocket: WebSocket):
     try:
         frequency_old = None
         while True:
-            frequency = db.get_radio_frequency()
+            frequency = db.get_radio_frequency_dict()
+            # print("frequency", frequency)
             if frequency_old != frequency:
-                frequency_old = RadioFrequency(name=frequency.name, minimum=frequency.minimum,
-                                               maximum=frequency.maximum, radio_name=frequency.radio_name,
-                                               radio_url=frequency.radio_url, radio_name_re=frequency.radio_name_re,
-                                               radio_url_re=frequency.radio_url_re, re_active=frequency.re_active)
-                frequency_data = json.dumps(frequency.to_dict())
+                frequency_old
+                frequency_data = json.dumps(frequency)
                 await websocket.send_text(frequency_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception as e:

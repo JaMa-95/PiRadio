@@ -73,7 +73,7 @@ class RadioDaemon(Daemon):
         self.processor_thread = Thread(target=self.data_processor.run)
         self.collector_thread = Thread(target=self.collector.run)
         self.audio_thread = Thread(target=self.audio_player.run)
-        self.app_process = Process(target=app_run)
+        self.app_process = Thread(target=app_run)
         self.fm_module_thread = Thread(target=self.fm_module.run)
         self.stop_thread = Thread(target=self.check_stop)
         print("STARTING THREADS")

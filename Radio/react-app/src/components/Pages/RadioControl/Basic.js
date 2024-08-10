@@ -66,7 +66,7 @@ function Volume(props) {
         };
 
         ws.onclose = function (event) {
-            console.log("WebSocket is closed now.");
+            console.log("WebSocket volume is closed now.");
         };
         return () => {
             ws.close();
@@ -322,7 +322,7 @@ function Equalizer(props) {
         };
 
         ws.onclose = function (event) {
-            console.log("WebSocket is closed now.");
+            console.log("WebSocket is equalizer closed now.");
         };
 
         return () => {
