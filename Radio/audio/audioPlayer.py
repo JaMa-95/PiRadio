@@ -10,7 +10,7 @@ from Radio.util.util import ThreadSafeInt
 
 
 class AudioPlayer(Subscriber):
-    def __init__(self, publisher, stop_event: Event, thread_stopped_counter: ThreadSafeInt):
+    def __init__(self, publisher, stop_event: Event = None, thread_stopped_counter: ThreadSafeInt = None):
         self._stop_event = stop_event
         self.noise_player = None
         self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter

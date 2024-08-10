@@ -249,7 +249,7 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
         print(error)
         response.status_code = 404
         return "Wrong data"
-    save_in_file(file_path=get_project_root() / f'data/freq_{name.lower()}.json', data=frequency.to_list())
+    save_in_file(file_path=get_project_root() / f'data/frequencies/freq_{name.lower()}.json', data=frequency.to_list())
     response.status_code = 200
     return True
 

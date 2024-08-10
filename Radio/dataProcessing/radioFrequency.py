@@ -91,7 +91,7 @@ class RadioFrequency:
             self.radio_name_re,
             self.radio_url_re,
             self.re_active,
-            self.sweet_spot
+            #self.sweet_spot
         ]
 
     def to_dict(self) -> dict:
