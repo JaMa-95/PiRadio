@@ -6,48 +6,73 @@ import AddLogo from './images/add-circle.svg';
 import { useEffect, useState } from 'react';
 
 export const Settings = (props) => {
+  const [analogSettings, setAnalogSettings] = useState({});
   const [buttonsSettings, setButtonsSettings] = useState({});
+  const [devices, setDevices] = useState([]);
+
   const fetchButtonSettings = () => {
     return fetch('http://127.0.0.1:8000/buttonsSettings/', {
       method: 'GET',
       headers: {
-          'Accept': 'application/json',
+        'Accept': 'application/json',
       },
-  })
-    .then((res) => res.json())
-    .then((d) => 
-    {
-      console.log(JSON.stringify(d));
-      setButtonsSettings(d);
     })
+      .then((res) => res.json())
+      .then((d) => {
+        setButtonsSettings(d);
+      })
   };
 
   useEffect(() => {
     fetchButtonSettings();
   }, []);
 
+  const fetchAnalogSettings = () => {
+    return fetch('http://127.0.0.1:8000/analogSettings/', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((d) => {
+        setAnalogSettings(d.sensors);
+        setDevices(d.devices);
+      })
+  };
+
+  useEffect(() => {
+    fetchButtonSettings();
+    fetchAnalogSettings();
+  }, []);
+
+
   return (
     <div className={props.className}>
       <div className="centerDiv">
-      <h1>Potentiometer</h1>
-      <img src={AddLogo} alt="Add Potentiometer" className="add"/>
+        <h1>Potentiometer</h1>
+        <img src={AddLogo} alt="Add Potentiometer" className="add" />
       </div>
       <div className='rowA'>
-        <Potentiometer name="Volume"/>
-        <Potentiometer name="Bass"/>
-        <Potentiometer name="Treble"/>
-        <Potentiometer name="Frequencies"/>
+        {Object.keys(analogSettings).map((analogKey) => (
+          <Potentiometer
+            key={analogKey}
+            name={analogKey}
+            settings={analogSettings[analogKey]}
+            devices={devices}
+          />
+        ))}
       </div>
       <h1>Buttons</h1>
-      <img src={AddLogo} alt="Add Button" className="add" fill="currentColor"/>
+      <img src={AddLogo} alt="Add Button" className="add" fill="currentColor" />
       < div className='rowB'>
-      {Object.keys(buttonsSettings).map((buttonKey) => (
-        <Button
-          key={buttonKey}
-          name={buttonKey}
-          settings={buttonsSettings[buttonKey]}
-        />
-      ))}
+        {Object.keys(buttonsSettings).map((buttonKey) => (
+          <Button
+            key={buttonKey}
+            name={buttonKey}
+            settings={buttonsSettings[buttonKey]}
+          />
+        ))}
       </div>
     </div>
   );

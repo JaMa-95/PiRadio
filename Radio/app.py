@@ -150,6 +150,13 @@ async def get_buttons_settings():
         settings = json.load(f)
     return settings["buttons"]
 
+@app.get("/analogSettings/")
+async def get_buttons_settings():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    return settings["analog"]
+
 @app.get("/buttons/")
 async def get_buttons_settings():
     path_settings = get_project_root() / 'data/settings.json'
@@ -167,6 +174,12 @@ async def set_button(button: dict):
     data_transmitter.send({"button": {"name": button["name"], "value": button["value"]}})
     # Perform the necessary operations to set the button
     return {"message": "Button set successfully"}
+
+
+@app.put("/potentiometer")
+async def set_potentiometer(potentiometer: dict):
+    data_transmitter.send({"potentiometer": int(potentiometer["value"])})
+    return {"message": "Potentiometer set successfully"}
 
 @app.websocket("/stream/buttons")
 async def websocket_buttons(websocket: WebSocket):
