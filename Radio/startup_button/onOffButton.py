@@ -43,7 +43,7 @@ class OnOffButton:
         GPIO.setup(self.active_pin, GPIO.OUT)
         #GPIO.output(self.active_pin, GPIO.LOW)
         time.sleep(0.1)
-        # GPIO.output(self.active_pin, GPIO.HIGH)
+        GPIO.output(self.active_pin, GPIO.HIGH)
     
     def check_(self, _):
         start = time.time()

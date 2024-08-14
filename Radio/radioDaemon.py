@@ -6,7 +6,7 @@ from multiprocessing import Process
 import requests
 
 from Radio.dataProcessing.dataProcessor import DataProcessor
-from Radio.startup_button.on_off_button import OnOffButton
+from Radio.startup_button.onOffButton import OnOffButton
 from Radio.util.dataTransmitter import Publisher
 from Radio.audio.audioPlayer import AudioPlayer
 from Radio.audio.tea5767 import FmModule
