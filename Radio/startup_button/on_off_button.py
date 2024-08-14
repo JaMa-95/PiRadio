@@ -58,6 +58,8 @@ class OnOffButton:
         else:
             print("Shutdown request detected\n")
             self.acknowledge()
+            GPIO.setup(self.active_pin, GPIO.OUT)
+            GPIO.output(self.active_pin, GPIO.LOW)
             self.raspberry.turn_raspi_off()
 
     def run(self):

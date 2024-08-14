@@ -58,33 +58,7 @@ void loop() {
   switch (state) {
     case OFF_STATE: // OFF
     default:
-    // ---- OFF STATE DEFINITION ----
-    // LED: OFF
-    // If Button press -> START_BOOT
-    // If TXD high -> BOOTING
-
-    if (state != prevstate) {
-      ////Serial.print("Off\n");
-      prevstate = state;
-    }
-    pinMode(GPIO_PI, INPUT_PULLUP);
-    //digitalWrite(LED, LOW);
-    digitalWrite(LED, ((millis() - timer) / 250) % 4 == 0);
-    if (digitalRead(BUTTON) == HIGH) {
-      buttontimer = millis();
-    } else {
-      if (millis() - buttontimer > 50) {
-        //Serial.println("BUTTON CLICKED START BOOT");
-        state = START_BOOT_STATE; // BOOT REQ
-        break;
-      }
-    }
-    if (digitalRead(TXD) == HIGH) {
-      //Serial.println("TXD HIGH. IN BOOT");
-      state = BOOTING_STATE; // BOOTING
-      break; 
-    }
-    break;
+      processDefaultState();
 
     // TODO: instead of pull SCL high just give power to the raspberry
     case START_BOOT_STATE: // BOOT START
@@ -254,5 +228,35 @@ void loop() {
     }
     break;
   }
+}
+
+void processDefaultState() {
+  // ---- OFF STATE DEFINITION ----
+    // LED: OFF
+    // If Button press -> START_BOOT
+    // If TXD high -> BOOTING
+
+    if (state != prevstate) {
+      ////Serial.print("Off\n");
+      prevstate = state;
+    }
+    pinMode(GPIO_PI, INPUT_PULLUP);
+    //digitalWrite(LED, LOW);
+    digitalWrite(LED, ((millis() - timer) / 250) % 4 == 0);
+    if (digitalRead(BUTTON) == HIGH) {
+      buttontimer = millis();
+    } else {
+      if (millis() - buttontimer > 50) {
+        //Serial.println("BUTTON CLICKED START BOOT");
+        state = START_BOOT_STATE; // BOOT REQ
+        break;
+      }
+    }
+    if (digitalRead(TXD) == HIGH) {
+      //Serial.println("TXD HIGH. IN BOOT");
+      state = BOOTING_STATE; // BOOTING
+      break; 
+    }
+    break;
 }
 
