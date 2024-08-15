@@ -11,6 +11,7 @@ from Radio.db.db import Database
 from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.util.sensorMsg import SensorMsg, AnalogData, ButtonState
 from Radio.util.util import get_project_root, map_
+from Radio.raspberry.raspberry import Raspberry
 
 
 class DataProcessor:
@@ -22,6 +23,7 @@ class DataProcessor:
 
         self.button_processor: ButtonProcessor = ButtonProcessor()
         self.analog_processor: AnalogProcessor = AnalogProcessor(self.publisher.publish)
+        self.raspberry: Raspberry = Raspberry()
 
         self.sensor_msg_old: SensorMsg = SensorMsg()
 
@@ -47,13 +49,14 @@ class DataProcessor:
         self.cycle_time = self.settings["cycle_time"]
 
     def run(self):
-        times = []
+        start = time.time()
         while True:
             #if len(times) >= 50000:
             #    print(f"TIME PROCESSOR: {mean(times)}")
             #    times.clear()
-            #start = time.time()
             # TODO: wait instead of endless loop
+            if start - time.time() > 1:
+                self.raspberry.alive()
             if self.stop_event.is_set():
                 self.thread_stopped_counter.increment()
                 print("STOPPING DATA PROCESSOR")
