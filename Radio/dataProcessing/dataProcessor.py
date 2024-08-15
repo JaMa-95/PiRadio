@@ -56,6 +56,7 @@ class DataProcessor:
             #    times.clear()
             # TODO: wait instead of endless loop
             if start - time.time() > 1:
+                start = time.time()
                 self.raspberry.alive()
             if self.stop_event.is_set():
                 self.thread_stopped_counter.increment()
