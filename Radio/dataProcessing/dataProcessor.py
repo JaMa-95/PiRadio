@@ -51,14 +51,12 @@ class DataProcessor:
     def run(self):
         start = time.time()
         while True:
-            #if len(times) >= 50000:
-            #    print(f"TIME PROCESSOR: {mean(times)}")
-            #    times.clear()
-            # TODO: wait instead of endless loop
-            if start - time.time() > 1:
+            if time.time() - start > 0.1:
                 start = time.time()
                 self.raspberry.alive()
+
             if self.stop_event.is_set():
+                self.raspberry.cleanup()
                 self.thread_stopped_counter.increment()
                 print("STOPPING DATA PROCESSOR")
                 break

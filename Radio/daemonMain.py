@@ -11,6 +11,7 @@ from Radio.radioDaemon import RadioDaemon
 if is_raspberry():
     IS_RASPBERRY_PI = True
     mock = False
+    import RPi.GPIO as GPIO
 
 
 def stop():
@@ -20,6 +21,9 @@ def stop():
 
 
 if __name__ == "__main__":
+    if IS_RASPBERRY_PI:
+        GPIO.cleanup()
+        GPIO.setmode(GPIO.BCM)
     daemon = RadioDaemon("/tmp/PiRadio.pid", *get_args())
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
