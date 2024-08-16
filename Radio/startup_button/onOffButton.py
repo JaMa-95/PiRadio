@@ -85,3 +85,15 @@ class OnOffButton:
         GPIO.output(self.poll_pin, GPIO.HIGH)
         GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+
+if __name__ == "__main__":
+    try:
+        GPIO.setmode(GPIO.BCM)
+        off_event = Event()
+        on_off_button = OnOffButton(off_event, ThreadSafeInt())
+        on_off_button.run()
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt")
+        off_event.set()
+        GPIO.cleanup()
+
