@@ -13,27 +13,12 @@ Use the webserver to change settings or control the radio from any device.
 
 # Installation
 - enable I2C
-## packages
-- sudo apt update
-- sudo apt upgrade
-- sudo apt install python3-pip
-- sudo apt install npm 
+- curl command
+- cd PiRadio
+- sudo ./install.sh
 
-- python -m ./Radio/venv ./Radio/venv
-- pip install -r ./Radio/requirements.txt
-- pip install RPi.GPIO
-- pip install adafruit-blinka
-- pip install adafruit-circuitpython-ads1x15
-- pip install smbus
-
- [reason for uninstall install](https://stackoverflow.com/questions/78386891/raspberry-pi-4-python-runtimeerror-error-waiting-for-edge)
-- pip uninstall rpi.gpio
-- pip install rpi-lgpio
-
-prefer using already available node modules. Raspberry takes a long time installing packages
+prefer using already available node modules. Raspberry takes a long time and mostly runs out of memory when installing packages
 - npm --prefix ./Radio/react-app install ./Radio/react-app
-
-- cp Radio/radio.sh  /etc/profile.d/radioStart.sh
 
 # audio
 ## mpd
@@ -55,17 +40,6 @@ When using aux ouput or comment out when using uda1334
 ```
 ## uda1334
 [Installation guide](https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/raspberry-pi-usage)
-
-# autostart
-https://raspberrypi.stackexchange.com/questions/40415/how-to-enable-auto-login
-https://unix.stackexchange.com/questions/56083/how-to-write-a-shell-script-that-gets-executed-on-login
-
-# service 
-sudo nano /lib/systemd/system/radio.service
-
-# ERROR
-## Segmentation fault
-https://stackoverflow.com/questions/10035541/what-causes-a-python-segmentation-fault
 
 
 # helpful links
