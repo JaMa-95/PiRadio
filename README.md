@@ -7,7 +7,7 @@ Use the webserver to change settings or control the radio from any device.
 - audio driver selection in settings
 
 # Hardware
-- Raspberry Pi 4 (Others should work the same)
+- Raspberry Pi 3, 4, 5, zero (others not tested)
 - Optional: print [PCB](PCB) 
 - assembly components according to PCB layout
 
