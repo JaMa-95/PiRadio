@@ -1,6 +1,6 @@
 # PiRadio
-Build your own url streaming radio by connecting buttons and potentiometers to your raspberry pi.
-Use the webapp to change to settings or control the radio from any device.
+Build your own web streaming radio by connecting buttons and potentiometers to your raspberry pi.
+Use the webserver to change settings or control the radio from any device.
 
 # TODO
 - support logarithmic poti
