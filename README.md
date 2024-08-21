@@ -4,10 +4,7 @@ Use the webserver to change settings or control the radio from any device.
 
 # TODO
 - support logarithmic poti
-- run as service
-- test with raspberry pi zero
-- automatic audio driver settings
-- create install script
+- audio driver selection in settings
 
 # Hardware
 - Raspberry Pi 4 (Others should work the same)
