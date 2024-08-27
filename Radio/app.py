@@ -189,6 +189,38 @@ async def set_potentiometer(potentiometer: dict):
         json.dump(settings, f, indent=4)
     return {"message": "Potentiometer set successfully"}
 
+@app.delete("/potentiometer")
+async def delete_potentiometer(potentiometer: dict):
+    name = potentiometer["name"]
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"].pop(name)
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Potentiometer deleted successfully"}
+
+@app.post("/potentiometer")
+async def add_potentiometer(potentiometer: dict):
+    name = potentiometer["name"]
+    settings_poti = {
+        "min": 0,
+        "max": 1000,
+        "on": False,
+        "is_volume": False,
+        "is_frequency": False,
+        "is_equalizer": False,
+        "pin": 0,
+        "device": ""
+    }
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"][name] = settings_poti
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Potentiometer added successfully"}
+
 @app.websocket("/stream/buttons")
 async def websocket_buttons(websocket: WebSocket):
     await websocket.accept()

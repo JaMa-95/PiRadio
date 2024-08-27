@@ -60,6 +60,28 @@ export default function Potentiometer(props) {
       });
   };
 
+  const deletePotentiometer = () => {
+    fetch('http://127.0.0.1:8000/potentiometer', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: props.name
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data if needed
+        console.log(data);
+        window.location.reload();
+      })
+      .catch(error => {
+        // Handle any errors
+        console.error('Error:', error);
+      });
+  };
+
 
   const setTypeVolume = () => {
     steIsVolume(true);
@@ -142,7 +164,7 @@ export default function Potentiometer(props) {
         <input type="checkbox" id="formula" name="formula" value={formula} onChange={(e) => setFormula(e.target.value)} />
       </section>
       <div class="vertical-center">
-        <button type="button" className="Delete">Delete</button>
+        <button type="button" className="Delete" onClick={deletePotentiometer}>Delete</button>
       </div>
       <div class="vertical-center">
         <button type="button" className="Save" onClick={updatePotentiometer}>Save</button>

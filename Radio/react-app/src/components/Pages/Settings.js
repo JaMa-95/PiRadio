@@ -41,6 +41,31 @@ export const Settings = (props) => {
       })
   };
 
+  const addPotentiometer = () => {
+    const name = prompt("Enter the potentiometer name:");
+    if (name) {
+      fetch('http://127.0.0.1:8000/potentiometer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data if needed
+          console.log(data);
+          window.location.reload();
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error('Error:', error);
+        });
+    }
+  };
+
   useEffect(() => {
     fetchButtonSettings();
     fetchAnalogSettings();
@@ -51,7 +76,7 @@ export const Settings = (props) => {
     <div className={props.className}>
       <div className="centerDiv">
         <h1>Potentiometer</h1>
-        <img src={AddLogo} alt="Add Potentiometer" className="add" />
+        <img src={AddLogo} alt="Add Potentiometer" className="add" onClick={addPotentiometer} />
       </div>
       <div className='rowA'>
         {Object.keys(analogSettings).map((analogKey) => (
