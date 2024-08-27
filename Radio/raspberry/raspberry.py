@@ -1,7 +1,8 @@
 from subprocess import call
 from Radio.util.util import is_raspberry
 
-if is_raspberry():
+IS_RASPBERRY = is_raspberry()
+if IS_RASPBERRY:
     import RPi.GPIO as GPIO
 
 
@@ -14,6 +15,8 @@ class Raspberry:
         self._dutyCycleDown = True
 
     def activate_alive_pin(self):
+        if not IS_RASPBERRY:
+            return
         try:
             GPIO.setup(self.alive_pin, GPIO.OUT)
             self.pwm_1 = GPIO.PWM(self.alive_pin, 60)
@@ -33,6 +36,8 @@ class Raspberry:
         # call(['shutdown', '-h', 'now'], shell=False)
 
     def alive(self):
+        if not IS_RASPBERRY:
+            return
         self._calcDutyCycle()
         self.pwm_1.ChangeDutyCycle(self.dutyCycle)
 

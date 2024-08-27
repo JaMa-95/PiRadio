@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from Radio.util.util import is_raspberry, get_args, get_project_root
 from Radio.radioDaemon import RadioDaemon
 
+IS_RASPBERRY_PI = False
 if is_raspberry():
     IS_RASPBERRY_PI = True
     mock = False

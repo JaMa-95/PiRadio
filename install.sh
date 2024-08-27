@@ -28,6 +28,7 @@ pip install -r ./Radio/requirements.txt
 pip install adafruit-blinka
 pip install adafruit-circuitpython-ads1x15
 pip install smbus
+pip uninstall rpi.gpio
 pip install rpi-lgpio
 
 
@@ -44,6 +45,9 @@ sed -i  "s,$USERNAME_PLACEHOLDER,$USERNAME,g" $PI_RADIO_SERVICE_PATH
 # copy service file to /etc/systemd/system
 SYSTEM_SERVICE_PATH=$SCRIPT_DIR"/PiRadio.service"
 cp $SYSTEM_SERVICE_PATH  /etc/systemd/system/
+
+# allowe shutdown from python without root
+sudo chmod u+s /sbin/halt
 
 systemctl daemon-reload
 systemctl enable PiRadio.service
