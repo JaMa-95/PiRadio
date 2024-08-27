@@ -177,8 +177,16 @@ async def set_button(button: dict):
 
 
 @app.put("/potentiometer")
-async def set_potentiometer(potentiometer: dict):
-    data_transmitter.send({"potentiometer": int(potentiometer["value"])})
+async def set_potentiometer(potentiometer: dict):    
+    name = potentiometer["name"]
+    settings_poti = potentiometer["settings"]
+    print("potentiometer", potentiometer)
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"][name] = settings_poti
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
     return {"message": "Potentiometer set successfully"}
 
 @app.websocket("/stream/buttons")

@@ -37,13 +37,17 @@ export default function Potentiometer(props) {
       pin: pin,
       device: device,
     };
+    let name = props.name;
 
-    fetch('http://127.0.0.1:8000/potentiometer/', {
+    fetch('http://127.0.0.1:8000/potentiometer', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(potentiometerData),
+      body: JSON.stringify({
+        settings: potentiometerData,
+        name: name
+      }),
     })
       .then(response => response.json())
       .then(data => {
@@ -90,19 +94,19 @@ export default function Potentiometer(props) {
       <section>
         <div style={mystyle}>
           <label for="minimum">Minimum</label>
-          <input type="number" id="minimum" name="minimum" value={min} onChange={(e) => setMin(e.target.value)} />
+          <input type="number" id="minimum" name="minimum" value={min} onChange={(e) => setMin(parseInt(e.target.value))} />
         </div>
       </section>
       <section>
         <div style={{ float: "left" }}>
           <label for="maximum">Maximum</label>
-          <input type="number" id="maximum" name="maximum" value={max} onChange={(e) => setMax(e.target.value)} />
+          <input type="number" id="maximum" name="maximum" value={max} onChange={(e) => setMax(parseInt(e.target.value))} />
         </div>
         <br style={{ clear: "both" }} />
       </section>
       <section>
         <label for="pin" className='pinLabel'>Pin</label>
-        <input type="number" id="pin" name="pin" value={pin} onChange={(e) => setPin(e.target.value)} />
+        <input type="number" id="pin" name="pin" value={pin} onChange={(e) => setPin(parseInt(e.target.value))} />
       </section>
       <section>
         <label for="type" className='typeLabel'> Type: <b>{type}</b> </label>
