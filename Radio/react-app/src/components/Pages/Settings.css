@@ -1,15 +1,23 @@
-.rowA{
-    display:flex; flex-direction:row;
+.rowA {
+    display: flex;
+    flex-direction: row;
 }
-.rowB{
+
+.rowB {
     width: 90%;
     overflow: hidden;
 }
 
-.button, .potentiometer {
+.button,
+.potentiometer {
     width: fit-content;
-    float:left; /* add this */
+    float: left;
+    /* add this */
     margin-left: 15px;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
 }
 
 h1 {

@@ -3,6 +3,13 @@ label {
     display: block;
 }
 
+section,
+button {
+    margin: 0 auto;
+    width: 80%;
+    margin: 5px;
+}
+
 h3,
 .formulaLabel,
 .pinLabel {

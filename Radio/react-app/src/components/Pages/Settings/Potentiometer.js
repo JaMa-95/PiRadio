@@ -1,5 +1,6 @@
 import './Potentiometer.css'
 import { useEffect, useState, cloneElement } from 'react';
+import Equalizer from './Equalizer';
 
 export default function Potentiometer(props) {
   const [min, setMin] = useState(props.settings.min);
@@ -13,6 +14,15 @@ export default function Potentiometer(props) {
   const [device, setDevice] = useState(props.settings.device);
   const [type, setType] = useState("");
   const [devices, setDevices] = useState([]);
+
+  const [hz60, setHz60] = useState(0);
+  const [hz170, setHz170] = useState(0);
+  const [hz310, setHz310] = useState(0);
+  const [hz600, setHz600] = useState(0);
+  const [khz1, setKhz1] = useState(0);
+  const [khz3, setKhz3] = useState(0);
+  const [khz6, setKhz6] = useState(0);
+  const [khz12, setKhz12] = useState(0);
 
   useEffect(() => {
     if (isVolume) {
@@ -104,11 +114,23 @@ export default function Potentiometer(props) {
     setType("Equalizer");
   };
 
+  const openEqualizer = () => {
+    let equalizer = document.getElementById("Equalizer" + props.name);
+    let equalizerButton = document.getElementById("openEqualizerButton" + props.name);
+    if (equalizer.style.display === "none") {
+      equalizerButton.innerHTML = "Close equalizer";
+      equalizer.style.display = "block";
+    } else {
+      equalizerButton.innerHTML = "Open equalizer";
+      equalizer.style.display = "none";
+    }
+  };
 
   const mystyle = {
     float: "left",
     marginRight: "20px"
   };
+
   return (
     <div className="potentiometer">
       <input type="checkbox" name='on' id='on' />
@@ -163,6 +185,31 @@ export default function Potentiometer(props) {
         <label for="formula" className='formulaLabel'> Formula</label>
         <input type="checkbox" id="formula" name="formula" value={formula} onChange={(e) => setFormula(e.target.value)} />
       </section>
+      {isEqualizer && (
+        <section>
+          <button id={"openEqualizerButton" + props.name} type="button" className="Add" onClick={openEqualizer}>Open equalizer</button>
+          <div style={{ display: "none" }} id={"Equalizer" + props.name}>
+            <Equalizer
+              hz60={hz60}
+              hz170={hz170}
+              hz310={hz310}
+              hz600={hz600}
+              khz1={khz1}
+              khz3={khz3}
+              khz6={khz6}
+              khz12={khz12}
+              setHz60={setHz60}
+              setHz170={setHz170}
+              setHz310={setHz310}
+              setHz600={setHz600}
+              setKhz1={setKhz1}
+              setKhz3={setKhz3}
+              setKhz6={setKhz6}
+              setKhz12={setKhz12}
+            />
+          </div>
+        </section>
+      )}
       <div class="vertical-center">
         <button type="button" className="Delete" onClick={deletePotentiometer}>Delete</button>
       </div>
@@ -172,14 +219,6 @@ export default function Potentiometer(props) {
     </div>
   );
 };
-
-/*
-const Equalizer = ({ setData }) => {
-  return (
-    <Potentiometer settings={settings} formula={formula} name={name} devices={devices} />
-  );
-};
-*/
 
 const Dropdown = ({ trigger, menu }) => {
   const [open, setOpen] = useState(false);

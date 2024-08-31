@@ -1,14 +1,14 @@
-input:not([type='checkbox']), label {
-    display:block;
+input:not([type='checkbox']),
+label {
+    display: block;
 }
 
-[type="checkbox"]
-{
-    vertical-align:middle;
+[type="checkbox"] {
+    vertical-align: middle;
     margin-right: 10px;
 }
 
-#pin  {
+#pin {
     width: 30px;
     float: right;
     margin-right: 20%;
@@ -19,7 +19,9 @@ input:not([type='checkbox']), label {
     margin-right: 20%;
 }
 
-h3, .reversedLabel, .pinLabel {
+h3,
+.reversedLabel,
+.pinLabel {
     display: inline-block;
 }
 
@@ -30,7 +32,20 @@ h3, .reversedLabel, .pinLabel {
 
 .Delete {
     border-radius: 5px;
-    background-color: red; /* Green */
+    background-color: red;
+    /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.Save {
+    border-radius: 5px;
+    background-color: green;
+    /* Green */
     border: none;
     color: white;
     text-align: center;
