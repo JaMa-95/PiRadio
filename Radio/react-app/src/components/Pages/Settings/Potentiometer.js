@@ -127,10 +127,6 @@ export default function Potentiometer(props) {
         <br style={{ clear: "both" }} />
       </section>
       <section>
-        <label for="pin" className='pinLabel'>Pin</label>
-        <input type="number" id="pin" name="pin" value={pin} onChange={(e) => setPin(parseInt(e.target.value))} />
-      </section>
-      <section>
         <label for="type" className='typeLabel'> Type: <b>{type}</b> </label>
         <div className="dropdown">
           <Dropdown
@@ -160,6 +156,10 @@ export default function Potentiometer(props) {
         </div>
       </section>
       <section>
+        <label for="pin" className='pinLabel'>Pin</label>
+        <input type="number" id="pin" name="pin" value={pin} onChange={(e) => setPin(parseInt(e.target.value))} />
+      </section>
+      <section>
         <label for="formula" className='formulaLabel'> Formula</label>
         <input type="checkbox" id="formula" name="formula" value={formula} onChange={(e) => setFormula(e.target.value)} />
       </section>
@@ -172,6 +172,14 @@ export default function Potentiometer(props) {
     </div>
   );
 };
+
+/*
+const Equalizer = ({ setData }) => {
+  return (
+    <Potentiometer settings={settings} formula={formula} name={name} devices={devices} />
+  );
+};
+*/
 
 const Dropdown = ({ trigger, menu }) => {
   const [open, setOpen] = useState(false);
