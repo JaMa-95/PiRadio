@@ -1,6 +1,7 @@
 import './Potentiometer.css'
 import { useEffect, useState, cloneElement } from 'react';
 import Equalizer from './Equalizer';
+import Dropdown from '../../../commen/Dropdown';
 
 export default function Potentiometer(props) {
   const [min, setMin] = useState(props.settings.min);
@@ -45,8 +46,6 @@ export default function Potentiometer(props) {
     setKhz3(props.settings["equalizer_reduction"]["3kHz"]);
     setKhz6(props.settings["equalizer_reduction"]["6kHz"]);
     setKhz12(props.settings["equalizer_reduction"]["12kHz"]);
-    console.log("B:", props.settings["equalizer_reduction"]["12kHz"]);
-    console.log("A: ", hz60);
   };
 
   const getPotiData = () => {
@@ -62,8 +61,6 @@ export default function Potentiometer(props) {
       device: device,
     };
     if (isEqualizer) {
-      console.log("put Equalizer");
-      console.log(hz60);
       potentiometerData.equalizer_reduction = {
         hz60: hz60,
         hz170: hz170,
@@ -168,7 +165,7 @@ export default function Potentiometer(props) {
 
   return (
     <div className="potentiometer">
-      <input type="checkbox" name='on' id='on' />
+      <input type="checkbox" name='on' id='on' checked={on} onChange={(e) => setOn(e.target.value)} />
       <h3>{props.name}</h3>
       <section>
         <div style={mystyle}>
@@ -251,36 +248,6 @@ export default function Potentiometer(props) {
       <div class="vertical-center">
         <button type="button" className="Save" onClick={updatePotentiometer}>Save</button>
       </div>
-    </div>
-  );
-};
-
-const Dropdown = ({ trigger, menu }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
-  return (
-    <div className="dropdown">
-      {cloneElement(trigger, {
-        onClick: handleOpen,
-      })}
-      {open ? (
-        <ul className="menu">
-          {menu.map((menuItem, index) => (
-            <li key={index} className="menu-item">
-              {cloneElement(menuItem, {
-                onClick: () => {
-                  menuItem.props.onClick();
-                  setOpen(false);
-                },
-              })}
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </div>
   );
 };

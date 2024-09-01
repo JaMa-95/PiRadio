@@ -53,3 +53,7 @@ h3,
     display: inline-block;
     font-size: 16px;
 }
+
+input[type=number] {
+    min-width: 45px !important;
+}

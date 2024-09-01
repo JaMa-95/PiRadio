@@ -20,6 +20,10 @@
     border-radius: 5px;
 }
 
+.button {
+    min-width: 150px;
+}
+
 h1 {
     display: inline-block;
     top: -5px;
