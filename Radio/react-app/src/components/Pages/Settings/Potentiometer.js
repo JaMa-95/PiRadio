@@ -31,11 +31,25 @@ export default function Potentiometer(props) {
       setType("Frequency");
     } else if (isEqualizer) {
       setType("Equalizer");
+      setEqualizer();
     }
     setDevices(Object.keys(props.devices));
   }, [isVolume, isFrequency, isEqualizer]);
 
-  const updatePotentiometer = () => {
+  const setEqualizer = () => {
+    setHz60(props.settings["equalizer_reduction"]["60Hz"]);
+    setHz170(props.settings["equalizer_reduction"]["170Hz"]);
+    setHz310(props.settings["equalizer_reduction"]["310Hz"]);
+    setHz600(props.settings["equalizer_reduction"]["600Hz"]);
+    setKhz1(props.settings["equalizer_reduction"]["1kHz"]);
+    setKhz3(props.settings["equalizer_reduction"]["3kHz"]);
+    setKhz6(props.settings["equalizer_reduction"]["6kHz"]);
+    setKhz12(props.settings["equalizer_reduction"]["12kHz"]);
+    console.log("B:", props.settings["equalizer_reduction"]["12kHz"]);
+    console.log("A: ", hz60);
+  };
+
+  const getPotiData = () => {
     const potentiometerData = {
       min: min,
       max: max,
@@ -47,6 +61,27 @@ export default function Potentiometer(props) {
       pin: pin,
       device: device,
     };
+    if (isEqualizer) {
+      console.log("put Equalizer");
+      console.log(hz60);
+      potentiometerData.equalizer_reduction = {
+        hz60: hz60,
+        hz170: hz170,
+        hz310: hz310,
+        hz600: hz600,
+        khz1: khz1,
+        khz3: khz3,
+        khz6: khz6,
+        khz12: khz12
+      };
+    }
+    return potentiometerData;
+  };
+
+  const updatePotentiometer = () => {
+    const potentiometerData = getPotiData();
+    console.log(potentiometerData);
+
     let name = props.name;
 
     fetch('http://127.0.0.1:8000/potentiometer', {
