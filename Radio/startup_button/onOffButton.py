@@ -10,6 +10,7 @@
 import json
 from threading import Event
 import time
+import os
 
 from Radio.raspberry.raspberry import Raspberry
 from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry
@@ -23,8 +24,8 @@ class OnOffButton:
     def __init__(self, stop_event: Event, thread_stopped_counter: ThreadSafeInt):
         self._stop_event = stop_event
         self.thread_stopped_counter = thread_stopped_counter
-        self.active_pin: int = 5
-        self.poll_pin: int = 22
+        self.active_pin: int = 0
+        self.output_pin: int = 0
         if IS_RASPBERRY:
             self.raspberry: Raspberry = Raspberry()
             # self.load_settings()
@@ -36,54 +37,50 @@ class OnOffButton:
         with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
         self.active_pin = settings["on_off_button"]["active_pin"]
-        self.poll_pin = settings["on_off_button"]["poll_pin"]
+        self.output_pin = settings["on_off_button"]["output_pin"]
 
     def activate_pins(self):
-        GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.active_pin, GPIO.OUT)
-        #GPIO.output(self.active_pin, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(self.active_pin, GPIO.HIGH)
-    
-    def check_(self, _):
+        GPIO.setup(self.active_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def poll(self):
         start = time.time()
-        while not GPIO.input(self.poll_pin):
+        while not GPIO.input(self.active_pin):
             if self._stop_event.is_set():
                 break
             time.sleep(0.01)
+        return time.time() - start
+    
+    def shutdown(self):
+        # Acknowledge by setting the GPIO pin as Output, Low
+        GPIO.setup(self.active_pin, GPIO.OUT)
+        GPIO.setup(14, GPIO.OUT)
+        GPIO.output(14, GPIO.LOW)
+        GPIO.output(self.active_pin, GPIO.LOW)
 
-        if time.time() - start < 0.1:
-            self.poll(start)
-            GPIO.add_event_callback(self.poll_pin, self.check_)
-        else:
-            print("Shutdown request detected\n")
-            self.acknowledge()
-            GPIO.setup(self.active_pin, GPIO.OUT)
-            GPIO.output(self.active_pin, GPIO.LOW)
-            self.raspberry.turn_raspi_off()
+        time.sleep(0.01)
+        # make as high again so attiny can detetct when shutdown is over -> pin low again
+        GPIO.output(self.active_pin, GPIO.HIGH)
+        GPIO.setup(self.active_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        os.system("shutdown now -h")
 
     def run(self):
-        if IS_RASPBERRY:
-            GPIO.add_event_detect(self.poll_pin, GPIO.FALLING)
-            GPIO.add_event_callback(self.poll_pin, self.check_)
-            while not self._stop_event.is_set():
-                time.sleep(1)
+        while not self._stop_event.is_set():
+            if IS_RASPBERRY:
+                GPIO.wait_for_edge(self.active_pin, GPIO.FALLING)
+
+                poll_duration = self.poll()
+                print("Poll: ", poll_duration)
+                if poll_duration < 0.1:
+                    GPIO.setup(self.active_pin, GPIO.OUT, initial=0)
+                    time.sleep(0.05)
+                    GPIO.setup(self.active_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+                else:
+                    print("Shutdown request detected")
+                    self.shutdown()
+
+                    
         self.thread_stopped_counter.increment()
         print("ON/OFF Button stopped")
-
-    def poll(self, start):
-        GPIO.setup(self.poll_pin, GPIO.OUT, initial=0)
-        time.sleep(0.05)
-        GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        print("Poll: ", time.time() - start)
-
-    def acknowledge(self):
-        # Acknowledge by setting the GPIO pin as Output, Low
-        GPIO.setup(self.poll_pin, GPIO.OUT)
-        GPIO.output(self.poll_pin, GPIO.LOW)
-        time.sleep(0.01)
-        GPIO.output(self.poll_pin, GPIO.HIGH)
-        GPIO.setup(self.poll_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 if __name__ == "__main__":

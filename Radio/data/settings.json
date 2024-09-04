@@ -4,7 +4,7 @@
   "mqtt": false,
   "on_off_button": {
     "active_pin": 5,
-    "poll_pin": 22
+    "output_pin": 14
   },
   "audio": {
     "fm_module": {
