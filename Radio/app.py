@@ -191,7 +191,7 @@ async def set_button(data: dict):
     settings["buttons"][name] = settings_button
     with open(path_settings.resolve(), "w") as f:
         json.dump(settings, f, indent=4)
-    return {"message": "Button deleted successfully"}
+    return {"message": "Button saved successfully"}
 
 
 @app.put("/potentiometer")

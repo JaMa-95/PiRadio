@@ -23,6 +23,7 @@ export default function Button(props) {
     const [isChangeSpeaker, setIsChangeSpeaker] = useState(props.settings.is_change_speaker);
     const [freq, setFreq] = useState(props.settings.freq);
     const [actions, setActions] = useState(props.settings.action);
+    const [actionsUUID, setActionsUUID] = useState({});
     const [type, setType] = useState("");
     const types = ["ON/OFF Music", "ON/OFF Raspi", "Change Speaker", "Frequency"];
     const actionChoices = {
@@ -35,33 +36,63 @@ export default function Button(props) {
         SET_AUDIO_SOURCE: 5
     };
 
+    function initActionsUUID() {
+        for (const data in props.settings.action) {
+            const actionUUID = uuid();
+            actionsUUID[actionUUID] = props.settings.action[data];
+        }
+        setActionsUUID(actionsUUID);
+    }
+
+    function actionsUUIDtoActions(actionsUUIDNew) {
+        let actionsNew = {};
+        let key = 0;
+        Object.keys(actionsUUIDNew).forEach(actionUUID => {
+            actionsNew[key] = actionsUUIDNew[actionUUID];
+            key++;
+        });
+        setActions(actionsNew);
+    }
 
     // outsource functions to action class
     let handleActionChange = (key, newValue) => {
-        let actionNew = actions;
+        let actionNew = actionsUUID;
 
         actionNew[key]["action_type"] = newValue;
-        setActions(actionNew);
+        setActionsUUID(actionNew);
+        actionsUUIDtoActions(actionNew);
     }
 
     let handleApplyStateChange = (key, clickType, newValue) => {
-        let actionNew = actions;
+        let actionNew = actionsUUID;
         if (newValue) {
             actionNew[key]["apply_state"].push(clickType);
         } else {
             actionNew[key]["apply_state"] = actionNew[key]["apply_state"].filter(state => state !== clickType);
         }
         setActions(actionNew);
+        actionsUUIDtoActions(actionNew);
     }
 
     let deleteAction = (key) => {
-        let actionNew = actions;
+        if (Object.keys(actionsUUID).length === 1) {
+            alert("You can't delete the last action");
+            return;
+        }
+        let actionNew = actionsUUID;
         delete actionNew[key];
         setActions(actionNew);
+        actionsUUIDtoActions(actionNew);
     }
 
-    let addAction = (key) => {
-
+    let addAction = (uuidNew) => {
+        let actionNew = actions;
+        actionNew[uuidNew] = {
+            "action_type": 99,
+            "apply_state": []
+        };
+        setActions(actionNew);
+        actionsUUIDtoActions(actionNew);
     }
 
     let saveButton = () => {
@@ -95,6 +126,13 @@ export default function Button(props) {
             .then(data => {
                 // Handle the response data if needed
                 console.log(data);
+                let buttonObject = document.getElementById("button" + name);
+                if (buttonObject) {
+                    buttonObject.classList.add("saveSuccess");
+                    setTimeout(() => {
+                        buttonObject.classList.remove("saveSuccess");
+                    }, 1500);
+                }
             })
             .catch(error => {
                 // Handle any errors
@@ -134,10 +172,11 @@ export default function Button(props) {
         } else {
             setType("Play Music");
         }
+        initActionsUUID();
     }, [isOnOff, isOnOffRaspi, isChangeSpeaker, freq]);
 
     return (
-        <div className="button">
+        <div className="button" id={"button" + name}>
             <input type="checkbox" name='active' id='active' checked={active} onChange={(e) => setActive(e.target.value)} />
             <h3>{props.name}</h3>
             <section>
@@ -170,9 +209,15 @@ export default function Button(props) {
             </section>
             <section>
                 {/* TODO: Open this view in extra popup */}
-                <Actions name={name} clickTypes={clickTypes} actions={actions} handleActionChange={handleActionChange}
+                <Actions name={name} clickTypes={clickTypes}
+                    actions={actions}
+                    actionsUUID={actionsUUID}
+                    handleActionChange={handleActionChange}
                     actionChoices={actionChoices}
-                    applyStateChange={handleApplyStateChange} />
+                    applyStateChange={handleApplyStateChange}
+                    deleteAction={deleteAction}
+                    addAction={addAction}
+                />
             </section>
             {type === "Play Music" && (
                 <section>
@@ -190,15 +235,39 @@ export default function Button(props) {
 };
 
 function Actions(props) {
+    const [actionsUUID, setActionsUUID] = useState(props.actionsUUID);
+
+    function addAction() {
+        let actionNew = actionsUUID;
+        const uuidNew = uuid();
+        actionNew[uuidNew] = {
+            "action_type": 99,
+            "apply_state": []
+        };
+        setActionsUUID(actionNew);
+        props.addAction(uuidNew);
+
+        setTimeout(() => {
+            const newElement = document.getElementById(uuidNew);
+            newElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+
     return (
         <div>
-            <button>Add action</button>
+            <button onClick={addAction}>Add action</button>
+
             {
-                Object.keys(props.actions).map(keyAction =>
-                    <Action actionChoices={props.actionChoices} actionsKey={keyAction} handleActionChange={props.handleActionChange}
-                        name={props.name} activeAction={props.actions[keyAction]["action_type"]}
-                        applyStates={props.actions[keyAction]["apply_state"]}
-                        applyStateChange={props.applyStateChange} />
+                Object.keys(props.actionsUUID).map(keyAction =>
+                    <Action
+                        actionChoices={props.actionChoices}
+                        actionsKey={keyAction}
+                        handleActionChange={props.handleActionChange}
+                        name={props.name}
+                        activeAction={props.actionsUUID[keyAction]["action_type"]}
+                        applyStates={props.actionsUUID[keyAction]["apply_state"]}
+                        applyStateChange={props.applyStateChange}
+                        deleteAction={props.deleteAction} />
                 )
             }
         </div>
@@ -206,34 +275,36 @@ function Actions(props) {
 }
 
 function Action(props) {
-    const uniqueKey = uuid();
-
     const [selectedOption, setSelectedOption] = useState(props.activeAction);
+
     let doActionChange = (actionKey, newValue) => {
-        console.log("doActionChange: " + actionKey + " " + newValue);
         props.handleActionChange(actionKey, newValue);
         setSelectedOption(newValue)
     }
 
-
     return (
-        <div class="Action">
+        <div class="Action" id={props.actionsKey}>
             <h3>Action</h3>
             <div>
                 {
                     Object.keys(props.actionChoices).map(key =>
-                        <div>
-                            <input type="radio" id={uniqueKey + props.name + key} name={props.name + uniqueKey} value={key}
+                        <div id={props.actionKey}>
+                            <input type="radio"
+                                id={props.name + key + props.actionsKey}
+                                name={props.name + key + props.actionsKey}
+                                value={props.actionsKey}
                                 checked={selectedOption === props.actionChoices[key]}
                                 onChange={() => { doActionChange(props.actionsKey, props.actionChoices[key]) }} />
-                            <label for={uniqueKey + props.name + key}>{key}</label>
+                            <label for={props.name + key + props.actionsKey}>{key}</label>
                         </div>
                     )
                 }
             </div>
-            <ApplyState uniqueKey={uniqueKey} applyStates={props.applyStates} applyStateChange={props.applyStateChange}
+            <ApplyState
+                applyStates={props.applyStates}
+                applyStateChange={props.applyStateChange}
                 actionKey={props.actionsKey} />
-            <li></li><button>Remove action</button>
+            <li></li><button onClick={() => { props.deleteAction(props.actionsKey) }}>Remove action</button>
         </div>
     )
 }
@@ -255,7 +326,9 @@ function ApplyState(props) {
             {
                 Object.keys(clickTypes).map(key => (
                     <div>
-                        <input type="checkbox" id={key} name={props.uniqueKey + key + "State"} value={clickTypes[key]}
+                        <input type="checkbox"
+                            id={key} name={props.actionKey + key + "State"}
+                            value={clickTypes[key]}
                             checked={applyStates.includes(clickTypes[key])}
                             onChange={() => { applyStateChange(props.actionKey, clickTypes[key], !props.applyStates.includes(clickTypes[key])) }} />
                         <label for={key}> {key} </label><br />

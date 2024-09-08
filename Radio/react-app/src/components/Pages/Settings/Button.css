@@ -61,3 +61,46 @@ input[type=number] {
 .Action {
     border: solid black 1px;
 }
+
+.saveSuccess {
+    border: solid black 1px;
+    animation: successButtonAnimation 1s;
+}
+
+@keyframes successButtonAnimation {
+    0% {
+        background-color: green;
+    }
+
+    50% {
+        background-color: white;
+    }
+
+    100% {
+        background-color: green;
+    }
+}
+
+
+.failAnimation {
+    border: solid black 1px;
+    animation: failButtonAnimation 1s;
+}
+
+@keyframes failButtonAnimation {
+    0% {
+        background-color: red;
+    }
+
+    25% {
+        background-color: white;
+    }
+
+    75% {
+        background-color: white;
+    }
+
+    100% {
+        background-color: red;
+    }
+}

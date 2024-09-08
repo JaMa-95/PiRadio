@@ -77,7 +77,6 @@ export default function Potentiometer(props) {
 
   const updatePotentiometer = () => {
     const potentiometerData = getPotiData();
-    console.log(potentiometerData);
 
     let name = props.name;
 
