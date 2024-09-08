@@ -252,14 +252,14 @@ function Actions(props) {
             newElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
     }
-
+    let counter = 1;
     return (
         <div>
             <button onClick={addAction}>Add action</button>
-
             {
                 Object.keys(props.actionsUUID).map(keyAction =>
                     <Action
+                        counter={counter++}
                         actionChoices={props.actionChoices}
                         actionsKey={keyAction}
                         handleActionChange={props.handleActionChange}
@@ -284,7 +284,7 @@ function Action(props) {
 
     return (
         <div class="Action" id={props.actionsKey}>
-            <h3>Action</h3>
+            <h3>Action {props.counter}</h3>
             <div>
                 {
                     Object.keys(props.actionChoices).map(key =>
