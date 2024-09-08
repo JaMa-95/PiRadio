@@ -169,11 +169,29 @@ async def get_buttons_settings():
                              "action": button_settings["action"], "state": False})
     return buttons
 
-@app.post("/button")
-async def set_button(button: dict):
-    data_transmitter.send({"button": {"name": button["name"], "value": button["value"]}})
-    # Perform the necessary operations to set the button
-    return {"message": "Button set successfully"}
+@app.delete("/button")
+async def delete_button(data: dict):
+    name = data["name"]
+    print("delete: ", name) 
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["buttons"].pop(name)
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Button deleted successfully"}
+
+@app.put("/button")
+async def set_button(data: dict):
+    name = data["name"]
+    settings_button = data["settings"]
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["buttons"][name] = settings_button
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Button deleted successfully"}
 
 
 @app.put("/potentiometer")

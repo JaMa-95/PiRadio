@@ -57,3 +57,7 @@ h3,
 input[type=number] {
     min-width: 45px !important;
 }
+
+.Action {
+    border: solid black 1px;
+}

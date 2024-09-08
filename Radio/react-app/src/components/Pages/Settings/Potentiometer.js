@@ -116,6 +116,7 @@ export default function Potentiometer(props) {
       .then(data => {
         // Handle the response data if needed
         console.log(data);
+        // TODO: antipattern -> delete must come from higher component
         window.location.reload();
       })
       .catch(error => {

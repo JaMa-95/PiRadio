@@ -1,389 +1,384 @@
 {
-  "cycle_time": 0.001,
-  "amplifier_pin": 99,
-  "mqtt": false,
-  "on_off_button": {
-    "active_pin": 5,
-    "output_pin": 14
-  },
-  "audio": {
-    "fm_module": {
-      "address": 96,
-      "active": true
+    "cycle_time": 0.001,
+    "amplifier_pin": 99,
+    "mqtt": false,
+    "on_off_button": {
+        "active_pin": 5,
+        "output_pin": 14
     },
-    "raspberry": {
-      "output": {
-        "hw:0,0": {
-          "name": "HDMI",
-          "active": false
-        }
-      }
-    },
-    "switcher": {
-      "pin_a": 27,
-      "pin_b": 17,
-      "devices": [
-        {
-          "device": "raspberry",
-          "A": true,
-          "B": false,
-          "startup": true
+    "audio": {
+        "fm_module": {
+            "address": 96,
+            "active": true
         },
-        {
-          "device": "tea5767",
-          "A": false,
-          "B": false
+        "raspberry": {
+            "output": {
+                "hw:0,0": {
+                    "name": "HDMI",
+                    "active": false
+                }
+            }
+        },
+        "switcher": {
+            "pin_a": 27,
+            "pin_b": 17,
+            "devices": [
+                {
+                    "device": "raspberry",
+                    "A": true,
+                    "B": false,
+                    "startup": true
+                },
+                {
+                    "device": "tea5767",
+                    "A": false,
+                    "B": false
+                }
+            ]
         }
-      ]
-    }
-  },
-  "analog": {
-    "devices": {
-      "ads_1": {
-        "address": 72
-      }
     },
-    "sensors": {
-      "posLangKurzMittel": {
+    "analog": {
+        "devices": {
+            "ads_1": {
+                "address": 72
+            }
+        },
+        "sensors": {
+            "posLangKurzMittel": {
+                "min": 19000,
+                "max": 20300,
+                "on": true,
+                "is_volume": false,
+                "is_frequency": true,
+                "is_equalizer": false,
+                "pin": 0,
+                "device": "ads_1"
+            },
+            "volume": {
+                "min": 14000,
+                "max": 24300,
+                "formula": true,
+                "on": true,
+                "is_volume": true,
+                "is_frequency": false,
+                "is_equalizer": false,
+                "pin": 1,
+                "device": "ads_1"
+            },
+            "bass": {
+                "min": 0,
+                "max": 26000,
+                "min_final": -20,
+                "max_final": 20,
+                "on": true,
+                "is_volume": false,
+                "is_frequency": false,
+                "is_equalizer": true,
+                "equalizer_reduction": {
+                    "60Hz": 1,
+                    "170Hz": 2,
+                    "310Hz": 3,
+                    "600Hz": 4,
+                    "1kHz": -1,
+                    "3kHz": -1,
+                    "6kHz": -1,
+                    "12kHz": -1
+                },
+                "pin": 2,
+                "device": "ads_1"
+            },
+            "treble": {
+                "min": 0,
+                "max": 26000,
+                "min_final": -20,
+                "max_final": 20,
+                "on": true,
+                "is_volume": false,
+                "is_frequency": false,
+                "is_equalizer": true,
+                "equalizer_reduction": {
+                    "60Hz": -1,
+                    "170Hz": -1,
+                    "310Hz": -1,
+                    "600Hz": -1,
+                    "1kHz": 4,
+                    "3kHz": 3,
+                    "6kHz": 2,
+                    "12kHz": 1
+                },
+                "pin": 3,
+                "device": "ads_1"
+            }
+        }
+    },
+    "button_general": {
+        "click_time": 0.5,
+        "shutdown": {
+            "pin": 3
+        }
+    },
+    "buttons": {
+        "OnOffMusic": {
+            "pin": 98,
+            "reversed": false,
+            "active": false,
+            "action": [
+                {
+                    "apply_state": [
+                        1
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "is_on_off": true
+        },
+        "OnOffRaspi": {
+            "pin": 99,
+            "reversed": false,
+            "active": false,
+            "is_on_off_raspi": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1
+                    ],
+                    "action_type": 0
+                }
+            ],
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
+            "led": 0
+        },
+        "changeSpeaker": {
+            "pin": 99,
+            "reversed": false,
+            "active": false,
+            "is_change_speaker": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1
+                    ],
+                    "action_type": 99
+                }
+            ],
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
+            "led": 0
+        },
+        "Lang": {
+            "pin": 13,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1,
+                        5
+                    ],
+                    "action_type": 2
+                },
+                {
+                    "apply_state": [
+                        0,
+                        6
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_lang.json"
+            },
+            "led": 2
+        },
+        "Mittel": {
+            "pin": 23,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1,
+                        5
+                    ],
+                    "action_type": 2
+                },
+                {
+                    "apply_state": [
+                        0,
+                        6
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_mittel.json"
+            },
+            "led": 3
+        },
+        "Kurz_1": {
+            "pin": 24,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1,
+                        5
+                    ],
+                    "action_type": 2
+                },
+                {
+                    "apply_state": [
+                        0,
+                        6
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_kurz_1.json"
+            },
+            "led": 4
+        },
+        "UKW": {
+            "pin": 25,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1,
+                        5
+                    ],
+                    "action_type": 2
+                },
+                {
+                    "apply_state": [
+                        0,
+                        6
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_kurz_2.json"
+            },
+            "led": 5
+        },
+        "SPR": {
+            "pin": 8,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        2
+                    ],
+                    "action_type": 2
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_ta.json"
+            },
+            "led": 6
+        },
+        "Ta": {
+            "pin": 12,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1,
+                        5
+                    ],
+                    "action_type": 2
+                },
+                {
+                    "apply_state": [
+                        0,
+                        6
+                    ],
+                    "action_type": 1
+                }
+            ],
+            "frequency": {
+                "pos": "posLangKurzMittel",
+                "musicList": "freq_ta.json"
+            },
+            "led": 1
+        },
+        "ResetAudioSource": {
+            "pin": 6,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        2
+                    ],
+                    "action_type": 5
+                }
+            ],
+            "frequency": {
+                "pos": "raspberry",
+                "musicList": ""
+            },
+            "led": 99
+        },
+        "RotateAudioSource": {
+            "pin": 14,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        2
+                    ],
+                    "action_type": 4
+                }
+            ],
+            "frequency": {
+                "pos": "",
+                "musicList": ""
+            },
+            "led": 99
+        },
+        "Jazz": {
+            "pin": 11,
+            "reversed": false,
+            "active": true,
+            "action": [
+                {
+                    "apply_state": [
+                        1
+                    ],
+                    "action_type": 3,
+                    "holding_pins": [
+                        3
+                    ]
+                }
+            ],
+            "is_frequency_lock": true,
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
+            "led": 0
+        }
+    },
+    "frequency": {
         "min": 19000,
-        "max": 20300,
-        "on": true,
-        "is_volume": false,
-        "is_frequency": true,
-        "is_equalizer": false,
-        "pin": 0,
-        "device": "ads_1"
-      },
-      "volume": {
-        "min": 14000,
-        "max": 24300,
-        "formula": true,
-        "on": true,
-        "is_volume": true,
-        "is_frequency": false,
-        "is_equalizer": false,
-        "pin": 1,
-        "device": "ads_1"
-      },
-      "bass": {
-        "min": 0,
-        "max": 26000,
-        "min_final": -20,
-        "max_final": 20,
-        "on": true,
-        "is_volume": false,
-        "is_frequency": false,
-        "is_equalizer": true,
-        "equalizer_reduction": {
-          "60Hz": 1,
-          "170Hz": 2,
-          "310Hz": 3,
-          "600Hz": 4,
-          "1kHz": -1,
-          "3kHz": -1,
-          "6kHz": -1,
-          "12kHz": -1
-        },
-        "pin": 2,
-        "device": "ads_1"
-      },
-      "treble": {
-        "min": 0,
-        "max": 26000,
-        "min_final": -20,
-        "max_final": 20,
-        "on": true,
-        "is_volume": false,
-        "is_frequency": false,
-        "is_equalizer": true,
-        "equalizer_reduction": {
-          "60Hz": -1,
-          "170Hz": -1,
-          "310Hz": -1,
-          "600Hz": -1,
-          "1kHz": 4,
-          "3kHz": 3,
-          "6kHz": 2,
-          "12kHz": 1
-        },
-        "pin": 3,
-        "device": "ads_1"
-      }
+        "max": 20400
     }
-  },
-  "button_general": {
-    "click_time": 0.5,
-    "shutdown": {
-      "pin": 3
-    }
-  },
-  "buttons": {
-    "OnOffMusic": {
-      "pin": 99,
-      "reversed": false,
-      "active": false,
-      "is_on_off": true,
-      "action": [
-        {
-          "apply_state": [
-            1
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": null,
-        "musicList": null
-      },
-      "led": 0
-    },
-    "OnOffRaspi": {
-      "pin": 99,
-      "reversed": false,
-      "active": false,
-      "is_on_off_raspi": true,
-      "action": [
-        {
-          "apply_state": [
-            1
-          ],
-          "action_type": 0
-        }
-      ],
-      "frequency": {
-        "pos": null,
-        "musicList": null
-      },
-      "led": 0
-    },
-    "changeSpeaker": {
-      "pin": 99,
-      "reversed": false,
-      "active": false,
-      "is_change_speaker": true,
-      "action": [
-        {
-          "apply_state": [
-            1
-          ],
-          "action_type": 99
-        }
-      ],
-      "frequency": {
-        "pos": null,
-        "musicList": null
-      },
-      "led": 0
-    },
-    "Lang": {
-      "pin": 13,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1,
-            5
-          ],
-          "action_type": 2
-        },
-        {
-          "apply_state": [
-            0,
-            6
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_lang.json"
-      },
-      "led": 2
-    },
-    "Mittel": {
-      "pin": 23,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1,
-            5
-          ],
-          "action_type": 2
-        },
-        {
-          "apply_state": [
-            0,
-            6
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_mittel.json"
-      },
-      "led": 3
-    },
-    "Kurz_1": {
-      "pin": 24,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1,
-            5
-          ],
-          "action_type": 2
-        },
-        {
-          "apply_state": [
-            0,
-            6
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_kurz_1.json"
-      },
-      "led": 4
-    },
-    "UKW": {
-      "pin": 25,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1,
-            5
-          ],
-          "action_type": 2
-        },
-        {
-          "apply_state": [
-            0,
-            6
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_kurz_2.json"
-      },
-      "led": 5
-    },
-    "SPR": {
-      "pin": 8,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            2
-          ],
-          "action_type": 2
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
-      },
-      "led": 6
-    },
-    "Ta": {
-      "pin": 12,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1,
-            5
-          ],
-          "action_type": 2
-        },
-        {
-          "apply_state": [
-            0,
-            6
-          ],
-          "action_type": 1
-        }
-      ],
-      "frequency": {
-        "pos": "posLangKurzMittel",
-        "musicList": "freq_ta.json"
-      },
-      "led": 1
-    },
-    "ResetAudioSource": {
-      "pin": 6,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            2
-          ],
-          "action_type": 5
-        }
-      ],
-      "frequency": {
-        "pos": "raspberry",
-        "musicList": ""
-      },
-      "led": 99
-    },
-    "RotateAudioSource": {
-      "pin": 14,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            2
-          ],
-          "action_type": 4
-        }
-      ],
-      "frequency": {
-        "pos": "",
-        "musicList": ""
-      },
-      "led": 99
-    },
-    "Jazz": {
-      "pin": 11,
-      "reversed": false,
-      "active": true,
-      "action": [
-        {
-          "apply_state": [
-            1
-          ],
-          "action_type": 3,
-          "holding_pins": [
-            3
-          ]
-        }
-      ],
-      "is_frequency_lock": true,
-      "frequency": {
-        "pos": null,
-        "musicList": null
-      },
-      "led": 0
-    }
-  },
-  "frequency": {
-    "min": 19000,
-    "max": 20400
-  }
 }
