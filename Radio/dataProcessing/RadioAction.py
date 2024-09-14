@@ -33,6 +33,9 @@ class RadioAction:
     # apply action to sensor msg
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         raise NotImplemented("This class is only used as a interface. Please, use one of the child classes")
+    
+    def execute_start(self):
+        raise NotImplemented("This class is only used as a interface. Please, use one of the child classes")
 
     def execute_exit(self):
         pass
@@ -82,6 +85,9 @@ class OffRestriction(RadioAction):
                 updated_buttons.append(button)
         sensor_msg_new.buttons_data.set_data(updated_buttons)
         return sensor_msg_new
+    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        return self.execute(sensor_msg_new, sensor_msg_old)
 
 
 class HoldFrequencyX(RadioAction):
@@ -107,6 +113,9 @@ class HoldFrequencyX(RadioAction):
                         sensor_msg_new.analog_data.sensor_data[index].value = (
                             sensor_msg_old.analog_data.sensor_data[index_old].value)
                         return sensor_msg_new
+                    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        return self.execute(sensor_msg_new, sensor_msg_old)
 
 
 class PlayMusic(RadioAction):
@@ -122,6 +131,9 @@ class PlayMusic(RadioAction):
         with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
         return Frequencies(settings["buttons"][self.button_name]["frequency"]["musicList"])
+    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
 
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         self.play_music()
@@ -130,6 +142,7 @@ class PlayMusic(RadioAction):
         self.play_music()
 
     def play_music(self):
+        print("Play music")
         button: ButtonProcessData = self.db.get_button_data(self.button_name)
         if not button:
             return None
@@ -152,9 +165,9 @@ class PlayMusic(RadioAction):
     def get_radio_frequency(self) -> None | RadioFrequency:
         sensor_value = self.db.get_frequency_value(self.frequency_pin_name)
         over_min_max_frequency = None
+        # print(self.frequency_list.frequencies)
         # print("------------------------------------------------------")
         for index, radio_frequency in enumerate(self.frequency_list.frequencies):
-           # print(radio_frequency.minimum, radio_frequency.maximum, sensor_value)
             try:
                 if radio_frequency.minimum <= sensor_value < radio_frequency.maximum:
                     return radio_frequency
@@ -187,6 +200,9 @@ class TurnOffMusic(RadioAction):
     def try_execute(self) -> bool:
         self.stop_music()
         return True
+    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
 
     def stop_music(self):
         self.db.replace_radio_frequency(RadioFrequency())
@@ -197,11 +213,17 @@ class TurnOffMusic(RadioAction):
 class TurnOffRaspberry(RadioAction):
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         raise NotImplemented("Turn off raspi")
+    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
 
 
 class AddRestriction(RadioAction):
     def execute(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
         raise NotImplemented("Add restriction")
+    
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
 
 
 class SwitchAudioSource(RadioAction):
@@ -226,6 +248,10 @@ class SwitchAudioSource(RadioAction):
         self.audio_source_switcher.switch(self.value_a, self.value_b)
         return sensor_msg_new
     
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
+    
+
 class RotateAudioSource(RadioAction):
     def __init__(self, apply_states: List[ButtonClickStates]):
         super().__init__(apply_states=apply_states, one_time_action=True)
@@ -237,6 +263,9 @@ class RotateAudioSource(RadioAction):
     
     def try_execute(self) -> SensorMsg:
         self.execute(None, None)
+
+    def execute_start(self, sensor_msg_new: SensorMsg, sensor_msg_old: SensorMsg) -> SensorMsg:
+        pass
         
 
 class Actions(Singleton):
@@ -263,6 +292,14 @@ class Actions(Singleton):
         for action in self._actions:
             sensor_msg_current_return = action.execute(sensor_msg_new=sensor_msg_current,
                                                        sensor_msg_old=sensor_msg_old)
+            if sensor_msg_current_return:
+                sensor_msg_current = sensor_msg_current_return
+        return sensor_msg_current
+    
+    def process_start(self, sensor_msg_current: SensorMsg, sensor_msg_old: SensorMsg):
+        for action in self._actions:
+            sensor_msg_current_return = action.execute_start(sensor_msg_new=sensor_msg_current,
+                                                             sensor_msg_old=sensor_msg_old)
             if sensor_msg_current_return:
                 sensor_msg_current = sensor_msg_current_return
         return sensor_msg_current
@@ -307,6 +344,7 @@ class Actions(Singleton):
                 print("TRY EXECUTE")
                 action_new.try_execute()
             else:
+                print("NEW ACTION: ", action_new.__class__, action_new.button_name)
                 action_new.try_execute()
                 self._actions.append(action_new)
 

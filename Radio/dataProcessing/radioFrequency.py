@@ -129,6 +129,8 @@ class Frequencies:
                 self.frequencies[i].minimum = self.frequencies[i - 1].maximum + 1
 
             self.frequencies[i].maximum = self.frequencies[i].minimum + frequency_width
+            print(f"Frequency {self.frequencies[i].name} min {self.frequencies[i].minimum} max {self.frequencies[i].maximum}")
+        print("--------------------------------------", self.min_frequency, self.max_frequency)
 
     def load_from_file(self, path: str = None):
         if not path:

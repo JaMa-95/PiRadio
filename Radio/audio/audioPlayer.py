@@ -1,6 +1,6 @@
 import time
 
-from mpd import MPDClient
+from mpd import MPDClient, ProtocolError
 from threading import Event
 
 from Radio.dataProcessing.radioFrequency import RadioFrequency
@@ -53,17 +53,24 @@ class AudioPlayer(Subscriber):
 
     def play(self, url: str):
         print("Playing: ", url)
-        self.client.clear()
-        self.client.add(url)  # add the URL stream to the playlist
-        self.client.play()                               # start playing the stream
+        try:
+            self.client.clear()
+            self.client.add(url)  # add the URL stream to the playlist
+            self.client.play()                               # start playing the stream
+        except ProtocolError:
+            print("Error: Protocoll error with url: ", url)
+            return
 
     def run(self):
         while True:
             status = self.client.status()
-            if status['state'] == 'play':
-                current_song = self.client.currentsong()
-                self.database.replace_song_name(self.get_song_title(current_song))
-                self.database.replace_song_station(self.get_station_name(current_song))
+            try:
+                if status['state'] == 'play':
+                    current_song = self.client.currentsong()
+                    self.database.replace_song_name(self.get_song_title(current_song))
+                    self.database.replace_song_station(self.get_station_name(current_song))
+            except KeyError:
+                pass
                     
             if self._stop_event.is_set():
                 print("STOP EVENT AUDIO PLAYER")

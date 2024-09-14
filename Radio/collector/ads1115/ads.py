@@ -51,7 +51,8 @@ class AdsObject:
                           address=settings["analog"]["devices"][analog_item["device"]]["address"],
                           min_=analog_item["min"],
                           max_=analog_item["max"], 
-                          ads=self.ads
+                          ads=self.ads,
+                          sensivity=analog_item["sensivity"]
                           )
             )
             # self.analog_sensors.append(analog_item)
@@ -65,7 +66,7 @@ class AdsObject:
         for sensor in self.analog_sensors:
             value_ = sensor.get_value_smoothed_by_pin(sensor.pin, False)
             data.add_value(
-                AnalogValue(sensor.pin, value_, sensor.min, sensor.max)
+                AnalogValue(sensor.pin, value_, sensor.min, sensor.max, sensor.sensivity)
             )
             # data.add_value(AnalogValue(item["pin"], self.ads.get_value_smoothed_by_pin(item["pin"], True)))
         return data
@@ -73,11 +74,12 @@ class AdsObject:
 
 class AdsSingle:
     # TODO: REFACTOR. too many methods which are not used, bad naming
-    def __init__(self, pin, mock: bool = False, address: int = 0x48, min_: int = 0, max_: int = 0, ads=None):
+    def __init__(self, pin, mock: bool = False, address: int = 0x48, min_: int = 0, max_: int = 0, ads=None, sensivity: int = 1):
         self.pin = pin
         self.min: int = min_
         self.max: int = max_
         self.db = Database()
+        self.sensivity = sensivity
         if not mock:
             self.ads: ADS.ADS1115 = ads
 

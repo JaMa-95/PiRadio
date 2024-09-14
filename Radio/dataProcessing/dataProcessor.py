@@ -64,8 +64,8 @@ class DataProcessor:
                 data = self.data_transmitter.receive()
                 if isinstance(data, SensorMsg):
                     sensor_msg_current = data
-                    sensor_msg_current = self.active_actions.process(sensor_msg_current=sensor_msg_current,
-                                                                 sensor_msg_old=self.sensor_msg_old)
+                    sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
+                                                                     sensor_msg_old=self.sensor_msg_old)
                     # publish/save volume, stream(frequ), equalizer
                     self.process_analogs(sensor_msg_current.analog_data)
                     # get change in buttons. which button has which button event
@@ -98,14 +98,17 @@ class DataProcessor:
         self.active_actions.add_or_remove_action(action)
 
     def process_buttons(self, sensor_msg_current: SensorMsg):
+        if sensor_msg_current.buttons_data == self.sensor_msg_old.buttons_data:
+            return None
         new_actions = self.button_processor.process(sensor_msg_current)
         if len(new_actions) > 0:
             self.active_actions.add_or_remove_actions(new_actions)
 
     def process_analogs(self, analog_data: AnalogData):
+        analog_data.delete_unchanged_values(self.sensor_msg_old.analog_data)
         if analog_data.is_empty():
             return None
-        if self.sensor_msg_old.analog_data.get_data_sensor() == analog_data:
+        if self.sensor_msg_old.analog_data == analog_data:
             return None
         self.analog_processor.process(analog_data, self.active_actions)
 
@@ -241,7 +244,6 @@ class AnalogProcessor:
                     self.analog_items[index].buttons.append(button_name)
 
     def process(self, data: AnalogData, active_actions: Actions):
-        # TODO: smarter solution
         for analog in data.get_data_sensor():
             for index, item in enumerate(self.analog_items):
                 if item.pin == analog.pin:
@@ -251,15 +253,12 @@ class AnalogProcessor:
                     if item.is_frequency:
                         value = self.set_frequency(item, analog.value, active_actions)
                         self.analog_items[index].value = value
-                        break
                     elif item.is_volume:
                         value = self.set_volume(item, analog.value)
                         self.analog_items[index].value = value
-                        break
                     elif item.is_equalizer:
                         value = self.set_equalizer(item, analog.value)
                         self.analog_items[index].value = value
-                        break
                     else:
                         raise NotImplemented
         self.is_first_run = False
@@ -276,9 +275,8 @@ class AnalogProcessor:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
-        if abs(current_frequency_value - frequency_item.value) > 4:
-            # print(f"Frequency: {current_frequency_value}")
-            self.publish_function(f"freq_fm:{current_frequency_value}")
+        print(f"Frequency: {current_frequency_value}")
+        self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)
         self.publish_function(f'{frequency_item.name}:{current_frequency_value}')
@@ -302,7 +300,6 @@ class AnalogProcessor:
         return int(-(value - min_) / (min_ - max_) * 100)
 
     def set_volume(self, volume: AnalogItem, value: int) -> int:
-        # print(f"Volume: {value}")
         value_new = self._map(volume.max, volume.min, value)
         if value_new < 0:
             value_new = 0

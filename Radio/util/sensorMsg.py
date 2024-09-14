@@ -57,6 +57,16 @@ class ButtonsData:
     def __init__(self):
         self.data: List[ButtonState] = []
 
+    def __eq__(self, other) -> bool:
+        data = other.get_data()
+        if len(self.data) != len(data):
+            return False
+        for idx, value in enumerate(self.data):
+            if value != data[idx]:
+                return False
+        return True
+        
+
     def is_empty(self):
         is_empty = not self.data
         return not is_empty
@@ -91,11 +101,12 @@ class ButtonsData:
 
 
 class AnalogValue:
-    def __init__(self, pin: int, value: int, min_: int, max_: int):
+    def __init__(self, pin: int, value: int, min_: int, max_: int, accepted_difference: int = 8):
         self.pin: int = pin
         self.value: int = value
         self.min: int = min_
         self.max: int = max_
+        self.accepted_difference: int = accepted_difference
         
 
 class AnalogData:
@@ -104,6 +115,14 @@ class AnalogData:
 
     def is_empty(self) -> bool:
         return not self.sensor_data
+    
+    def delete_unchanged_values(self, other):
+        sensor_data = other.get_data_sensor()
+        for value in self.sensor_data:
+            for value_other in sensor_data:
+                if value.pin == value_other.pin:
+                    if abs(value.value - value_other.value) <= value.accepted_difference:
+                        self.sensor_data.remove(value)
 
     def get_data_sensor(self) -> List[AnalogValue]:
         return self.sensor_data
@@ -120,3 +139,15 @@ class AnalogData:
                 self.sensor_data.remove(value)
                 return True
         return False
+    
+    def __eq__(self, other):
+        sensor_data = other.get_data_sensor()
+        if len(self.sensor_data) != len(sensor_data):
+            return False
+        for value in self.sensor_data:
+            for value_other in sensor_data:
+                if value.pin == value_other.pin:
+                    if abs(value.value - value_other.value) > value.accepted_difference:
+                        print(f"Difference in pin {value.pin} value {value.value} value_other {value_other.value}")
+                        return False
+        return True

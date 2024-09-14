@@ -45,14 +45,15 @@
         },
         "sensors": {
             "posLangKurzMittel": {
-                "min": 19000,
-                "max": 20300,
+                "min": 19600,
+                "max": 20400,
                 "on": true,
                 "is_volume": false,
                 "is_frequency": true,
                 "is_equalizer": false,
                 "pin": 0,
-                "device": "ads_1"
+                "device": "ads_1",
+                "sensivity": 5
             },
             "volume": {
                 "min": 14000,
@@ -63,7 +64,8 @@
                 "is_frequency": false,
                 "is_equalizer": false,
                 "pin": 1,
-                "device": "ads_1"
+                "device": "ads_1",
+                "sensivity": 25
             },
             "bass": {
                 "min": 0,
@@ -85,7 +87,8 @@
                     "12kHz": -1
                 },
                 "pin": 2,
-                "device": "ads_1"
+                "device": "ads_1",
+                "sensivity": 15
             },
             "treble": {
                 "min": 0,
@@ -107,7 +110,8 @@
                     "12kHz": 1
                 },
                 "pin": 3,
-                "device": "ads_1"
+                "device": "ads_1",
+                "sensivity": 15
             }
         }
     },
@@ -130,6 +134,10 @@
                     "action_type": 1
                 }
             ],
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
             "is_on_off": true
         },
         "OnOffRaspi": {
@@ -144,6 +152,10 @@
                     "action_type": 0
                 }
             ],
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
             "is_on_off_raspi": true
         },
         "changeSpeaker": {
@@ -158,6 +170,10 @@
                     "action_type": 99
                 }
             ],
+            "frequency": {
+                "pos": null,
+                "musicList": null
+            },
             "is_change_speaker": true
         },
         "Lang": {
@@ -339,8 +355,8 @@
                 }
             ],
             "frequency": {
-                "pos": "",
-                "musicList": ""
+                "pos": null,
+                "musicList": null
             },
             "led": 99
         },
