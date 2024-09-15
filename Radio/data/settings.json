@@ -45,8 +45,8 @@
         },
         "sensors": {
             "posLangKurzMittel": {
-                "min": 19600,
-                "max": 20400,
+                "min": 0,
+                "max": 26000,
                 "on": true,
                 "is_volume": false,
                 "is_frequency": true,
@@ -289,7 +289,7 @@
                     "apply_state": [
                         2
                     ],
-                    "action_type": 2
+                    "action_type": 4
                 }
             ],
             "frequency": {
@@ -384,7 +384,7 @@
         }
     },
     "frequency": {
-        "min": 19000,
-        "max": 20400
+        "min": 0,
+        "max": 26000
     }
 }

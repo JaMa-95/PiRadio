@@ -10,7 +10,7 @@ from statistics import mean
 i2c = busio.I2C(board.SCL, board.SDA)  # Create the I2C bus
 ads = ADS.ADS1115(i2c)  # Create the ADC object using the I2C bus
 
-pins = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
+pins = [ADS.P0]
 
 while True:
     values = []

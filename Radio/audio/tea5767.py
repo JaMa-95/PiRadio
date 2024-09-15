@@ -100,7 +100,8 @@ class FmModule(Subscriber):
                 # print(f"unknown content at audio player: {content}")
 
     def set_volume(self, volume):
-        print("Volume not supported by FM module")
+        # print("Volume not supported by FM module")
+        pass
 
     def set_freq(self, fm_frequency):
         if self.current_fm_frequency == round(fm_frequency, 1):

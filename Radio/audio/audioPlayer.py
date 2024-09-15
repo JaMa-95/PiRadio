@@ -1,6 +1,6 @@
 import time
 
-from mpd import MPDClient, ProtocolError
+from mpd import MPDClient, ProtocolError, ConnectionError
 from threading import Event
 
 from Radio.dataProcessing.radioFrequency import RadioFrequency
@@ -23,11 +23,14 @@ class AudioPlayer(Subscriber):
         self.client = MPDClient()               # create client object
         self.client.timeout = 10                # network timeout in seconds (floats allowed), default: None
         self.client.idletimeout = None          # timeout for fetching the result of the idle command is handled seperately, default: None
-        self.client.connect("localhost", 6600)  # connect to localhost:6600
+        self.connect()
         self.set_volume(self.volume)
 
         print("Audio Player started")
         # self.set_equalizer([0, 0, 0, 0, 0, 0, 0, 0])
+
+    def connect(self):
+        self.client.connect("localhost", 6600)
     
     def stop(self):
         self.publisher.detach()
@@ -63,7 +66,13 @@ class AudioPlayer(Subscriber):
 
     def run(self):
         while True:
-            status = self.client.status()
+            try:
+                status = self.client.status()
+            except ConnectionError:
+                self.client.connect("localhost", 6600)  # connect to localhost:6600
+                print("MPD connection error")
+                time.sleep(1)
+                continue
             try:
                 if status['state'] == 'play':
                     current_song = self.client.currentsong()
@@ -93,7 +102,11 @@ class AudioPlayer(Subscriber):
         
 
     def set_volume(self, volume):
-        self.client.setvol(volume)
+        try:
+            self.client.setvol(volume)
+        except ConnectionError:
+            print("MPD connection error")
+            return
 
     def set_equalizer(self, equalizer_data: list):
         print(f"SET EQ: {equalizer_data}")

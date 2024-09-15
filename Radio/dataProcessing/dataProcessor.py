@@ -275,7 +275,7 @@ class AnalogProcessor:
         if current_frequency_value == frequency_item.value:
             return current_frequency_value
         self.db.replace_frequency_value(frequency_item.name, current_frequency_value)
-        print(f"Frequency: {current_frequency_value}")
+        # print(f"Frequency: {current_frequency_value}")
         self.publish_function(f"freq_fm:{current_frequency_value}")
         frequency_item.value = current_frequency_value
         self.set_stream(frequency_item, active_actions)
@@ -307,7 +307,7 @@ class AnalogProcessor:
             value_new = 100
         if volume.value == value_new:
             return value_new
-        print(f"Volume: {value_new}")
+        # print(f"Volume: {value_new}")
         self.db.replace_volume(value_new)
         self.publish_function(f"volume:{value_new}")
         return value_new

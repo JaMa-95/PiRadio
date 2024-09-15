@@ -142,7 +142,6 @@ class PlayMusic(RadioAction):
         self.play_music()
 
     def play_music(self):
-        print("Play music")
         button: ButtonProcessData = self.db.get_button_data(self.button_name)
         if not button:
             return None
@@ -311,6 +310,7 @@ class Actions(Singleton):
         for index, action in enumerate(self._actions):
             if action == action_new:
                 self._actions.pop(index)
+                return
 
     def remove_all_of_type(self, typ_: RadioAction):
         for index, action in enumerate(self._actions):
