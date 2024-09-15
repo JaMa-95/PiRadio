@@ -45,17 +45,17 @@ class AdsObject:
         with open(path_settings.resolve()) as f:
             settings = json.load(f)
         for _, analog_item in settings["analog"]["sensors"].items():
-            self.analog_sensors.append(
-                AdsSingle(pin=analog_item["pin"],
-                          mock=self.mock,
-                          address=settings["analog"]["devices"][analog_item["device"]]["address"],
-                          min_=analog_item["min"],
-                          max_=analog_item["max"], 
-                          ads=self.ads,
-                          sensivity=analog_item["sensivity"]
-                          )
-            )
-            # self.analog_sensors.append(analog_item)
+            if analog_item["on"]:
+                self.analog_sensors.append(
+                    AdsSingle(pin=analog_item["pin"],
+                            mock=self.mock,
+                            address=settings["analog"]["devices"][analog_item["device"]]["address"],
+                            min_=analog_item["min"],
+                            max_=analog_item["max"], 
+                            ads=self.ads,
+                            sensivity=analog_item["sensivity"]
+                            )
+                    )
 
     def set_to_db(self):
         for item in self.analog_sensors:

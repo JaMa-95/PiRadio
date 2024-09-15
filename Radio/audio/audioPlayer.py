@@ -20,9 +20,9 @@ class AudioPlayer(Subscriber):
         self.noise = 30
         self.volume = self.database.get_volume()
 
-        self.client = MPDClient()               # create client object
-        self.client.timeout = 10                # network timeout in seconds (floats allowed), default: None
-        self.client.idletimeout = None          # timeout for fetching the result of the idle command is handled seperately, default: None
+        self.client = MPDClient()                   # create client object
+        self.client.timeout = None                  # network timeout in seconds (floats allowed), default: None
+        self.client.idletimeout = None              # timeout for fetching the result of the idle command is handled seperately, default: None
         self.connect()
         self.set_volume(self.volume)
 
