@@ -13,7 +13,7 @@ from Radio.audio.tea5767 import FmModule
 from Radio.app import run as app_run
 
 from Radio.collector.collector import Collector
-from Radio.util.util import is_raspberry, get_project_root, ThreadSafeInt
+from Radio.util.util import is_raspberry, get_project_root, ThreadSafeInt, ThreadSafeList
 from Radio.util.daemon import Daemon
 
 mock = True
@@ -27,8 +27,9 @@ class RadioDaemon(Daemon):
     def __init__(self, pidfile, mock, collector_on, sole_web_control, debug, app) -> None:
         super().__init__(pidfile)
         self.stop_event = Event()
-        self.thread_stopped_counter = ThreadSafeInt()
-        self.amount_stop_threads: int = 5
+        self.thread_stopped_counter: ThreadSafeInt = ThreadSafeInt()
+        self.amount_threads: int = 0
+        self.amount_stop_threads_names: ThreadSafeList = ThreadSafeList()
         self.mock = mock
         self.collector_on = collector_on
         self.sole_web_control = sole_web_control
@@ -47,8 +48,9 @@ class RadioDaemon(Daemon):
     def _stop(self):
         self.shutdown_server()
         self.stop_event.set()
-        while self.thread_stopped_counter.get() < self.amount_stop_threads:
+        while self.thread_stopped_counter.get() < self.amount_threads:
             print(f"STOPPING THREADS: {self.thread_stopped_counter.get()}")
+            print(f"REMAINIGN: {self.amount_stop_threads_names.get()}")
             time.sleep(0.1)
 
     def shutdown_server(self):
@@ -62,31 +64,56 @@ class RadioDaemon(Daemon):
         print("STARTING THREADS")
         # INSTANCES
         publisher: Publisher = Publisher()
-        self.collector = Collector(stop_event=self.stop_event, mock=mock, debug=self.debug, thread_stopped_counter=self.thread_stopped_counter)
-        self.data_processor = DataProcessor(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
-        self.audio_player = AudioPlayer(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
-        self.on_off_button: OnOffButton = OnOffButton(stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter)
-        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event, mock=mock, thread_stopped_counter=self.thread_stopped_counter)
+        self.collector = Collector(stop_event=self.stop_event, mock=mock, debug=self.debug, 
+                                   thread_stopped_counter=self.thread_stopped_counter, amount_stop_threads_names=self.amount_stop_threads_names)
+        self.data_processor = DataProcessor(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter,
+                                            amount_stop_threads_names=self.amount_stop_threads_names)
+        self.audio_player = AudioPlayer(publisher, stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter,
+                                        amount_stop_threads_names=self.amount_stop_threads_names)
+        self.on_off_button: OnOffButton = OnOffButton(stop_event=self.stop_event, thread_stopped_counter=self.thread_stopped_counter,
+                                                      amount_stop_threads_names=self.amount_stop_threads_names)
+        self.fm_module: FmModule = FmModule(publisher, stop_event=self.stop_event, mock=mock, 
+                                            thread_stopped_counter=self.thread_stopped_counter,
+                                            amount_stop_threads_names=self.amount_stop_threads_names)
 
          # THREADS
         self.on_off_thread = Thread(target=self.on_off_button.run)
         self.processor_thread = Thread(target=self.data_processor.run)
         self.collector_thread = Thread(target=self.collector.run)
         self.audio_thread = Thread(target=self.audio_player.run)
-        self.app_process = Thread(target=app_run)
+        self.app_process = Thread(target=app_run, args=(self.thread_stopped_counter, self.amount_stop_threads_names, ))
         self.fm_module_thread = Thread(target=self.fm_module.run)
         self.stop_thread = Thread(target=self.check_stop)
         print("STARTING THREADS")
         # START
         self.processor_thread.start()
+        self.amount_stop_threads_names.append(self.data_processor.__class__.__name__)
+        self.amount_threads += 1
+
         self.audio_thread.start()
+        self.amount_stop_threads_names.append(self.audio_player.__class__.__name__)
+        self.amount_threads += 1
+
         self.on_off_thread.start()
+        self.amount_stop_threads_names.append(self.on_off_button.__class__.__name__)
+        self.amount_threads += 1
+
         self.fm_module_thread.start()
+        self.amount_stop_threads_names.append(self.fm_module.__class__.__name__)
+        self.amount_threads += 1
+
         self.stop_thread.start()
+        self.amount_stop_threads_names.append(self.check_stop.__name__)
+        self.amount_threads += 1
+        
         if self.collector_on:
             self.collector_thread.start()
+            self.amount_stop_threads_names.append(self.collector.__class__.__name__)
+            self.amount_threads += 1
         if self.app:
-           self.app_process.start()
+            self.app_process.start()
+            self.amount_stop_threads_names.append(app_run.__name__)
+            self.amount_threads += 1
 
         # JOIN
         self.processor_thread.join()
@@ -109,12 +136,18 @@ class RadioDaemon(Daemon):
         
     def check_stop(self):
         while True:
+            if self.stop_event.is_set():
+                self.thread_stopped_counter.increment()
+                self.amount_stop_threads_names.delete(self.check_stop.__name__)
+                break
             with open(self.path_stop_file, "r") as file:
                 content = file.read()
                 if content != "":
                     self.stop()
+                    self.thread_stopped_counter.increment()
+                    self.amount_stop_threads_names.delete(self.stop_thread.__class__.__name__)
                     break
-            time.sleep(0.1)
+            time.sleep(0.3)
 
 
 if __name__ == "__main__":

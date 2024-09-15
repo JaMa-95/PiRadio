@@ -5,7 +5,7 @@ from threading import Event
 from Radio.util.dataTransmitter import Subscriber
 import subprocess
 import time
-from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry
+from Radio.util.util import ThreadSafeInt, ThreadSafeList, get_project_root, is_raspberry
 from Radio.util.dataTransmitter import Publisher
 
 if is_raspberry():
@@ -13,11 +13,13 @@ if is_raspberry():
 
 
 class FmModule(Subscriber):
-    def __init__(self, publisher: Publisher = Publisher(), stop_event: Event=None, mock: bool=False, thread_stopped_counter: ThreadSafeInt = None):
+    def __init__(self, publisher: Publisher = Publisher(), stop_event: Event=None, mock: bool=False, 
+                 thread_stopped_counter: ThreadSafeInt = None, amount_stop_threads_names: ThreadSafeList = None):
         self._stop_event = stop_event
         self.i2c_address: int = 0x60
         self.mock: bool = mock
-        self.thread_stopped_counter = thread_stopped_counter
+        self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
+        self.amount_stop_threads_names: ThreadSafeList = amount_stop_threads_names
         if not self.mock:
             self.i2c: smbus.SMBus = None
         self.active: bool = True
@@ -77,6 +79,7 @@ class FmModule(Subscriber):
             time.sleep(1)
         print("FM module stopped")
         self.thread_stopped_counter.increment()
+        self.amount_stop_threads_names.delete(self.__class__.__name__)
 
     def calcuulate_fm_value(self, frequency_value: int) -> float:
         valueScaled = (frequency_value - self.frequency_value_min) / (self.frequency_value_max - self.frequency_value_min) * (self.fm_max - self.fm_min) + self.fm_min

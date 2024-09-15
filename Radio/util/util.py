@@ -21,13 +21,34 @@ def react_app_start():
 
 class ThreadSafeInt:
     def __init__(self, value=0):
-        self._value = value
+        self._value: int = value
         self._lock = threading.Lock()
 
     def increment(self):
         with self._lock:
             self._value += 1
 
+    def decrement(self):
+        with self._lock:
+            self._value -= 1
+
+    def get(self):
+        with self._lock:
+            return self._value
+        
+class ThreadSafeList:
+    def __init__(self, value=[]):
+        self._value: list = value
+        self._lock = threading.Lock()
+
+    def append(self, value):
+        with self._lock:
+            self._value.append(value)
+
+    def delete(self, value):
+        with self._lock:
+            self._value.remove(value)
+    
     def get(self):
         with self._lock:
             return self._value

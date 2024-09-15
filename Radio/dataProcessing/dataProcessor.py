@@ -10,16 +10,17 @@ from Radio.dataProcessing.radioFrequency import Frequencies
 from Radio.db.db import Database
 from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.util.sensorMsg import SensorMsg, AnalogData, ButtonState
-from Radio.util.util import get_project_root, map_
+from Radio.util.util import get_project_root, map_, ThreadSafeInt, ThreadSafeList
 from Radio.raspberry.raspberry import Raspberry
 
 
 class DataProcessor:
-    def __init__(self, publisher: Publisher, stop_event, thread_stopped_counter):
+    def __init__(self, publisher: Publisher, stop_event, thread_stopped_counter: ThreadSafeInt, amount_stop_threads_names: ThreadSafeList):
         self.stop_event = stop_event
         self.data_transmitter: DataTransmitter = DataTransmitter()
         self.publisher: Publisher = publisher
-        self.thread_stopped_counter = thread_stopped_counter
+        self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
+        self.amount_stop_threads_names: ThreadSafeList = amount_stop_threads_names
 
         self.button_processor: ButtonProcessor = ButtonProcessor()
         self.analog_processor: AnalogProcessor = AnalogProcessor(self.publisher.publish)
@@ -58,6 +59,7 @@ class DataProcessor:
             if self.stop_event.is_set():
                 self.raspberry.cleanup()
                 self.thread_stopped_counter.increment()
+                self.amount_stop_threads_names.delete(self.__class__.__name__)
                 print("STOPPING DATA PROCESSOR")
                 break
             if self.data_transmitter.has_data():

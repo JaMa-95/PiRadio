@@ -6,14 +6,16 @@ from threading import Event
 from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.db.db import Database
 from Radio.util.dataTransmitter import Subscriber
-from Radio.util.util import ThreadSafeInt
+from Radio.util.util import ThreadSafeInt, ThreadSafeList
 
 
 class AudioPlayer(Subscriber):
-    def __init__(self, publisher, stop_event: Event = None, thread_stopped_counter: ThreadSafeInt = None):
+    def __init__(self, publisher, stop_event: Event = None, thread_stopped_counter: ThreadSafeInt = None, 
+                 amount_stop_threads_names: ThreadSafeList=None):
         self._stop_event = stop_event
         self.noise_player = None
         self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
+        self.amount_stop_threads_names: ThreadSafeList = amount_stop_threads_names
         self.publisher = publisher
         self.publisher.attach(self)
         self.database: Database = Database()
@@ -85,6 +87,7 @@ class AudioPlayer(Subscriber):
                 print("STOP EVENT AUDIO PLAYER")
                 self.stop()
                 self.thread_stopped_counter.increment()
+                self.amount_stop_threads_names.delete(self.__class__.__name__)
                 break
             time.sleep(1)
 

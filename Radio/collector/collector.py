@@ -8,14 +8,16 @@ from Radio.util.dataTransmitter import DataTransmitter
 from Radio.util.sensorMsg import SensorMsg
 
 from Radio.collector.ads1115.ads import AdsObject
-from Radio.util.util import ThreadSafeInt, print_
+from Radio.util.util import ThreadSafeInt, print_, ThreadSafeList
 
 
 class Collector:
-    def __init__(self, mock: bool = False, debug: bool = False, stop_event: Event=None, thread_stopped_counter: ThreadSafeInt=None):
+    def __init__(self, mock: bool = False, debug: bool = False, stop_event: Event=None, thread_stopped_counter: ThreadSafeInt=None,
+                 amount_stop_threads_names: ThreadSafeList = None):
         self._stop_event: Event = stop_event
         self.debug: bool = debug
         self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
+        self.amount_stop_threads_names: ThreadSafeList = amount_stop_threads_names
         print_(debug=debug, class_name="Collector",
                text=f"START COLLECTING SENSOR VALUES WITH MOCK: {mock}")
         self.mock: bool = mock
@@ -37,6 +39,7 @@ class Collector:
                 self.data_transmitter.send(sensor_msg)
             if self._stop_event.is_set():
                 self.thread_stopped_counter.increment()
+                self.amount_stop_threads_names.delete(self.__class__.__name__)
                 print("STOPPING COLLECTOR")
                 break
 

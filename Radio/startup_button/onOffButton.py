@@ -13,7 +13,7 @@ import time
 import os
 
 from Radio.raspberry.raspberry import Raspberry
-from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry
+from Radio.util.util import ThreadSafeInt, get_project_root, is_raspberry, ThreadSafeList
 IS_RASPBERRY = False
 if is_raspberry():
     IS_RASPBERRY = True
@@ -21,9 +21,10 @@ if is_raspberry():
 
 
 class OnOffButton:
-    def __init__(self, stop_event: Event, thread_stopped_counter: ThreadSafeInt):
+    def __init__(self, stop_event: Event, thread_stopped_counter: ThreadSafeInt, amount_stop_threads_names: ThreadSafeList = None):
         self._stop_event = stop_event
-        self.thread_stopped_counter = thread_stopped_counter
+        self.thread_stopped_counter: ThreadSafeInt = thread_stopped_counter
+        self.amount_stop_threads_names: ThreadSafeList = amount_stop_threads_names
         self.active_pin: int = 0
         self.output_pin: int = 0
         if IS_RASPBERRY:
@@ -64,9 +65,10 @@ class OnOffButton:
         os.system("shutdown now -h")
 
     def run(self):
-        while not self._stop_event.is_set():
-            if IS_RASPBERRY:
-                GPIO.wait_for_edge(self.active_pin, GPIO.FALLING)
+        if IS_RASPBERRY:
+            while not self._stop_event.is_set():
+                if not GPIO.wait_for_edge(self.active_pin, GPIO.FALLING, timeout=2):
+                    continue
 
                 poll_duration = self.poll()
                 print("Poll: ", poll_duration)
@@ -80,6 +82,7 @@ class OnOffButton:
 
                     
         self.thread_stopped_counter.increment()
+        self.amount_stop_threads_names.delete(self.__class__.__name__)
         print("ON/OFF Button stopped")
 
 

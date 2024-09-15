@@ -19,7 +19,7 @@ from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
-from Radio.util.util import get_project_root
+from Radio.util.util import ThreadSafeInt, ThreadSafeList, get_project_root
 import asyncio
 
 db = Database()
@@ -390,6 +390,8 @@ def save_in_file(file_path: Path, data):
 async def shutdown(response: Response = 200):
     print("Shutting down server...")
     asyncio.create_task(delayed_shutdown())
+    thread_stopped_counter_.increment()
+    amount_stop_threads_names_.delete("run")
     return Response(status_code=200)
 
 async def delayed_shutdown():
@@ -397,9 +399,12 @@ async def delayed_shutdown():
     server.should_exit = True
 
 
-def run():
+def run(thread_stopped_counter: ThreadSafeInt = ThreadSafeInt(), amount_stop_threads_names: ThreadSafeList = ThreadSafeList()):
     origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
-
+    global thread_stopped_counter_
+    global amount_stop_threads_names_
+    thread_stopped_counter_ = thread_stopped_counter
+    amount_stop_threads_names_ = amount_stop_threads_names
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
