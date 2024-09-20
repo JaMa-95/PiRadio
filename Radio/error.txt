@@ -46,3 +46,54 @@ Traceback (most recent call last):
     if button_item["frequency"]["pos"] == analog_item.name:
        ~~~~~~~~~~~^^^^^^^^^^^^^
 KeyError: 'frequency'
+Starting daemon
+/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/adafruit_blinka/microcontroller/generic_linux/i2c.py:30: RuntimeWarning: I2C frequency is not settable in python, ignoring!
+  warnings.warn(
+INFO:     Started server process [742]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Deleting file: /tmp/PiRadio.pid
+Starting daemon
+/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/adafruit_blinka/microcontroller/generic_linux/i2c.py:30: RuntimeWarning: I2C frequency is not settable in python, ignoring!
+  warnings.warn(
+INFO:     Started server process [661]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Exception in thread Thread-3 (run):
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/pi/PiRadio/Radio/dataProcessing/dataProcessor.py", line 72, in run
+    self.process_analogs(sensor_msg_current.analog_data)
+  File "/home/pi/PiRadio/Radio/dataProcessing/dataProcessor.py", line 115, in process_analogs
+    self.analog_processor.process(analog_data, self.active_actions)
+  File "/home/pi/PiRadio/Radio/dataProcessing/dataProcessor.py", line 259, in process
+    value = self.set_volume(item, analog.value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/dataProcessing/dataProcessor.py", line 314, in set_volume
+    self.publish_function(f"volume:{value_new}")
+  File "/home/pi/PiRadio/Radio/util/dataTransmitter.py", line 48, in publish
+    self.update_subscribers()
+  File "/home/pi/PiRadio/Radio/util/dataTransmitter.py", line 38, in update_subscribers
+    sub.update()
+  File "/home/pi/PiRadio/Radio/audio/audioPlayer.py", line 51, in update
+    self.set_volume(int(content.strip("volume:")))
+  File "/home/pi/PiRadio/Radio/audio/audioPlayer.py", line 109, in set_volume
+    self.client.setvol(volume)
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/mpd/base.py", line 478, in mpd_command
+    return wrapper(self, name, args, callback)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/mpd/base.py", line 541, in _execute
+    return retval()
+           ^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/mpd/base.py", line 463, in command_callback
+    res = function(self, self._read_lines())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/PiRadio/Radio/venv/lib/python3.11/site-packages/mpd/base.py", line 397, in _parse_nothing
+    raise ProtocolError(
+mpd.base.ProtocolError: Got unexpected return value: 'Title: K2 - Keep On Dancing, Name: Eurodance 90 - eurodance90.fr, Pos: 0, Id: 2'
+Deleting file: /tmp/PiRadio.pid

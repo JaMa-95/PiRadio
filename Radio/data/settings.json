@@ -3,8 +3,11 @@
     "amplifier_pin": 99,
     "mqtt": false,
     "on_off_button": {
-        "active_pin": 5,
-        "output_pin": 14
+        "active_pin": [
+            14,
+            5
+        ],
+        "output_pin": 15
     },
     "audio": {
         "fm_module": {

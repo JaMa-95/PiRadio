@@ -67,8 +67,10 @@ class OnOffButton:
     def run(self):
         if IS_RASPBERRY:
             while not self._stop_event.is_set():
-                if not GPIO.wait_for_edge(self.active_pin, GPIO.FALLING, timeout=2):
+                if not GPIO.wait_for_edge(self.output_pin, GPIO.FALLING, timeout=3):
                     continue
+                print("Shutdown request detected")
+                self.shutdown()
 
                 poll_duration = self.poll()
                 print("Poll: ", poll_duration)
