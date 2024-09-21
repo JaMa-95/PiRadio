@@ -8,12 +8,8 @@ from Radio.util.singleton import Singleton
 class DataTransmitter(Singleton):
     def __init__(self):
         self.parent_conn, self.child_conn = Pipe()
-        self.data_old = None
 
     def send(self, data):
-        if data == self.data_old:
-            return
-        self.data_old = data
         self.child_conn.send(data)
 
     def receive(self):

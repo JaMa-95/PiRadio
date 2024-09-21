@@ -35,6 +35,7 @@ class Collector:
         self.db = Database()
         self.cycle_time: float = 0
         self.load_from_settings()
+        self.sensor_msg_old: SensorMsg = None
         print_(debug=debug, class_name="Collector", text="Collector started")
 
     
@@ -45,7 +46,7 @@ class Collector:
         self.cycle_time = settings["cycle_time"]
 
     def run(self):
-        cycle_time = 0.001
+        cycle_time = 0.005
         while True:
             start = time.time()
             if not self.db.get_web_control_value():
@@ -54,7 +55,10 @@ class Collector:
                 sensor_msg = SensorMsg()
                 sensor_msg.set_buttons_data(buttons_data)
                 sensor_msg.analog_data.set_data(analog_data.sensor_data)
-                self.data_transmitter.send(sensor_msg)
+                if self.sensor_msg_old != sensor_msg:
+                    self.data_transmitter.send(sensor_msg)
+                    self.sensor_msg_old = sensor_msg
+                    # print("JO")
             if self._stop_event.is_set():
                 self.thread_stopped_counter.increment()
                 self.amount_stop_threads_names.delete(self.__class__.__name__)

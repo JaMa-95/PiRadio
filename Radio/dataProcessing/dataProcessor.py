@@ -68,6 +68,7 @@ class DataProcessor:
                 data = self.data_transmitter.receive()
                 if isinstance(data, SensorMsg):
                     if data != self.sensor_msg_old:
+                        print("PROCESS")
                         sensor_msg_current = data
                         sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
                                                                         sensor_msg_old=self.sensor_msg_old)

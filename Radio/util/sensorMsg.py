@@ -14,6 +14,8 @@ class SensorMsg:
         self.buttons_data = data
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if self.buttons_data == value.buttons_data and self.analog_data == value.analog_data:
             return True
         return False
@@ -68,6 +70,8 @@ class ButtonsData:
         self.data: List[ButtonState] = []
 
     def __eq__(self, other) -> bool:
+        if other is None:
+            return False
         data = other.get_data()
         if len(self.data) != len(data):
             return False
@@ -127,6 +131,8 @@ class AnalogData:
         self.sensor_data: List[AnalogValue] = []
 
     def __eq__(self, other):
+        if other is None:
+            return False
         sensor_data = other.get_data_sensor()
         if len(self.sensor_data) != len(sensor_data):
             return False

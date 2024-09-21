@@ -116,9 +116,9 @@ class AdsSingle:
 
     def get_value_smoothed_by_pin(self, pin: int, high_precision: bool):
         if self.mock:
-            if time.time() - self.start_time > 1:
+            if time.time() - self.start_time > 0.1:
                 self.start_time = time.time()
-                self.mock_value_last = randint(0, 5000)
+                # self.mock_value_last = randint(0, 5000)
             return self.mock_value_last
         values = []
         if high_precision:
