@@ -1,23 +1,23 @@
 // Pi power button
 
-// A single Pi GPIO_PI pin is used, plus connections to the Pi's TxD and SCL, which don't affect their
+// A single Pi PI_COM pin is used, plus connections to the Pi's TxD and SCL, which don't affect their
 // normal use. TxD is the only pin which will reliably indicate that the Pi is shutdown.
 //
-// The Pi sets its GPIO_PI pin as Input Pullup and watches for a Low to signal a shutdown request.
-// On seeing this it sets the GPIO_PI as Output, Low to acknowledge the request.
+// The Pi sets its PI_COM pin as Input Pullup and watches for a Low to signal a shutdown request.
+// On seeing this it sets the PI_COM as Output, Low to acknowledge the request.
 // When shutdown completes, TxD goes low. If the Pi is rebooted, it goes high again.
 //
 // The ATTiny has a pin configured as Output, set High, and connected to the Pi through 330 Ohms.
 // On pressing the button, this pin is pulled Low for 500mS, then set as Input Pullup.
 //
-// If it sees the GPIO_PI pin now Low it starts flashing the LED and awaits TxD to go low.
+// If it sees the PI_COM pin now Low it starts flashing the LED and awaits TxD to go low.
 //
 
-#define LED 4 // Pin 6
-#define RELAY 1 // Pin 2
-#define TXD 3 // Pin 3 -> RPI 5
-#define GPIO_PI 0     // PB0 -> RPi 22
-#define BUTTON 2 // ????????
+#define LED PB4  //25             // Pin 6            // POWER LED
+#define RELAY PB1     //33        // Pin 2            // TURNS ON POWER TO RASPI
+#define PI_ACTIVE PB3 //4         // Pin 3 -> RPI 5   // PI_ACTIVE should get ON at boot and off right after shutdown
+#define PI_COM PB0 //19           // PB0 -> RPi 5/14    // Used to communicate with raspberry
+#define BUTTON PB2 //32           //         // DETECTS ON/OFF REQUEST
 // Gnd 4
 // Vcc 8
 
@@ -33,21 +33,30 @@
 int state, prevstate;
 long int timeout, txdtimer, buttontimer, timer;
 
-void setup() {                
+bool relayState = false;
+
+void setup() {     
+  //Serialbegin(115200);           
+  //delay(1000);
+  //Serialprintln("STARTING 222");
   pinMode(LED, OUTPUT);
   pinMode(BUTTON, INPUT_PULLUP);
-  pinMode(GPIO_PI, OUTPUT); // Pi GPIO_PI pin
-  pinMode(TXD, INPUT); // Pi TxD pin
+  pinMode(PI_COM, OUTPUT); // Pi PI_COM pin
+  pinMode(PI_ACTIVE, INPUT); // Pi PI_ACTIVE pin
   //pinMode(SCL, INPUT);
   digitalWrite(LED, LOW);
-  digitalWrite(GPIO_PI, HIGH);
- // //Serial.begin(9600);
+  digitalWrite(PI_COM, HIGH);
+  
   pinMode(RELAY, OUTPUT);
-  // //Serial.println ("RELAY HIGH");
-  digitalWrite(RELAY, HIGH);
+  //Serialprintln ("RELAY HIGH");
+  delay(10);
+  digitalWrite(RELAY, LOW);
+  relayState = false;
 
   prevstate = NOT_INIT; 
-  state = timeout = txdtimer = buttontimer = timer = 0;
+  state = OFF_STATE;
+  timeout = txdtimer = buttontimer = timer = 0;
+  //Serialprintln("STARTING");
 }
 
 // loop runs forever and ever:
@@ -58,205 +67,293 @@ void loop() {
   switch (state) {
     case OFF_STATE: // OFF
     default:
-      processDefaultState();
+      processOffState();
+      break;
 
     // TODO: instead of pull SCL high just give power to the raspberry
     case START_BOOT_STATE: // BOOT START
-    // ---- START BOOT DEFINITION ----
-    // LED: OFF
-    // RELAY: ON
-    // If TXD high then State = 2 (BOOTING)
-    // If timeout 50mS then State = 0 (OFF)
-    if (state != prevstate) 
-    {
-      //Serial.print("Boot Req\n");
-      pinMode(RELAY, OUTPUT);
-      digitalWrite(RELAY, LOW);
-      delay(50);
-      txdtimer = millis();
-      prevstate = state;
-    }
-
-    digitalWrite(LED, LOW);
-    if (digitalRead(TXD) == HIGH) {
-      //Serial.println("TXD HIGH. IN BOOT");
-      state = BOOTING_STATE; // BOOTING
+      processStartBootState();
       break;
-    }
-    if (millis() - txdtimer > 50) {
-      // GO TO OFF AND WAIT TILL TXD is HIGH
-      state = OFF_STATE; // OFF
-    }
-    break;
 
     case BOOTING_STATE: // BOOTING
-    // ---- START BOOT DEFINITION ----
-    // GPIO_PI: HIGH
-    // LED: Flash 25% duty cycle
-    // Wait for Pi to set GPIO_PI input pullup
-    // Poll Pi by pulsing GPIO_PI low for 5mS
-    // If GPIO_PI low pulse acknowledged then State = 3 (RUNNING)
-    // If TXD low then State = 0 (OFF)
-    // If timeout 50 secs then State = 3 (RUNNING)
-    if (state != prevstate) {
-      //Serial.print("Booting\n");
-      timer = millis();
-      prevstate = state;
-    }
-
-    digitalWrite(LED, ((millis() - timer) / 250) % 4 == 0);
-
-    if (digitalRead(GPIO_PI) == LOW) break;
-
-    if ((millis() - timer) % 100 == 50) {
-      pinMode(GPIO_PI, OUTPUT);
-      digitalWrite(GPIO_PI, LOW);
-      delay(5);
-      digitalWrite(GPIO_PI, HIGH);
-      pinMode(GPIO_PI, INPUT_PULLUP);
-      timeout = millis();
-      while (millis() - timeout < 100) {
-        delay(1);
-        if (digitalRead(GPIO_PI) == HIGH) {
-          continue;
-        }
-        //Serial.println("RasPi GPIO_PI LOW. Must be on");
-        state = ON_STATE; // RUNNING
-        break;
-      }
-      while (digitalRead(GPIO_PI) == LOW) continue;
-      pinMode(GPIO_PI, OUTPUT);
-      digitalWrite(GPIO_PI, HIGH);
-      if (state != prevstate) break;
-    }
-    if (digitalRead(TXD) == LOW) {
-      //Serial.println("TXD LOW. Raspberry must be off");
-      state = OFF_STATE; // OFF
+      processBootingState();
       break;
-    }
-    if ((millis() - timer) > 50000) {
-      //Serial.println("TIMER HIT END. BOOTING FINISHED");
-      state = ON_STATE; // ON
-    }
-    break;
 
     case ON_STATE: // ON
-    // LED on
-    // GPIO_PI high
-    // If TXD low then State = 0 (OFF)
-    // If button push then State = 4 (SHDN REQ)
-    if (state != prevstate) {
-      //Serial.print("Running\n");
-      pinMode(GPIO_PI, OUTPUT);
-      digitalWrite(GPIO_PI, HIGH);
-      prevstate = state;
-    }
-    digitalWrite(LED, ((millis() - timer) / 20) % 8 != 0);
-    if (digitalRead(TXD) == HIGH) txdtimer = millis();
-    else {
-      if ((millis() - txdtimer) > 50) {
-        //Serial.println("TXD LOW. Raspberry must be off");
-        state = OFF_STATE; // OFF
-        break;
-      }
-    }
-    if (digitalRead(BUTTON) == HIGH) {
-      buttontimer = millis();
-    } else if (millis() - buttontimer > 1000) {
-      //Serial.println("RasPi GPIO_PI HIGH. Wants shutdown");
-      state = START_SHUTDOWN_STATE; // SHDN REQ
-      break;
-    }
-    break;
-
-      case START_SHUTDOWN_STATE: // SHDN REQ
-      // Pulse GPIO_PI low
-      // LED off
-      // If GPIO_PI low then State = 5 (SHUTTING DOWN)
-      // If TxD low then State = 0 (OFF)
-      // Timeout 100mS then 3 (RUNNING)
-      if (state != prevstate) {
-        //Serial.print("Shutdown Req\n");
-        digitalWrite(LED, LOW);
-        pinMode(GPIO_PI, OUTPUT);
-        digitalWrite(GPIO_PI, LOW);
-        delay(500);
-        pinMode(GPIO_PI, INPUT_PULLUP);
-        timer = millis();
-        prevstate = state;
-      }
-      if (digitalRead(GPIO_PI) == LOW) {
-        state = SHUTTING_DOWN_STATE; // SHUTTING DOWN
-        break;
-      }
-      if (digitalRead(TXD) == HIGH) txdtimer = millis();
-      else {
-        if (millis() - txdtimer > 50) {
-          state = OFF_STATE; // OFF
-          break;
-        }
-      }
-      if ((millis() - timer) > 100) {
-        state = ON_STATE; // RUNNING
-        break;
-      }
+      processOnState();
       break;
 
-    case SHUTTING_DOWN_STATE: // SHUTTING DOWN
-    // Flash LED 75% duty cycle
-    // If TXD low then State = 0 (OFF)
-    // If timeout 20 secs then State = 3 (RUNNING)
-    if (state != prevstate) {
-      //Serial.print("Shutting down\n");
-      timer = millis();
-      prevstate = state;
+    case START_SHUTDOWN_STATE: 
+      processStartShutdownState();
+      break;
+
+    case SHUTTING_DOWN_STATE: 
+      processShuttingDown();
+      break;
+  }
+  delay(50);
+}
+
+void processOffState() {
+  // ---- OFF STATE DEFINITION ----
+  // LED: OFF
+  // If Button press -> START_BOOT
+  // If TXD high -> BOOTING
+
+  if (state != prevstate) {
+    //Serialprint("Off\n");
+    prevstate = state;
+  }
+  pinMode(PI_COM, INPUT_PULLUP);
+  digitalWrite(LED, LOW);
+  // digitalWrite(LED, ((millis() - timer) / 5000) % 2 == 0);
+
+  // check button press
+  if (digitalRead(BUTTON) == HIGH) {
+    buttontimer = millis();
+  } else {
+    if (millis() - buttontimer > 50) {
+      //Serialprintln("BUTTON CLICKED START BOOT");
+      if (!relayState) {
+       // digitalWrite(RELAY, HIGH);
+        //relayState = true;
+        delay(100);
+      } 
+      state = START_BOOT_STATE; // BOOT REQ
+      return;
     }
-    digitalWrite(LED, ((millis() - timer) / 20) % 4 != 0);
-    if (digitalRead(TXD) == HIGH) txdtimer = millis();
-    else {
-      if (millis() - txdtimer > 50) {
-        // Cutting power
-        pinMode(RELAY, OUTPUT);
-        digitalWrite(RELAY, HIGH);
-        state = OFF_STATE; // OFF
-        break;
+  }
+
+  // TXD HIGH means raspi is already on
+  if (digitalRead(PI_ACTIVE) == HIGH) {
+    //Serialprintln("TXD HIGH. IN BOOT");
+    state = BOOTING_STATE; // BOOTING
+    return;
+  }
+  return;
+}
+
+void processStartBootState() {
+  // ---- START BOOT DEFINITION ----
+  // LED: OFF
+  // RELAY: ON
+  // If TXD high then State = 2 (BOOTING)
+  // If timeout 50mS then State = 0 (OFF)
+  if (state != prevstate) 
+  {
+    //Serialprint("Boot Req\n");
+    // TURN ON RASPI
+    pinMode(RELAY, OUTPUT);
+    digitalWrite(RELAY, LOW);
+    relayState = false;
+    delay(50);
+    txdtimer = millis();
+    prevstate = state;
+  }
+
+   digitalWrite(LED, ((millis() - timer) / 1000) % 2 == 0);
+  if (digitalRead(PI_ACTIVE) == HIGH) {
+    //Serialprintln("PI_ACTIVE HIGH. IN BOOT");
+    state = BOOTING_STATE; // BOOTING
+    return;
+  }
+  if (millis() - txdtimer > 50) {
+    // GO TO OFF AND WAIT TILL TXD is HIGH
+    state = OFF_STATE; // OFF
+  }
+  return;
+}
+
+void processBootingState() {
+  // ---- START BOOT DEFINITION ----
+  // LED: FON
+  // Wait for Pi to set PI_COM input pullup
+  // Poll Pi by pulsing PI_COM low for 5mS
+  // If PI_COM low pulse acknowledged then State = 3 (RUNNING)
+  // If TXD low then State = 0 (OFF)
+  // If timeout 50 secs then State = 3 (RUNNING)
+  if (state != prevstate) {
+    //Serialprint("Booting\n");
+    timer = millis();
+    prevstate = state;
+  }
+
+  // digitalWrite(LED, HIGH);
+  digitalWrite(LED, ((millis() - timer) / 1000) % 4 == 0);
+
+  if (digitalRead(PI_COM) == LOW) {
+    //Serialprintln("LOW");
+    return;
+  }
+
+  if ((millis() - timer) % 100 == 50) {
+    pinMode(PI_COM, OUTPUT);
+    digitalWrite(PI_COM, LOW);
+    delay(5);
+    digitalWrite(PI_COM, HIGH);
+    pinMode(PI_COM, INPUT_PULLUP);
+    timeout = millis();
+    while (millis() - timeout < 100) {
+      //Serialprintln("HELLO");
+      delay(1);
+      if (digitalRead(PI_COM) == HIGH) {
+        //Serialprintln("WAIT FOR LOW");
+        continue;
       }
-    }
-    if ((millis() - timer) > 20000) {
+      //Serialprintln("RasPi PI_COM LOW. Must be on");
       state = ON_STATE; // RUNNING
-      break;
+      return;
     }
-    break;
+    while (digitalRead(PI_COM) == LOW) continue;
+    pinMode(PI_COM, OUTPUT);
+    digitalWrite(PI_COM, HIGH);
+    if (state != prevstate) return;
+  }
+  if (digitalRead(PI_ACTIVE) == LOW) {
+    //Serialprintln("TXD LOW. Raspberry must be off");
+    state = OFF_STATE; // OFF
+    return;
+  }
+  if ((millis() - timer) > 50000) {
+    //Serialprintln("TIMER HIT END. BOOTING FINISHED");
+    state = ON_STATE; // ON
   }
 }
 
-void processDefaultState() {
-  // ---- OFF STATE DEFINITION ----
-    // LED: OFF
-    // If Button press -> START_BOOT
-    // If TXD high -> BOOTING
-
-    if (state != prevstate) {
-      ////Serial.print("Off\n");
+void processBootingState2() {
+      if (state != prevstate) {
+      //Serialprint("Booting\n");
+      timer = millis();
       prevstate = state;
     }
-    pinMode(GPIO_PI, INPUT_PULLUP);
-    //digitalWrite(LED, LOW);
-    digitalWrite(LED, ((millis() - timer) / 250) % 4 == 0);
-    if (digitalRead(BUTTON) == HIGH) {
-      buttontimer = millis();
-    } else {
-      if (millis() - buttontimer > 50) {
-        //Serial.println("BUTTON CLICKED START BOOT");
-        state = START_BOOT_STATE; // BOOT REQ
-        break;
+    digitalWrite(LED, HIGH);
+    if (digitalRead(PI_COM) == LOW) return;
+    if ((millis() - timer) % 100 == 50) {
+      //Serialprint("Poll\n");
+      pinMode(PI_COM, OUTPUT);
+      digitalWrite(PI_COM, LOW);
+      delay(5);
+      digitalWrite(PI_COM, HIGH);
+      pinMode(PI_COM, INPUT_PULLUP);
+      timeout = millis();
+      while (millis() - timeout < 100) {
+        delay(1);
+        if (digitalRead(PI_COM) == HIGH) continue;
+        state = ON_STATE; // RUNNING
+        return;
       }
+      while (digitalRead(PI_COM) == LOW) continue;
+      pinMode(PI_COM, OUTPUT);
+      digitalWrite(PI_COM, HIGH);
+      if (state != prevstate) return;
     }
-    if (digitalRead(TXD) == HIGH) {
-      //Serial.println("TXD HIGH. IN BOOT");
-      state = BOOTING_STATE; // BOOTING
-      break; 
+    if (digitalRead(PI_ACTIVE) == LOW) {
+      state = OFF_STATE; // OFF
+      return;
     }
-    break;
+    if ((millis() - timer) > 20000) {
+      state = ON_STATE; // RUNNING
+      //Serialprintln("TIMER HIT END. BOOTING FINISHED");
+    } 
+    return;
+}
+void processOnState() {
+  // LED on
+  // PI_COM high
+  // If TXD low then State = 0 (OFF)
+  // If button push then State = 4 (SHDN REQ)
+  if (state != prevstate) {
+    //Serialprint("Running\n");
+    pinMode(PI_COM, OUTPUT);
+    digitalWrite(PI_COM, HIGH);
+    prevstate = state;
+  }
+  // digitalWrite(LED, ((millis() - timer) / 20) % 8 != 0);
+  digitalWrite(LED, HIGH);
+  if (digitalRead(PI_ACTIVE) == HIGH) txdtimer = millis();
+  else {
+    if ((millis() - txdtimer) > 50) {
+      //Serialprintln("TXD LOW. Raspberry must be off");
+      state = OFF_STATE; // OFF
+      return;
+    }
+  }
+  if (digitalRead(BUTTON) == HIGH) {
+    buttontimer = millis();
+  } else if (millis() - buttontimer > 1000) {
+    //Serialprintln("Button HIGH. Wants shutdown");
+    state = START_SHUTDOWN_STATE; // SHDN REQ
+    return;
+  }
+  return;
+}
+      
+void processStartShutdownState() {
+  // SHDN REQ
+  // Pulse PI_COM low
+  // LED off
+  // If PI_COM low then State = 5 (SHUTTING DOWN)
+  // If TxD low then State = 0 (OFF)
+  // Timeout 100mS then 3 (RUNNING)
+  if (state != prevstate) {
+    //Serialprint("Shutdown Req\n");
+    digitalWrite(LED, ((millis() - timer) / 20) % 8 == 0);
+    pinMode(PI_COM, OUTPUT);
+    digitalWrite(PI_COM, LOW);
+    //Serialprintln("TO LOW");
+    delay(500);
+    pinMode(PI_COM, INPUT_PULLUP);
+    timer = millis();
+    prevstate = state;
+  }
+  if (digitalRead(PI_COM) == LOW) {
+    state = SHUTTING_DOWN_STATE; // SHUTTING DOWN
+    return;
+  }
+  if (digitalRead(PI_ACTIVE) == HIGH) txdtimer = millis();
+  else {
+    if (millis() - txdtimer > 200) {
+      state = SHUTTING_DOWN_STATE; // OFF
+      return;
+    }
+  }
+  if ((millis() - timer) > 400) {
+    state = ON_STATE; // RUNNING
+    return;
+  }
+  return;
+}
+
+void processShuttingDown() {
+  // SHUTTING DOWN
+  // Flash LED 75% duty cycle
+  // If TXD low then State = 0 (OFF)
+  // If timeout 20 secs then State = 3 (RUNNING)
+  if (state != prevstate) {
+    //Serialprint("Shutting down\n");
+    timer = millis();
+    prevstate = state;
+  }
+  
+  digitalWrite(LED, ((millis() - timer) / 20) % 4 != 0);
+  if (digitalRead(PI_ACTIVE) == HIGH) txdtimer = millis();
+  else {
+    //for safety reason wait 7s and then cut power
+    if (millis() - txdtimer > 10000) {
+      // Cutting power
+      //Serialprintln("CUTTING POWER");
+      digitalWrite(RELAY, HIGH);
+      relayState = true;
+      state = OFF_STATE; // OFF
+      return;
+    }
+  }
+  if ((millis() - timer) > 15000) {
+      digitalWrite(RELAY, HIGH);
+      relayState = true;
+      state = OFF_STATE; // OFF
+    return;
+  }
+  return;
 }
 
