@@ -19,9 +19,11 @@ class DataTransmitter(Singleton):
     def has_data(self):
         return self.parent_conn.poll()
     
-    def wait_for_data(self):
-        wait([self.parent_conn])
-        return self.receive()
+    def wait_for_data(self, timeout: bool=1):
+        wait([self.parent_conn], timeout=timeout)
+        if self.has_data():
+            return self.receive()
+        return None
 
 
 class Publisher(Singleton):

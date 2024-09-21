@@ -11,8 +11,12 @@ from Radio.dataProcessing.radioFrequency import Frequencies
 from Radio.db.db import Database
 from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.util.sensorMsg import SensorMsg, AnalogData, ButtonState
-from Radio.util.util import get_project_root, map_, ThreadSafeInt, ThreadSafeList
+from Radio.util.util import get_project_root, is_raspberry, map_, ThreadSafeInt, ThreadSafeList
 from Radio.raspberry.raspberry import Raspberry
+
+IS_RASPBERRY = False
+if is_raspberry():
+    IS_RASPBERRY = True
 
 
 class DataProcessor:
@@ -59,44 +63,43 @@ class DataProcessor:
                 self.raspberry.alive()
 
             if self.stop_event.is_set():
-                self.raspberry.cleanup()
+                if IS_RASPBERRY:
+                    self.raspberry.cleanup()
                 self.thread_stopped_counter.increment()
                 self.amount_stop_threads_names.delete(self.__class__.__name__)
                 print("STOPPING DATA PROCESSOR")
                 break
-            if self.data_transmitter.wait_for_data():
-                data = self.data_transmitter.receive()
-                if isinstance(data, SensorMsg):
-                    if data != self.sensor_msg_old:
-                        print("PROCESS")
-                        sensor_msg_current = data
-                        sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
-                                                                        sensor_msg_old=self.sensor_msg_old)
-                        
-                        #print(sensor_msg_current)
-                        # publish/save volume, stream(frequ), equalizer
-                        self.process_analogs(sensor_msg_current.analog_data)
-                        # get change in buttons. which button has which button event
-                        # button click, button long click, button to 1, button to 0
-                        self.process_buttons(sensor_msg_current)
-                        self.sensor_msg_old = sensor_msg_current
-                elif isinstance(data, dict):
-                    print(self.db.get_radio_frequency_dict())
-                    if "web_control" in data:
-                        self.db.replace_web_control_value(data["web_control"])
-                    if "volume" in data:
-                        self.db.replace_volume(data["volume"])
-                        self.publisher.publish(f"volume:{data['volume']}")
-                    elif "frequency" in data:
-                        self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"],
-                                                                self.active_actions)
-                    elif "button" in data:
-                        new_action = self.button_processor.process_button_web(data["button"]["name"],
-                                                                              data["button"]["value"])
-                        if new_action:
-                            self.active_actions.add_or_remove_actions(new_action) 
-            else:
-                time.sleep(self.cycle_time)
+
+            data =  self.data_transmitter.wait_for_data(timeout=1)
+            if isinstance(data, SensorMsg):
+                if data != self.sensor_msg_old:
+                    print("PROCESS")
+                    sensor_msg_current = data
+                    sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
+                                                                    sensor_msg_old=self.sensor_msg_old)
+                    
+                    #print(sensor_msg_current)
+                    # publish/save volume, stream(frequ), equalizer
+                    self.process_analogs(sensor_msg_current.analog_data)
+                    # get change in buttons. which button has which button event
+                    # button click, button long click, button to 1, button to 0
+                    self.process_buttons(sensor_msg_current)
+                    self.sensor_msg_old = sensor_msg_current
+            elif isinstance(data, dict):
+                print(self.db.get_radio_frequency_dict())
+                if "web_control" in data:
+                    self.db.replace_web_control_value(data["web_control"])
+                if "volume" in data:
+                    self.db.replace_volume(data["volume"])
+                    self.publisher.publish(f"volume:{data['volume']}")
+                elif "frequency" in data:
+                    self.analog_processor.set_frequency_web(data["frequency"]["name"], data["frequency"]["value"],
+                                                            self.active_actions)
+                elif "button" in data:
+                    new_action = self.button_processor.process_button_web(data["button"]["name"],
+                                                                            data["button"]["value"])
+                    if new_action:
+                        self.active_actions.add_or_remove_actions(new_action) 
             now = time.time()
             if now - loop_timer > self.cycle_time:
                 loop_timer = now

@@ -58,7 +58,6 @@ class Collector:
                 if self.sensor_msg_old != sensor_msg:
                     self.data_transmitter.send(sensor_msg)
                     self.sensor_msg_old = sensor_msg
-                    # print("JO")
             if self._stop_event.is_set():
                 self.thread_stopped_counter.increment()
                 self.amount_stop_threads_names.delete(self.__class__.__name__)
