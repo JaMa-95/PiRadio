@@ -86,33 +86,33 @@ class RadioDaemon(Daemon):
         self.stop_thread = Thread(target=self.check_stop)
         print("STARTING THREADS")
         # START
-        self.processor_thread.start()
         self.amount_stop_threads_names.append(self.data_processor.__class__.__name__)
+        self.processor_thread.start()
         self.amount_threads += 1
 
-        self.audio_thread.start()
         self.amount_stop_threads_names.append(self.audio_player.__class__.__name__)
+        self.audio_thread.start()
         self.amount_threads += 1
 
-        self.on_off_thread.start()
         self.amount_stop_threads_names.append(self.on_off_button.__class__.__name__)
+        self.on_off_thread.start()
         self.amount_threads += 1
 
-        self.fm_module_thread.start()
         self.amount_stop_threads_names.append(self.fm_module.__class__.__name__)
+        self.fm_module_thread.start()
         self.amount_threads += 1
 
-        self.stop_thread.start()
         self.amount_stop_threads_names.append(self.check_stop.__name__)
+        self.stop_thread.start()
         self.amount_threads += 1
         
         if self.collector_on:
-            self.collector_thread.start()
             self.amount_stop_threads_names.append(self.collector.__class__.__name__)
+            self.collector_thread.start()
             self.amount_threads += 1
         if self.app:
-            self.app_process.start()
             self.amount_stop_threads_names.append(app_run.__name__)
+            self.app_process.start()
             self.amount_threads += 1
 
         # JOIN
