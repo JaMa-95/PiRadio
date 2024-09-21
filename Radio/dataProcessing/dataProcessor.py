@@ -1,4 +1,3 @@
-import asyncio
 from copy import deepcopy
 import json
 import time
@@ -51,7 +50,7 @@ class DataProcessor:
 
         self.cycle_time = self.settings["cycle_time"]
 
-    async def run(self):
+    def run(self):
         alive_timer = time.time()
         loop_timer = time.time()
         while True:
@@ -96,12 +95,12 @@ class DataProcessor:
                         if new_action:
                             self.active_actions.add_or_remove_actions(new_action) 
             else:
-                await asyncio.sleep(self.cycle_time)
+                time.sleep(self.cycle_time)
             now = time.time()
             if now - loop_timer > self.cycle_time:
                 loop_timer = now
                 # print("SLEEP FOR: ", self.cycle_time - (now - loop_timer),  (now - loop_timer))
-                await asyncio.sleep(self.cycle_time - (now - loop_timer))
+                time.sleep(self.cycle_time - (now - loop_timer))
 
     # mostly for testing purpose
     def add_remove_actions(self, action: RadioAction):
