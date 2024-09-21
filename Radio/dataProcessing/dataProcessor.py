@@ -1,3 +1,4 @@
+import asyncio
 from copy import deepcopy
 import json
 import time
@@ -50,7 +51,7 @@ class DataProcessor:
 
         self.cycle_time = self.settings["cycle_time"]
 
-    def run(self):
+    async def run(self):
         alive_timer = time.time()
         loop_timer = time.time()
         while True:
@@ -67,17 +68,18 @@ class DataProcessor:
             if self.data_transmitter.wait_for_data():
                 data = self.data_transmitter.receive()
                 if isinstance(data, SensorMsg):
-                    sensor_msg_current = data
-                    sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
-                                                                     sensor_msg_old=self.sensor_msg_old)
-                    
-                    #print(sensor_msg_current)
-                    # publish/save volume, stream(frequ), equalizer
-                    self.process_analogs(sensor_msg_current.analog_data)
-                    # get change in buttons. which button has which button event
-                    # button click, button long click, button to 1, button to 0
-                    self.process_buttons(sensor_msg_current)
-                    self.sensor_msg_old = sensor_msg_current
+                    if data != self.sensor_msg_old:
+                        sensor_msg_current = data
+                        sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
+                                                                        sensor_msg_old=self.sensor_msg_old)
+                        
+                        #print(sensor_msg_current)
+                        # publish/save volume, stream(frequ), equalizer
+                        self.process_analogs(sensor_msg_current.analog_data)
+                        # get change in buttons. which button has which button event
+                        # button click, button long click, button to 1, button to 0
+                        self.process_buttons(sensor_msg_current)
+                        self.sensor_msg_old = sensor_msg_current
                 elif isinstance(data, dict):
                     print(self.db.get_radio_frequency_dict())
                     if "web_control" in data:
@@ -94,12 +96,12 @@ class DataProcessor:
                         if new_action:
                             self.active_actions.add_or_remove_actions(new_action) 
             else:
-                print("No data")
-                time.sleep(self.cycle_time)
+                await asyncio.sleep(self.cycle_time)
             now = time.time()
-            if now - loop_timer > 0.1:
+            if now - loop_timer > self.cycle_time:
                 loop_timer = now
-                time.sleep(self.cycle_time - (now - loop_timer))
+                # print("SLEEP FOR: ", self.cycle_time - (now - loop_timer),  (now - loop_timer))
+                await asyncio.sleep(self.cycle_time - (now - loop_timer))
 
     # mostly for testing purpose
     def add_remove_actions(self, action: RadioAction):
@@ -117,7 +119,6 @@ class DataProcessor:
         data.delete_unchanged_values(self.sensor_msg_old.analog_data)
         if data.is_empty():
             return None
-        print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {int(time.time() * 1000) % 1000} ms - {analog_data}")
         if self.sensor_msg_old.analog_data == analog_data:
             return None
         self.analog_processor.process(analog_data, self.active_actions)

@@ -13,6 +13,11 @@ class SensorMsg:
     def set_buttons_data(self, data):
         self.buttons_data = data
 
+    def __eq__(self, value: object) -> bool:
+        if self.buttons_data == value.buttons_data and self.analog_data == value.analog_data:
+            return True
+        return False
+
     def __str__(self):
         buttons_data_str = "\n".join([f"Pin: {button.pin}, State: {button.state}, States: {list(button.states)}" for button in self.buttons_data.get_data()])
         analog_data_str = "\n".join([f"Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, Accepted Difference: {value.accepted_difference}" for value in self.analog_data.get_data_sensor()])
@@ -121,6 +126,17 @@ class AnalogData:
     def __init__(self):
         self.sensor_data: List[AnalogValue] = []
 
+    def __eq__(self, other):
+        sensor_data = other.get_data_sensor()
+        if len(self.sensor_data) != len(sensor_data):
+            return False
+        for value in self.sensor_data:
+            for value_other in sensor_data:
+                if value.pin == value_other.pin:
+                    if abs(value.value - value_other.value) > value.accepted_difference:
+                        return False
+        return True
+
     def __str__(self):
         return "\n".join([f"""Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, 
                           Accepted Difference: {value.accepted_difference}""" for value in self.sensor_data])
@@ -154,14 +170,3 @@ class AnalogData:
                 self.sensor_data.remove(value)
                 return True
         return False
-    
-    def __eq__(self, other):
-        sensor_data = other.get_data_sensor()
-        if len(self.sensor_data) != len(sensor_data):
-            return False
-        for value in self.sensor_data:
-            for value_other in sensor_data:
-                if value.pin == value_other.pin:
-                    if abs(value.value - value_other.value) > value.accepted_difference:
-                        return False
-        return True

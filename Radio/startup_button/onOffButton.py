@@ -95,7 +95,6 @@ class OnOffButton:
             while not self._stop_event.is_set():
                 if not GPIO.wait_for_edge(self.att_comm_pin, GPIO.FALLING, timeout=3):
                     continue
-
                 poll_duration = self.poll()
                 print("Poll: ", poll_duration)
                 if poll_duration < 0.1:
