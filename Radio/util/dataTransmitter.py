@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from multiprocessing import Pipe
+from multiprocessing.connection import wait
 
 from Radio.util.singleton import Singleton
 
@@ -17,6 +18,10 @@ class DataTransmitter(Singleton):
 
     def has_data(self):
         return self.parent_conn.poll()
+    
+    def wait_for_data(self):
+        wait([self.parent_conn])
+        return self.receive()
 
 
 class Publisher(Singleton):

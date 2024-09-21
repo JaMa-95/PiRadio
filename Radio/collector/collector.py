@@ -1,3 +1,4 @@
+import json
 from threading import Event
 import time
 from statistics import mean
@@ -8,7 +9,13 @@ from Radio.util.dataTransmitter import DataTransmitter
 from Radio.util.sensorMsg import SensorMsg
 
 from Radio.collector.ads1115.ads import AdsObject
-from Radio.util.util import ThreadSafeInt, print_, ThreadSafeList
+from Radio.util.util import ThreadSafeInt, get_project_root, print_, ThreadSafeList
+
+from Radio.util.util import is_raspberry
+
+IS_RASBERRY = False
+if is_raspberry():
+    IS_RASBERRY = True
 
 
 class Collector:
@@ -26,10 +33,21 @@ class Collector:
         self.buttons: RadioButtonsRaspi = RadioButtonsRaspi(mock=mock, debug=debug)
         self.ads = AdsObject(mock=mock, debug=debug)
         self.db = Database()
+        self.cycle_time: float = 0
+        self.load_from_settings()
         print_(debug=debug, class_name="Collector", text="Collector started")
 
+    
+    def load_from_settings(self):
+        with open(get_project_root() / 'data/settings.json') as f:
+            settings = json.load(f)
+
+        self.cycle_time = settings["cycle_time"]
+
     def run(self):
+        cycle_time = 0.001
         while True:
+            start = time.time()
             if not self.db.get_web_control_value():
                 buttons_data = self.buttons.get_values()
                 analog_data = self.ads.get()
@@ -42,6 +60,9 @@ class Collector:
                 self.amount_stop_threads_names.delete(self.__class__.__name__)
                 print("STOPPING COLLECTOR")
                 break
+            now = time.time()
+            if cycle_time - (now - start) > 0:
+                sleep(cycle_time - (now - start))
 
 
 if __name__ == "__main__":

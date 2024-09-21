@@ -57,7 +57,7 @@ class AudioPlayer(Subscriber):
             # print(f"unknown content at audio player: {content}")
 
     def play(self, url: str):
-        print("Playing: ", url)
+        # print("Playing: ", url)
         try:
             self.client.clear()
             self.client.add(url)  # add the URL stream to the playlist

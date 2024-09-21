@@ -135,7 +135,32 @@ class RadioDaemon(Daemon):
         print("CLOSING")
         
     def check_stop(self):
+        import psutil
+        import time
+        start_ = time.time()
+        start = time.time()
+        process = psutil.Process()
         while True:
+            if True:
+                if time.time() - start > 2:
+                    # Get the current process
+                    start = time.time()
+                    # CPU usage of the current process
+                    cpu_percent = process.cpu_percent(interval=1)
+                    # Memory usage of the current process
+                    memory_info = process.memory_info()
+                    
+                    print(f"CPU Usage of the script: {cpu_percent}%")
+                    print("Memory Info of the script:")
+                    print(f"Memory Usage: {memory_info.rss / (1024 * 1024):.2f} MB")
+                    print("---------------------------")
+                    # Calculate the average CPU usage over the last 10 seconds
+                    if not hasattr(self, 'cpu_usage_list'):
+                        self.cpu_usage_list = []
+                    self.cpu_usage_list.append(cpu_percent)
+                    elapsed_time = time.time() - start_
+                    average_cpu_usage = sum(self.cpu_usage_list) / len(self.cpu_usage_list)
+                    print(f"Average CPU Usage over the last {elapsed_time:.2f} seconds: {average_cpu_usage:.2f}%")
             if self.stop_event.is_set():
                 self.thread_stopped_counter.increment()
                 self.amount_stop_threads_names.delete(self.check_stop.__name__)
@@ -148,6 +173,7 @@ class RadioDaemon(Daemon):
                     self.amount_stop_threads_names.delete(self.stop_thread.__class__.__name__)
                     break
             time.sleep(0.3)
+
 
 
 if __name__ == "__main__":

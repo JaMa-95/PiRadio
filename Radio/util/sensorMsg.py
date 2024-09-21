@@ -13,6 +13,11 @@ class SensorMsg:
     def set_buttons_data(self, data):
         self.buttons_data = data
 
+    def __str__(self):
+        buttons_data_str = "\n".join([f"Pin: {button.pin}, State: {button.state}, States: {list(button.states)}" for button in self.buttons_data.get_data()])
+        analog_data_str = "\n".join([f"Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, Accepted Difference: {value.accepted_difference}" for value in self.analog_data.get_data_sensor()])
+        return f"Buttons Data:\n{buttons_data_str}\n\nAnalog Data:\n{analog_data_str}"
+
 
 class SensorData(Singleton):
     def __init__(self):
@@ -65,6 +70,9 @@ class ButtonsData:
             if value != data[idx]:
                 return False
         return True
+    
+    def __str__(self):
+        return "\n".join([f"Pin: {button.pin}, State: {button.state}, States: {list(button.states)}" for button in self.data])
         
 
     def is_empty(self):
@@ -113,16 +121,23 @@ class AnalogData:
     def __init__(self):
         self.sensor_data: List[AnalogValue] = []
 
+    def __str__(self):
+        return "\n".join([f"""Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, 
+                          Accepted Difference: {value.accepted_difference}""" for value in self.sensor_data])
+
     def is_empty(self) -> bool:
         return not self.sensor_data
     
     def delete_unchanged_values(self, other):
-        sensor_data = other.get_data_sensor()
+        other_sensor_data = other.get_data_sensor()
+        values_to_remove = []
         for value in self.sensor_data:
-            for value_other in sensor_data:
+            for value_other in other_sensor_data:
                 if value.pin == value_other.pin:
                     if abs(value.value - value_other.value) <= value.accepted_difference:
-                        self.sensor_data.remove(value)
+                        values_to_remove.append(value)
+        for value in values_to_remove:
+            self.sensor_data.remove(value)
 
     def get_data_sensor(self) -> List[AnalogValue]:
         return self.sensor_data
@@ -148,6 +163,5 @@ class AnalogData:
             for value_other in sensor_data:
                 if value.pin == value_other.pin:
                     if abs(value.value - value_other.value) > value.accepted_difference:
-                        print(f"Difference in pin {value.pin} value {value.value} value_other {value_other.value}")
                         return False
         return True

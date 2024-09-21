@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import time
 from collections import deque
@@ -50,10 +51,11 @@ class DataProcessor:
         self.cycle_time = self.settings["cycle_time"]
 
     def run(self):
-        start = time.time()
+        alive_timer = time.time()
+        loop_timer = time.time()
         while True:
-            if time.time() - start > 0.1:
-                start = time.time()
+            if time.time() - alive_timer > 0.1:
+                alive_timer = time.time()
                 self.raspberry.alive()
 
             if self.stop_event.is_set():
@@ -62,12 +64,14 @@ class DataProcessor:
                 self.amount_stop_threads_names.delete(self.__class__.__name__)
                 print("STOPPING DATA PROCESSOR")
                 break
-            if self.data_transmitter.has_data():
+            if self.data_transmitter.wait_for_data():
                 data = self.data_transmitter.receive()
                 if isinstance(data, SensorMsg):
                     sensor_msg_current = data
                     sensor_msg_current = self.active_actions.process_start(sensor_msg_current=sensor_msg_current,
                                                                      sensor_msg_old=self.sensor_msg_old)
+                    
+                    #print(sensor_msg_current)
                     # publish/save volume, stream(frequ), equalizer
                     self.process_analogs(sensor_msg_current.analog_data)
                     # get change in buttons. which button has which button event
@@ -88,12 +92,14 @@ class DataProcessor:
                         new_action = self.button_processor.process_button_web(data["button"]["name"],
                                                                               data["button"]["value"])
                         if new_action:
-                            self.active_actions.add_or_remove_actions(new_action)
-                    
+                            self.active_actions.add_or_remove_actions(new_action) 
             else:
+                print("No data")
                 time.sleep(self.cycle_time)
-            #end = time.time()
-            #times.append(end-start)
+            now = time.time()
+            if now - loop_timer > 0.1:
+                loop_timer = now
+                time.sleep(self.cycle_time - (now - loop_timer))
 
     # mostly for testing purpose
     def add_remove_actions(self, action: RadioAction):
@@ -107,9 +113,11 @@ class DataProcessor:
             self.active_actions.add_or_remove_actions(new_actions)
 
     def process_analogs(self, analog_data: AnalogData):
-        analog_data.delete_unchanged_values(self.sensor_msg_old.analog_data)
-        if analog_data.is_empty():
+        data = deepcopy(analog_data)
+        data.delete_unchanged_values(self.sensor_msg_old.analog_data)
+        if data.is_empty():
             return None
+        print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {int(time.time() * 1000) % 1000} ms - {analog_data}")
         if self.sensor_msg_old.analog_data == analog_data:
             return None
         self.analog_processor.process(analog_data, self.active_actions)

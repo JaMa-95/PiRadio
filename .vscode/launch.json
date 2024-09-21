@@ -9,6 +9,9 @@
             "type": "debugpy",
             "request": "launch",
             "module": "Radio.main",
+            "args": [
+                "start"
+            ],
             "python": "Radio/venv/bin/python",
         }
     ]
