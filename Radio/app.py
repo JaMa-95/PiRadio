@@ -185,6 +185,11 @@ async def delete_button(data: dict):
 async def set_button(data: dict):
     name = data["name"]
     settings_button = data["settings"]
+    if not "frequency" in settings_button:
+        settings_button["frequency"] = {
+                "pos": None,
+                "musicList": None,
+            }
     path_settings = get_project_root() / 'data/settings.json'
     with open(path_settings.resolve()) as f:
         settings = json.load(f)
@@ -259,6 +264,18 @@ async def get_frequency_names():
     for name, analog_item in settings["analog"]["sensors"].items():
         if analog_item["is_frequency"] and analog_item["on"]:
             frequency_names.append({name: {"min": analog_item["min"], "max": analog_item["max"]}})
+    return frequency_names
+
+@app.get("/frequenciesPotis")
+async def get_frequencies_potis():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    frequency_names = []
+    for name, analog_item in settings["analog"]["sensors"].items():
+        if analog_item["is_frequency"]:
+            frequency_names.append(name)
+    print(frequency_names)
     return frequency_names
 
 

@@ -141,7 +141,7 @@ class RadioDaemon(Daemon):
         start = time.time()
         process = psutil.Process()
         while True:
-            if True:
+            if False:
                 if time.time() - start > 2:
                     # Get the current process
                     start = time.time()

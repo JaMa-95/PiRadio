@@ -21,7 +21,7 @@ export default function Button(props) {
     const [isOnOff, setIsOnOff] = useState(props.settings.is_on_off);
     const [isOnOffRaspi, setIsOnOffRaspi] = useState(props.settings.is_on_off_raspi);
     const [isChangeSpeaker, setIsChangeSpeaker] = useState(props.settings.is_change_speaker);
-    const [freq, setFreq] = useState(props.settings.freq);
+    const [freq, setFreq] = useState(props.settings.frequency);
     const [actions, setActions] = useState(props.settings.action);
     const [actionsUUID, setActionsUUID] = useState({});
     const [type, setType] = useState("");
@@ -35,6 +35,14 @@ export default function Button(props) {
         ROTATE_AUDIO_SOURCE: 4,
         SET_AUDIO_SOURCE: 5
     };
+
+    function setFrequencySettings(musicList, poti) {
+        let freq = {
+            "musicList": musicList,
+            "pos": poti
+        };
+        setFreq(freq);
+    }
 
     function initActionsUUID() {
         for (const data in props.settings.action) {
@@ -221,7 +229,7 @@ export default function Button(props) {
             </section>
             {type === "Play Music" && (
                 <section>
-                    <Frequency />
+                    <Frequency setFrequencySettings={setFrequencySettings} frequencySettings={freq} />
                 </section>
             )}
             <div class="vertical-center">
@@ -254,21 +262,24 @@ function Actions(props) {
     }
     let counter = 1;
     return (
-        <div>
+        <div class="Actions">
             <button onClick={addAction}>Add action</button>
             {
-                Object.keys(props.actionsUUID).map(keyAction =>
-                    <Action
-                        counter={counter++}
-                        actionChoices={props.actionChoices}
-                        actionsKey={keyAction}
-                        handleActionChange={props.handleActionChange}
-                        name={props.name}
-                        activeAction={props.actionsUUID[keyAction]["action_type"]}
-                        applyStates={props.actionsUUID[keyAction]["apply_state"]}
-                        applyStateChange={props.applyStateChange}
-                        deleteAction={props.deleteAction} />
-                )
+                Object.keys(props.actionsUUID).map(keyAction => (
+                    <details key={keyAction}>
+                        <summary>Action {counter++}</summary>
+                        <Action
+                            counter={counter}
+                            actionChoices={props.actionChoices}
+                            actionsKey={keyAction}
+                            handleActionChange={props.handleActionChange}
+                            name={props.name}
+                            activeAction={props.actionsUUID[keyAction]["action_type"]}
+                            applyStates={props.actionsUUID[keyAction]["apply_state"]}
+                            applyStateChange={props.applyStateChange}
+                            deleteAction={props.deleteAction} />
+                    </details>
+                ))
             }
         </div>
     )
@@ -283,19 +294,18 @@ function Action(props) {
     }
 
     return (
-        <div class="Action" id={props.actionsKey}>
-            <h3>Action {props.counter}</h3>
+        <div className="Action" id={props.actionsKey} >
             <div>
                 {
                     Object.keys(props.actionChoices).map(key =>
-                        <div id={props.actionKey}>
+                        <div id={props.actionKey} style={{ display: 'flex', alignItems: 'center' }}>
                             <input type="radio"
                                 id={props.name + key + props.actionsKey}
                                 name={props.name + key + props.actionsKey}
                                 value={props.actionsKey}
                                 checked={selectedOption === props.actionChoices[key]}
                                 onChange={() => { doActionChange(props.actionsKey, props.actionChoices[key]) }} />
-                            <label for={props.name + key + props.actionsKey}>{key}</label>
+                            <label htmlFor={props.name + key + props.actionsKey} style={{ flex: 1 }}>{key}</label>
                         </div>
                     )
                 }
@@ -304,7 +314,7 @@ function Action(props) {
                 applyStates={props.applyStates}
                 applyStateChange={props.applyStateChange}
                 actionKey={props.actionsKey} />
-            <li></li><button onClick={() => { props.deleteAction(props.actionsKey) }}>Remove action</button>
+            <button onClick={() => { props.deleteAction(props.actionsKey) }}>Remove action</button>
         </div>
     )
 }
@@ -325,13 +335,16 @@ function ApplyState(props) {
         <ul>
             {
                 Object.keys(clickTypes).map(key => (
-                    <div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         <input type="checkbox"
                             id={key} name={props.actionKey + key + "State"}
                             value={clickTypes[key]}
                             checked={applyStates.includes(clickTypes[key])}
-                            onChange={() => { applyStateChange(props.actionKey, clickTypes[key], !props.applyStates.includes(clickTypes[key])) }} />
-                        <label for={key}> {key} </label><br />
+                            onChange={() => {
+                                applyStateChange(props.actionKey, clickTypes[key],
+                                    !props.applyStates.includes(clickTypes[key]))
+                            }} />
+                        <label htmlFor={key} style={{ flex: 1 }}> {key} </label><br />
                     </div>
                 ))
             }
@@ -339,22 +352,79 @@ function ApplyState(props) {
     )
 }
 
-function Frequency() {
+function Frequency(props) {
+    const [frequencyOptions, setFrequencyOptions] = useState([]);
+    const [frequencyNames, setFrequencyNames] = useState([]);
+    const [selectedFrequencyPotentiometer, setSelectedFrequencyPotentiometer] = useState(props.frequencySettings["pos"]);
+    const [selectedFrequencyMusicList, setSelectedFrequencyMusicList] = useState([]);
+
+
+    const fetchPotiOptions = () => {
+        return fetch('http://127.0.0.1:8000/frequenciesPotis/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((d) => {
+                setFrequencyOptions(d);
+            })
+    };
+
+    const fetchFrequencyNames = () => {
+        return fetch('http://127.0.0.1:8000/frequencyNames/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((d) => {
+                setFrequencyNames(d);
+            })
+    };
+
+    useEffect(() => {
+        setSelectedFrequencyMusicList(props.frequencySettings["musicList"] ? props.frequencySettings["musicList"].slice(5, -5) : "");
+        fetchPotiOptions();
+        fetchFrequencyNames();
+    }, []);
+
     return (
         <div>
             <div>
-                <label for="freqPos">Frequency position</label>
-                <select id="freqPos" name="freqPos" >
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                <label htmlFor="freqPos">Frequency potentiometer:</label>
+                <select
+                    id="freqPos"
+                    name="freqPos"
+                    value={selectedFrequencyPotentiometer}
+                    onChange={(e) => {
+                        setSelectedFrequencyPotentiometer(e.target.value);
+                        props.setFrequencySettings(selectedFrequencyMusicList, e.target.value);
+                    }}
+                >
+                    {frequencyOptions.map((value, index) => (
+                        <option key={index} value={value}>{value}</option>
+                    ))}
                 </select>
             </div>
             <div>
-                <label for="freqMusList">Frequency music list</label>
-                <select id="freqMusList" name="freqMusList" />
+                <label htmlFor="freqMusList">Frequency music list:</label>
+                <select
+                    id="freqMusList"
+                    name="freqMusList"
+                    value={selectedFrequencyMusicList}
+                    onChange={(e) => {
+                        setSelectedFrequencyMusicList(e.target.value);
+                        props.setFrequencySettings(e.target.value, selectedFrequencyPotentiometer);
+                    }}
+                >
+                    {frequencyNames.map((value, index) => (
+                        <option key={index} value={value}>{value}</option>
+                    ))}
+                </select>
             </div>
         </div>
-    )
+    );
 }
