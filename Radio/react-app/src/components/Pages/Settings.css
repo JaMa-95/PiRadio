@@ -9,7 +9,8 @@
 }
 
 .button,
-.potentiometer {
+.potentiometer,
+.Box {
     width: fit-content;
     float: left;
     /* add this */

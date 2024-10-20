@@ -34,6 +34,8 @@ if __name__ == "__main__":
             stop()
         elif 'start' == sys.argv[1]:
             daemon._start()
+        else:
+            print(f"Unregocnized argument: {sys.argv[1]}")
     except KeyboardInterrupt:
         daemon._stop()
         sys.exit(0)

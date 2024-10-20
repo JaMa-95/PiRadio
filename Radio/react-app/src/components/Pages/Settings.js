@@ -1,7 +1,8 @@
 import './Settings.css';
+import AddLogo from './images/add-circle.svg';
 import Potentiometer from './Settings/Potentiometer';
 import Button from './Settings/Button';
-import AddLogo from './images/add-circle.svg';
+import General from './Settings/General';
 
 import { useEffect, useState } from 'react';
 
@@ -74,6 +75,10 @@ export const Settings = (props) => {
 
   return (
     <div className={props.className}>
+      <div className="centerDiv">
+        <h1>General</h1>
+      </div>
+      <General />
       <div className="centerDiv">
         <h1>Potentiometer</h1>
         <img src={AddLogo} alt="Add Potentiometer" className="add" onClick={addPotentiometer} />
