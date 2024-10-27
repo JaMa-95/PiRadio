@@ -11,7 +11,7 @@ export const RadioControl = (props) => {
 
   const handleWebControl = (checked) => {
     setWebControl(checked);
-    fetch('/apiwebcontrol', {
+    fetch('/api/webcontrol', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ export const RadioControl = (props) => {
   };
 
   const setupWebSocket = () => {
-    const socket = new WebSocket('ws://192.168.0.24:8000/stream/buttons');
+    const socket = new WebSocket('ws://api/stream/buttons');
 
     socket.onopen = () => {
       console.log('WebSocket connection established.');

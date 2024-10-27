@@ -80,7 +80,7 @@ export default function Potentiometer(props) {
 
     let name = props.name;
 
-    fetch('http://127.0.0.1:8000/potentiometer', {
+    fetch('/api/potentiometer', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function Potentiometer(props) {
   };
 
   const deletePotentiometer = () => {
-    fetch('http://127.0.0.1:8000/potentiometer', {
+    fetch('/api/potentiometer', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

@@ -120,7 +120,7 @@ export default function Button(props) {
             data["is_change_speaker"] = true;
         }
 
-        fetch('http://127.0.0.1:8000/button', {
+        fetch('/api/button', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export default function Button(props) {
     }
 
     let deleteButton = () => {
-        fetch('http://127.0.0.1:8000/button', {
+        fetch('/api/button', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ function Frequency(props) {
 
 
     const fetchPotiOptions = () => {
-        return fetch('http://127.0.0.1:8000/frequenciesPotis/', {
+        return fetch('/api/frequenciesPotis/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -373,7 +373,7 @@ function Frequency(props) {
     };
 
     const fetchFrequencyNames = () => {
-        return fetch('http://127.0.0.1:8000/frequencyNames/', {
+        return fetch('/api/frequencyNames/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
