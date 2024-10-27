@@ -14,6 +14,18 @@ function getLocalIpAddress() {
 	return 'http://127.0.0.1:8000';
 }
 
+function getLocalIpAddressWs() {
+	const interfaces = os.networkInterfaces();
+	for (const name of Object.keys(interfaces)) {
+		for (const iface of interfaces[name]) {
+			if (iface.family === 'IPv4' && !iface.internal) {
+				return "ws://" + iface.address + ":8000";
+			}
+		}
+	}
+	return 'ws://127.0.0.1:8000';
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [preact()],
@@ -25,6 +37,11 @@ export default defineConfig({
 				target: getLocalIpAddress(), // Replace with your backend server URL
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, ''),
+			},
+			'/socket': {
+				target: getLocalIpAddress(), // Replace with your backend server URL
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/socket/, ''),
 			},
 		},
 	},

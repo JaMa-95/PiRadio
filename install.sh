@@ -13,7 +13,7 @@ APP_PLACEHOLDER_TEXT="--app=0"
 while true; do
     read -p "Do you want to install web frontend?" yn
     case $yn in
-        [Yy]* ) apt install npm; apt install node;
+        [Yy]* ) apt install npm; apt install node; npm install preact; npm i uuid;
         sed -i  "s,$APP_PLACEHOLDER_TEXT,--app=1,g" $PI_RADIO_SERVICE_PATH
                 break;;
         [Nn]* ) break;;

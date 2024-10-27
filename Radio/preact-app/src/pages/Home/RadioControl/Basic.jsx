@@ -52,7 +52,7 @@ function Button(props) {
 function Volume(props) {
     const [volume, setVolume] = useState(50); // Default volume set to 50
     useEffect(() => {
-        const ws = new WebSocket("ws:///api/stream/volume", 'echo-protocol');
+        const ws = new WebSocket("/socket/stream/volume", 'echo-protocol');
         ws.onopen = () => {
             console.log("Connected to WebSocket volume");
         };
@@ -117,7 +117,7 @@ function FrequencyValues(props) {
 function FrequencyValue(props) {
     const [frequency, setFrequency] = useState(0);
     useEffect(() => {
-        const ws = new WebSocket("ws:///api/stream/frequency_values", 'echo-protocol');
+        const ws = new WebSocket("/socket/stream/frequency_values", 'echo-protocol');
 
         ws.onopen = () => {
             console.log("Connected to WebSocket frequency values");
@@ -177,8 +177,8 @@ function RadioFrequency(props) {
     const [sweetSpot, setSweetSpot] = useState(0);
 
     useEffect(() => {
-        const ws_radio_station = new WebSocket("ws://api/stream/current_radio", 'echo-protocol');
-        const ws_radio_frequency = new WebSocket("ws://api/stream/radio_frequency", 'echo-protocol');
+        const ws_radio_station = new WebSocket("/socket/stream/current_radio", 'echo-protocol');
+        const ws_radio_frequency = new WebSocket("/socket/stream/radio_frequency", 'echo-protocol');
 
         ws_radio_frequency.onopen = () => {
             console.log("Connected to WebSocket radio frequency");
@@ -301,7 +301,7 @@ function Equalizer(props) {
     const [khz12, setKhz12] = React.useState(0);
 
     useEffect(() => {
-        const ws = new WebSocket("ws://api/stream/equalizer", 'echo-protocol');
+        const ws = new WebSocket("/socket/stream/equalizer", 'echo-protocol');
 
         ws.onopen = () => {
             console.log("Connected to WebSocket volume");

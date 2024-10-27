@@ -40,7 +40,7 @@ export const RadioControl = (props) => {
   };
 
   const setupWebSocket = () => {
-    const socket = new WebSocket('ws://api/stream/buttons');
+    const socket = new WebSocket('/socket/stream/buttons');
 
     socket.onopen = () => {
       console.log('WebSocket connection established.');
