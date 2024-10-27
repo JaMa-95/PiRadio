@@ -39,7 +39,7 @@ export default defineConfig({
 				rewrite: (path) => path.replace(/^\/api/, ''),
 			},
 			'/socket': {
-				target: getLocalIpAddress(), // Replace with your backend server URL
+				target: getLocalIpAddressWs(), // Replace with your backend server URL
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/socket/, ''),
 			},
