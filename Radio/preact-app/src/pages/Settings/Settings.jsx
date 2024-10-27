@@ -12,7 +12,7 @@ export const Settings = () => {
   const [devices, setDevices] = useState([]);
 
   const fetchButtonSettings = () => {
-    return fetch('http://127.0.0.1:8000/buttonsSettings/', {
+    return fetch('/api/buttonsSettings/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -29,7 +29,7 @@ export const Settings = () => {
   }, []);
 
   const fetchAnalogSettings = () => {
-    return fetch('http://127.0.0.1:8000/analogSettings/', {
+    return fetch('/api/analogSettings/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -45,7 +45,7 @@ export const Settings = () => {
   const addPotentiometer = () => {
     const name = prompt("Enter the potentiometer name:");
     if (name) {
-      fetch('http://127.0.0.1:8000/potentiometer', {
+      fetch('/api/potentiometer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
