@@ -106,7 +106,13 @@ class AudioPlayer(Subscriber):
 
     def set_volume(self, volume):
         try:
-            self.client.setvol(volume)
+            if isinstance(volume, int):
+                if 0 <= volume <= 100:
+                    self.client.setvol(volume)
+                else:
+                    print("Volume must be between 0 and 100. Actual: ", volume)
+            else:
+                print("Volume must be an integer. Actual: ", type(volume))
         except ConnectionError:
             print("MPD connection error")
             return
