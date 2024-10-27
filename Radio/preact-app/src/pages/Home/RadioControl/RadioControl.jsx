@@ -43,7 +43,7 @@ export const RadioControl = (props) => {
     const socket = new WebSocket('/socket/stream/buttons');
 
     socket.onopen = () => {
-      console.log('WebSocket connection established.');
+      console.log('WebSocket connection buttons established.');
     };
 
     socket.onmessage = (event) => {
@@ -63,11 +63,11 @@ export const RadioControl = (props) => {
     };
 
     socket.onclose = () => {
-      console.log('WebSocket connection closed.');
+      console.log('WebSocket connection button closed.');
     };
 
     socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.error('WebSocket button error:', error);
     };
   };
 
