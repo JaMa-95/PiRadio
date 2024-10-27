@@ -321,7 +321,7 @@ class AnalogProcessor:
             value_new = 100
         if volume.value == value_new:
             return value_new
-        # print(f"Volume: {value_new}")
+        print(f"Volume: {value_new}")
         self.db.replace_volume(value_new)
         self.publish_function(f"volume:{value_new}")
         return value_new

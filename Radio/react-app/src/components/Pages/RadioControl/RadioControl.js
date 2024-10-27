@@ -11,7 +11,8 @@ export const RadioControl = (props) => {
 
   const handleWebControl = (checked) => {
     setWebControl(checked);
-    fetch('http://localhost:8000/webcontrol', {
+    fetch('/webcontrol', {
+      mode: 'cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +28,8 @@ export const RadioControl = (props) => {
   const [frequencyValues, setFrequencyValues] = useState([]);
 
   const fetchButtons = () => {
-    return fetch('http://127.0.0.1:8000/buttons/', {
+    return fetch('/buttons/', {
+      mode: 'cors',
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -110,9 +112,10 @@ export const RadioControl = (props) => {
   function postButtonValue(name, value) {
     console.log("POSTED: ", name, value);
     // Send the button value to the server
-    fetch('http://localhost:8000/button', {
+    fetch('/button', {
       method: 'POST',
       headers: {
+        mode: 'cors',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ "name": name, "value": value })
@@ -124,9 +127,10 @@ export const RadioControl = (props) => {
 
 
   const fetchFrequencyValues = () => {
-    return fetch('http://127.0.0.1:8000/frequency_names/', {
+    return fetch('/frequency_names/', {
       method: 'GET',
       headers: {
+        mode: 'cors',
         'Accept': 'application/json',
       },
     })

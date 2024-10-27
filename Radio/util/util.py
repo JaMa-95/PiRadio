@@ -14,7 +14,7 @@ def react_app_start():
     subprocess.Popen(f"cd {root} && npm start", shell=True)
 
 
-def react_app_start():
+def react_app_start_():
     root = get_project_root() / "react-app"
     os.system(f"cd {root} && npm start")
 

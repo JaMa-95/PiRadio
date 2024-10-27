@@ -415,39 +415,39 @@ async def delayed_shutdown():
     await asyncio.sleep(1)
     server.should_exit = True
 
-
-def run(thread_stopped_counter: ThreadSafeInt = ThreadSafeInt(), amount_stop_threads_names: ThreadSafeList = ThreadSafeList()):
-    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
-    global thread_stopped_counter_
-    global amount_stop_threads_names_
-    thread_stopped_counter_ = thread_stopped_counter
-    amount_stop_threads_names_ = amount_stop_threads_names
+def set_middleware():
+    origins = ['http://localhost:3000', 'http://127.0.0.1:3000',
+            'http://localhost', 'http://192.168.0.24', 'http://192.168.0.245:*',
+            'https://localhost:3000', 'https://127.0.0.1:3000', "http://192.168.0.24:3000"]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
         allow_headers=["*"],
+        expose_headers=["*"]
     )
-    config = uvicorn.Config(app, host="127.0.0.1", port=8000)
+
+
+def run(thread_stopped_counter: ThreadSafeInt = ThreadSafeInt(), amount_stop_threads_names: ThreadSafeList = ThreadSafeList()):
+    
+    global thread_stopped_counter_
+    global amount_stop_threads_names_
+    thread_stopped_counter_ = thread_stopped_counter
+    amount_stop_threads_names_ = amount_stop_threads_names
+    set_middleware()
+    
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000)
     global server
     server = uvicorn.Server(config)
     server.run()
 
 
 if __name__ == "__main__":
-    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
-
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    set_middleware()
     # uvicorn.run(app, host="127.0.0.1", port=8000)
 
-    config = uvicorn.Config(app, host="127.0.0.1", port=8000)
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000)
     global server
     server = uvicorn.Server(config)
     server.run()

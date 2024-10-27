@@ -2,10 +2,10 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route } from 'preact-iso';
 
 import { Header } from './components/Header.jsx';
-import { Home } from './pages/Home/Home.js';
-import { Frequencies } from './pages/Frequencies/Frequencies.js';
-import { Settings } from './pages/Settings/Settings.js';
-import { Contact } from './pages/Contact/Contact.js';
+import { Home } from './pages/Home/Home.jsx';
+import { Frequencies } from './pages/Frequencies/Frequencies.jsx';
+import { Settings } from './pages/Settings/Settings.jsx';
+import { Contact } from './pages/Contact/Contact.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
 

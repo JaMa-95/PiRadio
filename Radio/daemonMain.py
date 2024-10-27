@@ -27,15 +27,16 @@ if __name__ == "__main__":
     daemon = RadioDaemon("/tmp/PiRadio.pid", *get_args())
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
-            react_app_start()
+            daemon.check_pid_state()
             print("START REQUESTED")
-            react_app_start()
             daemon.start()
+            # react_app_start()
+            print("FINISHED STARTING")
         elif 'stop' == sys.argv[1]:
             # we cannot stop the daemon from the daemon itself, because of threads
             print("STOP REQUESTED")
             stop()
-            # daemon.stop()
+            daemon.stop()
         elif 'restart' == sys.argv[1]:
             # its another process, thats why we have to wait
             stop()
