@@ -16,7 +16,7 @@ export const Frequencies = (props) => {
   const [globalTestValue, setGlobalTestValue] = useState(-1);
 
   const fetchFrequencyNames = () => {
-    return fetch('http://127.0.0.1:8000/frequencyNames/', {
+    return fetch('/api/frequencyNames/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -34,7 +34,7 @@ export const Frequencies = (props) => {
   const fetchFrequencyList = (name) => {
     setCurrentButton(name);
     setFrequencyList(null);
-    return fetch('http://127.0.0.1:8000/frequencies/' + name, {
+    return fetch('/api/frequencies/' + name, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -68,7 +68,7 @@ export const Frequencies = (props) => {
   };
 
   const postFrequencyList = () => {
-    return fetch('http://127.0.0.1:8000/frequencies/', {
+    return fetch('/api/frequencies/', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -304,7 +304,7 @@ function Frequency(props) {
     setAttention(true);
     props.handleTestChange(-2);
     try {
-      const response = await fetch('http://127.0.0.1:8000/frequency/testWithRe', {
+      const response = await fetch('/frequency/testWithRe', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

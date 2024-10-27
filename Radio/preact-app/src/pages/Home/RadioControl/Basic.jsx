@@ -52,7 +52,7 @@ function Button(props) {
 function Volume(props) {
     const [volume, setVolume] = useState(50); // Default volume set to 50
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8000/stream/volume", 'echo-protocol');
+        const ws = new WebSocket("ws:///api/stream/volume", 'echo-protocol');
         ws.onopen = () => {
             console.log("Connected to WebSocket volume");
         };
@@ -78,7 +78,7 @@ function Volume(props) {
         setVolume(newVolume);
 
         // Send the new volume value to the server
-        fetch('http://localhost:8000/volume', {
+        fetch('http:///api/volume', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ function FrequencyValues(props) {
 function FrequencyValue(props) {
     const [frequency, setFrequency] = useState(0);
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8000/stream/frequency_values", 'echo-protocol');
+        const ws = new WebSocket("ws:///api/stream/frequency_values", 'echo-protocol');
 
         ws.onopen = () => {
             console.log("Connected to WebSocket frequency values");
@@ -144,7 +144,7 @@ function FrequencyValue(props) {
     const handleFrequencyChange = (value) => {
         setFrequency(value);
         // Send the new frequency value to the server
-        fetch('http://localhost:8000/frequency', {
+        fetch('http:///api/frequency', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -177,8 +177,8 @@ function RadioFrequency(props) {
     const [sweetSpot, setSweetSpot] = useState(0);
 
     useEffect(() => {
-        const ws_radio_station = new WebSocket("ws://localhost:8000/stream/current_radio", 'echo-protocol');
-        const ws_radio_frequency = new WebSocket("ws://localhost:8000/stream/radio_frequency", 'echo-protocol');
+        const ws_radio_station = new WebSocket("ws://192.168.0.24:8000/stream/current_radio", 'echo-protocol');
+        const ws_radio_frequency = new WebSocket("ws://192.168.0.24:8000/stream/radio_frequency", 'echo-protocol');
 
         ws_radio_frequency.onopen = () => {
             console.log("Connected to WebSocket radio frequency");
@@ -228,7 +228,7 @@ function RadioFrequency(props) {
 
     function handleBackupActiveChange(active) {
         // Send the backup active value to the server
-        fetch('http://localhost:8000/re_active', {
+        fetch('/api/re_active', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -301,7 +301,7 @@ function Equalizer(props) {
     const [khz12, setKhz12] = React.useState(0);
 
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8000/stream/equalizer", 'echo-protocol');
+        const ws = new WebSocket("ws://192.168.0.24:8000/stream/equalizer", 'echo-protocol');
 
         ws.onopen = () => {
             console.log("Connected to WebSocket volume");
@@ -343,7 +343,7 @@ function Equalizer(props) {
         };
 
         // Send the equalizer data to the server
-        fetch('http://localhost:8000/equalizer', {
+        fetch('/api/equalizer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

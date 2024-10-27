@@ -11,7 +11,7 @@ export const RadioControl = (props) => {
 
   const handleWebControl = (checked) => {
     setWebControl(checked);
-    fetch('http://localhost:8000/webcontrol', {
+    fetch('/apiwebcontrol', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export const RadioControl = (props) => {
   const [frequencyValues, setFrequencyValues] = useState([]);
 
   const fetchButtons = () => {
-    return fetch('http://127.0.0.1:8000/buttons/', {
+    return fetch('/api/buttons/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -40,7 +40,7 @@ export const RadioControl = (props) => {
   };
 
   const setupWebSocket = () => {
-    const socket = new WebSocket('ws://localhost:8000/stream/buttons');
+    const socket = new WebSocket('ws://192.168.0.24:8000/stream/buttons');
 
     socket.onopen = () => {
       console.log('WebSocket connection established.');
@@ -110,7 +110,7 @@ export const RadioControl = (props) => {
   function postButtonValue(name, value) {
     console.log("POSTED: ", name, value);
     // Send the button value to the server
-    fetch('http://localhost:8000/button', {
+    fetch('/api/button', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ export const RadioControl = (props) => {
 
 
   const fetchFrequencyValues = () => {
-    return fetch('http://127.0.0.1:8000/frequency_names/', {
+    return fetch('/api/frequency_names/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
