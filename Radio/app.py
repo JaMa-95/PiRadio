@@ -306,6 +306,7 @@ def get_frequency_names():
     freq_names = []
     for file_name in freq_files:
         freq_names.append(file_name.replace("freq_", "").replace(".json", ""))
+    print(freq_names)
     return freq_names
 
 

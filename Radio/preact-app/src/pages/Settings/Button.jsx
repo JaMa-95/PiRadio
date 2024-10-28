@@ -360,7 +360,7 @@ function Frequency(props) {
 
 
     const fetchPotiOptions = () => {
-        return fetch('/api/frequenciesPotis/', {
+        return fetch('/api/frequenciesPotis', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -373,7 +373,7 @@ function Frequency(props) {
     };
 
     const fetchFrequencyNames = () => {
-        return fetch('/api/frequencyNames/', {
+        return fetch('/api/frequencyNames', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

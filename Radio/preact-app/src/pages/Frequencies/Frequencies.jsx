@@ -16,7 +16,7 @@ export const Frequencies = (props) => {
   const [globalTestValue, setGlobalTestValue] = useState(-1);
 
   const fetchFrequencyNames = () => {
-    return fetch('/api/frequencyNames/', {
+    return fetch('/api/frequencyNames', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

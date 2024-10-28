@@ -124,7 +124,7 @@ export const RadioControl = (props) => {
 
 
   const fetchFrequencyValues = () => {
-    return fetch('/api/frequency_names/', {
+    return fetch('/api/frequency_names', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
