@@ -21,6 +21,14 @@ def stop():
         file.write("stop")
 
 
+def empty_output_files():
+    root = get_project_root()
+    with open(root / "out.txt", "w") as file:
+        file.write("")
+    with open(root / "error.txt", "w") as file:
+        file.write("")
+
+
 if __name__ == "__main__":
     if IS_RASPBERRY_PI:
         GPIO.cleanup()
@@ -28,6 +36,7 @@ if __name__ == "__main__":
     daemon = RadioDaemon("/tmp/PiRadio.pid", *get_args())
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
+            empty_output_files()
             daemon.check_pid_state()
             print("START REQUESTED")
             react_app_start()
