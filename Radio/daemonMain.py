@@ -41,7 +41,6 @@ if __name__ == "__main__":
         elif 'restart' == sys.argv[1]:
             # its another process, thats why we have to wait
             stop()
-            # TODO: wait till PiRadio.pid is deleted
             time.sleep(5)
             daemon.stop()
             react_app_start()
