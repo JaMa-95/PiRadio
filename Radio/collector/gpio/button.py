@@ -8,6 +8,7 @@ from Radio.util.util import is_raspberry
 if is_raspberry():
     IS_RASPBERRY_PI = True
     import RPi.GPIO as GPIO
+    import lgpio
 else:
     IS_RASPBERRY_PI = False
 
@@ -64,11 +65,14 @@ class ButtonRaspi:
         if not self.mock:
             GPIO.setmode(GPIO.BCM)
             # TODO: give PUD up mode
-            if self.is_on_off_raspi:
-                print(f"raspi init: {self.pin}")
-                GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            else:
-                GPIO.setup(self.pin, GPIO.OUT)
+            try:
+                if self.is_on_off_raspi:
+                    GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+                else:
+                    GPIO.setup(self.pin, GPIO.OUT)
+            except lgpio.error as e:
+                print(f"ERROR: GPIO PIN {self.pin} is busy: ", e)
+                raise lgpio.error(f"ERROR: GPIO PIN {self.pin} is busy: ")
 
     def set_pin(self, pin: int):
         GPIO.setup(self.pin, GPIO.IN)
@@ -95,6 +99,7 @@ class ButtonRaspi:
                 self.state = not self.state
             self._put_state_to_list(self.state)
         else:
+            # print("MOCKING BUTTON VALUE")
             if self.pin == 24 or self.pin == 4:
                 self.state = True
             else:
@@ -104,10 +109,11 @@ class ButtonRaspi:
 
 class RadioButtonsRaspi(Singleton):
 
-    def __init__(self, mock: bool = False):
+    def __init__(self, mock: bool = False, debug: bool = False):
         if self._Singleton__initialized:
             return
         self.mock = mock
+        self.debug: bool = debug
         self.on_off_button: ButtonRaspi = ButtonRaspi(mock=mock)
         self.on_off_raspi_button: ButtonRaspi = ButtonRaspi(mock=mock)
         self.change_speaker_button: ButtonRaspi = ButtonRaspi(mock=mock)
@@ -116,6 +122,9 @@ class RadioButtonsRaspi(Singleton):
         self.buttons: List[ButtonRaspi] = None
 
         self.db = Database()
+        if not self.mock:
+            GPIO.setmode(GPIO.BCM)
+            GPIO.cleanup()
         self._init_settings()
 
     def _init_settings(self):
@@ -125,16 +134,17 @@ class RadioButtonsRaspi(Singleton):
         if self.buttons is None:
             self.buttons = []
         for name, button_settings in settings["buttons"].items():
-            if "is_on_off" in button_settings:
-                self.on_off_button = ButtonRaspi(name, is_on_off=True, mock=self.mock)
-            elif "is_on_off_raspi" in button_settings:
-                self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True, mock=self.mock)
-            elif "is_frequency_lock" in button_settings:
-                self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True, mock=self.mock)
-            elif "is_change_speaker" in button_settings:
-                self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True, mock=self.mock)
-            else:
-                self.buttons.append(ButtonRaspi(name, mock=self.mock))
+            if button_settings["pin"] != 99 and button_settings["active"]:
+                if "is_on_off" in button_settings:
+                    self.on_off_button = ButtonRaspi(name, is_on_off=True, mock=self.mock)
+                elif "is_on_off_raspi" in button_settings:
+                    self.on_off_raspi_button = ButtonRaspi(name, is_on_off_raspi=True, mock=self.mock)
+                elif "is_frequency_lock" in button_settings:
+                    self.frequency_lock_button = ButtonRaspi(name, is_frequency_lock=True, mock=self.mock)
+                elif "is_change_speaker" in button_settings:
+                    self.change_speaker_button = ButtonRaspi(name, is_change_speaker=True, mock=self.mock)
+                else:
+                    self.buttons.append(ButtonRaspi(name, mock=self.mock))
 
     def set_values(self):
         for button in self.buttons:

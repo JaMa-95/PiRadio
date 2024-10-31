@@ -1,0 +1,1269 @@
+PROCESS
+PROCESS
+PROCESS
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+equalizer_data {'hz60': 0, 'hz170': 0, 'hz310': 0, 'hz600': 0, 'khz1': 0, 'khz3': 0, 'khz6': 0, 'khz12': 0}
+SET EQ: [0, 0, 0, 0, 0, 0, 0, 0]
+INFO:     192.168.0.245:36934 - "POST /equalizer HTTP/1.1" 200 OK
+INFO:     192.168.0.245:36944 - "GET /frequency_names HTTP/1.1" 200 OK
+INFO:     192.168.0.245:36954 - "GET /buttons/ HTTP/1.1" 200 OK
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+equalizer_data {'hz60': 0, 'hz170': 0, 'hz310': 0, 'hz600': 0, 'khz1': 0, 'khz3': 0, 'khz6': 0, 'khz12': 0}
+SET EQ: [0, 0, 0, 0, 0, 0, 0, 0]
+INFO:     192.168.0.245:38698 - "POST /equalizer HTTP/1.1" 200 OK
+INFO:     192.168.0.245:38704 - "GET /frequency_names HTTP/1.1" 200 OK
+INFO:     192.168.0.245:38718 - "GET /buttons/ HTTP/1.1" 200 OK
+STOPPING daemon: /tmp/PiRadio.pid
+Shutting down server...
+INFO:     127.0.0.1:58632 - "GET /shutdown HTTP/1.1" 200 OK
+Reponse server shutdown: b''
+STOPPING THREADS: 3
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop', 'Collector']
+STOPPING COLLECTOR
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOP EVENT AUDIO PLAYER
+Audio Player stopped
+STOPPING DATA PROCESSOR
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+ON/OFF Button stopped
+FM module stopped
+PROCESS
+Check state:  1  in  [1, 5]
+Check state:  1  in  [0, 6]
+Add or remove action:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'>
+NEW ACTION:  <class 'Radio.dataProcessing.RadioAction.PlayMusic'> Kurz_1
+Error:  '<=' not supported between instances of 'int' and 'NoneType'
+STOPPING daemon: /tmp/PiRadio.pid
+Shutting down server...
+INFO:     127.0.0.1:43242 - "GET /shutdown HTTP/1.1" 200 OK
+Reponse server shutdown: b''
+STOPPING THREADS: 3
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop', 'Collector']
+STOPPING COLLECTOR
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOPPING THREADS: 4
+REMAINIGN: ['DataProcessor', 'AudioPlayer', 'check_stop']
+STOP EVENT AUDIO PLAYER
+Audio Player stopped
+STOPPING DATA PROCESSOR
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STOPPING THREADS: 6
+REMAINIGN: ['check_stop']
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+STOPPING DATA PROCESSOR
+ON/OFF Button stopped
+STOP EVENT AUDIO PLAYER
+FM module stopped
+STOPPING COLLECTOR
+Audio Player stopped
+STARTING THREADS
+PLAY MUSIC FOR:  Lang
+STOP MUSIC FOR:  Lang
+PLAY MUSIC FOR:  Mittel
+STOP MUSIC FOR:  Mittel
+PLAY MUSIC FOR:  Kurz_1
+STOP MUSIC FOR:  Kurz_1
+PLAY MUSIC FOR:  UKW
+STOP MUSIC FOR:  UKW
+PLAY MUSIC FOR:  Ta
+STOP MUSIC FOR:  Ta
+Creating the object
+Data Processor started
+Audio Player started
+ON/OFF Button active
+MAX IS:  26000
+FM module mocked
+STARTING THREADS
+STOPPING DATA PROCESSOR
+ON/OFF Button stopped
+STOP EVENT AUDIO PLAYER
+FM module stopped
+STOPPING COLLECTOR
+Audio Player stopped
+equalizer_data {'hz60': 0, 'hz170': 0, 'hz310': 0, 'hz600': 0, 'khz1': 0, 'khz3': 0, 'khz6': 0, 'khz12': 0}
+SET EQ: [0, 0, 0, 0, 0, 0, 0, 0]
+INFO:     192.168.0.245:33608 - "POST /equalizer HTTP/1.1" 200 OK
+INFO:     192.168.0.245:33622 - "GET /frequency_names HTTP/1.1" 200 OK
+INFO:     192.168.0.245:33636 - "GET /buttons/ HTTP/1.1" 200 OK

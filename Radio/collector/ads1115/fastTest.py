@@ -19,13 +19,13 @@ class AdsSingle:
         self.pin = pin
 
         if pin == 1:
-            self.chan = AnalogIn(self.ads, ADS.P1)  # Create single-ended input on channel 0
+            self.ads_pin = ADS.P1
         elif pin == 2:
-            self.chan = AnalogIn(self.ads, ADS.P2)  # Create single-ended input on channel 0
+            self.ads_pin = ADS.P2
         elif pin == 3:
-            self.chan = AnalogIn(self.ads, ADS.P3)  # Create single-ended input on channel 0
+            self.ads_pin = ADS.P3
         else:
-            self.chan = AnalogIn(self.ads, ADS.P0)  # Create single-ended input on channel 0
+            self.ads_pin = ADS.P0
 
         self.ads.mode = Mode.CONTINUOUS
         self.ads.data_rate = self.RATE

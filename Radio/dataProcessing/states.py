@@ -13,6 +13,8 @@ class ButtonClickStates(Enum):
 
 class RadioActionTypes(Enum):
     TURN_OFF_RASPBERRY = 0
-    TURN_OFF_MUSIC = 1
+    STOP_MUSIC = 1
     PLAY_MUSIC = 2
     HOLD_FREQUENCY = 3
+    ROTATE_AUDIO_SOURCE = 4
+    SET_AUDIO_SOURCE = 5

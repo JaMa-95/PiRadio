@@ -8,7 +8,11 @@
             "name": "Python Debugger: Module",
             "type": "debugpy",
             "request": "launch",
-            "module": "Radio.app"
+            "module": "Radio.main",
+            "args": [
+                "start"
+            ],
+            "python": "Radio/venv/bin/python",
         }
     ]
 }

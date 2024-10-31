@@ -2,7 +2,6 @@ import time
 from dataclasses import dataclass
 import json
 from typing import List
-import vlc
 
 from Radio.util.util import get_project_root
 
@@ -11,17 +10,17 @@ max_value_kurz_mittel_lang = 17150
 max_value_ukw = 21100
 
 
-@dataclass
 class RadioFrequency:
-    name: str = ""
-    minimum: int = 0
-    maximum: int = 0
-    sweet_spot: int = 0
-    radio_name: str = ""
-    radio_name_re: str = ""
-    radio_url: str = ""
-    radio_url_re: str = ""
-    re_active: bool = False
+    def __int__(self):
+        self.name: str = ""
+        self.minimum: int = 0
+        self.maximum: int = 0
+        self.sweet_spot: int = 0
+        self.radio_name: str = ""
+        self.radio_name_re: str = ""
+        self.radio_url: str = ""
+        self.radio_url_re: str = ""
+        self.re_active: bool = False
 
     def __init__(self, name: str = "", minimum: int = 0, maximum: int = 0, radio_name: str = "", radio_url: str = "",
                  radio_name_re: str = "", radio_url_re: str = "", re_active: bool = False):
@@ -41,7 +40,6 @@ class RadioFrequency:
         if self.name != other.name or \
            self.minimum != other.minimum or \
            self.maximum != other.maximum or \
-           self.sweet_spot != other.sweet_spot or \
            self.radio_name != other.radio_name or \
            self.radio_name_re != other.radio_name_re or \
            self.radio_url != other.radio_url or \
@@ -50,8 +48,24 @@ class RadioFrequency:
             return False
         return True
 
+    def copy(self):
+        return RadioFrequency(
+            name=self.name,
+            minimum=self.minimum,
+            maximum=self.maximum,
+            radio_name=self.radio_name,
+            radio_name_re=self.radio_name_re,
+            radio_url=self.radio_url,
+            radio_url_re=self.radio_url_re,
+            re_active=self.re_active
+        )
+
     def from_list(self, data: list) -> bool:
-        if len(data) != 8:
+        if len(data) == 9:
+            self.sweet_spot = data[8]
+        elif len(data) == 8:
+            self.sweet_spot = int((self.maximum - self.minimum) / 2)
+        else:
             if len(data) >= 0:
                 raise TypeError(f"data length incorrect. Not equal 7: {len(data)}. Name: {data[0]}")
             else:
@@ -59,7 +73,7 @@ class RadioFrequency:
         self.name = data[0]
         self.minimum = int(data[1])
         self.maximum = int(data[2])
-        self.sweet_spot = int((self.maximum - self.minimum) / 2)
+
         self.radio_name = data[3]
         self.radio_url = data[4]
         self.radio_name_re = data[5]
@@ -77,7 +91,7 @@ class RadioFrequency:
             self.radio_name_re,
             self.radio_url_re,
             self.re_active,
-            self.sweet_spot
+            #self.sweet_spot
         ]
 
     def to_dict(self) -> dict:
@@ -93,27 +107,6 @@ class RadioFrequency:
             "sweet_spot": self.sweet_spot
         }
 
-    def test_radio_frequency(self, test_re: bool = False):
-        if test_re:
-            url = self.radio_url_re
-        else:
-            url = self.radio_url
-        instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-        player = instance.media_player_new()
-        media = instance.media_new(url)
-        media.get_mrl()
-        player.set_media(media)
-        player.audio_set_volume(0)
-        player.play()
-        for _ in range(5):
-            is_playing = player.is_playing()
-            if is_playing:
-                break
-            else:
-                time.sleep(1)
-        player.stop()
-        return is_playing
-
 
 class Frequencies:
     def __init__(self, file_name: str = None):
@@ -125,28 +118,6 @@ class Frequencies:
             self.load_from_file(f"data/frequencies/{file_name}")
             self.init_min_max()
         self.name: str = ""
-
-    def test_radio_frequencies(self) -> dict:
-        result = {"working": [], "broken": []}
-        for frequency in self.frequencies:
-            url = frequency.radio_url
-            instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
-            player = instance.media_player_new()
-            media = instance.media_new(url)
-            media.get_mrl()
-            player.set_media(media)
-            player.audio_set_volume(0)
-            player.play()
-            for _ in range(5):
-                is_playing = player.is_playing()
-                if is_playing:
-                    break
-            if is_playing == 1:
-                result["working"].append(frequency)
-            else:
-                result["broken"].append(frequency)
-            player.stop()
-        return result
 
     def init_min_max(self):
         number_frequencies = len(self.frequencies)

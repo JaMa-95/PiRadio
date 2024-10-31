@@ -1,16 +1,17 @@
 from collections import deque
+import time
 from typing import List
 from Radio.dataProcessing.states import ButtonClickStates
-from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
-from Radio.util.sensorMsg import AnalogData, ButtonState, SensorMsg
+from Radio.dataProcessing.radioFrequency import Frequencies
+from Radio.util.sensorMsg import AnalogData, ButtonState
 
 
 class ButtonProcessData:
     def __init__(self, name: str, pin: int):
         self.name = name
         self.pin = pin
-        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=deque([False]*ButtonState.max_values))
-        self.short_threshold: int = 2
+        self.state: ButtonState = ButtonState(pin=self.pin, state=False, states=deque([0]*ButtonState.max_values))
+        self.short_threshold: int = 1
         self.long_threshold: int = 10
         self.radio_actions: list = []
 
@@ -44,7 +45,7 @@ class ButtonProcessData:
         # TODO: measure is click with time
         counter = 0
         for value in self.state.states:
-            if value is True:
+            if value is True or value == 1:
                 counter += 1
                 if counter > threshold:
                     return True
@@ -58,15 +59,35 @@ class ButtonProcessData:
         return False
 
     def is_to_off(self) -> bool:
-        if self.state.states[0] and not self.state.states[1]:
+        if not self.state.states[0] and self.state.states[1]:
             return True
         return False
 
     def is_short_click(self):
-        return self._is_click(self.short_threshold)
+        counter = 0
+        for index, value in enumerate(self.state.states):
+            if index == 0 and (value is False or value == 0):
+                pass
+            elif (value is True or value == 1) and index > 0:
+                counter += 1
+            else:
+                if counter > self.short_threshold and counter < self.long_threshold:
+                    print("SHORT CLICK")
+                    return True
+                return False
 
     def is_long_click(self):
-        return self._is_click(self.long_threshold)
+        counter = 0
+        for index, value in enumerate(self.state.states):
+            if index == 0 and (value is False or value == 0):
+                pass
+            elif value is True or value == 1:
+                counter += 1
+            else:
+                if counter > self.long_threshold:
+                    print("LONG CLICK")
+                    return True
+                return False
 
     def is_double_click(self):
         # TODO

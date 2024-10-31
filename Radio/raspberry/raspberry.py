@@ -1,21 +1,53 @@
 from subprocess import call
+from Radio.util.util import is_raspberry
+
+IS_RASPBERRY = is_raspberry()
+if IS_RASPBERRY:
+    import RPi.GPIO as GPIO
 
 
 class Raspberry:
+    def __init__(self):
+        self.alive_pin = 16
+        self.dutyCycle = 100
+        self.activate_alive_pin()
+
+        self._dutyCycleDown = True
+
+    def activate_alive_pin(self):
+        if not IS_RASPBERRY:
+            return
+        try:
+            GPIO.setup(self.alive_pin, GPIO.OUT)
+            self.pwm_1 = GPIO.PWM(self.alive_pin, 60)
+            self.pwm_1.start(0)
+        except RuntimeError:
+            pass
+        #self.pwm_2 = GPIO.PWM(self.alive_pin, 0.5)
+
+    def cleanup(self):
+        self.pwm_1.stop()
+        GPIO.cleanup()
+
     @staticmethod
     def turn_raspi_off():
         print("turn off raspi")
         call("sudo shutdown -h now", shell=True)
+        # call(['shutdown', '-h', 'now'], shell=False)
 
-    @staticmethod
-    def turn_off_usb():
-        """
-        No such file or directory: "echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/unbind"
+    def alive(self):
+        if not IS_RASPBERRY:
+            return
+        self._calcDutyCycle()
+        self.pwm_1.ChangeDutyCycle(self.dutyCycle)
 
-        :return:
-        """
-        call("echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/unbind")
-
-    @staticmethod
-    def turn_on_usb():
-        call("echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/bind")
+    def _calcDutyCycle(self):
+        if self._dutyCycleDown:
+            self.dutyCycle -= 5
+            if self.dutyCycle == 0:
+                self._dutyCycleDown = False
+        else:
+            self.dutyCycle += 5
+            if self.dutyCycle == 100:
+                self._dutyCycleDown = True
+        

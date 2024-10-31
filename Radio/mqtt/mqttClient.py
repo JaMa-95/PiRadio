@@ -1,5 +1,4 @@
 import random
-import vlc
 from paho.mqtt import client as mqtt_client
 from tapo import TapoPlug
 
@@ -19,7 +18,6 @@ class MqttClient:
         self.topic_stream = "piradio/stream"
         self.topic_volume = "piradio/volume"
 
-        self.instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
         self.player = self.instance.media_player_new()
         self.volume = 50
         self.url = None

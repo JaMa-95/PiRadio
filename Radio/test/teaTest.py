@@ -8,7 +8,7 @@ import time
 
 i2c = smbus.SMBus(1) # newer version RASP (512 megabytes)
 i2c_address = 0x60
-time .sleep(2)
+time.sleep(2)
 
 def init_radio(address):
     """initialize hardware"""

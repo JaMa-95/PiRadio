@@ -1,12 +1,13 @@
 import asyncio
+import copy
 import json
 import time
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
-from random import randint
 from typing import Generator
 
+from Radio.audio.audioPlayer import AudioPlayer
 import uvicorn
 from fastapi import Body, status, HTTPException
 from fastapi import FastAPI, WebSocket
@@ -18,10 +19,11 @@ from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.dataProcessing.equalizerData import Equalizer
 from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
 from Radio.db.db import Database
-from Radio.util.util import get_project_root
+from Radio.util.util import ThreadSafeInt, ThreadSafeList, get_project_root
+import asyncio
 
-app = FastAPI()
 db = Database()
+app = FastAPI()
 data_transmitter: DataTransmitter = DataTransmitter()
 publisher: Publisher = Publisher()
 
@@ -40,16 +42,39 @@ async def websocket_volume(websocket: WebSocket):
             if volume_old != volume:
                 volume_old = volume
                 volume_data = json.dumps({"volume": volume})
-                await websocket.send_text(volume_data)
+                await websocket.send_text(volume_data)  
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         print("WebSocket disconnected")
         await websocket.close()
 
+@app.post("/webcontrol")
+async def webcontrol(data: dict):
+    data_transmitter.send({"web_control": bool(data["web_control"])})
+    return {"message": "Web control executed successfully"}
+
 @app.post("/volume")
 async def set_volume(volume: dict):
     data_transmitter.send({"volume": int(volume["volume"])})
     return {"message": "Volume set successfully"}
+
+@app.websocket("/stream/current_radio")
+async def websocket_current_radio(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        song_old = None
+        radio_station_old = None
+        while True:
+            song = db.get_song()
+            radio_station = db.get_radio_station()
+            if song != song_old or radio_station != radio_station_old:
+                radio_station_old = radio_station
+                song_old = song
+                radio_data = json.dumps({"radio_station": radio_station, "song": song})
+                await websocket.send_text(radio_data)
+            await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
+    except Exception as e:
+        await websocket.close()
 
 @app.websocket("/stream/equalizer")
 async def websocket_equalizer(websocket: WebSocket):
@@ -70,6 +95,7 @@ async def websocket_equalizer(websocket: WebSocket):
 
 @app.post("/equalizer")
 async def set_equalizer(equalizer_data: dict):
+    print("equalizer_data", equalizer_data)
     equalizer = Equalizer()
     equalizer.from_dict(equalizer_data)
     publisher.publish(f'equalizer:{str(equalizer.to_list())}')
@@ -105,20 +131,31 @@ async def set_re_active(active: dict):
 async def websocket_radio_frequency(websocket: WebSocket):
     await websocket.accept()
     try:
-        frequency_old = RadioFrequency()
+        frequency_old = None
         while True:
-            frequency = db.get_radio_frequency()
+            frequency = db.get_radio_frequency_dict()
+            # print("frequency", frequency)
             if frequency_old != frequency:
-                frequency_old = RadioFrequency(name=frequency.name, minimum=frequency.minimum,
-                                               maximum=frequency.maximum, radio_name=frequency.radio_name,
-                                               radio_url=frequency.radio_url, radio_name_re=frequency.radio_name_re,
-                                               radio_url_re=frequency.radio_url_re, re_active=frequency.re_active)
-                frequency_data = json.dumps(frequency.to_dict())
+                frequency_old
+                frequency_data = json.dumps(frequency)
                 await websocket.send_text(frequency_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception as e:
         await websocket.close()
 
+@app.get("/buttonsSettings/")
+async def get_buttons_settings():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    return settings["buttons"]
+
+@app.get("/analogSettings/")
+async def get_buttons_settings():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    return settings["analog"]
 
 @app.get("/buttons/")
 async def get_buttons_settings():
@@ -129,14 +166,83 @@ async def get_buttons_settings():
     for name, button_settings in settings["buttons"].items():
         if button_settings["active"]:
             buttons.append({"name": name, "reversed": button_settings["reversed"],
-                             "type": button_settings["action"]["type"], "state": False})
+                             "action": button_settings["action"], "state": False})
     return buttons
 
-@app.post("/button")
-async def set_button(button: dict):
-    data_transmitter.send({"button": {"name": button["name"], "value": button["value"]}})
-    # Perform the necessary operations to set the button
-    return {"message": "Button set successfully"}
+@app.delete("/button")
+async def delete_button(data: dict):
+    name = data["name"]
+    print("delete: ", name) 
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["buttons"].pop(name)
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Button deleted successfully"}
+
+@app.put("/button")
+async def set_button(data: dict):
+    name = data["name"]
+    settings_button = data["settings"]
+    if not "frequency" in settings_button:
+        settings_button["frequency"] = {
+                "pos": None,
+                "musicList": None,
+            }
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["buttons"][name] = settings_button
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Button saved successfully"}
+
+
+@app.put("/potentiometer")
+async def set_potentiometer(potentiometer: dict):    
+    name = potentiometer["name"]
+    settings_poti = potentiometer["settings"]
+    print("potentiometer", potentiometer)
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"][name] = settings_poti
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Potentiometer set successfully"}
+
+@app.delete("/potentiometer")
+async def delete_potentiometer(potentiometer: dict):
+    name = potentiometer["name"]
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"].pop(name)
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Potentiometer deleted successfully"}
+
+@app.post("/potentiometer")
+async def add_potentiometer(potentiometer: dict):
+    name = potentiometer["name"]
+    settings_poti = {
+        "min": 0,
+        "max": 1000,
+        "on": False,
+        "is_volume": False,
+        "is_frequency": False,
+        "is_equalizer": False,
+        "pin": 0,
+        "device": ""
+    }
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    settings["analog"]["sensors"][name] = settings_poti
+    with open(path_settings.resolve(), "w") as f:
+        json.dump(settings, f, indent=4)
+    return {"message": "Potentiometer added successfully"}
 
 @app.websocket("/stream/buttons")
 async def websocket_buttons(websocket: WebSocket):
@@ -158,6 +264,18 @@ async def get_frequency_names():
     for name, analog_item in settings["analog"]["sensors"].items():
         if analog_item["is_frequency"] and analog_item["on"]:
             frequency_names.append({name: {"min": analog_item["min"], "max": analog_item["max"]}})
+    return frequency_names
+
+@app.get("/frequenciesPotis")
+async def get_frequencies_potis():
+    path_settings = get_project_root() / 'data/settings.json'
+    with open(path_settings.resolve()) as f:
+        settings = json.load(f)
+    frequency_names = []
+    for name, analog_item in settings["analog"]["sensors"].items():
+        if analog_item["is_frequency"]:
+            frequency_names.append(name)
+    print(frequency_names)
     return frequency_names
 
 
@@ -188,11 +306,12 @@ def get_frequency_names():
     freq_names = []
     for file_name in freq_files:
         freq_names.append(file_name.replace("freq_", "").replace(".json", ""))
+    print(freq_names)
     return freq_names
 
 
 def get_freq_files():
-    path_data = get_project_root() / 'data'
+    path_data = get_project_root() / 'data/frequencies'
     freq_files = [f for f in listdir(path_data) if isfile(join(path_data, f)) and f.startswith("freq")]
     return freq_files
 
@@ -216,11 +335,11 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
         print(error)
         response.status_code = 404
         return "Wrong data"
-    save_in_file(file_path=get_project_root() / f'data/freq_{name.lower()}.json', data=frequency.to_list())
+    save_in_file(file_path=get_project_root() / f'data/frequencies/freq_{name.lower()}.json', data=frequency.to_list())
     response.status_code = 200
     return True
 
-
+# ------------------- Test -------------------
 @app.post("/frequencies/test2")
 async def test_frequencies(frequencies_data: list = Body(), response: Response = 200):
     name = frequencies_data[0]
@@ -244,8 +363,9 @@ async def test_frequencies(frequencies_data: list = Body(), response: Response =
     return result
 
 
-@app.post("/frequencies/test")
-async def get_image_file(frequencies_data: list = Body(), response: Response = 200):
+@app.post("/frequencies/testWithRe")
+async def get_image_file(frequencies_data: dict, response: Response = 200):
+    print(frequencies_data)
     name = frequencies_data[0]
     frequencies_data.pop(0)
     frequencies_data = frequency_dict_to_list(frequencies_data)
@@ -259,44 +379,22 @@ async def get_image_file(frequencies_data: list = Body(), response: Response = 2
         )
     except Exception as error:
         raise HTTPException(detail=error.__str__(), status_code=status.HTTP_404_NOT_FOUND)
+    
+@app.post("/frequency/testWithRe")
+async def test_frequency(urls: dict):
+    audio_player = AudioPlayer(publisher=publisher)
+    volume = audio_player.volume
+    audio_player.set_volume(0)
+    url_valid = audio_player.is_valid(urls["url"])
+    url_re_valid = audio_player.is_valid(urls["url_re"])
+    audio_player.set_volume(volume)
+    return {"result": {"url": url_valid, "url_re": url_re_valid}}
 
 
 def test_all_frequencies(frequencies_obj: Frequencies) -> Generator:
     for frequency in frequencies_obj.frequencies:
         yield json.dumps([frequency.radio_url, frequency.test_radio_frequency(),
                           frequency.radio_url_re, frequency.test_radio_frequency(test_re=True)])
-
-
-@app.post("/frequency/test/")
-async def test_frequencies(url: dict):
-    frequency = RadioFrequency()
-    frequency.radio_url = url["url"]
-    if frequency.test_radio_frequency() == 1:
-        return True
-    else:
-        return False
-
-
-@app.post("/frequency/testWithRe/")
-async def test_frequencies(url: dict):
-    frequency = RadioFrequency()
-    frequency.radio_url = url["url"]
-    frequency.radio_url_re = url["url_re"]
-    if url["url"]:
-        if frequency.test_radio_frequency() == 1:
-            url_state = True
-        else:
-            url_state = False
-    else:
-        url_state = None
-    if url["url_re"]:
-        if frequency.test_radio_frequency(True) == 1:
-            url_state_re = True
-        else:
-            url_state_re = False
-    else:
-        url_state_re = None
-    return url_state, url_state_re
 
 
 def save_in_file(file_path: Path, data):
@@ -306,27 +404,51 @@ def save_in_file(file_path: Path, data):
         json.dump(data, file_handler, indent=4)
 
 
-def run():
-    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+@app.get("/shutdown")
+async def shutdown(response: Response = 200):
+    print("Shutting down server...")
+    asyncio.create_task(delayed_shutdown())
+    thread_stopped_counter_.increment()
+    amount_stop_threads_names_.delete("run")
+    return Response(status_code=200)
 
+async def delayed_shutdown():
+    await asyncio.sleep(1)
+    server.should_exit = True
+
+def set_middleware():
+    origins = ['http://localhost:3000', 'http://127.0.0.1:3000',
+            'http://localhost', 'http://192.168.0.24', 'http://192.168.0.245:*',
+            'https://localhost:3000', 'https://127.0.0.1:3000', "http://192.168.0.24:3000"]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
         allow_headers=["*"],
+        expose_headers=["*"]
     )
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+def run(thread_stopped_counter: ThreadSafeInt = ThreadSafeInt(), amount_stop_threads_names: ThreadSafeList = ThreadSafeList()):
+    
+    global thread_stopped_counter_
+    global amount_stop_threads_names_
+    thread_stopped_counter_ = thread_stopped_counter
+    amount_stop_threads_names_ = amount_stop_threads_names
+    set_middleware()
+    
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000)
+    global server
+    server = uvicorn.Server(config)
+    server.run()
 
 
 if __name__ == "__main__":
-    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+    set_middleware()
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000)
+    global server
+    server = uvicorn.Server(config)
+    server.run()

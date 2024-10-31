@@ -107,6 +107,15 @@ class RadioMockup:
 
 
 
-if __name__ == "__main__":
-    radio = RadioMockup()
-    print()
+def is_raspberry() -> bool:
+    import io
+    try:
+        with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
+            if 'raspberry pi' in m.read().lower(): return True
+    except Exception:
+        pass
+    return False
+
+
+if __name__ == '__main__':
+    is_raspberry()

@@ -13,6 +13,18 @@ class SensorMsg:
     def set_buttons_data(self, data):
         self.buttons_data = data
 
+    def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
+        if self.buttons_data == value.buttons_data and self.analog_data == value.analog_data:
+            return True
+        return False
+
+    def __str__(self):
+        buttons_data_str = "\n".join([f"Pin: {button.pin}, State: {button.state}, States: {list(button.states)}" for button in self.buttons_data.get_data()])
+        analog_data_str = "\n".join([f"Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, Accepted Difference: {value.accepted_difference}" for value in self.analog_data.get_data_sensor()])
+        return f"Buttons Data:\n{buttons_data_str}\n\nAnalog Data:\n{analog_data_str}"
+
 
 class SensorData(Singleton):
     def __init__(self):
@@ -39,7 +51,7 @@ class SensorDataOld(SensorData):
 
 
 class ButtonState:
-    max_values = 5
+    max_values = 20
     def __init__(self, pin: int, state: bool, states=None):
         if states is None:
             states = deque([False] * self.max_values)
@@ -56,6 +68,21 @@ class ButtonState:
 class ButtonsData:
     def __init__(self):
         self.data: List[ButtonState] = []
+
+    def __eq__(self, other) -> bool:
+        if other is None:
+            return False
+        data = other.get_data()
+        if len(self.data) != len(data):
+            return False
+        for idx, value in enumerate(self.data):
+            if value != data[idx]:
+                return False
+        return True
+    
+    def __str__(self):
+        return "\n".join([f"Pin: {button.pin}, State: {button.state}, States: {list(button.states)}" for button in self.data])
+        
 
     def is_empty(self):
         is_empty = not self.data
@@ -91,19 +118,48 @@ class ButtonsData:
 
 
 class AnalogValue:
-    def __init__(self, pin: int, value: int, min_: int, max_: int):
+    def __init__(self, pin: int, value: int, min_: int, max_: int, accepted_difference: int = 8):
         self.pin: int = pin
         self.value: int = value
         self.min: int = min_
         self.max: int = max_
+        self.accepted_difference: int = accepted_difference
         
 
 class AnalogData:
     def __init__(self):
         self.sensor_data: List[AnalogValue] = []
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        sensor_data = other.get_data_sensor()
+        if len(self.sensor_data) != len(sensor_data):
+            return False
+        for value in self.sensor_data:
+            for value_other in sensor_data:
+                if value.pin == value_other.pin:
+                    if abs(value.value - value_other.value) > value.accepted_difference:
+                        return False
+        return True
+
+    def __str__(self):
+        return "\n".join([f"""Pin: {value.pin}, Value: {value.value}, Min: {value.min}, Max: {value.max}, 
+                          Accepted Difference: {value.accepted_difference}""" for value in self.sensor_data])
+
     def is_empty(self) -> bool:
         return not self.sensor_data
+    
+    def delete_unchanged_values(self, other):
+        other_sensor_data = other.get_data_sensor()
+        values_to_remove = []
+        for value in self.sensor_data:
+            for value_other in other_sensor_data:
+                if value.pin == value_other.pin:
+                    if abs(value.value - value_other.value) <= value.accepted_difference:
+                        values_to_remove.append(value)
+        for value in values_to_remove:
+            self.sensor_data.remove(value)
 
     def get_data_sensor(self) -> List[AnalogValue]:
         return self.sensor_data

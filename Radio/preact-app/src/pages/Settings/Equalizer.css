@@ -1,0 +1,15 @@
+.Equalizer {
+    display: flex;
+    /* Use flexbox to layout children */
+    flex-direction: row;
+    /* Align children horizontally */
+    align-items: center;
+    /* Center-align items vertically */
+    justify-content: space-around;
+    /* Distribute space evenly around items */
+}
+
+.Equalizer label {
+    margin: 0 10px;
+    /* Adds space between each label */
+}
