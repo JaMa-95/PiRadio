@@ -42,7 +42,7 @@ async def websocket_volume(websocket: WebSocket):
             if volume_old != volume:
                 volume_old = volume
                 volume_data = json.dumps({"volume": volume})
-                await websocket.send_text(volume_data)
+                await websocket.send_text(volume_data)  
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         print("WebSocket disconnected")

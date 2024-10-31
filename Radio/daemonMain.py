@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from Radio.util.util import is_raspberry, get_args, get_project_root, react_app_start
 from Radio.radioDaemon import RadioDaemon
 
+IS_RASPBERRY_PI = False
 if is_raspberry():
     IS_RASPBERRY_PI = True
     mock = False
@@ -29,8 +30,8 @@ if __name__ == "__main__":
         if 'start' == sys.argv[1]:
             daemon.check_pid_state()
             print("START REQUESTED")
+            react_app_start()
             daemon.start()
-            # react_app_start()
             print("FINISHED STARTING")
         elif 'stop' == sys.argv[1]:
             # we cannot stop the daemon from the daemon itself, because of threads
@@ -41,8 +42,9 @@ if __name__ == "__main__":
             # its another process, thats why we have to wait
             stop()
             # TODO: wait till PiRadio.pid is deleted
-            time.sleep(8)
-            # daemon.stop()
+            time.sleep(5)
+            daemon.stop()
+            react_app_start()
             daemon.start()
         else:
             print("Unknown command")

@@ -10,13 +10,13 @@ import subprocess
 
 
 def react_app_start():
-    root = get_project_root() / "react-app"
-    subprocess.Popen(f"cd {root} && npm start", shell=True)
-
-
-def react_app_start_():
-    root = get_project_root() / "react-app"
-    os.system(f"cd {root} && npm start")
+    root = get_project_root() / "preact-app"
+    try:
+        subprocess.Popen(f"cd {root} && npm run dev", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Preact App started")
+    except Exception as e:
+        print(f"Failed to start Preact App: {e}")
+        return
 
 
 class ThreadSafeInt:
