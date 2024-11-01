@@ -1,6 +1,6 @@
 import time
 
-from mpd import MPDClient, ProtocolError, ConnectionError
+from mpd import MPDClient, ProtocolError, ConnectionError, CommandError
 from threading import Event
 
 from Radio.dataProcessing.radioFrequency import RadioFrequency
@@ -113,7 +113,7 @@ class AudioPlayer(Subscriber):
                     print("Volume must be between 0 and 100. Actual: ", volume)
             else:
                 print("Volume must be an integer. Actual: ", type(volume))
-        except ConnectionError:
+        except (ConnectionError, CommandError):
             print("MPD connection error")
             return
 

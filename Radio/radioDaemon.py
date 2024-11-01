@@ -48,9 +48,13 @@ class RadioDaemon(Daemon):
     def _stop(self):
         self.shutdown_server()
         self.stop_event.set()
+        counter = 0
         while self.thread_stopped_counter.get() < self.amount_threads:
-            print(f"STOPPING THREADS: {self.thread_stopped_counter.get()}")
-            print(f"REMAINIGN: {self.amount_stop_threads_names.get()}")
+            if counter >= 50:
+                print(f"STOPPING THREADS: {self.thread_stopped_counter.get()}")
+                print(f"REMAINIGN: {self.amount_stop_threads_names.get()}")
+                counter = 0
+            counter += 1
             time.sleep(0.1)
 
     def shutdown_server(self):

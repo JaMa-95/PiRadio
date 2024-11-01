@@ -13,12 +13,12 @@ Use the webserver to change settings or control the radio from any device.
 
 # Installation
 - enable I2C
-- curl command
+- TODO: curl command
 - cd PiRadio
 - sudo ./install.sh
 
 prefer using already available node modules. Raspberry takes a long time and mostly runs out of memory when installing packages
-- npm --prefix ./Radio/react-app install ./Radio/react-app
+- npm --prefix ./Radio/preact-app install ./Radio/preact-app
 
 # audio
 ## mpd

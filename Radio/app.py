@@ -42,7 +42,8 @@ async def websocket_volume(websocket: WebSocket):
             if volume_old != volume:
                 volume_old = volume
                 volume_data = json.dumps({"volume": volume})
-                await websocket.send_text(volume_data)  
+                if websocket.client_state == 1:
+                    await websocket.send_text(volume_data)  
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         print("WebSocket disconnected")
@@ -71,7 +72,8 @@ async def websocket_current_radio(websocket: WebSocket):
                 radio_station_old = radio_station
                 song_old = song
                 radio_data = json.dumps({"radio_station": radio_station, "song": song})
-                await websocket.send_text(radio_data)
+                if websocket.client_state == 1:
+                    await websocket.send_text(radio_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception as e:
         await websocket.close()
@@ -88,7 +90,8 @@ async def websocket_equalizer(websocket: WebSocket):
             if equalizer_old != equalizer:
                 equalizer_old.from_list(equalizer.to_list())
                 equalizer_data = json.dumps(equalizer.to_dict())
-                await websocket.send_text(equalizer_data)
+                if websocket.client_state == 1:
+                    await websocket.send_text(equalizer_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         await websocket.close()
@@ -111,7 +114,8 @@ async def websocket_frequency_values(websocket: WebSocket):
             if frequency_old != frequency:
                 frequency_old = frequency.copy()  # Create a copy of frequency
                 frequency_data = json.dumps(frequency)
-                await websocket.send_text(frequency_data)
+                if websocket.client_state == 1:
+                    await websocket.send_text(frequency_data)
             await asyncio.sleep(0.01)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         await websocket.close()
@@ -138,7 +142,8 @@ async def websocket_radio_frequency(websocket: WebSocket):
             if frequency_old != frequency:
                 frequency_old
                 frequency_data = json.dumps(frequency)
-                await websocket.send_text(frequency_data)
+                if websocket.client_state == 1:
+                    await websocket.send_text(frequency_data)
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception as e:
         await websocket.close()
@@ -250,7 +255,8 @@ async def websocket_buttons(websocket: WebSocket):
     try:
         while True:
             buttons = db.get_buttons_data()
-            await websocket.send_text(json.dumps(buttons))
+            if websocket.client_state == 1:
+                await websocket.send_text(json.dumps(buttons))
             await asyncio.sleep(1)  # Simulate data sent every second using asyncio compatible sleep
     except Exception:
         await websocket.close()
