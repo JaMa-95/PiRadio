@@ -275,7 +275,6 @@ async def get_frequencies_potis():
     for name, analog_item in settings["analog"]["sensors"].items():
         if analog_item["is_frequency"]:
             frequency_names.append(name)
-    print(frequency_names)
     return frequency_names
 
 
@@ -337,6 +336,11 @@ async def save_frequencies(frequencies_data: list = Body(), response: Response =
     save_in_file(file_path=get_project_root() / f'data/frequencies/freq_{name.lower()}.json', data=frequency.to_list())
     response.status_code = 200
     return True
+
+@app.post("/webControl/button")
+async def set_web_control_button(data: dict):
+    data_transmitter.send({"button": data})
+    return {"message": "Web control button set successfully"}
 
 # ------------------- Test -------------------
 @app.post("/frequencies/test2")

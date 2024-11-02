@@ -110,7 +110,7 @@ export const RadioControl = (props) => {
   function postButtonValue(name, value) {
     console.log("POSTED: ", name, value);
     // Send the button value to the server
-    fetch('/api/button', {
+    fetch('/api/webControl/button', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

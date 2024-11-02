@@ -93,7 +93,12 @@ class OnOffButton:
     def run(self):
         if IS_RASPBERRY:
             while not self._stop_event.is_set():
-                if not GPIO.wait_for_edge(self.att_comm_pin, GPIO.FALLING, timeout=3):
+                try:
+                    if not GPIO.wait_for_edge(self.att_comm_pin, GPIO.FALLING, timeout=3):
+                        continue
+                except Exception as e:
+                    # always running into lgpio.error bad event request, but unsure why
+                    print("ERROR: SHUTDOWN WATCHDOG: ", e)
                     continue
                 poll_duration = self.poll()
                 print("Poll: ", poll_duration)
