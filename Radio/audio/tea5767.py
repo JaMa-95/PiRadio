@@ -1,5 +1,4 @@
 import json
-import sys
 from threading import Event
 
 from Radio.util.dataTransmitter import Subscriber

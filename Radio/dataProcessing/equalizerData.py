@@ -1,6 +1,3 @@
-import time
-
-
 class EqualizerReductionData:
     def __init__(self, reduction_60_hz: int = 1, reduction_170_hz: int = 1, reduction_310_hz: int = 1, reduction_600_hz: int = 1,
                  reduction_1_khz: int = 1, reduction_3_khz: int = 1, reduction_6_khz: int = 1,

@@ -1,5 +1,4 @@
 from collections import deque
-import time
 from typing import List
 from Radio.dataProcessing.states import ButtonClickStates
 from Radio.dataProcessing.radioFrequency import Frequencies

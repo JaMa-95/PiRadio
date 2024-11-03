@@ -1,7 +1,6 @@
 import json
 from threading import Event
 import time
-from statistics import mean
 from time import sleep
 from Radio.db.db import Database
 from Radio.collector.gpio.button import RadioButtonsRaspi

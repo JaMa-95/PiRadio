@@ -1,7 +1,6 @@
 # ---------------------------------------------------
 # Observer Pattern in publisher and subscriber model.
 # ---------------------------------------------------
-import os
 import io
 from pathlib import Path
 import sys

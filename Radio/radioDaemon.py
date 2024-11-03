@@ -1,7 +1,5 @@
 import time
-import psutil
 from threading import Thread, Event
-from multiprocessing import Process
 
 import requests
 

@@ -1,9 +1,8 @@
-import copy
 import threading
 from typing import Dict
 
 from Radio.dataProcessing.equalizerData import Equalizer
-from Radio.dataProcessing.radioFrequency import RadioFrequency, Frequencies
+from Radio.dataProcessing.radioFrequency import RadioFrequency
 from Radio.util.singleton import Singleton
 
 

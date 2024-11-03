@@ -1,5 +1,4 @@
 import asyncio
-import copy
 import json
 import time
 from os import listdir
@@ -17,7 +16,7 @@ from starlette.responses import StreamingResponse
 
 from Radio.util.dataTransmitter import DataTransmitter, Publisher
 from Radio.dataProcessing.equalizerData import Equalizer
-from Radio.dataProcessing.radioFrequency import Frequencies, RadioFrequency
+from Radio.dataProcessing.radioFrequency import Frequencies
 from Radio.db.db import Database
 from Radio.util.util import ThreadSafeInt, ThreadSafeList, get_project_root
 import asyncio
