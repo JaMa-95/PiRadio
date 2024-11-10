@@ -38,6 +38,7 @@ class Raspberry:
     def alive(self):
         if not IS_RASPBERRY:
             return
+        print("alive")
         self._calcDutyCycle()
         self.pwm_1.ChangeDutyCycle(self.dutyCycle)
 
