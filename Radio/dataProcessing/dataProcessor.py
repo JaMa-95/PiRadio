@@ -58,7 +58,7 @@ class DataProcessor:
         alive_timer = time.time()
         loop_timer = time.time()
         while True:
-            if time.time() - alive_timer > 0.1:
+            if time.time() - alive_timer > 0.5:
                 alive_timer = time.time()
                 self.raspberry.alive()
 

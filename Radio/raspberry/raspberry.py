@@ -38,8 +38,14 @@ class Raspberry:
     def alive(self):
         if not IS_RASPBERRY:
             return
-        self._calcDutyCycle()
-        self.pwm_1.ChangeDutyCycle(self.dutyCycle)
+        self.toggle_led()
+        # self._calcDutyCycle()
+        # self.pwm_1.ChangeDutyCycle(self.dutyCycle)
+    
+    def toggle_led(self):
+        if not IS_RASPBERRY:
+            return
+        GPIO.output(self.alive_pin, not GPIO.input(self.alive_pin))
 
     def _calcDutyCycle(self):
         print(f"DC: {self.dutyCycle}, DCDown: {self._dutyCycleDown}")
