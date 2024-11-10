@@ -42,6 +42,7 @@ class Raspberry:
         self.pwm_1.ChangeDutyCycle(self.dutyCycle)
 
     def _calcDutyCycle(self):
+        print(f"DC: {self.dutyCycle}, DCDown: {self._dutyCycleDown}")
         if self._dutyCycleDown:
             self.dutyCycle -= 5
             if self.dutyCycle <= 0:
