@@ -38,17 +38,16 @@ class Raspberry:
     def alive(self):
         if not IS_RASPBERRY:
             return
-        print("alive")
         self._calcDutyCycle()
         self.pwm_1.ChangeDutyCycle(self.dutyCycle)
 
     def _calcDutyCycle(self):
         if self._dutyCycleDown:
             self.dutyCycle -= 5
-            if self.dutyCycle == 0:
+            if self.dutyCycle <= 0:
                 self._dutyCycleDown = False
         else:
             self.dutyCycle += 5
-            if self.dutyCycle == 100:
+            if self.dutyCycle >= 100:
                 self._dutyCycleDown = True
         
