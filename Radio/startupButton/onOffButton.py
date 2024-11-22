@@ -68,7 +68,7 @@ class OnOffButton:
                 GPIO.output(self.active_pin, GPIO.HIGH)
     
     def shutdown(self):
-        os.system("shutdown now -h")
+        os.system("sudo shutdown now")
 
     def run(self):
         if IS_RASPBERRY:
@@ -95,9 +95,6 @@ class OnOffButton:
                     GPIO.setup(PIN, GPIO.OUT, initial=0)
                     time.sleep(0.05)
                     GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                    print("Poll ")
-                    print(time.time() - start)
-                    print("\n")
                 else:
                     print("Shutdown request detected\n")
 
