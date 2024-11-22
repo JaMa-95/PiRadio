@@ -30,7 +30,8 @@ class OnOffButton:
         if IS_RASPBERRY:
             # self.raspberry: Raspberry = Raspberry()
             # self.load_settings()
-            self.activate_pins()
+            # self.activate_pins()
+            pass
 
         print("ON/OFF Button active")
 
