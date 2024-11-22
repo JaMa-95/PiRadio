@@ -77,7 +77,7 @@ class OnOffButton:
             print ("Starting...\n")
             GPIO.cleanup()
             time.sleep(1)
-            GPIO.setmode(GPIO.BCM)
+            #GPIO.setmode(GPIO.BCM)
 
             GPIO.setup(PIN, GPIO.OUT)
             GPIO.output(PIN, GPIO.HIGH)
@@ -86,7 +86,6 @@ class OnOffButton:
             GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
             while True:
-                print(GPIO.input(PIN))
                 start = time.time()
                 while (not GPIO.input(PIN)):
                     time.sleep(0.01)
