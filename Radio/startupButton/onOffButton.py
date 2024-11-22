@@ -72,6 +72,7 @@ class OnOffButton:
         os.system("sudo shutdown now")
 
     def run(self):
+        return
         if IS_RASPBERRY:
             PIN = 15
 
