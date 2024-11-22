@@ -51,7 +51,7 @@ class OnOffButton:
         else:
             GPIO.setup(self.active_pin, GPIO.OUT)
             GPIO.output(self.active_pin, GPIO.HIGH)
-        GPIO.setup(self.att_comm_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.att_comm_pin, GPIO.IN)
 
     def poll(self):
         start = time.time()
