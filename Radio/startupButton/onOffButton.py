@@ -72,12 +72,10 @@ class OnOffButton:
         os.system("sudo shutdown now")
 
     def run(self):
-        return
         if IS_RASPBERRY:
             PIN = 15
 
             print ("Starting...\n")
-            GPIO.cleanup()
             time.sleep(1)
 
             GPIO.setup(PIN, GPIO.OUT)
