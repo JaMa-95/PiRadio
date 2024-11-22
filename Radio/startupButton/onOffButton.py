@@ -28,7 +28,7 @@ class OnOffButton:
         self.active_pin: int = 0
         self.att_comm_pin: int = 0
         if IS_RASPBERRY:
-            self.raspberry: Raspberry = Raspberry()
+            # self.raspberry: Raspberry = Raspberry()
             # self.load_settings()
             self.activate_pins()
 
@@ -37,70 +37,79 @@ class OnOffButton:
     def load_settings(self):
         with open(get_project_root() / 'data/settings.json') as f:
             settings = json.load(f)
-        self.active_pin = settings["on_off_button"]["active_pin"]
+        # self.active_pin = settings["on_off_button"]["active_pin"]
         self.att_comm_pin = settings["on_off_button"]["att_comm_pin"]
 
     def activate_pins(self):
-        if isinstance(self.active_pin, list):
-            for idx, pin in enumerate(self.active_pin):
-                if idx == 0:
-                    GPIO.setup(pin, GPIO.OUT)
-                    GPIO.output(pin, GPIO.HIGH)
-                else:
-                    GPIO.setup(pin, GPIO.IN)
-        else:
-            GPIO.setup(self.active_pin, GPIO.OUT)
-            GPIO.output(self.active_pin, GPIO.HIGH)
-        GPIO.setup(self.att_comm_pin, GPIO.IN)
+        print ("Starting...\n")
+        GPIO.cleanup()
+        time.sleep(1)
+        GPIO.setmode(GPIO.BCM)
 
-    def poll(self):
-        start = time.time()
-        while not GPIO.input(self.att_comm_pin):
-            if self._stop_event.is_set():
-                break
-            time.sleep(0.01)
-        return time.time() - start
-    
+        GPIO.setup(self.att_comm_pin, GPIO.OUT)
+        GPIO.output(self.att_comm_pin, GPIO.HIGH)
+        time.sleep(1)
 
+        GPIO.setup(self.att_comm_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     
     def set_active_pin(self, state: bool):
         if isinstance(self.active_pin, list):
             for pin in self.active_pin:
+                GPIO.setup(pin, GPIO.OUT)
                 if state:
                     GPIO.output(pin, GPIO.LOW)
                 else:
                     GPIO.output(pin, GPIO.HIGH)
         else:
+            GPIO.setup(self.active_pin, GPIO.OUT)
             if state:
                 GPIO.output(self.active_pin, GPIO.LOW)
             else:
                 GPIO.output(self.active_pin, GPIO.HIGH)
     
     def shutdown(self):
-        # Acknowledge by setting the GPIO pin as Output, Low
-        self.set_active_pin(False)
-        GPIO.setup(self.att_comm_pin, GPIO.OUT)
-        GPIO.output(self.att_comm_pin, GPIO.LOW)
-
-        time.sleep(0.01)
-        # make as high again so attiny can detetct when shutdown is over -> pin low again
-        GPIO.output(self.att_comm_pin, GPIO.HIGH)
-        GPIO.setup(self.att_comm_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        time.sleep(0.2)
-        self.set_active_pin(False)
         os.system("shutdown now -h")
 
     def run(self):
         if IS_RASPBERRY:
-            while not self._stop_event.is_set():
-                if GPIO.input(self.att_comm_pin):
-                    time.sleep(0.1)
-                    if not  GPIO.input(self.att_comm_pin):
-                        continue
-                    print("Shutdown request detected")
+            PIN = 15
+
+            print ("Starting...\n")
+            GPIO.cleanup()
+            time.sleep(1)
+            GPIO.setmode(GPIO.BCM)
+
+            GPIO.setup(PIN, GPIO.OUT)
+            GPIO.output(PIN, GPIO.HIGH)
+            time.sleep(1)
+
+            GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+            while True:
+                print(GPIO.input(PIN))
+                start = time.time()
+                while (not GPIO.input(PIN)):
+                    time.sleep(0.01)
+
+                if time.time() - start < 0.1:
+                    GPIO.setup(PIN, GPIO.OUT, initial=0)
+                    time.sleep(0.05)
+                    GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+                    print("Poll ")
+                    print(time.time() - start)
+                    print("\n")
+                else:
+                    print("Shutdown request detected\n")
+
+                    # Acknowledge by setting the GPIO pin as Output, Low
+                    GPIO.setup(PIN, GPIO.OUT)
+                    GPIO.output(PIN, GPIO.LOW)
+                    time.sleep(0.01)
+                    GPIO.output(PIN, GPIO.HIGH)
+                    GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
                     self.shutdown()
 
-                    
+                                
         self.thread_stopped_counter.increment()
         self.amount_stop_threads_names.delete(self.__class__.__name__)
         print("ON/OFF Button stopped")

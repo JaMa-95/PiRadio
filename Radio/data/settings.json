@@ -3,10 +3,6 @@
     "amplifier_pin": 99,
     "mqtt": false,
     "on_off_button": {
-        "active_pin": [
-            14,
-            5
-        ],
         "att_comm_pin": 15
     },
     "audio": {
